@@ -1,7 +1,7 @@
 ---
 layout:     post   				    # 使用的布局（不需要改）
-title:      TLS1.3 密钥衍生计算方法和功能
-subtitle:   Hello World, Hello Blog #副标题
+title:      HKDF-Extract与HKDF-Expand
+subtitle:   TLS1.3中的基础知识 #副标题
 date:       2020-08-27 				# 时间
 author:     大狗 						# 作者
 header-img: img/post-bg-map.jpg
