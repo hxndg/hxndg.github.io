@@ -1,5 +1,15 @@
+---
+layout:     post   				    # 使用的布局（不需要改）
+title:      TLS1.3 密钥衍生计算方法和功能
+subtitle:   Hello World, Hello Blog #副标题
+date:       2020-08-27 				# 时间
+author:     大狗 						# 作者
+header-img: img/post-bg-map.jpg
+catalog: true 						# 是否归档
+tags:								
+    - TLS1.3
+---
 #TLS1.3 密钥衍生计算方法和功能
-
 ##前言
 Tls1.3的RFC（RFC8446）中规定了各种密钥的算法和用途，虽然我打算在不久的将来翻译TLS1.3的RFC，出于方便的考虑，还是简单讲讲TLS1.3中的各种密钥计算方法。因为RFC的密钥衍生流程中没有画出PSK的计算过程，我也会在本文附加PSK的计算流程如果文章帮到了你/或者依然存在一些问题，欢迎给我一些反馈。
 
