@@ -108,6 +108,7 @@ static unsigned char *HKDF_Extract(const EVP_MD *evp_md,
 ```
 简单说说，salt就是参与计算的盐,salt_len为盐长度，如果盐为NULL或者盐长度为0，就会被初始化为空字符串即`static const unsigned char dummy_key[1] = {'\0'};`,key就是输入的初始密钥材料，利用它计算出来伪随机密钥（PRK）。这里唯一注意的就是prk和prk_len是存储结果的。
 ### HKDF-Expand
+
 ```c
 static unsigned char *HKDF_Expand(const EVP_MD *evp_md,
                                   const unsigned char *prk, size_t prk_len,
@@ -116,17 +117,14 @@ static unsigned char *HKDF_Expand(const EVP_MD *evp_md,
 {
     HMAC_CTX *hmac;
     unsigned char *ret = NULL;
-
     unsigned int i;
-
     unsigned char prev[EVP_MAX_MD_SIZE];
-
     size_t done_len = 0, dig_len = EVP_MD_size(evp_md);
 
     size_t n = okm_len / dig_len;  //计算需要产生几块T(x)，如果像输出的结果不是hashLen的整数倍，需要向上取整。
     if (okm_len % dig_len)
         n++;
-
+		
     if (n > 255 || okm == NULL)		//如果输出的地址或者长度太长，直接就当失败了。
         return NULL;
 
