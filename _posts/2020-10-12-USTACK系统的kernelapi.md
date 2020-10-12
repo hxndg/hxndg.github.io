@@ -690,6 +690,10 @@ kapi_handle_req_atcp(void)
 }
 ```
 
+现在我们看看`kernelapi_input`函数，`kernelapi_input`本质上是调用index对应的函数，也就是说我们写的函数虽然是`ssl_get_special_user_all_host_config_kern`，但atcp进程真正调用的是一个index对应于`ssl_get_special_user_all_host_config_kern`的函数，这个函数实际上是`kernel_ssl_get_special_user_all_host_config_kern`(没想到吧.jpg)。好，我们看看`kernelapi_input`函数具体流程。
+
+`kernelapi_input`函数首先获取backend和atcp的之间的连接（此时，读取的数据已经填好了），拿到请求的kernelapi函数的index，也拿到rsp，初始化rsp的两个长度都为0。获取该kernelapi函数的lock，看看需要锁哪种lock。这个地方是出于数据一致性的要求，比方说显示当前所有的连接，`atcp_sync_stop_broadcast`会把全局变量`click_kernelapi_want_lock`赋值为一，然后将自己线程的`atcp_sync_stop_flag[curatcp]`赋值为一，然后调用`tsleep(atcpwait[curatcp], 0, "atcpsync", 1);`，管理线程会一直等待该资源就绪从而被wakeup，同时等待其他线程的终止也就是其他线程的`atcp_sync_stop_flag[i]`为1，注意，这里管理线程只有对于`atcp_sync_stop_flag[i]`的读，没有同时写操作，因此没有竞争！而其他线程检查函数会调用`atcp_sync_stop_check`这个函数竞争atcpwait[another_curatcp]，也没发生资源的竞争。所以不需要锁！很好，那么问题来了，其他线程修改完了`atcp_sync_stop_flag[curatcp]`之后，哪里唤醒管理线程呢？
+
 
 
 
