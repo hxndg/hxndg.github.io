@@ -60,7 +60,153 @@ OK，那么如何设计一个无锁的并发数据结构呢？
 
 ## RTE_ring的无锁实现
 
+首先我们要清楚的明白，多消费，多生产的竞争来自两个方面。一方面是生产和生产的竞争，另一方面是生产和消费的竞争。RTE_ring怎么解决生产和生产的竞争？
+
+简单总结，RTE_ring的无所实现是先占一段距离，令head和tail来开距离。操作完成了，再把head和tail改成一个值。当tail和head一起的时候说明要么现在没人enqueue，要么已经enqueue完成了。
+
+仔细想想实际上这里面依靠的就是一个“圈地的原子性”。而对tail的操作则是不需要原子性的，所以按照C11的写法来说。我们只需要保证read是atomic，顺序一致即可。
+
+mp_enqueue的代码本质还是先占坑，后拉屎的行为。函数`__rte_ring_move_prod_head`中，每次生产者都尝试原子获取并移动`r->prod.head`，因为每个线程都从`r->prod.head`填写数据，这保证了每次都只有一个线程先把坑占好。接着`__rte_ring_enqueue_elems`把内容扔进去。
+
+最后调用`update_tail`函数，实际上update_tail是加了一个对前面操作的写屏障，然后尝试等待生产队列位到位置。
+
+```
+static __rte_always_inline unsigned int
+__rte_ring_do_enqueue_elem(struct rte_ring *r, const void *obj_table,
+		unsigned int esize, unsigned int n,
+		enum rte_ring_queue_behavior behavior, unsigned int is_sp,
+		unsigned int *free_space)
+{
+	uint32_t prod_head, prod_next;
+	uint32_t free_entries;
+
+	n = __rte_ring_move_prod_head(r, is_sp, n, behavior,
+			&prod_head, &prod_next, &free_entries);
+	if (n == 0)
+		goto end;
+
+	__rte_ring_enqueue_elems(r, prod_head, obj_table, esize, n);
+
+	update_tail(&r->prod, prod_head, prod_next, is_sp, 1);
+end:
+	if (free_space != NULL)
+		*free_space = free_entries - n;
+	return n;
+}
+
+
+static __rte_always_inline unsigned int
+__rte_ring_move_prod_head(struct rte_ring *r, unsigned int is_sp,
+		unsigned int n, enum rte_ring_queue_behavior behavior,
+		uint32_t *old_head, uint32_t *new_head,
+		uint32_t *free_entries)
+{
+	const uint32_t capacity = r->capacity;
+	unsigned int max = n;
+	int success;
+
+	do {
+		/* Reset n to the initial burst count */
+		n = max;
+
+		*old_head = r->prod.head;
+
+		/* add rmb barrier to avoid load/load reorder in weak
+		 * memory model. It is noop on x86
+		 */
+		rte_smp_rmb();
+
+		/*
+		 *  The subtraction is done between two unsigned 32bits value
+		 * (the result is always modulo 32 bits even if we have
+		 * *old_head > cons_tail). So 'free_entries' is always between 0
+		 * and capacity (which is < size).
+		 */
+		*free_entries = (capacity + r->cons.tail - *old_head);
+
+		/* check that we have enough room in ring */
+		if (unlikely(n > *free_entries))
+			n = (behavior == RTE_RING_QUEUE_FIXED) ?
+					0 : *free_entries;
+
+		if (n == 0)
+			return 0;
+
+		*new_head = *old_head + n;
+		if (is_sp)
+			r->prod.head = *new_head, success = 1;
+		else
+			success = rte_atomic32_cmpset(&r->prod.head,
+					*old_head, *new_head);
+	} while (unlikely(success == 0));
+	return n;
+}
+
+static __rte_always_inline void
+update_tail(struct rte_ring_headtail *ht, uint32_t old_val, uint32_t new_val,
+		uint32_t single, uint32_t enqueue)
+{
+	if (enqueue)
+		rte_smp_wmb();
+	else
+		rte_smp_rmb();
+	/*
+	 * If there are other enqueues/dequeues in progress that preceded us,
+	 * we need to wait for them to complete
+	 */
+	if (!single)
+		while (unlikely(ht->tail != old_val))
+			rte_pause();
+
+	ht->tail = new_val;
+}
+```
+
+
 ## kfifo的无锁实现
+
+可以看到本质上就是一个先enqueue再挪动指针，保证数据先进去，再稳定挪动的操作。这个过程使用了内存屏障等多种操作。在ARM ustack atcp_rq就会出现问题。
+
+```
+	unsigned int kfifo_in(struct kfifo *fifo, const void *from,
+				unsigned int len)
+{
+	len = min(kfifo_avail(fifo), len);
+
+	__kfifo_in_data(fifo, from, len, 0);
+	__kfifo_add_in(fifo, len);
+	return len;
+}
+
+static inline void __kfifo_in_data(struct kfifo *fifo,
+		const void *from, unsigned int len, unsigned int off)
+{
+	unsigned int l;
+
+	/*
+	 * Ensure that we sample the fifo->out index -before- we
+	 * start putting bytes into the kfifo.
+	 */
+
+	smp_mb();
+
+	off = __kfifo_off(fifo, fifo->in + off);
+
+	/* first put the data starting from fifo->in to buffer end */
+	l = min(len, fifo->size - off);
+	memcpy(fifo->buffer + off, from, l);
+
+	/* then put the rest (if any) at the beginning of the buffer */
+	memcpy(fifo->buffer, from + l, len - l);
+}
+
+static inline void __kfifo_add_in(struct kfifo *fifo,
+				unsigned int off)
+{
+	smp_wmb();
+	fifo->in += off;
+}
+```
 
 
 
