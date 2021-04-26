@@ -84,7 +84,7 @@ BSSL_NAMESPACE_BEGIN
 
 #### 1.2.1 TLS连接结构
 
-可以看出来SSL_HANDSHAKE结构和具体的握手状态是相关的，具体的握手状态在自动机里面才会用到，先不过于关注这几个东西。BoringSSL添加了一个SSL_CONFIG结构用于完成握手之后给后面连接保存必要的信息。 `SSL`并不是线程安全的，任何时刻只能有一个线程使用该数据结构。具体的配置可以直接对`SSL_CTX`结构或者世界对`SSL`结构配置。
+可以看出来SSL_HANDSHAKE结构和具体的握手状态是相关的，具体的握手状态在自动机里面才会用到，先不过于关注这几个东西。BoringSSL添加了一个SSL_CONFIG结构用于完成握手之后给后面连接保存必要的信息。 `SSL`并不是线程安全的，任何时刻只能有一个线程使用该数据结构。具体的配置可以直接对`SSL_CTX`结构或者世界对`SSL`结构配置。实际上这个东西就是我们关注的对象
 
 ```c++
 enum ssl_hs_wait_t {
@@ -1281,7 +1281,355 @@ struct SSL_CONFIG {
 };
 ```
 
+## 2 握手函数
 
+### 2.1 握手相关函数
+
+函数`SSL_do_handshake`负责继续当前连接的握手状态，有个很有趣的地方实际上要注意，需要先绑定`fd`或`bio`才能继续让`SSL_do_handshake`继续。很类似的`SSL__connect`和`SSL_accept`分别用来给client和server端使用，`SSL_read`函数和openssl代码里还是一致的，返回读取到的明文。和`SSL_read`类似的函数`SSL_peak`用来获得明文，但是不会真正的读取报文。这东西也就特定情况下需要。
+
+
+
+诸如`KEY_UPDATE_UPDATE_REQUESTED`和`KEY_UPDATE_UPDATE_NOT_REQUESTED`倒是和我写的代码完全一致。
+
+
+
+`SSL_get_error`函数很有趣，最近的操作失败时，使用这个函数获取失败原因，统一的处理
+
+
+
+## 3 基本的属性和值
+
+### 3.1 protocol version和函数
+
+和openssl一样，还是两个函数。但是有单独的函数去设定对应的SSL版本号。最后的函数负责获得握手时确定的版本号
+
+```c++
+#define DTLS1_VERSION_MAJOR 0xfe
+#define SSL3_VERSION_MAJOR 0x03
+#define SSL3_VERSION 0x0300
+#define TLS1_VERSION 0x0301
+#define TLS1_1_VERSION 0x0302
+#define TLS1_2_VERSION 0x0303
+#define TLS1_3_VERSION 0x0304
+#define DTLS1_VERSION 0xfeff
+#define DTLS1_2_VERSION 0xfefd
+OPENSSL_EXPORT int SSL_CTX_set_min_proto_version(SSL_CTX *ctx, uint16_t version);
+OPENSSL_EXPORT int SSL_CTX_set_max_proto_version(SSL_CTX *ctx, uint16_t version);                           OPENSSL_EXPORT int SSL_version(const SSL *ssl);                      
+```
+
+
+
+### 3.2 CTX的属性和函数
+
+属性这一块坦白讲我觉得没啥意思，
+
+```
+SSL_MODE_ENABLE_PARTIAL_WRITE //允许往一个record里面写部分的报文
+```
+
+### 3.3 证书和私钥相关函数
+
+```c++
+OPENSSL_EXPORT int SSL_CTX_use_certificate(SSL_CTX *ctx, X509 *x509);
+OPENSSL_EXPORT int SSL_use_certificate(SSL *ssl, X509 *x509);
+OPENSSL_EXPORT int SSL_CTX_set0_chain(SSL_CTX *ctx, STACK_OF(X509) *chain);
+OPENSSL_EXPORT int SSL_CTX_set1_chain(SSL_CTX *ctx, STACK_OF(X509) *chain);
+
+OPENSSL_EXPORT void SSL_CTX_set_cert_cb(SSL_CTX *ctx,
+                                        int (*cb)(SSL *ssl, void *arg),
+                                        void *arg);  //这个函数就很有趣了，设置回调来选择具体的证书
+OPENSSL_EXPORT size_t
+SSL_get0_peer_verify_algorithms(const SSL *ssl, const uint16_t **out_sigalgs);//这个函数就负责选择对端识别的sig算法，从而能够影响本端证书的选择
+OPENSSL_EXPORT int SSL_CTX_check_private_key(const SSL_CTX *ctx); //检测私钥证书是否匹配
+```
+
+
+
+## 4 复用相关数据结构
+
+复用最基础的数据结构就三个，这三个就是我们主要的研究对象。
+
+### 4.1 SESSION
+
+`SESSION`基本的数据结构，但是是关联SESSION ID还是SESSION CACHE是需要看SESSION里面的数据结构。实际上这意味着我们可以自由自在地往里面存储数据。
+
+```c++
+OPENSSL_EXPORT SSL_SESSION *SSL_SESSION_new(const SSL_CTX *ctx);
+OPENSSL_EXPORT int SSL_SESSION_up_ref(SSL_SESSION *session);
+OPENSSL_EXPORT void SSL_SESSION_free(SSL_SESSION *session); //减少引用计数，引用计数为0就触发free
+OPENSSL_EXPORT uint64_t SSL_SESSION_get_time(const SSL_SESSION *session);//获取SESSION的颁发时间
+OPENSSL_EXPORT size_t SSL_SESSION_get_master_key(const SSL_SESSION *session,
+                                                 uint8_t *out, size_t max_out);//获取具体的衍生秘钥
+OPENSSL_EXPORT int SSL_SESSION_should_be_single_use(const SSL_SESSION *session);//这个就很牛逼了，只能使用一次的SESSION
+```
+
+
+
+### 4.2 SESSION CACHE
+
+和`SESSION`有什么区别？这个问题自然而然出现了，看注释应该是一样的，都是`SSL_session`结构。boringg ssl自己内置了一种SESSION CACHE的代码实现，使用的数据结构是内置的hashTable，原文引用于下
+
+> For a server, the library implements a built-in internal session cache as an in-memory hash table. Servers may also use `SSL_CTX_sess_set_get_cb` and `SSL_CTX_sess_set_new_cb` to implement a custom external session cache. In particular, this may be used to share a session cache between multiple servers in a large deployment. An external cache may be used in addition to or instead of the internal one. Use `SSL_CTX_set_session_cache_mode` to toggle the internal cache.
+
+```c++
+#define SSL_SESS_CACHE_OFF 0x0000  //用来关停SESSION CACHE功能
+struct ssl_session_st {
+  explicit ssl_session_st(const bssl::SSL_X509_METHOD *method);
+  ssl_session_st(const ssl_session_st &) = delete;
+  ssl_session_st &operator=(const ssl_session_st &) = delete;
+
+  CRYPTO_refcount_t references = 1;
+
+  // ssl_version is the (D)TLS version that established the session.
+  uint16_t ssl_version = 0;
+
+  // group_id is the ID of the ECDH group used to establish this session or zero
+  // if not applicable or unknown.
+  uint16_t group_id = 0;
+
+  // peer_signature_algorithm is the signature algorithm used to authenticate
+  // the peer, or zero if not applicable or unknown.
+  uint16_t peer_signature_algorithm = 0;
+
+  // secret, in TLS 1.2 and below, is the master secret associated with the
+  // session. In TLS 1.3 and up, it is the resumption PSK for sessions handed to
+  // the caller, but it stores the resumption secret when stored on |SSL|
+  // objects.
+  int secret_length = 0;
+  uint8_t secret[SSL_MAX_MASTER_KEY_LENGTH] = {0};
+
+  // session_id - valid?
+  unsigned session_id_length = 0;
+  uint8_t session_id[SSL_MAX_SSL_SESSION_ID_LENGTH] = {0};
+  // this is used to determine whether the session is being reused in
+  // the appropriate context. It is up to the application to set this,
+  // via SSL_new
+  uint8_t sid_ctx_length = 0;
+  uint8_t sid_ctx[SSL_MAX_SID_CTX_LENGTH] = {0};
+
+  bssl::UniquePtr<char> psk_identity;
+
+  // certs contains the certificate chain from the peer, starting with the leaf
+  // certificate.
+  bssl::UniquePtr<STACK_OF(CRYPTO_BUFFER)> certs;
+
+  const bssl::SSL_X509_METHOD *x509_method = nullptr;
+
+  // x509_peer is the peer's certificate.
+  X509 *x509_peer = nullptr;
+
+  // x509_chain is the certificate chain sent by the peer. NOTE: for historical
+  // reasons, when a client (so the peer is a server), the chain includes
+  // |peer|, but when a server it does not.
+  STACK_OF(X509) *x509_chain = nullptr;
+
+  // x509_chain_without_leaf is a lazily constructed copy of |x509_chain| that
+  // omits the leaf certificate. This exists because OpenSSL, historically,
+  // didn't include the leaf certificate in the chain for a server, but did for
+  // a client. The |x509_chain| always includes it and, if an API call requires
+  // a chain without, it is stored here.
+  STACK_OF(X509) *x509_chain_without_leaf = nullptr;
+
+  // verify_result is the result of certificate verification in the case of
+  // non-fatal certificate errors.
+  long verify_result = X509_V_ERR_INVALID_CALL;
+
+  // timeout is the lifetime of the session in seconds, measured from |time|.
+  // This is renewable up to |auth_timeout|.
+  uint32_t timeout = SSL_DEFAULT_SESSION_TIMEOUT;
+
+  // auth_timeout is the non-renewable lifetime of the session in seconds,
+  // measured from |time|.
+  uint32_t auth_timeout = SSL_DEFAULT_SESSION_TIMEOUT;
+
+  // time is the time the session was issued, measured in seconds from the UNIX
+  // epoch.
+  uint64_t time = 0;
+
+  const SSL_CIPHER *cipher = nullptr;
+
+  CRYPTO_EX_DATA ex_data;  // application specific data
+
+  // These are used to make removal of session-ids more efficient and to
+  // implement a maximum cache size.
+  SSL_SESSION *prev = nullptr, *next = nullptr;
+
+  bssl::Array<uint8_t> ticket;
+
+  bssl::UniquePtr<CRYPTO_BUFFER> signed_cert_timestamp_list;
+
+  // The OCSP response that came with the session.
+  bssl::UniquePtr<CRYPTO_BUFFER> ocsp_response;
+
+  // peer_sha256 contains the SHA-256 hash of the peer's certificate if
+  // |peer_sha256_valid| is true.
+  uint8_t peer_sha256[SHA256_DIGEST_LENGTH] = {0};
+
+  // original_handshake_hash contains the handshake hash (either SHA-1+MD5 or
+  // SHA-2, depending on TLS version) for the original, full handshake that
+  // created a session. This is used by Channel IDs during resumption.
+  uint8_t original_handshake_hash[EVP_MAX_MD_SIZE] = {0};
+  uint8_t original_handshake_hash_len = 0;
+
+  uint32_t ticket_lifetime_hint = 0;  // Session lifetime hint in seconds
+
+  uint32_t ticket_age_add = 0;
+
+  // ticket_max_early_data is the maximum amount of data allowed to be sent as
+  // early data. If zero, 0-RTT is disallowed.
+  uint32_t ticket_max_early_data = 0;
+
+  // early_alpn is the ALPN protocol from the initial handshake. This is only
+  // stored for TLS 1.3 and above in order to enforce ALPN matching for 0-RTT
+  // resumptions. For the current connection's ALPN protocol, see
+  // |alpn_selected| on |SSL3_STATE|.
+  bssl::Array<uint8_t> early_alpn;
+
+  // local_application_settings, if |has_application_settings| is true, is the
+  // local ALPS value for this connection.
+  bssl::Array<uint8_t> local_application_settings;
+
+  // peer_application_settings, if |has_application_settings| is true, is the
+  // peer ALPS value for this connection.
+  bssl::Array<uint8_t> peer_application_settings;
+
+  // extended_master_secret is whether the master secret in this session was
+  // generated using EMS and thus isn't vulnerable to the Triple Handshake
+  // attack.
+  bool extended_master_secret : 1;
+
+  // peer_sha256_valid is whether |peer_sha256| is valid.
+  bool peer_sha256_valid : 1;  // Non-zero if peer_sha256 is valid
+
+  // not_resumable is used to indicate that session resumption is disallowed.
+  bool not_resumable : 1;
+
+  // ticket_age_add_valid is whether |ticket_age_add| is valid.
+  bool ticket_age_add_valid : 1;
+
+  // is_server is whether this session was created by a server.
+  bool is_server : 1;
+
+  // is_quic indicates whether this session was created using QUIC.
+  bool is_quic : 1;
+
+  // has_application_settings indicates whether ALPS was negotiated in this
+  // session.
+  bool has_application_settings : 1;
+
+  // quic_early_data_context is used to determine whether early data must be
+  // rejected when performing a QUIC handshake.
+  bssl::Array<uint8_t> quic_early_data_context;
+
+ private:
+  ~ssl_session_st();
+  friend void SSL_SESSION_free(SSL_SESSION *);
+};
+```
+
+
+
+数据结构看完了，看看`SESSION CACHE`的管理是怎么做的，几个关键函数如下
+
+```c++
+// ssl_lookup_session looks up |session_id| in the session cache and sets
+// |*out_session| to an |SSL_SESSION| object if found.
+static enum ssl_hs_wait_t ssl_lookup_session(
+    SSL_HANDSHAKE *hs, UniquePtr<SSL_SESSION> *out_session,
+    Span<const uint8_t> session_id) {
+  SSL *const ssl = hs->ssl;
+  out_session->reset();
+
+  if (session_id.empty() || session_id.size() > SSL_MAX_SSL_SESSION_ID_LENGTH) {
+    return ssl_hs_ok;//session id不合法，不是合理的session id就直接放弃
+  }
+
+  UniquePtr<SSL_SESSION> session;
+  // Try the internal cache, if it exists.
+  if (!(ssl->session_ctx->session_cache_mode &
+        SSL_SESS_CACHE_NO_INTERNAL_LOOKUP)) {
+    uint32_t hash = ssl_hash_session_id(session_id);//先通过session_id计算出来hash
+    auto cmp = [](const void *key, const SSL_SESSION *sess) -> int {
+      Span<const uint8_t> key_id =
+          *reinterpret_cast<const Span<const uint8_t> *>(key);
+      Span<const uint8_t> sess_id =
+          MakeConstSpan(sess->session_id, sess->session_id_length);
+      return key_id == sess_id ? 0 : 1;
+    };
+    MutexReadLock lock(&ssl->session_ctx->lock);  //读锁开始锁SSL连接相关的session-ctx的锁了，然后升高ssl->session-ctx->session的reference count。但是这个锁太大了！去找一下这个锁的初始化的位置，这个锁太狠了
+    // |lh_SSL_SESSION_retrieve_key| returns a non-owning pointer.
+    session = UpRef(lh_SSL_SESSION_retrieve_key(ssl->session_ctx->sessions,
+                                                &session_id, hash, cmp));
+    // TODO(davidben): This should probably move it to the front of the list.
+  }
+
+  // Fall back to the external cache, if it exists.
+  if (!session && ssl->session_ctx->get_session_cb != nullptr) {
+    int copy = 1;
+    session.reset(ssl->session_ctx->get_session_cb(ssl, session_id.data(),
+                                                   session_id.size(), &copy));
+    if (!session) {
+      return ssl_hs_ok;
+    }
+
+    if (session.get() == SSL_magic_pending_session_ptr()) {
+      session.release();  // This pointer is not actually owned.
+      return ssl_hs_pending_session;
+    }
+
+    // Increment reference count now if the session callback asks us to do so
+    // (note that if the session structures returned by the callback are shared
+    // between threads, it must handle the reference count itself [i.e. copy ==
+    // 0], or things won't be thread-safe).
+    if (copy) {
+      SSL_SESSION_up_ref(session.get());
+    }
+
+    // Add the externally cached session to the internal cache if necessary.
+    if (!(ssl->session_ctx->session_cache_mode &
+          SSL_SESS_CACHE_NO_INTERNAL_STORE)) {
+      SSL_CTX_add_session(ssl->session_ctx.get(), session.get());
+    }
+  }
+
+  if (session && !ssl_session_is_time_valid(ssl, session.get())) {
+    // The session was from the cache, so remove it.
+    SSL_CTX_remove_session(ssl->session_ctx.get(), session.get());
+    session.reset();
+  }
+
+  *out_session = std::move(session);
+  return ssl_hs_ok;
+}
+```
+
+下面看一下``
+
+### 4.3 SESSION TICKET
+
+和SESSION CACHE不同，RFC5077里面给出了SESSION TICKET的实现。对于BORING SSL而言，SESSION TICKET也是支持的。
+
+> On the server, tickets are encrypted and authenticated with a secret key. By default, an `SSL_CTX` will manage session ticket encryption keys by generating them internally and rotating every 48 hours. Tickets are minted and processed transparently. The following functions may be used to configure a persistent key or implement more custom behavior, including key rotation and sharing keys between multiple servers in a large deployment. There are three levels of customisation possible:
+>
+> 1) One can simply set the keys with `SSL_CTX_set_tlsext_ticket_keys`. 2) One can configure an `EVP_CIPHER_CTX` and `HMAC_CTX` directly for encryption and authentication. 3) One can configure an `SSL_TICKET_AEAD_METHOD` to have more control and the option of asynchronous decryption.
+
+
+
+
+
+
+
+## 5 拓展相关数据结构
+
+### 5.1 ALPN
+
+### 5.2 NPN
+
+## 6 回归到基本问题
+
+### 6.1 复用的基本性能耗损
+
+### 6.2 兼容性的差别，BORING SSL与OPENSSL的对比
 
 
 
