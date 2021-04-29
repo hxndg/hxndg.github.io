@@ -1633,7 +1633,7 @@ struct ssl_session_st {
   }
   ```
 
-+ 上面看完了`LOOKUP`我们看看new SESSION的时候，也就是添加SESSION的时候发生了什么
++ 上面看完了`LOOKUP`我们看看new SESSION的时候，也就是添加SESSION的时候发生了什么？一个ssl的session最多存储多少个？
 
   ```c++
   int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *session) {
@@ -1857,7 +1857,9 @@ int SSL_SESSION_should_be_single_use(const SSL_SESSION *session) {
 }
 ```
 
-那么如何实现SINGLE-USE的呢？具体的代码得看`ssl_process_ticket`函数
+那么如何实现SINGLE-USE的呢？遗憾的是，这个东西BORING SSL和OPENSSL SSL都没实现：
+
+> Note also, in TLS 1.2 and earlier, offering sessions allows passive observers to correlate different client connections. TLS 1.3 and later fix this, provided clients use sessions at most once. Session caches are managed by the caller in BoringSSL, so this must be implemented externally. See `SSL_SESSION_should_be_single_use` for details.
 
 
 
@@ -1881,12 +1883,12 @@ int SSL_SESSION_should_be_single_use(const SSL_SESSION *session) {
 
 兼容性的角度需要从多个方面区别，比方说功能，代码，下面是功能的比较，我会从S_SERVER的属性进行比较。
 
-| 功能名称    | OPENSSL | BORING SSL |
-| ----------- | ------- | ---------- |
-| THREAD-SAFE | ✔       | ✔          |
-|             |         |            |
-|             |         |            |
-|             |         |            |
+| 功能名称                       | OPENSSL | BORING SSL |
+| ------------------------------ | ------- | ---------- |
+| THREAD-SAFE，都以pthread为基础 | ✔       | ✔          |
+| TICKET-AEAD 加密               |         |            |
+|                                |         |            |
+|                                |         |            |
 
 
 
