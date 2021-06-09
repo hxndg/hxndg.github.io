@@ -53,110 +53,113 @@ BORING SSL和OPENSSL相比较使用的参数，命令行的选项之类的东西
 
 + throughtworks技术雷达
 
-### 0.2 功能比较
+### 0.2 调研计划
 
-由于单纯阅读代码并不能直接检测具体代码的差别，因此为了对比具体的差别打算从以下三个方面下手：
+由于单纯阅读代码并不能直接检测具体代码的差别，因此打算从以下几个方面进行：
 
-+ 一个是GITHUB上面BORGINSSL从2020年开始的PATCH，它们是哪个方面的PATCH，是功能性还是补丁性质？
-+ 具体文档中提到的与openssl不同的地方，明显的优势是哪些？
-+ 具体代码功能的阅读，代码不能说谎，因此最后是必然追踪到代码的。有多少个地方使用了这种方法？覆盖的程度有多少？
-+ REVIEW BOARD的检查，应该可以对应到BUG
-
-
-
-#### 0.2.1 功能比较（文档）
-
-兼容性的角度需要从多个方面区别，比方说功能，代码，下面是功能的比较，我会从S_SERVER的属性进行比较。
-
-| 功能名称                       | OPENSSL | BORING SSL |
-| ------------------------------ | ------- | ---------- |
-| THREAD-SAFE，都以pthread为基础 | ✔       | ✔          |
-| TICKET-AEAD 加密               |         |            |
-| SSL-RENEGOTIATE                | 支持    | 默认不支持 |
-|                                |         |            |
++ GITHUB上面BORGINSSL从2020年开始的PATCH，属于功能性还是优化性？是否为experiment feature，内部做了哪些优化？
++ BORINGSSL具体文档中提到的与openssl不同的地方，明显的优势是哪些？GOOGLE云的文档当中又有哪些提到的地方
++ 源代码中的基本功能代码，覆盖的程度有多少？gRPC和chromium中关于tls的相关代码，chromium中的quic的代码。该部分主要为功能剪裁，需要从这部分进行调研。
 
 
 
+#### 0.2.1 文档比较
 
+从文档方面入手，可以看到BoringSSL对TLS自动机做的优化主要针对分布式环境下数据共享的难度和异步优化的操作，即将计算和IO相分离，降低多线程/分布式环境下的争用以提高吞吐：
 
-|      功能名称      | TLS1 | TLS1.1 | TLS1.2 | TLS1.3 | TLS1 | TLS1.1 | TLS1.2 | TLS1.3 |
-| :----------------: | :--: | :----: | :----: | :----: | :--: | :----: | :----: | :----: |
-|   SESSION TICKET   |  ✔   |   ✔    |   ✔    |   ✔    |  ✖   |   ✖    |   ✖    |   ✔    |
-|  SESSION ID CACHE  |  ✔   |   ✔    |   ✔    |   ✔    |  ✔   |   ✔    |   ✔    |   ✔    |
-| PREFER CIPHER LIST |  ✖   |   ✖    |   ✖    |   ✖    |  ✔   |   ✔    |   ✔    |   ✔    |
-| SINGLE-USE TICKET  |  ✖   |   ✖    |   ✖    |   ✖    |  ✖   |   ✖    |   ✖    |   ✖    |
-| TLS 重协商默认允许 |  ✔   |   ✔    |   ✔    |   ✔    |  ✖   |   ✖    |   ✖    |   ✖    |
-|                    |      |        |        |        |      |        |        |        |
-|                    |      |        |        |        |      |        |        |        |
-|                    |      |        |        |        |      |        |        |        |
-|                    |      |        |        |        |      |        |        |        |
+分布式环境下对共享数据的保护：
 
++ session ticket 直接将所有数据缓存在客户端，所有的机器只需要共享一套AEAD的密钥/Enc&Hmac密钥即可。
++ SSL_CTX_sess_set_get_cb异步查找session，实际上也是可以用于分布式多机环境
++ 如果使用默认的session cache全局查找，那么会使用一个全局的lock，从而复用的性能极低
 
+异步分离操作：
 
++ SSL_CTX_sess_set_get_cb异步查找session，
++ SSL_TICKET_AEAD_METHOD异步的AEAD加解密操作
++ ssl_private_key_method_st普通的异步加解密操作
++ SSL_CTX_set_custom_verify证书校验异步操作
 
+GOOGLE的云安全文档中，
 
-代码的兼容性
+外部session，openssl和BoringSSL都支持。但是我们似乎没有使用。
 
-+ 很多OPENSSL的CTRL函数被提出按了，Some OpenSSL APIs are implemented with `ioctl`-style functions such as `SSL_ctrl` and `EVP_PKEY_CTX_ctrl`, combined with convenience macros,In BoringSSL, these macros have been replaced with proper functions. The underlying `_ctrl` functions have been removed.
-+ 一部分的加解密代码变了，比方说EVP_PKEY_HMAC，变成了HMAC_*
+BoringSSL的加解密/IO操作分离不能说openssl不具备，但是不像这么直接提出来。对于session的自定，openssl目前不支持。
 
-
-
-具体的代码差别可以看https://boringssl.googlesource.com/boringssl/+/HEAD/PORTING.md链接
+BoringSSL在tls1.3引入了session ticket，异步的证书签名verify是openssl不具备的。
 
 
 
-#### 0.2.2 功能比较（PATCH）
+#### 0.2.2 PATCH比较
 
 从patch来看，boringssl引入了以下方面
 
-+ ECH(ESNI)
-+ HPKE
-+ EVP
-+ AEAD，应用范围越来越广了，除了加密/认证，还有nonce产生
-+ 对侧信道攻击的防御，比方说lucky13
-+ 安全方面，移除了所有的不安全算法。比方说CBC SHA2
-+ 开启c11支持，移除gcc4.9.0代码的检测
-+ 具体实现代码的考虑：线程安全的考虑。因为内部hold锁，外部hold锁的原因
-+ 具体实现代码的考虑：性能优化。减少内存使用 & 证书压缩
-+ 具体实现代码的考虑：内存回收是否清零
++ HPKE（ECH，也就是ESNI）HPKE即复合公钥加密方案，用于非对称环境下对任意长度明文的保护。换言之，实现了完全的保密。目前已知的应用场景有ECH。该功能为实验性质，OPENSSL并未支持。BoringSSL优化了HPKE四种模式中的三种，只是用最基本的模式，共享backend server的公钥和私钥进行加密通信。
++ AEAD，加密并认证算法在BoringSSL应用范围被不断扩大，从具体的通信加解密到敏感信息存储，再到做为PRF参与伪随机密钥进行计算。相比较而言，OpenSSL只使用AEAD做为基本的通信加密手段，并没有做为单独模块参与敏感信息的存储。
++ TrustToken和PMBToken，用于替代第三方COOKIE的代码
 + 关注一下crypto/trust_token/trust_token.c的代码https://github.com/google/boringssl/commit/07827156c9ef185d3777e0f72e1afc44fa9cc2e0
 + 还要关注这个trust token，Update TrustTokenV2 to use VOPRFs and assemble RR.参考这个链接https://eprint.iacr.org/2020/072/20200324:214215
++ 对侧信道攻击的防御，比方说lucky13
++ 优化性质的patch
+
+#### 0.2.3 源码分析（gRPC和Chromium）
 
 
+
+
+
+就目前而言，quic只允许使用tls1.3协议。除此之外的不同需要通过查看chrome的具体配置来进行细化。大部分的google都适用quic协议，目前我们能够明显的看到GOOGLE已经开始大规模部署TLS1.3了https://cloud.google.com/blog/products/networking/tls-1-3-is-now-on-by-default-for-google-cloud-services。
+
+此外，GOOGLE的具体性能剪裁的内容在这里可见https://cloud.google.com/security/encryption-in-transit#user_to_google_front_end_encryption
+
+boringSSL的核心库需要boringCrypto需要研究
+
+需要调研BeyondCorp
 
 ### 0.3 总体比较
 
 从实现来看BORINGSSL作为GOOGLE为TLS提供的基础库，主要包含以下几个方面的精细化内容：
 
-+ 安全方面：内容很多，基础的HPKE，HPKE的利用ECH，AEAD逐渐取代了过去的EThenMac渗透到的各种方面（包括SSL ticket，关键数据的存储等），TrustToken + PMBToken。使用TLS1.3覆盖原本的基础协议。SIPHASH
++ 安全方面：内容很多，基础的HPKE，HPKE的利用ECH，AEAD逐渐取代了过去的EncryptThenMac渗透到的各种方面（包括SSL ticket，关键数据的存储等），TrustToken + PMBToken。使用TLS1.3覆盖原本的基础协议。SIPHASH
 + 标准化方面：AEAD与HKDF-EXTRACT & HKDF-EXPAND
-+ 性能方面：性能方面的优化并不多，而且和上面的内容比较重合，比方说使用AEAD追求安全和性能的平衡。使用证书压缩来简短通信流量。使用TLS1.3来减少RTT。在TLS1.3中GOOGLE引入SESSION TICKET/SESSION ID机制来降低全局数据查询的时间(换言之QUIC)。使用长连接来降低秘钥交换的性能消耗（这条已经很多开始使用了）
++ 性能方面：性能方面的优化并不多，而且和上面的内容比较重合，比方说使用AEAD追求安全和性能的平衡。使用证书压缩来简短通信流量。使用TLS1.3来减少RTT。在TLS1.3中GOOGLE引入SESSION TICKET/SESSION ID机制来降低全局数据查询的时间(换言之QUIC)。使用长连接来降低秘钥交换的性能消耗（这条已经很多开始使用了）。QUIC
 + 兼容性方面：
++ 待补充，具体BORRINGSSL做的哪些功能和细节剪裁的内容，然后避开了哪些问题进行补齐。
 
 我们下面拆开说：
 
 安全方面：
 
 + HPKE，混合公钥加密机制提供了
++ GREASE
 + AEAD
 + TurstToken：取代第三方cookie
-+ TLS1.3的大规模使用
++ TLS1.3的大规模使用。google内部已经开始大规模使用tls1.3协议，具体链接为https://cloud.google.com/blog/products/networking/tls-1-3-is-now-on-by-default-for-google-cloud-services。从
++ 需要补充双向认证方面的安全实现方案。具体GOOGLE做了什么
 
 标准化方面：
+
+在这块添加BORRINGSSL具体剪裁的内容即可，这个东西说白了就是GOOGLE默认的配置做了哪些剪裁
 
 性能方面：
 
 + AEAD安全性和性能的平衡
-+ 压缩证书，对于证书链比较长的证书，进行压缩降低数据传输时候消耗的数据包数量
++ 压缩证书，对于证书链比较长的证书，进行压缩降低数据传输时候消耗的数据包数量。具体的RFC参见rfc8779https://datatracker.ietf.org/doc/html/rfc8879
 + 使用TLS1.3在完整情况下减少一个RTT时间
 + 使用TLS1.3的SESSION ID和SESSION TICKET机制减少握手秘钥的迭代和签名等信息的计算（严格来说是减少RTT的时间消耗+非对称操作的时间来提高性能）。需要注意的是对于TLS1.3之前的协议，复用机制能大大减少性能消耗（时间延迟）。
-+ 前向安全，这个是性能优化当中一个不是很被注意的东西。前向安全的好处是获得服务器秘钥被第三方获取后，也不能解密具体的通信流量。当时前向安全要求服务器每次必须重新产生随机秘钥，因此带来很大的性能消耗。
++ 前向安全，这个是性能优化当中一个不是很被注意的东西。前向安全的好处是获得服务器秘钥被第三方获取后，也不能解密具体的通信流量。当时前向安全要求服务器每次必须重新产生随机秘钥，因此带来很大的性能消耗。需要注意的是对TLS1.3而言，前向安全是必须提供的，换言之。对TLS1.3，丢弃前向安全并不可能。
 + 使用长连接来减少秘钥的性能消耗。
++ QUIC，快速性能高
 
 兼容性方面：
 
 
+
+
+
+先看具体的功能剪裁
+
+catClient. 郑超
 
 
 
