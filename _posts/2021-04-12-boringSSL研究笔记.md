@@ -116,6 +116,96 @@ boringSSL的核心库需要boringCrypto需要研究
 
 需要调研BeyondCorp
 
+
+
+gRPC的默认服务端verify级别：
+
+```
+ typedef enum {
+  /** Default option: performs server certificate verification and hostname
+     verification. */
+  GRPC_TLS_SERVER_VERIFICATION,
+  /** Performs server certificate verification, but skips hostname verification
+     Client is responsible for verifying server's identity via
+     server authorization check callback. */
+  GRPC_TLS_SKIP_HOSTNAME_VERIFICATION,
+  /** Skips both server certificate and hostname verification.
+     Client is responsible for verifying server's identity and
+     server's certificate via server authorization check callback. */
+  GRPC_TLS_SKIP_ALL_SERVER_VERIFICATION
+} grpc_tls_server_verification_option;
+
+ GRPC_TLS_SERVER_VERIFICATION
+```
+
+gRPC的默认session配置
+
+```
+/** --- SSL Session Cache. ---
+
+    A SSL session cache object represents a way to cache client sessions
+    between connections. Only ticket-based resumption is supported. */
+
+typedef struct grpc_ssl_session_cache grpc_ssl_session_cache;
+```
+
+gRPC默认的session存储结构和配置
+
++ session时长？
++ session存储方式？
++ 
+
+
+
+gRPC默认支持的TLS版本：
+
+```
+/** The TLS versions that are supported by the SSL stack. **/
+typedef enum { TLS1_2, TLS1_3 } grpc_tls_version;
+```
+
+
+
+默认cipher：
+
+```
+// All cipher suites for default are compliant with HTTP2.
+GPR_GLOBAL_CONFIG_DEFINE_STRING(
+    grpc_ssl_cipher_suites,
+    "TLS_AES_128_GCM_SHA256:"
+    "TLS_AES_256_GCM_SHA384:"
+    "TLS_CHACHA20_POLY1305_SHA256:"
+    "ECDHE-ECDSA-AES128-GCM-SHA256:"
+    "ECDHE-ECDSA-AES256-GCM-SHA384:"
+    "ECDHE-RSA-AES128-GCM-SHA256:"
+    "ECDHE-RSA-AES256-GCM-SHA384",
+    "A colon separated list of cipher suites to use with OpenSSL")
+
+static void init_cipher_suites(void) {
+  grpc_core::UniquePtr<char> value =
+      GPR_GLOBAL_CONFIG_GET(grpc_ssl_cipher_suites);
+  cipher_suites = value.release();
+}
+```
+
+gRPC选用的PRF和HKDF
+
+gRPC实现
+
+gRPC的拓展：
+
+gRPCtls1.3默认配置检查：
+
+gRPC 0-RTT是否接受
+
+gRPC 证书算法的支持verify signature
+
+gRPC具体支持的曲线supported groups
+
+gRPC PHA是否支持
+
+gRPC PSK mode的支持
+
 ### 0.3 总体比较
 
 从实现来看BORINGSSL作为GOOGLE为TLS提供的基础库，主要包含以下几个方面的精细化内容：
