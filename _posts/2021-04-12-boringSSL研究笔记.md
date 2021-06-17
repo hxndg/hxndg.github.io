@@ -116,6 +116,8 @@ boringSSL的核心库需要boringCrypto需要研究
 
 需要调研BeyondCorp
 
+gRPC将认证作为一个context单独拿出来
+
 
 
 gRPC的默认服务端verify级别：
@@ -151,9 +153,19 @@ typedef struct grpc_ssl_session_cache grpc_ssl_session_cache;
 
 gRPC默认的session存储结构和配置
 
-+ session时长？
++ session时长？     有ssl_session_openssl.cc（序列化存储）和
 + session存储方式？
-+ 
++ 管理方式  lru方式。内部使用AVL平衡树+链表执行查找 ，ssl_session_cache.h一开始有一行Note that servers are required to share session ticket encryption keys
+
+gRPC JWT相关方法
+
+gRPC token最大的时长 ：1h，默认算法 RS256
+
+ssl_transport_security.cc
+
+client_ssl.cc
+
+gRPC local identity
 
 
 
@@ -249,7 +261,7 @@ gRPC PSK mode的支持
 
 先看具体的功能剪裁
 
-catClient. 郑超
+
 
 
 
