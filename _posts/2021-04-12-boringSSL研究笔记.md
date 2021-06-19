@@ -163,7 +163,9 @@ gRPC token最大的时长 ：1h，默认算法 RS256
 
 ssl_transport_security.cc
 
-client_ssl.cc
+client_ssl.cc 
+
+session相关  /* TODO(jboeuf): Add revocation verification. */，grpc开始了具体代码位置ssl_transport_security.cc 2007
 
 gRPC local identity
 
@@ -217,6 +219,147 @@ gRPC具体支持的曲线supported groups
 gRPC PHA是否支持
 
 gRPC PSK mode的支持
+
+
+
+看borringSSL SSL_CTX_NEW中默认的1.2算法使用的cipher等方面信息
+
+```
+// SSL_DEFAULT_SESSION_TIMEOUT is the default lifetime, in seconds, of a
+// session in TLS 1.2 or earlier. This is how long we are willing to use the
+// secret to encrypt traffic without fresh key material.
+#define SSL_DEFAULT_SESSION_TIMEOUT (2 * 60 * 60)
+
+// SSL_DEFAULT_SESSION_PSK_DHE_TIMEOUT is the default lifetime, in seconds, of a
+// session for TLS 1.3 psk_dhe_ke. This is how long we are willing to use the
+// secret as an authenticator.
+#define SSL_DEFAULT_SESSION_PSK_DHE_TIMEOUT (2 * 24 * 60 * 60)
+
+// SSL_DEFAULT_SESSION_AUTH_TIMEOUT is the default non-renewable lifetime, in
+// seconds, of a TLS 1.3 session. This is how long we are willing to trust the
+// signature in the initial handshake.
+```
+
+boringssl 两个文件client.cc和server.cc
+
+
+
+比较openssl和boringssl方面：
+
+**-sigalgs**  不配置的情况下，openssl是默认的都支持
+
+**-client_sigalgs** 不配置的情况下和sigalgs一致，一般来说就是默认都有.总共就是23种
+
+> Signature Hash Algorithms (23 algorithms)
+>     Signature Algorithm: ecdsa_secp256r1_sha256 (0x0403)
+>     Signature Algorithm: ecdsa_secp384r1_sha384 (0x0503)
+>     Signature Algorithm: ecdsa_secp521r1_sha512 (0x0603)
+>     Signature Algorithm: ed25519 (0x0807)
+>     Signature Algorithm: ed448 (0x0808)
+>     Signature Algorithm: rsa_pss_pss_sha256 (0x0809)
+>     Signature Algorithm: rsa_pss_pss_sha384 (0x080a)
+>     Signature Algorithm: rsa_pss_pss_sha512 (0x080b)
+>     Signature Algorithm: rsa_pss_rsae_sha256 (0x0804)
+>     Signature Algorithm: rsa_pss_rsae_sha384 (0x0805)
+>     Signature Algorithm: rsa_pss_rsae_sha512 (0x0806)
+>     Signature Algorithm: rsa_pkcs1_sha256 (0x0401)
+>     Signature Algorithm: rsa_pkcs1_sha384 (0x0501)
+>     Signature Algorithm: rsa_pkcs1_sha512 (0x0601)
+>     Signature Algorithm: SHA224 ECDSA (0x0303)
+>     Signature Algorithm: ecdsa_sha1 (0x0203)
+>     Signature Algorithm: SHA224 RSA (0x0301)
+>     Signature Algorithm: rsa_pkcs1_sha1 (0x0201)
+>     Signature Algorithm: SHA224 DSA (0x0302)
+>     Signature Algorithm: SHA1 DSA (0x0202)
+>     Signature Algorithm: SHA256 DSA (0x0402)
+>     Signature Algorithm: SHA384 DSA (0x0502)
+>     Signature Algorithm: SHA512 DSA (0x0602)
+
+
+
+**-groups**
+
+Supported Groups (5 groups)
+    Supported Group: x25519 (0x001d)
+    Supported Group: secp256r1 (0x0017)
+    Supported Group: x448 (0x001e)
+    Supported Group: secp521r1 (0x0019)
+    Supported Group: secp384r1 (0x0018)
+
+boringssl默认的如下
+
+不过要注意的是，SHA1这种算法默认已经不再被青睐了，grpc、boringssl里面已经提供了单独的选项禁用掉这种算法了。
+
+```
+
+// kVerifySignatureAlgorithms is the default list of accepted signature
+// algorithms for verifying.
+static const uint16_t kVerifySignatureAlgorithms[] = {
+    // List our preferred algorithms first.
+    SSL_SIGN_ECDSA_SECP256R1_SHA256,
+    SSL_SIGN_RSA_PSS_RSAE_SHA256,
+    SSL_SIGN_RSA_PKCS1_SHA256,
+
+    // Larger hashes are acceptable.
+    SSL_SIGN_ECDSA_SECP384R1_SHA384,
+    SSL_SIGN_RSA_PSS_RSAE_SHA384,
+    SSL_SIGN_RSA_PKCS1_SHA384,
+
+    SSL_SIGN_RSA_PSS_RSAE_SHA512,
+    SSL_SIGN_RSA_PKCS1_SHA512,
+
+    // For now, SHA-1 is still accepted but least preferable.
+    SSL_SIGN_RSA_PKCS1_SHA1,
+};
+
+// kSignSignatureAlgorithms is the default list of supported signature
+// algorithms for signing.
+static const uint16_t kSignSignatureAlgorithms[] = {
+    // List our preferred algorithms first.
+    SSL_SIGN_ED25519,
+    SSL_SIGN_ECDSA_SECP256R1_SHA256,
+    SSL_SIGN_RSA_PSS_RSAE_SHA256,
+    SSL_SIGN_RSA_PKCS1_SHA256,
+
+    // If needed, sign larger hashes.
+    //
+    // TODO(davidben): Determine which of these may be pruned.
+    SSL_SIGN_ECDSA_SECP384R1_SHA384,
+    SSL_SIGN_RSA_PSS_RSAE_SHA384,
+    SSL_SIGN_RSA_PKCS1_SHA384,
+
+    SSL_SIGN_ECDSA_SECP521R1_SHA512,
+    SSL_SIGN_RSA_PSS_RSAE_SHA512,
+    SSL_SIGN_RSA_PKCS1_SHA512,
+
+    // If the peer supports nothing else, sign with SHA-1.
+    SSL_SIGN_ECDSA_SHA1,
+    SSL_SIGN_RSA_PKCS1_SHA1,
+};
+```
+
+
+
+-groups
+
+```
+CONSTEXPR_ARRAY NamedGroup kNamedGroups[] = {
+    {NID_secp224r1, SSL_CURVE_SECP224R1, "P-224", "secp224r1"},
+    {NID_X9_62_prime256v1, SSL_CURVE_SECP256R1, "P-256", "prime256v1"},
+    {NID_secp384r1, SSL_CURVE_SECP384R1, "P-384", "secp384r1"},
+    {NID_secp521r1, SSL_CURVE_SECP521R1, "P-521", "secp521r1"},
+    {NID_X25519, SSL_CURVE_X25519, "X25519", "x25519"},
+    {NID_CECPQ2, SSL_CURVE_CECPQ2, "CECPQ2", "CECPQ2"},
+};
+
+
+```
+
+
+
+openssl 默认的版本是从tls1.0-tls1.3，
+
+boringssl
 
 ### 0.3 总体比较
 
