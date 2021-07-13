@@ -57,165 +57,138 @@ BORING SSL和OPENSSL相比较使用的参数，命令行的选项之类的东西
 
 ### 0.2 调研计划
 
-由于单纯阅读代码并不能直接检测具体代码的差别，因此打算从以下几个方面进行：
+#### 0.2.1 调研对象和方法
 
-+ GITHUB上面BORGINSSL从2020年开始的PATCH，属于功能性还是优化性？是否为experiment feature，内部做了哪些优化？
-+ BORINGSSL具体文档中提到的与openssl不同的地方，明显的优势是哪些？GOOGLE云的文档当中又有哪些提到的地方
-+ 源代码中的基本功能代码，覆盖的程度有多少？gRPC和chromium中关于tls的相关代码，chromium中的quic的代码。该部分主要为功能剪裁，需要从这部分进行调研。
+调研对象：BoringSSL和OpenSSL，及部分使用BoringSSL的开源软件（gRPC，chromium)
 
+调研目的：调研BorringSSL基础库内做了哪些TLS的的功能性/安全性/性能方面的改造。
 
+期望的调研结果：给出适用场景/优缺点比较/实现难易程度比较/性能比较
 
-#### 0.2.1 文档比较
-
-从文档方面入手，可以看到BoringSSL对TLS自动机做的优化主要针对分布式环境下数据共享的难度和异步优化的操作，即将计算和IO相分离，降低多线程/分布式环境下的争用以提高吞吐：
-
-分布式环境下对共享数据的保护：
-
-+ session ticket 直接将所有数据缓存在客户端，所有的机器只需要共享一套AEAD的密钥/Enc&Hmac密钥即可。
-+ SSL_CTX_sess_set_get_cb异步查找session，实际上也是可以用于分布式多机环境
-+ 如果使用默认的session cache全局查找，那么会使用一个全局的lock，从而复用的性能极低
-
-异步分离操作：
-
-+ SSL_CTX_sess_set_get_cb异步查找session，
-+ SSL_TICKET_AEAD_METHOD异步的AEAD加解密操作
-+ ssl_private_key_method_st普通的异步加解密操作
-+ SSL_CTX_set_custom_verify证书校验异步操作
-
-GOOGLE的云安全文档中，
-
-外部session，openssl和BoringSSL都支持。但是我们似乎没有使用。
-
-BoringSSL的加解密/IO操作分离不能说openssl不具备，但是不像这么直接提出来。对于session的自定，openssl目前不支持。
-
-BoringSSL在tls1.3引入了session ticket，异步的证书签名verify是openssl不具备的。
+调研方法：1 调研BORGINSS L从2020年提交的PATCH，关注其中功能性方面的代码；2 BoringSSL文档中提供，而OpenSSL未提供的旧功能，尤其关注针对大规模环境下提交的功能；3 源代码剪裁，尤其是以gRPC为代表的软件所执行的代码剪裁。
 
 
 
-#### 0.2.2 PATCH比较
+#### 0.2.2 调研结果
 
-从patch来看，boringssl引入了以下方面
+调研结果从以下几个方面展示：
 
-+ HPKE（ECH，也就是ESNI）HPKE即复合公钥加密方案，用于非对称环境下对任意长度明文的保护。换言之，实现了完全的保密。目前已知的应用场景有ECH。该功能为实验性质，OPENSSL并未支持。BoringSSL优化了HPKE四种模式中的三种，只是用最基本的模式，共享backend server的公钥和私钥进行加密通信。
-+ AEAD，加密并认证算法在BoringSSL应用范围被不断扩大，从具体的通信加解密到敏感信息存储，再到做为PRF参与伪随机密钥进行计算。相比较而言，OpenSSL只使用AEAD做为基本的通信加密手段，并没有做为单独模块参与敏感信息的存储。
-+ TrustToken和PMBToken，用于替代第三方COOKIE的代码
-+ 关注一下crypto/trust_token/trust_token.c的代码https://github.com/google/boringssl/commit/07827156c9ef185d3777e0f72e1afc44fa9cc2e0
-+ 还要关注这个trust token，Update TrustTokenV2 to use VOPRFs and assemble RR.参考这个链接https://eprint.iacr.org/2020/072/20200324:214215
-+ 对侧信道攻击的防御，比方说lucky13
-+ 优化性质的patch
++ 安全方面：重点关注BorringSSL实现了哪些新的安全功能，改进了哪些曾经的部件（流程），对TLS的利用到哪种程度
++ 标准化方面：即BorringSSL提取出哪些组件为标准模块参与到基本功能里
++ 性能方面：性能方面主要为TLS握手性能的优化。需区分TLS1.3和TLS1.3之前的协议
++ 兼容性方面：主要表现为功能剪裁，即BoringSSL相比较OpenSSL筛检了哪些基本功能。
 
-#### 0.2.3 源码分析（gRPC和Chromium）
+##### 0.2.2.1 安全方面
+
+安全方面BoringSSL全力推进HPKE的使用
+
+1. HPKE，混合公钥加密方案，目前主要用于非对称环境下的一次一密通信方案。目前已有的使用方案为ECH，用于加密SNI信息，保证所有握手信息的安全性，绕过第三方监控等等。**OpenSSL不支持该功能，而BoringSSL已经作为基本组件进入代码库。**
+
+   HPKE的解释和优缺点：混合公钥加密方案，目前主要用于非对称环境下的一次一密通信方案。目前已有的使用方案为ECH，用于加密SNI信息，保证所有握手信息的安全性，绕过第三方监控等等。HPKE的优点是，其安全性经过机构证明，和实施时编写的代码细节没有直接关系，且性能良好。其缺点在于客户端必须预先共享真正服务器（backend server)的证书/公钥等信息，增加了客户端负担。HPKE适用于大规模启用TLS握手环境。实现难度较大。
+
+2. AEAD取代过去的EncryptThenMac，使用AEAD替代过去加密和认证分离的储存机制。优点为安全和性能的兼顾，避免了程序员自己实现不安全的EThenC方案。缺点为目前已有的AEAD方案没有拆分开EThenC灵活，不能随意组合。**OpenSSL提供了的AEAD接口，但是没有将AEAD作为一个通用模块参与到对敏感信息（如SESSION，Identity）的保护。**
+
+   AEAD的解释和优缺点：严格来说AEAD仍然是一种encrypt-then-authenticate的算法，但是AEAD的的认证过程和加密过程同时进行，而且无需特殊处理CBC加密块。因此AEAD需要较少的运算遍数，1遍（OCB，不常用），1.5遍（GCM，Poly1305），或2遍。这意味着AEAD比AES-CBC+HMAC的方案要快。单AEAD目前模式基本是固定的，没有拆分开的灵活。AEAD适用于任何敏感信息储存场景。实现难度较小。
+
+3. TrustToken/PMBToken，GOOGLE用于替代第三方COOKIE而提出的方案，除了提供者和提供者授权的对象能够鉴别Token携带者是否为用户（也可用于区分用户和robot），第三方均无法鉴别。**该方案不属于标准方案，因此OpenSSL并不支持**
+
+   TrustToken的优缺点：GOOGLE用于替代第三方COOKIE而提出的方案，除了提供者和提供者授权的对象能够鉴别Token携带者是否为用户（也可用于区分用户和robot），第三方无法鉴别。优点为trusttoken提供了完全保密性，即使是redeemer认为token是可信的，也不能从token当中得出用户的具体身份。缺点是：trusttoken并不抗重放，不能确认用户是其声称的角色。（Trust Tokens are a way to **convey** trust in a user, not **establish** trust in a user.）且其具体的使用方法需要结合环境变化，实现难度较大。
+
+4. SSL_CTX_set_custom_verify证书校验异步操作，**相比OpenSSL，BoringSSL单独将认证证书的流程拿出来从而提供更详细的认证控制**。
+
+   BoringSSL对于计算流程，身份验证流程，证书签名流程均留了开放接口方便用户进行自定义操作，方便用户将签名/验签等流程交付给自定义/异步的真实后端操作。由于是可选的操作，因此不存在明显的优缺点。
+
+
+
+##### 0.2.2.2 标准化方面
+
+1. AEAD的标准化，目前已知覆盖了敏感信息存储（SESSION TICKET）。AEAD的优缺点已经阐述过，不再赘述。
+
+2. HKDF-EXPAND+HKDF-EXTRACT，逐渐替代过去的PRF。相比较而言BoringSSL内部已经开始大规模的使用HKDF替代过去的PRF流程，**相比较而言，目前OPENSSL并没有使用HKDF替代过去的PRF**。
+
+   HKDF优缺点：HKDF是TLS1.3中特别提出的PRF，作为安全基本件参与到整个运算当中。优点为更安全：即先经过HKDF-EXTRACT从原始密钥材料中提取出来的部分信息，再HKDF-Expand为最终密钥材料，增加了利用原始密钥材料进行分析的难度。TLS1.2当中只使用了HKDF-Expand部分。缺点同样是不够灵活，其内部依赖HMAC。HKDF适用于任何密钥延生/产生场景，实现难度较小。
+
+3. SIPHASH，主要用于hash表的一种高速安全的伪随机码产生函数。**BoringSSL，OpenSSL支持但是没有大规模使用**
+
+   SIPHASH的优缺点：SIPHASH于2012年设计，相比较传统的MAC算法，更高效且具备更高的理论安全（计算结果更为随机）。但SIPHASH本身并不是为MAC认证设计，因此用途相对单一，更适用于hashtable等使用场景。但由于hashtable一般内嵌于各种基础环境当中，因此使用SIPHASH改造底层代码会比较困难，实现难度较大。
+   
+4. GREASE，是"Generate Random Extensions And Sustain Extensibility"的简称，目前依然处于DRAFT阶段。**BoringSSL已经支持，但OpenSSL并未支持**
+
+   GREASE优缺点：GREASE用于测试服务器/客户端的TLS实现是否正确，并用于简单的测试。它之所以有效依赖一个简单的前提：TLS期望服务端/客户端会忽视它们不是别的选项（协议/CIPHER/拓展等等）。从本质来说，GREASE只是一种测试，不存在所谓优缺点的问题。
+
+
+
+##### 0.2.2.3 性能方面
+
+性能部分分为两个方面，一个是gRPC/GOOGLE开始大规模采用的性能优化方案，另一个是bssl和OpenSSL本身的性能对比，作为附录附加在最后。
+
+1. 证书压缩，使用证书压缩功能降低长证书链下传输的数据长度。证书压缩主要针对长证书链，目前证书压缩的应用场景主要集中在QUIC协议，普通TLS并未大规模使用，因此未进行性能测试。
+
+   证书压缩的优缺点：从理论来讲证书压缩只有优点没有缺点，但由于该标准刚刚成为正式RFC，尚未流行，支持的设备过少可能是该标准的缺点。实现难度较大。
+
+   
+
+2. TLS1.3的大规模使用，使用TLS1.3降低时延消耗(一个RTT）。需要注意两点：1 tls的clienthello报文往往是跟随三次握手的末尾一同到达对端。2 cloudfire的服务器在国外，一个RTT的影响较大。
+
+   | 协议版本号 | 被访问网站        | 共耗时（1000次） |
+   | ---------- | ----------------- | ---------------- |
+   | TLS1.2     | www.cloudfire.com | 435.7983s        |
+   | TLS1.3     | www.cloudfire.com | 231.5094s        |
+
+   
+
+3. 使用复用模式降低握手性能消耗和时延，TLS1.3复用方案的选择，BorringSSL在TLS1.3才引入SESSION TICKET方案。通过[3]可知使用DH交换算法时，TLS1.3复用比TLS1.2复用快大约25%，使用ECDH-P-256, TLS 1.3复用快15%。
+
+   理论上来说，复用减少至少一次签名，因此复用应当比完整握手的新建性能高30%以上。此外由于TLS1.3的SESSION TICKET免除了SESSION CACHE本地缓存争用的问题，服务端的新建性能会提高一部分，但这一部分耗时相比完整握手的两次非对称运算耗时，优化的力度难以衡量，需要测量确定。由于缺乏性能工具，所以使用估算手段计算性能。以下测量值均评估自我的主机，纯软算。
+
+   | 复用方案       | 测试方法                    | 新建性能（理论值） |
+   | -------------- | --------------------------- | ------------------ |
+   | TLS1.3完整握手 | Bssl speed测试结果估算(384) | 173                |
+   | TLS1.3复用握手 | Bssl speed测试结果估算(384) | 438                |
+
+   
+
+4. AEAD存储敏感信息时具备更好的性能。
+
+   | 具体算法               | 操作对象            | 平均速度                                                     |
+   | ---------------------- | ------------------- | ------------------------------------------------------------ |
+   | AES256(CBC)+HMAC(SHA1) | 16386字节数据       | Did 32000 AES-256-CBC-SHA1 (16384 bytes) open operations in 1010359us (31671.9 ops/sec): 518.9 MB/s |
+   | AEAD（AES256-GCM）     | 相同的16384字节数据 | Did 253000 AES-256-GCM (16384 bytes) seal operations in 1000260us (252934.2 ops/sec): 4144.1 MB/s |
+
+   
+
+5. 前向安全，每次握手使用静态的公钥密钥对进行握手，降低计算非对称密钥的成本。有一点需要注意TLS1.3是必然提供前向安全的，该优化针对TLS1.3之前的协议。Google在ALTS中通过轮换密钥来保证过去的流量不会被破解。每次采用静态公私密钥对减少了椭圆曲线计算的性能消耗，理论上应该至少能有20%新建性能的提升。
+
+   | 方案           | 操作对象  | 新建性能（理论值） |
+   | -------------- | --------- | ------------------ |
+   | 不提供前向安全 | ECDH P384 | 286                |
+   | 前向安全       | ECDH P384 | 173                |
+
+   
+
+6. ALPN，通信时延是性能消耗的主要来源，因此采用ALPN拓展协议能够在TLS协议协商过程当中直接确定上次协议的通信细节，避免再引入上层协议的通信延时。
+
+   APLN的优缺点：APLN从理论来讲不存在缺点，但是需要TLS和上层协议结合可能是其唯一缺点。
 
 
 
 
 
-就目前而言，quic只允许使用tls1.3协议。除此之外的不同需要通过查看chrome的具体配置来进行细化。大部分的google都适用quic协议，目前我们能够明显的看到GOOGLE已经开始大规模部署TLS1.3了https://cloud.google.com/blog/products/networking/tls-1-3-is-now-on-by-default-for-google-cloud-services。
+##### 0.2.2.4 兼容性方面
 
-此外，GOOGLE的具体性能剪裁的内容在这里可见https://cloud.google.com/security/encryption-in-transit#user_to_google_front_end_encryption
+下表为具体的兼容性剪裁对比。
 
-boringSSL的核心库需要boringCrypto需要研究
-
-gRPC将认证作为一个context单独拿出来，或者说BORINGSSL提供了单独筛选Context的功能，甚至单独将证书签名的部分筛选出来。
-
-
-
-gRPC的默认服务端verify级别：
-
-```
- typedef enum {
-  /** Default option: performs server certificate verification and hostname
-     verification. */
-  GRPC_TLS_SERVER_VERIFICATION,
-  /** Performs server certificate verification, but skips hostname verification
-     Client is responsible for verifying server's identity via
-     server authorization check callback. */
-  GRPC_TLS_SKIP_HOSTNAME_VERIFICATION,
-  /** Skips both server certificate and hostname verification.
-     Client is responsible for verifying server's identity and
-     server's certificate via server authorization check callback. */
-  GRPC_TLS_SKIP_ALL_SERVER_VERIFICATION
-} grpc_tls_server_verification_option;
-
- GRPC_TLS_SERVER_VERIFICATION
-```
-
-gRPC默认的session存储结构和配置
-
-+ session时长？     有ssl_session_openssl.cc（序列化存储）和
-+ session存储方式？
-+ 管理方式  lru方式。内部使用AVL平衡树+链表执行查找 ，ssl_session_cache.h一开始有一行Note that servers are required to share session ticket encryption keys
-
-gRPC JWT相关方法
-
-gRPC token最大的时长 ：1h，默认算法 RS256
-
-ssl_transport_security.cc
-
-client_ssl.cc 
-
-session相关  /* TODO(jboeuf): Add revocation verification. */，grpc开始了具体代码位置ssl_transport_security.cc 2007
-
-gRPC local identity
-
-| 功能剪裁                       | OPENSSL                                                      | BORINGSSL（GRPC）                                            |
+| 功能剪裁                       | OPENSSL                                                      | BORINGSSL（GRPC, CHROMIUM）                                  |
 | ------------------------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| TLS PROTOCOL                   | TLS1.0-TLS1.3                                                | TLS1_2, TLS1_3                                               |
-| 默认CIPHER                     | TLS协议对应的所有协议                                        | "TLS_AES_128_GCM_SHA256:"<br/>    "TLS_AES_256_GCM_SHA384:"<br/>    "TLS_CHACHA20_POLY1305_SHA256:"<br/>    "ECDHE-ECDSA-AES128-GCM-SHA256:"<br/>    "ECDHE-ECDSA-AES256-GCM-SHA384:"<br/>    "ECDHE-RSA-AES128-GCM-SHA256:"<br/>    "ECDHE-RSA-AES256-GCM-SHA384", |
-| 签名算法                       | Signature Hash Algorithms (23 algorithms)<br/>ecdsa_secp256r1_sha256 (0x0403)<br/>ecdsa_secp384r1_sha384 (0x0503)<br/>ecdsa_secp521r1_sha512 (0x0603)<br/>ed25519 (0x0807)<br/>ed448 (0x0808)<br/>rsa_pss_pss_sha256 (0x0809)<br/>rsa_pss_pss_sha384 (0x080a)<br/>rsa_pss_pss_sha512 (0x080b)<br/>rsa_pss_rsae_sha256 (0x0804)<br/>rsa_pss_rsae_sha384 (0x0805)<br/>rsa_pss_rsae_sha512 (0x0806)<br/>rsa_pkcs1_sha256 (0x0401)<br/>: rsa_pkcs1_sha384 (0x0501)<br/>rsa_pkcs1_sha512 (0x0601)<br/>SHA224 ECDSA (0x0303)<br/>ecdsa_sha1 (0x0203)<br/>SHA224 RSA (0x0301)<br/>rsa_pkcs1_sha1 (0x0201)<br/>SHA224 DSA (0x0302)<br/>SHA1 DSA (0x0202)<br/>SHA256 DSA (0x0402)<br/>SHA384 DSA (0x0502)<br/>SHA512 DSA (0x0602) | static const uint16_t kVerifySignatureAlgorithms[] = {<br/>    // List our preferred algorithms first.<br/>    SSL_SIGN_ECDSA_SECP256R1_SHA256,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA256,<br/>    SSL_SIGN_RSA_PKCS1_SHA256,<br/><br/>    // Larger hashes are acceptable.<br/>    SSL_SIGN_ECDSA_SECP384R1_SHA384,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA384,<br/>    SSL_SIGN_RSA_PKCS1_SHA384,<br/><br/>    SSL_SIGN_RSA_PSS_RSAE_SHA512,<br/>    SSL_SIGN_RSA_PKCS1_SHA512,<br/><br/>    // For now, SHA-1 is still accepted but least preferable.<br/>    SSL_SIGN_RSA_PKCS1_SHA1,<br/>}; |
-| 校验客户端证书支持的verify算法 | 和上面一致，都支持                                           | static const uint16_t kSignSignatureAlgorithms[] = {<br/>    // List our preferred algorithms first.<br/>    SSL_SIGN_ED25519,<br/>    SSL_SIGN_ECDSA_SECP256R1_SHA256,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA256,<br/>    SSL_SIGN_RSA_PKCS1_SHA256,<br/><br/>    // If needed, sign larger hashes.<br/>    //<br/>    // TODO(davidben): Determine which of these may be pruned.<br/>    SSL_SIGN_ECDSA_SECP384R1_SHA384,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA384,<br/>    SSL_SIGN_RSA_PKCS1_SHA384,<br/><br/>    SSL_SIGN_ECDSA_SECP521R1_SHA512,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA512,<br/>    SSL_SIGN_RSA_PKCS1_SHA512,<br/><br/>    // If the peer supports nothing else, sign with SHA-1.<br/>    SSL_SIGN_ECDSA_SHA1,<br/>    SSL_SIGN_RSA_PKCS1_SHA1,<br/>}; |
-| 支持的曲线（groups）           | Supported Groups (5 groups)<br/>    Supported Group: x25519 (0x001d)<br/>    Supported Group: secp256r1 (0x0017)<br/>    Supported Group: x448 (0x001e)<br/>    Supported Group: secp521r1 (0x0019)<br/>    Supported Group: secp384r1 (0x0018) | {NID_secp224r1, SSL_CURVE_SECP224R1, "P-224", "secp224r1"},<br/>{NID_X9_62_prime256v1, SSL_CURVE_SECP256R1, "P-256", "prime256v1"},<br/>{NID_secp384r1, SSL_CURVE_SECP384R1, "P-384", "secp384r1"},<br/>{NID_secp521r1, SSL_CURVE_SECP521R1, "P-521", "secp521r1"},<br/>{NID_X25519, SSL_CURVE_X25519, "X25519", "x25519"},<br/>{NID_CECPQ2, SSL_CURVE_CECPQ2, "CECPQ2", "CECPQ2"}, |
+| TLS PROTOCOL                   | TLS1.0-TLS1.3                                                | TLS1_2, TLS1_3(GRPC和chromium都不支持TLS1.0/1.1，CHROME81即不再支持) |
+| 默认CIPHER                     | TLS协议对应的所有协议                                        | "TLS_AES_128_GCM_SHA256:" <br/>   "TLS_AES_256_GCM_SHA384:"<br/>   "TLS_CHACHA20_POLY1305_SHA256:"<br/>    "ECDHE-ECDSA-AES128-GCM-SHA256:"<br/>    "ECDHE-ECDSA-AES256-GCM-SHA384:"<br/>    "ECDHE-RSA-AES128-GCM-SHA256:"<br/>    "ECDHE-RSA-AES256-GCM-SHA384", |
+| 签名算法                       | ecdsa_secp256r1_sha256 (0x0403)<br/>ecdsa_secp384r1_sha384 (0x0503)<br/>ecdsa_secp521r1_sha512 (0x0603)<br/>ed25519 (0x0807)<br/>ed448 (0x0808)<br/>rsa_pss_pss_sha256 (0x0809)<br/>rsa_pss_pss_sha384 (0x080a)<br/>rsa_pss_pss_sha512 (0x080b)<br/>rsa_pss_rsae_sha256 (0x0804)<br/>rsa_pss_rsae_sha384 (0x0805)<br/>rsa_pss_rsae_sha512 (0x0806)<br/>rsa_pkcs1_sha256 (0x0401)<br/>rsa_pkcs1_sha384 (0x0501)<br/>rsa_pkcs1_sha512 (0x0601)<br/>SHA224 ECDSA (0x0303)<br/>ecdsa_sha1 (0x0203)<br/>SHA224 RSA (0x0301)<br/>rsa_pkcs1_sha1 (0x0201)<br/>SHA224 DSA (0x0302)<br/>SHA1 DSA (0x0202)<br/>SHA256 DSA (0x0402)<br/>SHA384 DSA (0x0502)<br/>SHA512 DSA (0x0602) | SSL_SIGN_ECDSA_SECP256R1_SHA256,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA256,<br/>    SSL_SIGN_RSA_PKCS1_SHA256,<br/><br/>    // Larger hashes are acceptable.<br/>    SSL_SIGN_ECDSA_SECP384R1_SHA384,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA384,<br/>    SSL_SIGN_RSA_PKCS1_SHA384,<br/><br/>    SSL_SIGN_RSA_PSS_RSAE_SHA512,<br/>    SSL_SIGN_RSA_PKCS1_SHA512,<br/><br/>    // For now, SHA-1 is still accepted but least preferable.<br/>    SSL_SIGN_RSA_PKCS1_SHA1,<br/> |
+| 校验客户端证书支持的verify算法 | 和上面一致，都支持                                           | SSL_SIGN_ED25519,<br/>    SSL_SIGN_ECDSA_SECP256R1_SHA256,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA256,<br/>    SSL_SIGN_RSA_PKCS1_SHA256,<br/><br/>    // If needed, sign larger hashes.<br/>    //<br/>    // TODO(davidben): Determine which of these may be pruned.<br/>    SSL_SIGN_ECDSA_SECP384R1_SHA384,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA384,<br/>    SSL_SIGN_RSA_PKCS1_SHA384,<br/><br/>    SSL_SIGN_ECDSA_SECP521R1_SHA512,<br/>    SSL_SIGN_RSA_PSS_RSAE_SHA512,<br/>    SSL_SIGN_RSA_PKCS1_SHA512,<br/><br/>    // If the peer supports nothing else, sign with SHA-1.<br/>    SSL_SIGN_ECDSA_SHA1,<br/>    SSL_SIGN_RSA_PKCS1_SHA1,<br/> |
+| 支持的曲线（groups）           | x25519 (0x001d)<br/>secp256r1 (0x0017)<br/>x448 (0x001e)<br/>secp521r1 (0x0019)<br/>secp384r1 (0x0018) | {NID_secp224r1,  "P-224", "secp224r1"},<br/>{NID_X9_62_prime256v1, , "P-256", "prime256v1"},<br/>{NID_secp384r1, "P-384", "secp384r1"},<br/>{NID_secp521r1, "P-521", "secp521r1"},<br/>{NID_X25519, "X25519", "x25519"},<br/>{NID_CECPQ2, "CECPQ2", "CECPQ2"}, |
 | SESSION TICKET复用             | TLS1-TLS1.3都支持                                            | 仅TLS1.3支持                                                 |
-| 默认的证书校验方式             | 也是只校验服务端证书                                         | GRPC_TLS_SERVER_VERIFICATION                                 |
+| 默认的证书校验方式             | 也是只校验服务端证书，不校验SNI                              | GRPC_TLS_SERVER_VERIFICATION 校验证书和SNI必须匹配           |
 |                                |                                                              |                                                              |
 |                                |                                                              |                                                              |
-
-
-
-### 0.3 总体比较
-
-从实现来看BORINGSSL作为GOOGLE为TLS提供的基础库，主要包含以下几个方面的精细化内容：
-
-+ 安全方面：内容很多，基础的HPKE，HPKE的利用ECH，AEAD逐渐取代了过去的EncryptThenMac渗透到的各种方面（包括SSL ticket，关键数据的存储等），TrustToken + PMBToken。使用TLS1.3覆盖原本的基础协议。SIPHASH
-+ 标准化方面：AEAD与HKDF-EXTRACT & HKDF-EXPAND
-+ 性能方面：性能方面的优化并不多，而且和上面的内容比较重合，比方说使用AEAD追求安全和性能的平衡。使用证书压缩来简短通信流量。使用TLS1.3来减少RTT。在TLS1.3中GOOGLE引入SESSION TICKET/SESSION ID机制来降低全局数据查询的时间(换言之QUIC)。使用长连接来降低秘钥交换的性能消耗（这条已经很多开始使用了）。QUIC
-+ 兼容性方面：
-+ 待补充，具体BORRINGSSL做的哪些功能和细节剪裁的内容，然后避开了哪些问题进行补齐。
-
-我们下面拆开说：
-
-安全方面：
-
-+ HPKE，混合公钥加密机制提供了
-+ GREASE
-+ AEAD
-+ TurstToken：取代第三方cookie
-+ TLS1.3的大规模使用。google内部已经开始大规模使用tls1.3协议，具体链接为https://cloud.google.com/blog/products/networking/tls-1-3-is-now-on-by-default-for-google-cloud-services。从
-+ 需要补充双向认证方面的安全实现方案。具体GOOGLE做了什么
-
-标准化方面：
-
-在这块添加BORRINGSSL具体剪裁的内容即可，这个东西说白了就是GOOGLE默认的配置做了哪些剪裁
-
-性能方面：
-
-+ AEAD安全性和性能的平衡
-+ 压缩证书，对于证书链比较长的证书，进行压缩降低数据传输时候消耗的数据包数量。具体的RFC参见rfc8779https://datatracker.ietf.org/doc/html/rfc8879
-+ 使用TLS1.3在完整情况下减少一个RTT时间
-+ 使用TLS1.3的SESSION ID和SESSION TICKET机制减少握手秘钥的迭代和签名等信息的计算（严格来说是减少RTT的时间消耗+非对称操作的时间来提高性能）。需要注意的是对于TLS1.3之前的协议，复用机制能大大减少性能消耗（时间延迟）。
-+ 前向安全，这个是性能优化当中一个不是很被注意的东西。前向安全的好处是获得服务器秘钥被第三方获取后，也不能解密具体的通信流量。当时前向安全要求服务器每次必须重新产生随机秘钥，因此带来很大的性能消耗。需要注意的是对TLS1.3而言，前向安全是必须提供的，换言之。对TLS1.3，丢弃前向安全并不可能。
-+ 使用长连接来减少秘钥的性能消耗。
-+ QUIC，快速性能高
-
-兼容性方面：
-
-
-
-
-
-先看具体的功能剪裁
-
-
 
 
 
