@@ -177,6 +177,140 @@ update_tail(struct rte_ring_headtail *ht, uint32_t old_val, uint32_t new_val,
 ```
 
 
+
+## BOOST::SPSC_QUEUE的实现
+
+```cpp
+
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+template <typename T, typename A0, typename A1>
+#else
+template <typename T, typename ...Options>
+#endif
+struct make_ringbuffer
+{
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    typedef typename ringbuffer_signature::bind<A0, A1>::type bound_args;
+#else
+    typedef typename ringbuffer_signature::bind<Options...>::type bound_args;
+#endif
+  
+...
+    /* if_c是一个偏特化模板，如果runtime_sized为false，就使用第二个类型作为type。否则选择第一个类型作为type*/
+    /* 具体的意思是buffer的大小到底是运行时确定还是编译时确定，我们关注编译时确定的ringbuffer */
+    typedef typename mpl::if_c<runtime_sized,
+                               runtime_sized_ringbuffer<T, allocator>,
+                               compile_time_sized_ringbuffer<T, capacity>
+                              >::type ringbuffer_type;
+};
+
+
+
+template <typename T, std::size_t MaxSize>
+class compile_time_sized_ringbuffer:
+    public ringbuffer_base<T>
+{
+    typedef std::size_t size_type;
+    static const std::size_t max_size = MaxSize + 1;
+
+    typedef typename boost::aligned_storage<max_size * sizeof(T),
+                                            boost::alignment_of<T>::value
+                                           >::type storage_type;
+
+    storage_type storage_;
+...
+  
+
+/* 而aligned_storage到最后*/
+
+struct aligned_storage_imp
+{
+    union data_t
+    {
+        char buf[size_];
+
+        typename ::boost::type_with_alignment<alignment_>::type align_;
+    } data_;
+    void* address() const { return const_cast<aligned_storage_imp*>(this); }
+};
+template <std::size_t size>
+struct aligned_storage_imp<size, std::size_t(-1)>
+{
+   union data_t
+   {
+      char buf[size];
+      ::boost::detail::max_align align_;
+   } data_;
+   void* address() const { return const_cast<aligned_storage_imp*>(this); }
+};
+
+template< std::size_t alignment_ >
+struct aligned_storage_imp<0u,alignment_>
+{
+    /* intentionally empty */
+    void* address() const { return 0; }
+};
+
+}} // namespace detail::aligned_storage
+
+template <
+      std::size_t size_
+    , std::size_t alignment_ = std::size_t(-1)
+>
+class aligned_storage : 
+#ifndef BOOST_BORLANDC
+   private 
+#else
+   public
+#endif
+   ::boost::detail::aligned_storage::aligned_storage_imp<size_, alignment_> 
+{
+ 
+public: // constants
+
+    typedef ::boost::detail::aligned_storage::aligned_storage_imp<size_, alignment_> type;
+
+    BOOST_STATIC_CONSTANT(
+          std::size_t
+        , size = size_
+        );
+    BOOST_STATIC_CONSTANT(
+          std::size_t
+        , alignment = (
+              alignment_ == std::size_t(-1)
+            ? ::boost::detail::aligned_storage::alignment_of_max_align
+            : alignment_
+            )
+        );
+
+private: // noncopyable
+
+    aligned_storage(const aligned_storage&);
+    aligned_storage& operator=(const aligned_storage&);
+
+public: // structors
+
+    aligned_storage()
+    {
+    }
+
+    ~aligned_storage()
+    {
+    }
+
+public: // accessors
+
+    void* address()
+    {
+        return static_cast<type*>(this)->address();
+    }
+
+```
+
+
+
+
+
 ## kfifo的无锁实现
 
 可以看到本质上就是一个先enqueue再挪动指针，保证数据先进去，再稳定挪动的操作。这个过程使用了内存屏障等多种操作。在ARM ustack atcp_rq就会出现问题。
