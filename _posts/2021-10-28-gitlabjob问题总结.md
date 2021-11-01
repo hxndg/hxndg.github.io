@@ -327,7 +327,7 @@ bazel cc_image当中向编译多个binary文件，使用`data=[]`文件不会被
 
 
 
-job一直在pending
+job一直在pending，任务很忙，一直拿不到？
 
 ```
 Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
@@ -514,6 +514,31 @@ ERROR: Job failed: command terminated with exit code 1
 ```
 
 
+
+
+
+
+
+
+
+```
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be running, status is Pending
+	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
+ERROR: Job failed (system failure): prepare environment: timed out waiting for pod to start. Check https://docs.gitlab.com/runner/shells/index.html#shell-profile-loading for more information
+```
 
 
 
