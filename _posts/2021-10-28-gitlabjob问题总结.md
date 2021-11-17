@@ -31,7 +31,7 @@ Compilation terminated
 
 
 
-push到阿里云服务器时候失败，看网络上博客有两种解决方法：1重新打tag 2 在push之前先logout再logi。但是在脚本当中没看到谁这么干的
+push到阿里云服务器时候失败，看网络上博客有两种解决方法：1重新打tag 2 在push之前先logout再logi。但是在脚本当中没看到谁这么干的，问题在于是我已经登录了啊，为什么还会出错呢？这两种解决方法的意思实际上是两种，一个是说：1没登录 2 image的名字过于长了，简单说就是本来image的名字应该是repo_name/namespace/image_name:tag，如果image_name特别长比方说是/xxx/yyy/zzz/ddd/aaa/eee/ccc这种，name就会出现push失败的情况。提示requested access to the resource is denied
 
 ```shell
 
@@ -45,6 +45,8 @@ c65cd6950943: Waiting
 a24b8da85c42: Waiting
 denied: requested access to the resource is denied
 ```
+
+
 
 
 
@@ -327,7 +329,9 @@ bazel cc_image当中向编译多个binary文件，使用`data=[]`文件不会被
 
 
 
-job一直在pending，任务很忙，一直拿不到？
+job一直在pending，任务很忙，一直拿不到？目前看起来有什么可能的原因呢？有多种可能：
+
++ master发布升级命令，然后pod开始升级，包括拉取镜像，挂载设备等等。如果镜像仓库有问题，一直拉不下来，那么就会一直pending，比方说2021/11/11号早上，阿里云仓库出了问题，镜像一直拉不下来。这里多说一句，CI的镜像是在master里面通过对CN_IMG/USA_IMG指定的
 
 ```
 Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
@@ -343,8 +347,6 @@ Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be 
 	ContainersNotReady: "containers with unready status: [build helper]"
 	ContainersNotReady: "containers with unready status: [build helper]"
 ```
-
-
 
 
 
@@ -539,6 +541,211 @@ Waiting for pod gitlab-runner/runner-bcwge4ow-project-4-concurrent-0gglgq to be 
 	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
 ERROR: Job failed (system failure): prepare environment: timed out waiting for pod to start. Check https://docs.gitlab.com/runner/shells/index.html#shell-profile-loading for more information
 ```
+
+
+
+
+
+
+
+
+
+
+
+```
+8d8e61aa0ac3: Layer already exists
+6babb56be259: Layer already exists
+89e6b375-223c-47b3-ab12-2201c128911e: digest: sha256:efd6dcf9e110bc691591b95b519eadc84d68100feec36d1ac03ae0ab5877bdb2 size: 10651
+push image took 0m:1s
+I1102 10:53:46.537779   701 argo_launcher.cc:318] build and push image takes 26 seconds
+I1102 10:53:46.537994   208 argo_launcher.cc:392] Submitting workflow a5b82252-4c03-4a2b-ba4e-f50bb4af1f4a
+I1102 10:53:47.969311   208 launcher.cc:21] Job status will be uploaded to http://sim-dash.qcraftai.com/results/1715313468243280512
+I1102 10:53:50.110766   208 argo_launcher.cc:425] workflow status RUNNING
+I1102 10:53:53.089411   208 argo_launcher.cc:425] workflow status RUNNING
+I1102 10:53:58.077638   208 argo_launcher.cc:425] workflow status RUNNING
+I1102 10:54:07.104588   208 argo_launcher.cc:425] workflow status RUNNING
+I1102 10:54:24.083097   208 argo_launcher.cc:425] workflow status RUNNING
+I1102 10:54:57.069236   208 argo_launcher.cc:425] workflow status TERMINATED
+I1102 10:54:57.069286   208 argo_launcher.cc:364] Workflow finished, cleaning up resources
+I1102 10:54:58.244271   208 job.cc:107] Job failed, result uploaded to http://sim-dash.qcraftai.com/results/1715313468243280512
+I1102 10:54:58.244294   208 job.cc:143] SMTP client not set, skip sending notification
+```
+
+
+
+
+
+镜像拉不下来，镜像确实存在。那么是什么问题呢？有一个问题是这里面的imagepullsecret为name: aliyun。但是实际上没有这个secret，没有这个secret不会报错。而且需要添加的secret应该为docker register，这样子才能拉下来镜像。拉不下来镜像才会报下面这个错误。我添加镜像的方法错了。
+
+```
+Events:
+  Type     Reason     Age                     From               Message
+  ----     ------     ----                    ----               -------
+  Normal   Scheduled  9m26s                   default-scheduler  Successfully assigned staging/sim-dash-6fd5b6bc99-2456v to cn-zhangjiakou.172.20.1.234
+  Normal   Pulling    7m54s (x4 over 9m25s)   kubelet            Pulling image "registry.qcraftai.com/qcraft/offboard/dashboard/sim_dash:cn-edge-f0cf6de5726d84b11939da2a70a3d3c878ac4c85"
+  Warning  Failed     7m54s (x4 over 9m25s)   kubelet            Failed to pull image "registry.qcraftai.com/qcraft/offboard/dashboard/sim_dash:cn-edge-f0cf6de5726d84b11939da2a70a3d3c878ac4c85": rpc error: code = Unknown desc = Error response from daemon: pull access denied for registry.qcraftai.com/qcraft/offboard/dashboard/sim_dash, repository does not exist or may require 'docker login': denied: requested access to the resource is denied
+  Warning  Failed     7m54s (x4 over 9m25s)   kubelet            Error: ErrImagePull
+  Normal   BackOff    7m40s (x6 over 9m25s)   kubelet            Back-off pulling image "registry.qcraftai.com/qcraft/offboard/dashboard/sim_dash:cn-edge-f0cf6de5726d84b11939da2a70a3d3c878ac4c85"
+  Warning  Failed     4m16s (x21 over 9m25s)  kubelet            Error: ImagePullBackOff
+
+```
+
+
+
+
+
+```
+[NVBLAS] No Gpu available
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename 'nvblas.conf'
+[NVBLAS] Cannot open default config file 'nvblas.conf'
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+I1105 03:10:58.178120   423 argo_launcher.cc:259] binary_path: offboard/simulation/scenario_test_parallel
+I1105 03:10:58.178198   423 task.cc:17] Job server eks-prod-sim-server.qcraft.ai:3401
+I1105 03:10:59.739009   423 job.cc:49] Job result will be uploaded to results/1715556170522852672
+Using base image: 548416963446.dkr.ecr.cn-northwest-1.amazonaws.com.cn/qcraft-dev-prebuild-env:dev-venv-20211101_2206-with-res
+building image
+.
+dev-venv-20211101_2206-with-res: Pulling from qcraft-dev-prebuild-env
+Digest: sha256:bbc84d5fe9e21d6efa6cae522f669b4d743136add46f3d92d24f5792e153aa71
+Status: Image is up to date for 548416963446.dkr.ecr.cn-northwest-1.amazonaws.com.cn/qcraft-dev-prebuild-env:dev-venv-20211101_2206-with-res
+548416963446.dkr.ecr.cn-northwest-1.amazonaws.com.cn/qcraft-dev-prebuild-env:dev-venv-20211101_2206-with-res
+pull image took 0m:0s
+Step 1/11 : ARG IMG
+Step 2/11 : FROM ${IMG} as diff_files
+ ---> db5e29603812
+Step 3/11 : SHELL ["/bin/bash", "-c"]
+ ---> Using cache
+ ---> 95de7e76256c
+Step 4/11 : COPY tmp  /qcraft-bins-goal
+failed to export image: failed to set parent sha256:95de7e76256c12ee3332d726b03082afd76133f2d2cb2ab8b29b4c124cb6abe6: unknown parent image ID sha256:95de7e76256c12ee3332d726b03082afd76133f2d2cb2ab8b29b4c124cb6abe6
+I1105 03:13:17.911182   916 argo_launcher.cc:318] build and push image takes 138 seconds
+I1105 03:13:17.911468   423 argo_launcher.cc:364] Workflow finished, cleaning up resources
+I1105 03:13:18.910075   423 launcher.cc:21] Job status will be uploaded to http://sim-dash.qcraftai.com/results/1715556170522852672
+Running after_script
+```
+
+
+
+
+
+同样的配置文件，为什么edge-test集群里面多了一堆managedFields？而staging没有，初次之外的配置都差不多?因为edge-test是老版本的kubernetes，因此里面多了一堆managedFields字段
+
+```
+```
+
+
+
+诸如affinity，nodeAffinity这些在production和staging当中并不一样。producition里面有而我们默认的配置里面没有，用哪个？上面的代码是edge-cn，下面的是edge-us的区别。这些是正常的现象，我们文件当中的配置没变
+
+```
+onboard/mock/mock_self_destruct_module.cc:160:10: warning: 'SHM_UNUSED' is deprecated [-Wdeprecated-declarations]
+    case SHM_UNUSED:
+         ^
+bazel-out/k8-opt/bin/onboard/lite/proto/shm_message.pb.h:81:14: note: 'SHM_UNUSED' has been explicitly marked deprecated here
+  SHM_UNUSED PROTOBUF_DEPRECATED_ENUM = 1
+             ^
+external/com_google_protobuf/src/google/protobuf/port_def.inc:320:50: note: expanded from macro 'PROTOBUF_DEPRECATED_ENUM'
+# define PROTOBUF_DEPRECATED_ENUM __attribute__((deprecated))
+                                                 ^
+1 warning generated.
+[5,878 / 5,885] JoinLayers external/prod_docker_base_china/image/image.tar; 29s remote-cache ... (2 actions, 1 running)
+[5,880 / 5,885] Action release/common/prod_docker_wrapper_china_commit.tar; 41s remote-cache
+INFO: From Action release/common/prod_docker_wrapper_china_commit.tar:
+Loaded image: bazel/image:image
+sha256:b710a0b263a8155c796728af606319e2ad79fcada7f3ed191a0ebf2e6801ab10
+079c2726d234936c9d0c758d8dd27f3f1368b90510607f331ba2a0219ba5c3f1
+Target //release/offboard/dashboard:sim_server_image_cn up-to-date:
+  bazel-bin/release/offboard/dashboard/sim_server_image_cn-layer.tar
+INFO: Elapsed time: 644.597s, Critical Path: 262.42s
+INFO: 5885 processes: 5128 remote cache hit, 757 internal.
+INFO: Build completed successfully, 5885 total actions
+INFO: Running command line: bazel-bin/release/offboard/dashboard/sim_server_image_cn.executable --norun
+INFO: Build completed successfully, 5885 total actions
+Loading legacy tarball base com_qcraft/release/common/prod_docker_wrapper_china_commit.tar... //就在这里出现了错误 应该loaded image,但是直接出错了
+Running after_script
+00:00
+Cleaning up file based variables
+00:00
+ERROR: Job failed: pod "runner-p-kgzmph-project-4-concurrent-2lzwhb" status is "Failed"
+```
+
+```
+2 warnings generated.
+[5,879 / 5,885] JoinLayers external/prod_docker_base_china/image/image.tar; 72s remote-cache
+[5,880 / 5,885] Action release/common/prod_docker_wrapper_china_commit.tar; 41s remote-cache
+INFO: From Action release/common/prod_docker_wrapper_china_commit.tar:
+Loaded image: bazel/image:image
+sha256:b710a0b263a8155c796728af606319e2ad79fcada7f3ed191a0ebf2e6801ab10
+079c2726d234936c9d0c758d8dd27f3f1368b90510607f331ba2a0219ba5c3f1
+Target //release/offboard/dashboard:sim_server_image_cn up-to-date:
+  bazel-bin/release/offboard/dashboard/sim_server_image_cn-layer.tar
+INFO: Elapsed time: 745.764s, Critical Path: 307.29s
+INFO: 5885 processes: 5128 remote cache hit, 757 internal.
+INFO: Build completed successfully, 5885 total actions
+INFO: Running command line: bazel-bin/release/offboard/dashboard/sim_server_image_cn.executable --norun
+INFO: Build completed successfully, 5885 total actions
+Loading legacy tarball base com_qcraft/release/common/prod_docker_wrapper_china_commit.tar...
+Loaded image: bazel/release/common:prod_docker_wrapper_china
+Loaded image ID: sha256:4f740c2a7e010cc4292efc26c903e32c473ef35d78edec591060d302b5a40f9d
+Tagging 4f740c2a7e010cc4292efc26c903e32c473ef35d78edec591060d302b5a40f9d as bazel/release/offboard/dashboard:sim_server_image_cn
+Building sim_server image. Done
+Pushing sim_server image to registry
+The push refers to repository [qcraft-docker.qcraft.ai/qcraft/sim_server]
+```
+
+
+
+今天遇到一个这个错误，问题来了，为什么出现这个问题？libcuinj64这个库是dev-docker编译的
+
+```
+/app/offboard/dashboard/sim_server: error while loading shared libraries: libcuinj64.so.11.3: cannot open shared object file: No such file or directory
+```
+
+
+
+
+
+代码保护导致的错误
+
+```
+[580s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access 'https://gitlab-cn.qcraftai.com/root/qcraft.git/': error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[585s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access 'https://gitlab-cn.qcraftai.com/root/qcraft.git/': error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[590s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access 'https://gitlab-cn.qcraftai.com/root/qcraft.git/': error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[595s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access 'https://gitlab-cn.qcraftai.com/root/qcraft.git/': error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[600s] can not find refs/pipelines/90402, retry later ...
+can not find refs/pipelines/90402, exit!
+Cleaning up file based variables
+00:01
+ERROR: Job failed: command terminated with exit code 1
+```
+
+
+
+
+
+安州牧：
+
+信息素：战术  
+
+渤海小吏：刘秀 & 王莽 不得不说的故事
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
