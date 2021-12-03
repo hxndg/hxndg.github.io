@@ -727,7 +727,36 @@ ERROR: Job failed: command terminated with exit code 1
 
 
 
+job不断的尝试重连，目前遇到的情况很多，一种是我将sidecar tracing的镜像改成了registry了，导致拉不下来，然后就一直重试。
 
+```
+I1124 04:14:12.669909   418 launcher.cc:42] Job status RUNNING
+W1124 04:15:12.670430   418 retry.h:21] 14 Socket closed retrying
+I1124 04:15:13.658504   418 launcher.cc:42] Job status RUNNING
+W1124 04:16:13.659106   418 retry.h:21] 14 Socket closed retrying
+I1124 04:16:14.658265   418 launcher.cc:42] Job status RUNNING
+W1124 04:17:14.658864   418 retry.h:21] 14 Socket closed retrying
+I1124 04:17:15.652274   418 launcher.cc:42] Job status RUNNING
+W1124 04:18:15.652964   418 retry.h:21] 14 Socket closed retrying
+I1124 04:18:16.692870   418 launcher.cc:42] Job status RUNNING
+W1124 04:19:16.693482   418 retry.h:21] 14 Socket closed retrying
+I1124 04:19:17.744310   418 launcher.cc:42] Job status RUNNING
+W1124 04:20:17.744796   418 retry.h:21] 14 Socket closed retrying
+I1124 04:20:18.714323   418 launcher.cc:42] Job status RUNNING
+W1124 04:21:18.714792   418 retry.h:21] 14 Socket closed retrying
+I1124 04:21:19.767874   418 launcher.cc:42] Job status RUNNING
+W1124 04:22:19.768371   418 retry.h:21] 14 Socket closed retrying
+I1124 04:22:20.755031   418 launcher.cc:42] Job status RUNNING
+I1124 04:23:21.537782   418 launcher.cc:42] Job status RUNNING
+W1124 04:24:21.538275   418 retry.h:21] 14 Socket closed retrying
+I1124 04:24:22.519601   418 launcher.cc:42] Job status RUNNING
+W1124 04:25:22.520140   418 retry.h:21] 14 Socket closed retrying
+I1124 04:25:23.501000   418 launcher.cc:42] Job status RUNNING
+W1124 04:26:23.501471   418 retry.h:21] 14 Socket closed retrying
+I1124 04:26:24.581113   418 launcher.cc:42] Job status RUNNING
+W1124 04:27:24.581622   418 retry.h:21] 14 Socket closed retrying
+I1124 04:27:25.560441   418 launcher.cc:42] Job status RUNNING
+```
 
 安州牧：
 
@@ -739,9 +768,51 @@ ERROR: Job failed: command terminated with exit code 1
 
 
 
++ scenarios test的内存溢出用valgand分析原因
++ jiannan的mr把几个场景测试合并进了bazel test
 
 
 
+
+
+
+
+
+
++ qsim-frontend, 语言为node，
++ yaml在哪里？线上在edge-test，production，qsim-dash
+
+
+
+今天gitlab部署sim-server出错了，然后报错的地方和原因八杆子打不着，原来是配置文件写错哦了
+
+```yaml
+           - name: GITLAB_ACCESS_TOKEN
+              valueFrom:  //这里多写了一行
+              valueFrom:
+                secretKeyRef:
+                  name: gitlab-access-token
+```
+
+具体报错信息在这里
+
+```
+...
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  3m7s                default-scheduler  Successfully assigned staging/sim-server-grey-6bc7997545-mx4t8 to cn-zhangjiakou.172.20.2.197
+  Warning  Unhealthy  90s                 kubelet            Liveness probe failed: OCI runtime exec failed: exec failed: container_linux.go:346: starting container process caused "process_linux.go:101: executing setns process caused \"exit status 1\"": unknown
+  Warning  Unhealthy  84s (x2 over 94s)   kubelet            Readiness probe failed:
+  Normal   Started    67s (x3 over 99s)   kubelet            Started container sim-server
+  Warning  Unhealthy  60s                 kubelet            Liveness probe failed:
+  Warning  Unhealthy  59s                 kubelet            Readiness probe errored: rpc error: code = Unknown desc = container not running (b47a56e00cddda91ee7e446a77ece77d8c6955320dd11a031a3d8c71372ab3d4)
+  Warning  BackOff    44s (x5 over 82s)   kubelet            Back-off restarting failed container
+  Normal   Pulling    28s (x4 over 3m5s)  kubelet            Pulling image "registry.qcraftai.com/global/sim_server:c8ad37ec94ebfda0a08106f77210cb92ed67387d"
+  Normal   Pulled     28s (x4 over 101s)  kubelet            Successfully pulled image "registry.qcraftai.com/global/sim_server:c8ad37ec94ebfda0a08106f77210cb92ed67387d"
+  Normal   Created    27s (x4 over 100s)  kubelet            Created container sim-server
+
+```
 
 
 
