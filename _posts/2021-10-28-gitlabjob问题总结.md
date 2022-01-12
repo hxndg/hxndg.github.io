@@ -592,7 +592,7 @@ Events:
 
 
 
-
+Build image的时候 base镜像被evict出去的原因，等换了CI机器估计也就好了,
 
 ```
 [NVBLAS] No Gpu available
@@ -707,7 +707,7 @@ The push refers to repository [qcraft-docker.qcraft.ai/qcraft/sim_server]
 
 
 
-代码保护导致的错误
+代码保护导致的错误，代码保护软件似乎有个问题，即白名单加多了以后就不生效了，然后gitlab-runner拉代码就会出先下面的错误。今天虽然加了代码但是没生效的原因是因为gitlab-runner上的客户端死了，所以没同步配置。代码就没拉下来。
 
 ```
 [580s] can not find refs/pipelines/90402, retry later ...
@@ -813,6 +813,876 @@ Events:
   Normal   Created    27s (x4 over 100s)  kubelet            Created container sim-server
 
 ```
+
+
+
+
+
+aws, kube, map-secret
+
+安装了一个gitlabrunner以后，运行提示pending，没有runner，后来改了下两个NodeSelector的label解决了问题。
+
+```shell
+This job is pending because no runner with tag: "k8s-aws-mount-test"
+```
+
+
+
+
+
+sleep超时问题，超时了一秒
+
+```
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:25:3: warning: explicitly defaulted default constructor is implicitly deleted [-Wdefaulted-function-deleted]
+  Token() noexcept = default;
+  ^
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:31:17: note: default constructor of 'Token' is implicitly deleted because field 'context_' of const-qualified type 'const opentelemetry::context::Context' would not be initialized
+  const Context context_;
+                ^
+1 warning generated.
+INFO: From Compiling onboard/qlfs/tests/filesystem/file_transfer/local_file_transfer_test.cc:
+onboard/qlfs/tests/filesystem/file_transfer/local_file_transfer_test.cc:22:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+    system(cmd.c_str());
+    ^~~~~~ ~~~~~~~~~~~
+1 warning generated.
+FAIL: //onboard/global:logging_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/b0b45119ef6e2a7c8a9693a61600d065/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/global/logging_test/test.log)
+INFO: From Testing //onboard/global:logging_test:
+==================== Test output for //onboard/global:logging_test:
+Running main() from gmock_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from LoggingTest
+[ RUN      ] LoggingTest.TestErrorWithOnboard
+onboard/global/logging_test.cc:29: Failure
+Expected equality of these values:
+  a
+    Which is: 4
+  kCounter + 1
+    Which is: 3
+[  FAILED  ] LoggingTest.TestErrorWithOnboard (4812 ms)
+[----------] 1 test from LoggingTest (4812 ms total)
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (4812 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] LoggingTest.TestErrorWithOnboard
+ 1 FAILED TEST
+================================================================================
+INFO: From Compiling onboard/global/ftrace_test.cc:
+onboard/global/ftrace_test.cc:71:33: warning: nested designators are a C99 extension [-Wc99-designator]
+                                .args[0].key = "key_1",
+                                ^~~~~~~~~~~~
+onboard/global/ftrace_test.cc:71:38: warning: array designators are a C99 extension [-Wc99-designator]
+                                .args[0].key = "key_1",
+```
+
+
+
+直接就出错然后挂掉了。这个啥情况？看报错信息说是用的过多存储空间，但理论上应该没用，最后直接abort了。
+
+```
+In file included from bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/sdk/_virtual_includes/headers/opentelemetry/sdk/trace/tracer_provider.h:16:
+In file included from bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/sdk/_virtual_includes/headers/opentelemetry/sdk/trace/tracer.h:12:
+In file included from bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/trace/noop.h:10:
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:25:3: warning: explicitly defaulted default constructor is implicitly deleted [-Wdefaulted-function-deleted]
+  Token() noexcept = default;
+  ^
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:31:17: note: default constructor of 'Token' is implicitly deleted because field 'context_' of const-qualified type 'const opentelemetry::context::Context' would not be initialized
+  const Context context_;
+                ^
+1 warning generated.
+[6,042 / 6,053] Compiling offboard/simulation/simulator_main.cc; 43s remote-cache, linux-sandbox ... (4 actions, 3 running)
+[6,047 / 6,053] JoinLayers external/prod_docker_base_china/image/image.tar; 74s linux-sandbox
+Running after_script
+00:00
+Cleaning up file based variables
+00:00
+ERROR: Job failed: pod "runner-wa4gnvzx-project-4-concurrent-18qqgm" status is "Failed"
+```
+
+
+
+
+
+IO出了问题，重启就好了
+
+```
+INFO: Repository rules_folly instantiated at:
+  /builds/uxKdbFbb/0/root/qcraft/WORKSPACE:5:20: in <toplevel>
+  /builds/uxKdbFbb/0/root/qcraft/bazel/workspace.bzl:178:33: in qcraft_repositories
+  /builds/uxKdbFbb/0/root/qcraft/bazel/workspace.bzl:162:16: in initialize_third_party_repos
+  /builds/uxKdbFbb/0/root/qcraft/third_party/rules_folly/workspace.bzl:9:17: in repo
+Repository rule http_archive defined at:
+  /home/qcrafter/.cache/bazel/_bazel_qcrafter/308b7d803ead1e4500ecbe2758e610a4/external/bazel_tools/tools/build_defs/repo/http.bzl:336:31: in <toplevel>
+ERROR: An error occurred during the fetch of repository 'rules_folly':
+   Traceback (most recent call last):
+	File "/home/qcrafter/.cache/bazel/_bazel_qcrafter/308b7d803ead1e4500ecbe2758e610a4/external/bazel_tools/tools/build_defs/repo/http.bzl", line 111, column 45, in _http_archive_impl
+		download_info = ctx.download_and_extract(
+Error in download_and_extract: java.io.IOException: /home/qcrafter/.repository_cache/content_addressable/sha256/317abac1c970ad0af43c88b6eac706c9b4c5a06ee8b673d0e352143b0d9fd481/tmp-a1565851-2790-4802-97a2-5793118e6d84 (Input/output error)
+ERROR: no such package '@rules_folly//bazel': java.io.IOException: /home/qcrafter/.repository_cache/content_addressable/sha256/317abac1c970ad0af43c88b6eac706c9b4c5a06ee8b673d0e352143b0d9fd481/tmp-a1565851-2790-4802-97a2-5793118e6d84 (Input/output error)
+INFO: Elapsed time: 3.578s
+```
+
+
+
+
+
+ARGO SERVER出现一个>>双箭头的符号，代表没找到scenario？但是参数并不能确定到底是什么，这个得看generateScenarios(0)的日志，里面我加了日志，如果scenario为空，那么会记录一条日志
+
+
+
+
+
+找不到qcraft1233333.com，一个已经被删除的域名还在使用。理论上不该出现，具体为啥还不是很清楚，直接retry
+
+```
+aliyun-edge-2080ti-03
+runner-zlvbamvk-project-4-concurrent-1r85qs
+==================
+found refs/pipelines/97858
+Fetching changes with git depth set to 50...
+Initialized empty Git repository in /builds/root/qcraft/.git/
+Created fresh repository.
+Checking out d814070b as refs/merge-requests/14304/head...
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/806278546806acbd0b2073d84e2670ec64f6564a3cda4c6c822ee585c40857e1: dial tcp: lookup qcraft123333.com: no such host
+error: failed to fetch some objects from 'https://gitlab-ci-token:[MASKED]@gitlab-cn.qcraftai.com/root/qcraft.git/info/lfs'
+Uploading artifacts for failed job
+00:00
+Uploading artifacts...
+WARNING: ./testlogs/**/test.xml: no matching files 
+ERROR: No files to upload                          
+Uploading artifacts...
+WARNING: ./testlogs/**/test.xml: no matching files 
+ERROR: No files to upload                          
+Cleaning up file based variables
+00:01
+ERROR: Job failed: command terminated with exit code 1
+```
+
+```
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/63046290aac160196244f324f94c862d2a3fa2182771819cfc8ce9f8b6deaf3b: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/0ea0f2011258f36e4cb779737833530af99d5a6ca8c5c1a8e2a2aa047852ba32: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/05333001cd83c6f699130030b5d3260d0dd02f8559ff01a775fff79c97c28ba0: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/fae5f08742430c21ba9484cb5daefdac533322477fc5c7b6b4352ca133515883: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/290eaf80ebd29316a483bb0780dedbd7c664fccd2194bbde59fd6c7b078b9511: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/7ddffad5ce294bce527c1d7352fb0710373480bb526474b770be67d800492fb5: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/0b9cc89a112790e7a89e33e53902e23c444536cf029217079ec340478b98af9e: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/a8e1cf31848c708ebb256361b073640a9035c811154515a71aaa5406c1b7bd1a: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/7c69b92985c250d6f96049c22565d9f7e7f45f7e1a9bf0c16eccd7ab8e5a2b74: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/cbe93dd741a5fbb855d41d2f0890305f693682aacd7bf1960514e48b3aeb10c8: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/1d72320d1a88b34df2c87530ecf6b26073649454c03143687a202405793206e7: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/d625b2b66076e8df103d17cfc6320a15f567790bc512f0e5ab2beb0ff18da205: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/e8e3dd801debe525125724ca12099c22983055f1bf039479138f2cec71841174: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/fd694915977379c5d01ba2484ce790914ba73ded32d0aecf5334ac78f70f112b: dial tcp: lookup qcraft123333.com: no such host
+LFS: Get https://qcraft123333.com/root/qcraft.git/gitlab-lfs/objects/fbae1e3f10c84a488f98445683645b86350555815d4fffc8b91b1dcc31606c1a: dial tcp: lookup qcraft123333.com: no such host
+error: failed to fetch some objects from 'https://gitlab-ci-token:[MASKED]@gitlab-us.qcraftai.com/root/qcraft.git/info/lfs'
+```
+
+
+
+VSCode乱码问题
+
+```
+
+```
+
+
+
+看起来是你不小心编辑了/home/qcraft/.aws/credentials 这个文件导致的，要么想办法还原，要么重新setup一次，删了重新跑aws configure
+
+```
+有人碰到过这个问题吗？初始化tools报错
+[INFO] Start goofys mounting from /qcraftroaddata to /media/s3/run_data_2
+2021/12/20 11:02:22.424581 main.FATAL Unable to mount file system, see syslog for details
+查看syslog信息是
+Dec 20 11:18:28 yanguodong /usr/local/bin/goofys[7687]: main.ERROR Unable to setup backend: SharedConfigLoadError: failed to load config file, /home/qcraft/.aws/credentials#012caused by: INIParseError: invalid state with ASTKind {completed_stmt {0 NONE 0 []} false [{section_stmt {1 STRING 0 [78 111 110 101]} true []}]} and TokenType {4 NONE 0 [58]}
+Dec 20 11:18:28 yanguodong /usr/local/bin/goofys[7687]: main.FATAL Mounting file system: Mount: initialization failed
+```
+
+
+
+我们的cuda的runtime library已经是11.3了，但是新建的centos7没有装驱动，需要手动装驱动。参考的链接是https://blog.csdn.net/JimmyOrigin/article/details/112972883
+
+```
+Events:
+  Type     Reason     Age    From               Message
+  ----     ------     ----   ----               -------
+  Normal   Scheduled  2m36s  default-scheduler  Successfully assigned gitlab-runner/runner-fcakjyg6-project-4-concurrent-0dgs2w to cn-gpu03016ack
+  Normal   Pulled     2m29s  kubelet            Container image "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95" already present on machine
+  Normal   Created    2m29s  kubelet            Created container init-permissions
+  Normal   Started    2m29s  kubelet            Started container init-permissions
+  Normal   Pulling    2m28s  kubelet            Pulling image "registry.qcraftai.com/global/qcraft-ci:dev-libgit-20211214_0012"
+  Normal   Pulled     91s    kubelet            Successfully pulled image "registry.qcraftai.com/global/qcraft-ci:dev-libgit-20211214_0012" in 56.658518838s
+  Normal   Created    81s    kubelet            Created container build
+  Warning  Failed     81s    kubelet            Error: failed to start container "build": Error response from daemon: OCI runtime create failed: container_linux.go:380: starting container process caused: process_linux.go:545: container init caused: Running hook #0:: error running hook: exit status 1, stdout: , stderr: nvidia-container-cli: requirement error: unsatisfied condition: cuda>=11.3, please update your driver to a newer version, or use an earlier cuda container: unknown
+  Normal   Pulled     81s    kubelet            Container image "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95" already present on machine
+  Normal   Created    81s    kubelet            Created container helper
+  Normal   Started    81s    kubelet            Started container helper
+```
+
+
+
+
+
+要了一台ack-cn的gpu机器，然后发现虽然有驱动，但是驱动版本和cuda版本太老了。所以更新下安装流程和命令：
+
+```
+# 以root用户登录进centos7.9系统，删除旧的nvidia驱动
+yum remoe nvidia*
+# 需要重启才能卸载当前正在运行的nvidia mod
+shutdown -r now
+# 大部分的驱动安装都说要禁用nouveau，但是我使用默认的centos7检查的时候lsmod nouveau直接就没有，所以我们省略了这一步
+# 下载nvidia驱动文件
+wget https://cn.download.nvidia.com/XFree86/Linux-x86_64/470.94/NVIDIA-Linux-x86_64-470.94.run
+# 更新依赖组件和包
+yum update
+yum groupinstall "Development Tools"
+yum install kernel-devel epel-release
+# 确定提示出来的内核的版本一致，不一致使用yum -y upgrade kernel kernel-devel
+uname -r
+rpm -q kernel-devel
+# 运行驱动，执行安装.安装32bit nvidia驱动时选择no,update your x configuration选择yes。剩下的都ok即可
+chmod +x ./NVIDIA-Linux-x86_64-470.94.run 
+./NVIDIA-Linux-x86_64-470.94.run
+
+# 查看匹配的cuda版本
+nvidia smi
+#执行结果见下
+[root@cn-gpu03016ack ~]# nvidia-smi
+Tue Dec 21 13:06:23 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.94       Driver Version: 470.94       CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  Off  | 00000000:00:08.0 Off |                  N/A |
+| 15%   41C    P0    64W / 250W |      0MiB / 11019MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+# 下载对应的CUDA版本
+wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run
+
+# 进行安装,这里有几点要注意: 出现一个文档，这里要输入accept。然后CUDA installer里面组件选择去掉驱动的选中，我们已经装了驱动了，然后再Install
+sh cuda_11.4.0_470.42.01_linux.run
+
+# 添加CUDA到环境变量
+export PATH=/usr/local/cuda-11.4/bin:$PATH
+export LD_LIBRARY_PATH=$LDLIBRARY_PATH:/usr/local/cuda-11.4/lib64
+source ~/.bashrc
+
+# 测试cuda指令，可以看到cuda已经安装成功，版本为11.4
+nvcc -V
+
+# 第一步的时候把nvidia-docker啥的都删除了，所以需要重新添加repo源
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)    && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+# 更新 yum cache
+yum clean expire-cache
+# 安装nvidia-docker
+yum install -y nvidia-docker2
+# 重启docker
+systemctl restart docker
+```
+
+
+
+
+
+这里的报错虽然是driver name nasplugin.csi.alibabacloud.com not found，但是实际上是运行在每个node上的daemonset没有启动，因此需要启动相对应的守护进程集。之所以出现这个问题是因为在上一步我更新驱动文件的时候将所有的nvidia相关的组件/驱动全删除了，也就罢nvidia-docker2也给删除了，因此日志里面报错：
+
+```
+Warning  FailedCreatePodSandBox  4m2s (x4 over 4m5s)    kubelet            (combined from similar events): Failed to create pod sandbox: rpc error: code = Unknown desc = failed to start sandbox container for pod "csi-plugin-n8wgn": Error response from daemon: OCI runtime create failed: unable to retrieve OCI runtime error (open /run/containerd/io.containerd.runtime.v1.linux/moby/238bd4e5cf01dd61498969daacae01454eb59624e9e11732d4bd8aa356fcbaec/log.json: no such file or directory): fork/exec /usr/bin/nvidia-container-runtime: no such file or directory: unknown
+```
+
+表现出来的报错信息为
+
+```
+Events:
+  Type     Reason       Age                   From               Message
+  ----     ------       ----                  ----               -------
+  Normal   Scheduled    3m9s                  default-scheduler  Successfully assigned gitlab-runner/runner-cm89m7vp-project-4-concurrent-0drj7g to cn-gpu03016ack
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume "gitlab-runner-pvc-bazel-distdir" : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume "gitlab-runner-pvc-bazel-repo-cache" : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume "gitlab-runner-pvc-qcraft-maps-china" : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  67s                   kubelet            Unable to attach or mount volumes: unmounted volumes=[bazel-distdir qcraft-maps-china bazel-repo-cache], unattached volumes=[bazel-distdir qcraft-maps-china default-token-g2v9p docksock logs hosthostname aws repo bazel-repo-cache scripts]: timed out waiting for the condition
+
+```
+
+
+
+
+
+即使安装了完了诸如nvidia & cuda & nvidia-docker，依然会发现Job没有使用gpu运行，这个时候需要修改/etc/docker/daemon.json文件下面的文件.
+
+还有一个要注意的地方，即使添加了gpu也不一定代表着test会一定rerun，
+
+```
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    },
+    "registry-mirror": [
+             "https://registry.docker-cn.com"
+    ],
+        "exec-opts": ["native.cgroupdriver=systemd"],
+        "live-restore": true,
+        "log-driver": "json-file",
+        "log-opts": {
+                "max-size": "50m",
+                "max-file": "5"
+        },
+        "bip": "169.254.123.1/24",
+        "registry-mirrors": ["https://pqbap4ya.mirror.aliyuncs.com"]
+}
+```
+
+报错信息为
+
+```
+  PASSED  ] 0 tests.
+[  FAILED  ] 2 tests, listed below:
+[  FAILED  ] list_add_test.ListAdd
+[  FAILED  ] list_add_test.ListAddHalf
+ 2 FAILED TESTS
+================================================================================
+FAIL: //onboard/nets/custom_ops:gen_coordinates_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/b7b2ac012bd759fe3fc931a5a52099ce/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/nets/custom_ops/gen_coordinates_test/test.log)
+INFO: From Testing //onboard/nets/custom_ops:gen_coordinates_test:
+==================== Test output for //onboard/nets/custom_ops:gen_coordinates_test:
+[NVBLAS] No Gpu available
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename 'nvblas.conf'
+[NVBLAS] Cannot open default config file 'nvblas.conf'
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+```
+
+
+
+这里还有一个奇怪的问题，就是job报错找不到GPU，然后运行失败，但是在docker里面执行却没有问题执行成功。具体参考这个job 。为什么出这个错误？为此我把bazel run -c opt //onboard/nets/custom_ops:multiply_value_test这个扔到那个job里面。问题出现了bazel run是成功的，而bazel test是失败的。。。。有个类似的链接https://github.com/bazelbuild/rules_nodejs/issues/2325  为什么出现这个问题？因为指定了具体用不用cpu_only_flag，为了能够先跳过这个job，先
+
+bazel run -c opt //onboard/nets/custom_ops:multiply_value_test
+
+bazel test --cache_test_results=no -c opt --config=nolint $CPU_ONLY_PARAM --test_tag_filters=hxn  -- //...
+
+是这两个commit  
+
+```
+# Docker 内部运行的结果
+qcrafter@runner-yeb5xrzz-project-4-concurrent-0st2sc:/qcraft$ bazel run -c opt //onboard/nets/custom_ops:multiply_value_test
+INFO: Invocation ID: 99fdcd7d-047b-4086-a572-722da639841f
+INFO: Analyzed target //onboard/nets/custom_ops:multiply_value_test (9 packages loaded, 234 targets configured).
+INFO: Found 1 target...
+Target //onboard/nets/custom_ops:multiply_value_test up-to-date:
+  bazel-bin/onboard/nets/custom_ops/multiply_value_test
+INFO: Elapsed time: 6.002s, Critical Path: 0.36s
+INFO: 196 processes: 65 remote cache hit, 130 internal, 1 processwrapper-sandbox.
+INFO: Build completed successfully, 196 total actions
+INFO: Build completed successfully, 196 total actions
+exec ${PAGER:-/usr/bin/less} "$0" || exit 1
+Executing tests from //onboard/nets/custom_ops:multiply_value_test
+-----------------------------------------------------------------------------
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename 'nvblas.conf'
+[NVBLAS] Cannot open default config file 'nvblas.conf'
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+Running main() from gmock_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from multiply_value_test
+[ RUN      ] multiply_value_test.MultiplyValue
+[       OK ] multiply_value_test.MultiplyValue (117 ms)
+[ RUN      ] multiply_value_test.MultiplyValueHalf
+[       OK ] multiply_value_test.MultiplyValueHalf (0 ms)
+[----------] 2 tests from multiply_value_test (117 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (117 ms total)
+[  PASSED  ] 2 tests.
+
+# 在CI节点里面执行job的日志
+FAIL: //onboard/nets/custom_ops:multiply_value_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/b7b2ac012bd759fe3fc931a5a52099ce/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/nets/custom_ops/multiply_value_test/test.log)
+INFO: From Testing //onboard/nets/custom_ops:multiply_value_test:
+==================== Test output for //onboard/nets/custom_ops:multiply_value_test:
+[NVBLAS] No Gpu available                这个失败的原因实际上可能是编译build导致的
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename 'nvblas.conf'
+[NVBLAS] Cannot open default config file 'nvblas.conf'
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+Running main() from gmock_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from multiply_value_test
+[ RUN      ] multiply_value_test.MultiplyValue
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 7350900951613439, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 7350900951613440,
+kOutputResult[i] evaluates to 1, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 4, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 3.0677225980998895e-41,
+kOutputResult[i] evaluates to 4, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 5.9999999997455671, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 2.544326138664843e-10,
+kOutputResult[i] evaluates to 6, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 4, which exceeds kMaxDiffFloat, where
+...
+kOutputResultHalf[i] evaluates to 18, and
+kMaxDiffHalf evaluates to 0.00039999998989515007.
+[  FAILED  ] multiply_value_test.MultiplyValueHalf (0 ms)
+[----------] 2 tests from multiply_value_test (1 ms total)
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 2 tests, listed below:
+[  FAILED  ] multiply_value_test.MultiplyValue
+[  FAILED  ] multiply_value_test.MultiplyValueHalf
+ 2 FAILED TESTS
+```
+
+
+
+跑的job被kill了，单纯的资源不足导致的
+
+```
+                                            ^
+6 warnings generated.
+INFO: From Compiling offboard/tools/run_processor/run_job_composer.cc:
+offboard/tools/run_processor/run_job_composer.cc:342:9: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+        kafka_producer_client->Produce(
+        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+INFO: From Compiling offboard/tools/run_processor/run_job_monitor.cc:
+offboard/tools/run_processor/run_job_monitor.cc:330:3: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+  qcraft::RunDBHandler::Instance()->GetRunServersTable()->insert(
+  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+ERROR: /builds/7EQKjzDs/6/root/qcraft/offboard/mapping/pose_graph_mapping/BUILD:954:10: Compiling offboard/mapping/pose_graph_mapping/combine_match_results_main.cc failed: (Killed): clang failed: error executing command /opt/llvm/bin/clang '--target=x86_64-unknown-linux-gnu' -U_FORTIFY_SOURCE -fstack-protector -fno-omit-frame-pointer -fcolor-diagnostics -Wall -Wthread-safety -Wself-assign -Wdeprecated-declarations ... (remaining 300 argument(s) skipped)
+Use --sandbox_debug to see verbose messages from the sandbox
+INFO: Elapsed time: 551.039s, Critical Path: 113.88s
+INFO: 20120 processes: 10831 remote cache hit, 9198 internal, 91 linux-sandbox.
+FAILED: Build did NOT complete successfully
+FAILED: Build did NOT complete successfully
+Running after_script
+00:01
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 101977
+================= CI_JOB_ID ID 2212690
+================= CI Runner us-edge-07
+================= Docker Instance runner-7eqkjzds-project-4-concurrent-6q4298
+================= Current Path /builds/7EQKjzDs/6/root/qcraft
+================= PULL MAP true
+================= CI_MERGE_REQUEST_LABELS 
+$ scripts/ci_cleanup.sh
+Cleaning up file based variables
+00:01
+ERROR: Job failed: command terminated with exit code 1
+
+```
+
+```
+[qcraft@qcraft-dev-qcraft:/qcraft(master) ] $ kubectl get event -n gitlab-runner | grep runner-7eqkjzds-project-4-concurrent-6q4298
+25m         Normal    Scheduled            pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Successfully assigned gitlab-runner/runner-7eqkjzds-project-4-concurrent-6q4298 to us-edge-07
+25m         Normal    Pulled               pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Container image "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95" already present on machine
+25m         Normal    Created              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Created container init-permissions
+25m         Normal    Started              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Started container init-permissions
+25m         Normal    Pulled               pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Container image "registry.qcraftai.com/global/qcraft-ci:dev-libgit-20211214_0012" already present on machine
+25m         Normal    Created              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Created container build
+25m         Normal    Started              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Started container build
+25m         Normal    Pulled               pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Container image "registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95" already present on machine
+25m         Normal    Created              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Created container helper
+25m         Normal    Started              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Started container helper
+14m         Normal    Killing              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Stopping container build
+14m         Normal    Killing              pod/runner-7eqkjzds-project-4-concurrent-6q4298                      Stopping container helper
+```
+
+
+
+build farm挂了，重试不行
+
+```
+1 warning generated.
+INFO: From Compiling offboard/tools/s3_client.cc:
+offboard/tools/s3_client.cc:419:5: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
+    SetUploadId(s3_file_key, upload_id);
+    ^~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~
+1 warning generated.
+ERROR: /builds/uxKdbFbb/0/root/qcraft/onboard/autonomy/BUILD:26:11: Compiling onboard/autonomy/autonomy_module.cc failed: (Exit 34): UNAVAILABLE: io exception
+java.io.IOException: io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.executeRemotely(GrpcRemoteExecutor.java:226)
+	at com.google.devtools.build.lib.remote.RemoteExecutionService.execute(RemoteExecutionService.java:471)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.lambda$exec$2(RemoteSpawnRunner.java:251)
+	at com.google.devtools.build.lib.remote.Retrier.execute(Retrier.java:244)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:125)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:114)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.exec(RemoteSpawnRunner.java:230)
+	at com.google.devtools.build.lib.exec.SpawnRunner.execAsync(SpawnRunner.java:238)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:144)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:106)
+	at com.google.devtools.build.lib.actions.SpawnStrategy.beginExecution(SpawnStrategy.java:47)
+	at com.google.devtools.build.lib.exec.SpawnStrategyResolver.beginExecution(SpawnStrategyResolver.java:65)
+	at com.google.devtools.build.lib.rules.cpp.CppCompileAction.beginExecution(CppCompileAction.java:1451)
+	at com.google.devtools.build.lib.actions.Action.execute(Action.java:127)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$5.execute(SkyframeActionExecutor.java:855)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.continueAction(SkyframeActionExecutor.java:1016)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.run(SkyframeActionExecutor.java:975)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.runStateMachine(ActionExecutionState.java:129)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.getResultOrDependOnFuture(ActionExecutionState.java:81)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor.executeAction(SkyframeActionExecutor.java:472)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.checkCacheAndExecuteIfNeeded(ActionExecutionFunction.java:834)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.compute(ActionExecutionFunction.java:307)
+	at com.google.devtools.build.skyframe.AbstractParallelEvaluator$Evaluate.run(AbstractParallelEvaluator.java:477)
+	at com.google.devtools.build.lib.concurrent.AbstractQueueVisitor$WrappedRunnable.run(AbstractQueueVisitor.java:398)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: io.grpc.StatusRuntimeException: UNAVAILABLE: io exception
+	at io.grpc.Status.asRuntimeException(Status.java:533)
+	at io.grpc.stub.ClientCalls$BlockingResponseStream.hasNext(ClientCalls.java:648)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.lambda$executeRemotely$0(GrpcRemoteExecutor.java:160)
+	at com.google.devtools.build.lib.remote.Retrier.execute(Retrier.java:244)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:125)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:114)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.lambda$executeRemotely$1(GrpcRemoteExecutor.java:139)
+	at com.google.devtools.build.lib.remote.util.Utils.refreshIfUnauthenticated(Utils.java:494)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.executeRemotely(GrpcRemoteExecutor.java:137)
+	... 26 more
+Caused by: io.netty.channel.AbstractChannel$AnnotatedConnectException: finishConnect(..) failed: Connection refused: buildfarm.qcraftai.com/172.20.2.232:80
+Caused by: java.net.ConnectException: finishConnect(..) failed: Connection refused
+	at io.netty.channel.unix.Errors.throwConnectException(Errors.java:124)
+	at io.netty.channel.unix.Socket.finishConnect(Socket.java:243)
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.doFinishConnect(AbstractEpollChannel.java:672)
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.finishConnect(AbstractEpollChannel.java:649)
+	at io.netty.channel.epoll.AbstractEpollChannel$AbstractEpollUnsafe.epollOutReady(AbstractEpollChannel.java:529)
+	at io.netty.channel.epoll.EpollEventLoop.processReady(EpollEventLoop.java:465)
+	at io.netty.channel.epoll.EpollEventLoop.run(EpollEventLoop.java:378)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:989)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Unknown Source)
+INFO: Elapsed time: 1191.390s, Critical Path: 244.06s
+INFO: 11169 processes: 6485 remote cache hit, 4204 internal, 480 remote.
+FAILED: Build did NOT complete successfully
+FAILED: Build did NOT complete successfully
+Running after_script
+00:01
+Running after script...
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 102061
+================= CI_JOB_ID ID 2214734
+================= CI Runner cn-cpu01018ack
+================= Docker Instance runner-uxkdbfbb-project-4-concurrent-0lthhh
+================= Current Path /builds/uxKdbFbb/0/root/qcraft
+================= PULL MAP true
+================= CI_MERGE_REQUEST_LABELS 
+```
+
+
+
+workflow的址址为下面的,查了一下workflow的日志里面的18.144.103.119，是canssdra的ip地址，因此是cassdra连接不上导致的错误。那么如何解决呢?最后等了一段时间，然后自己恢复了。
+
+```
+--workflows_server=a72b3aa94114d48bd99b72a1a968d294-1716175034.us-west-2.elb.amazonaws.com:3405
+```
+
+```
+I1225 11:17:43.844477   979 argo_launcher.cc:102] build and push image takes 81 seconds
+I1225 11:17:43.844708   421 argo_launcher.cc:155] Workflow finished, cleaning up resources
+W1225 11:17:45.246464   421 retry.h:21] 5 Failed to read ID from workflow_db.workflows. retrying
+E1225 11:17:48.246567   421 argo_launcher.cc:166] Error Draining Workflow 5, Failed to read ID from workflow_db.workflows.
+I1225 11:17:48.246603   421 launcher.cc:22] Job status will be uploaded to http://qsim.qcraftai.com/job/1720116551797817536
+```
+
+```
+#看eks-prod-01的workflow server的状态是running，但是有一些warning日志：
+1640433163.614 [WARN] (connection_pool.cpp:278:void datastax::internal::core::ConnectionPool::on_reconnect(datastax::internal::core::DelayedConnector*)): Connection pool was unable to reconnect to host 18.144.103.119 because of the following error: Connect error 'connection refused'
+```
+
+
+
+很多情况下是canssdra数据库挂了，重启或者升级（还是重启）。目前canssdra的重启没有报警，需要手动到sim-server或者workflow-server上去看日志，几个ip都在sim-server deployment文件里面有写
+
+```
+I1227 11:41:08.879084  1036 launcher.cc:43] Job status PENDING
+W1227 11:42:08.879546  1036 retry.h:21] 14 Socket closed retrying
+I1227 11:42:17.040661  1036 launcher.cc:43] Job status PENDING
+I1227 11:43:20.174173  1036 launcher.cc:43] Job status PENDING
+W1227 11:44:45.257000  1036 retry.h:21] 13 Failed to read ID from sim_db.jobs. retrying
+E1227 11:44:48.257108  1036 job.cc:137] Error Getting Job 13, Failed to read ID from sim_db.jobs.
+```
+
+
+
+
+
+
+
+cas空间不足导致的问题
+
+```
+15 warnings generated.
+INFO: From Executing genrule //offboard/vis/vantage/topics:tree_item_moc:
+offboard/vis/vantage/topics/tree_item.h:0: Note: No relevant classes found. No output generated.
+ERROR: /builds/nNsD5xAU/9/root/qcraft/offboard/simulation/prt/util/BUILD:25:10: Linking offboard/simulation/prt/util/prt_history_main failed: (Exit 34): Remote Execution Failure:
+Failed Precondition: Action 5dc5e44338b97515cc06a7ddbba8873ffbb8156ec213565d807228aee084315a/144 is invalid: A requested input (or the `Action` or its `Command`) was not found in the CAS..
+  Precondition Failure:
+    (MISSING) blobs/a1967c1f28203bae0e65366970c9de8dc4853cc066d757c32650e447fac53283/181288: A requested input (or the `Action` or its `Command`) was not found in the CAS.
+java.io.IOException: com.google.devtools.build.lib.remote.ExecutionStatusException: FAILED_PRECONDITION: Action 5dc5e44338b97515cc06a7ddbba8873ffbb8156ec213565d807228aee084315a/144 is invalid: A requested input (or the `Action` or its `Command`) was not found in the CAS..
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.executeRemotely(GrpcRemoteExecutor.java:226)
+	at com.google.devtools.build.lib.remote.RemoteExecutionService.execute(RemoteExecutionService.java:471)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.lambda$exec$2(RemoteSpawnRunner.java:251)
+	at com.google.devtools.build.lib.remote.Retrier.execute(Retrier.java:244)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:125)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:114)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.exec(RemoteSpawnRunner.java:230)
+	at com.google.devtools.build.lib.exec.SpawnRunner.execAsync(SpawnRunner.java:238)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:144)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:106)
+	at com.google.devtools.build.lib.actions.SpawnStrategy.beginExecution(SpawnStrategy.java:47)
+	at com.google.devtools.build.lib.exec.SpawnStrategyResolver.beginExecution(SpawnStrategyResolver.java:65)
+	at com.google.devtools.build.lib.rules.cpp.CppLinkAction.beginExecution(CppLinkAction.java:306)
+	at com.google.devtools.build.lib.actions.Action.execute(Action.java:127)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$5.execute(SkyframeActionExecutor.java:855)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.continueAction(SkyframeActionExecutor.java:1016)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.run(SkyframeActionExecutor.java:975)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.runStateMachine(ActionExecutionState.java:129)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.getResultOrDependOnFuture(ActionExecutionState.java:81)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor.executeAction(SkyframeActionExecutor.java:472)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.checkCacheAndExecuteIfNeeded(ActionExecutionFunction.java:834)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.compute(ActionExecutionFunction.java:307)
+	at com.google.devtools.build.skyframe.AbstractParallelEvaluator$Evaluate.run(AbstractParallelEvaluator.java:477)
+	at com.google.devtools.build.lib.concurrent.AbstractQueueVisitor$WrappedRunnable.run(AbstractQueueVisitor.java:398)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: com.google.devtools.build.lib.remote.ExecutionStatusException: FAILED_PRECONDITION: Action 5dc5e44338b97515cc06a7ddbba8873ffbb8156ec213565d807228aee084315a/144 is invalid: A requested input (or the `Action` or its `Command`) was not found in the CAS..
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.handleStatus(GrpcRemoteExecutor.java:70)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.getOperationResponse(GrpcRemoteExecutor.java:82)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.lambda$executeRemotely$0(GrpcRemoteExecutor.java:185)
+	at com.google.devtools.build.lib.remote.Retrier.execute(Retrier.java:244)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:125)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:114)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.lambda$executeRemotely$1(GrpcRemoteExecutor.java:139)
+	at com.google.devtools.build.lib.remote.util.Utils.refreshIfUnauthenticated(Utils.java:494)
+	at com.google.devtools.build.lib.remote.GrpcRemoteExecutor.executeRemotely(GrpcRemoteExecutor.java:137)
+	... 26 more
+INFO: Elapsed time: 349.293s, Critical Path: 66.50s
+INFO: 20458 processes: 10631 remote cache hit, 9430 internal, 397 remote.
+FAILED: Build did NOT complete successfully
+FAILED: Build did NOT complete successfully
+Running after_script
+00:01
+Running after script...
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 103297
+================= CI_JOB_ID ID 2241495
+================= CI Runner cn-cpu01018ack
+================= Docker Instance runner-nnsd5xau-project-4-concurrent-95mk8c
+================= Current Path /builds/nNsD5xAU/9/root/qcraft
+================= PULL MAP true
+================= CI_MERGE_REQUEST_LABELS 
+$ scripts/ci_cleanup.sh
+Cleaning up file based variables
+00:00
+ERROR: Job failed: command terminated with exit code 1
+```
+
+
+
+内存不足导致的问题，解决方法?rerun?
+
+```
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:25:3: warning: explicitly defaulted default constructor is implicitly deleted [-Wdefaulted-function-deleted]
+  Token() noexcept = default;
+  ^
+bazel-out/k8-opt/bin/external/io_opentelemetry_cpp/api/_virtual_includes/api/opentelemetry/context/runtime_context.h:31:17: note: default constructor of 'Token' is implicitly deleted because field 'context_' of const-qualified type 'const opentelemetry::context::Context' would not be initialized
+  const Context context_;
+                ^
+1 warning generated.
+[7,063 / 7,760] 31 / 2730 tests; Compiling onboard/perception/traffic_light/traffic_light_classifier.cc; 82s remote-cache, processwrapper-sandbox ... (20 actions running)
+[7,063 / 7,760] 31 / 2730 tests; Compiling onboard/perception/traffic_light/traffic_light_classifier.cc; 156s remote-cache, processwrapper-sandbox ... (20 actions running)
+[7,063 / 7,760] 31 / 2730 tests; Compiling onboard/perception/traffic_light/traffic_light_classifier.cc; 241s remote-cache, processwrapper-sandbox ... (20 actions running)
+[7,063 / 7,760] 31 / 2730 tests; Compiling onboard/perception/traffic_light/traffic_light_classifier.cc; 360s remote-cache, processwrapper-sandbox ... (20 actions running)
+[7,063 / 7,760] 31 / 2730 tests; Compiling onboard/perception/traffic_light/traffic_light_classifier.cc; 484s remote-cache, processwrapper-sandbox ... (20 actions running)
+Server terminated abruptly (error code: 14, error message: 'Socket closed', log file: '/home/qcrafter/.cache/bazel/_bazel_qcrafter/3f9d30763bdd1976729c71b2e94e5c8a/server/jvm.out')
+Running after_script
+00:05
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 103405
+================= CI_JOB_ID ID 2244084
+================= CI Runner cn-cpu01016ack
+================= Docker Instance runner-nnsd5xau-project-4-concurrent-4vd2g8
+```
+
+
+
+新加的机器，权限问题没解决，解决了就好了
+
+```
+settings.gradle
+third_party
+/builds/nNsD5xAU/3/root/qcraft
+$ echo "SANITIZER_CONFIG=$SANITIZER_CONFIG";
+SANITIZER_CONFIG=
+$ scripts/ci_link_map_k8s.sh
+Create symbolic links ..
+$ export GLOG_logtostderr=1
+$ export USER=qcrafter
+$ export BAZEL_FLAGS=$SANITIZER_CONFIG
+$ scripts/run_scenario_test.sh --china_mode=$CHINA_MODE --test_sets=$SCENARIO_TEST_SETS --type=$TEST_TYPE --user=$GITLAB_USER_NAME --jobs_server=$JOBS_SERVER --labels=$COMMON_TEST_LABELS,$TEST_LABELS --disable_vantage_forwarding --description=$DESCRIPTION $CUSTOME_TAGS;
+Using default TAG at dev-devquery-20211228_1109
+Using ECR_CN Image
+Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post "http://%2Fvar%2Frun%2Fdocker.sock/v1.24/auth": dial unix /var/run/docker.sock: connect: permission denied
+Running after_script
+00:00
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+rsync: change_dir "/builds/nNsD5xAU/3/root/qcraft//bazel-out/k8-opt" failed: No such file or directory (2)
+rsync error: some files/attrs were not transferred (see previous errors) (code 23) at main.c(1196) [sender=3.1.2]
+Cleaning up file based variables
+00:01
+ERROR: Job failed: command terminated with exit code 1
+```
+
+
+
+pod关闭，然后exec在pod里被迫退出的错误码是137
+
+```
+command terminated with exit code 137
+```
+
+
+
+所有会影响到est planner的改动都有可能影响到selector_test。。。
+
+```
+FAIL: //onboard/planner/selector:selector_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/913a3d32ff0528d9e00a91687d23280b/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/planner/selector/selector_test/test.log)
+INFO: From Testing //onboard/planner/selector:selector_test:
+==================== Test output for //onboard/planner/selector:selector_test:
+Warning: please export TSAN_OPTIONS='ignore_noninstrumented_modules=1' to avoid false positive reports from the OpenMP runtime!
+WARNING: Logging before InitGoogleLogging() is written to STDERR
+W1230 02:46:03.330783    12 map_selector.cc:172] /qcraft-maps/ not exist!
+W1230 02:46:03.330811    12 map_selector.cc:172] /qcraft-maps-china/ not exist!
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from Selector
+[ RUN      ] Selector.OvertakeTest
+I1230 02:46:03.331035    12 param_util.cc:581] Use v2 params
+I1230 02:46:03.331912    12 param_manager.cc:159] Loading the main param file from onboard/params/param_files/mkz_testing.pb.txt
+I1230 02:46:03.344257    12 semantic_map_io.cc:328] Try to delegate the map loading...
+I1230 02:46:03.344280    12 map_loader_delegate.cc:23] Map: dojo, version:
+I1230 02:46:03.344434    12 map_loader_delegate.cc:44]  set country code by office: 1
+I1230 02:46:03.344444    12 semantic_map_manager.cc:42] Delegated map loading fails. Load the local map now...
+I1230 02:46:03.344452    12 semantic_map_io.cc:702] [LoadSemanticMap] map_location_dir=/qcraft/onboard/maps/data/dojo/semantic_map
+I1230 02:46:03.469314    12 semantic_map_manager.cc:51] Load semantic map done, Load meta:OK
+W1230 02:46:03.636983    12 speed_optimizer.cc:56] The negative speed -0.017 calculated by osqp is too large,the threshold: -0.010 has been exceeded.
+W1230 02:46:03.637006    12 speed_optimizer.cc:42] The cumulative distance of speed point is nonmonotonic, the threshold: -0.010 has been exceeded, prev_s: 26.867 now_s: 26.856.
+[       OK ] Selector.OvertakeTest (330 ms)
+[ RUN      ] Selector.LaneChangeTest
+I1230 02:46:03.806254    12 param_util.cc:581] Use v2 params
+I1230 02:46:03.806838    12 param_manager.cc:159] Loading the main param file from onboard/params/param_files/mkz_testing.pb.txt
+I1230 02:46:03.808241    12 semantic_map_io.cc:328] Try to delegate the map loading...
+I1230 02:46:03.808470    12 semantic_map_manager.cc:42] Delegated map loading fails. Load the local map now...
+I1230 02:46:03.808488    12 semantic_map_io.cc:702] [LoadSemanticMap] map_location_dir=/qcraft/onboard/maps/data/dojo/semantic_map
+I1230 02:46:04.013269    12 semantic_map_manager.cc:51] Load semantic map done, Load meta:OK
+[       OK ] Selector.LaneChangeTest (364 ms)
+[ RUN      ] Selector.EarlyLaneChangeTest
+I1230 02:46:04.170562    12 param_util.cc:581] Use v2 params
+I1230 02:46:04.171169    12 param_manager.cc:159] Loading the main param file from onboard/params/param_files/mkz_testing.pb.txt
+I1230 02:46:04.172641    12 semantic_map_io.cc:328] Try to delegate the map loading...
+I1230 02:46:04.172659    12 semantic_map_manager.cc:42] Delegated map loading fails. Load the local map now...
+I1230 02:46:04.172669    12 semantic_map_io.cc:702] [LoadSemanticMap] map_location_dir=/qcraft/onboard/maps/data/dojo/semantic_map
+I1230 02:46:04.302968    12 semantic_map_manager.cc:51] Load semantic map done, Load meta:OK
+W1230 02:46:04.395381    12 trajectory_validation.cc:604] EstPlanner plan failed validation.
+W1230 02:46:04.395907    12 trajectory_validation.cc:605] Validation details: validation_errors_ex {
+  error_code: OUT_OF_DRIVE_PASSAGE_QUERY_AREA
+  error_message: "QueryFrenetLatOffset fail at traj point 82 (275.584575, -220.331998), return info: OUT_OF_RANGE: 5.572352 is out of left lateral range 5.479109."
+}
+onboard/planner/selector/selector_test.cc:412: Failure
+Value of: results[i].ok()
+  Actual: false
+Expected: true
+[  FAILED  ] Selector.EarlyLaneChangeTest (248 ms)
+[----------] 3 tests from Selector (1088 ms total)
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (1088 ms total)
+[  PASSED  ] 2 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Selector.EarlyLaneChangeTest
+ 1 FAILED TEST
+```
+
+
+
+SIM-SERVER挂了
+
+```
+26894cd74717: Pushed
+36fea60e-76d4-44d1-82ad-9aa5f0e0e7e3: digest: sha256:60de6c7b2f6055c747b74d1ce3845c4e4dcbc3ceed9bbb4677fd08bb60e54183 size: 9594
+push image took 0m:33s
+I1130 06:29:28.351953   983 argo_launcher.cc:102] build and push image takes 105 seconds
+I1130 06:29:28.352202   207 argo_launcher.cc:183] Submitting workflow bd234a59-6a21-48b0-aaa4-bc2d84143de0
+I1130 06:29:28.352221   207 argo_launcher.cc:184] Workflow URL https://argo-cn.qcraftai.com/workflows/default/bd234a59-6a21-48b0-aaa4-bc2d84143de0
+I1130 06:29:29.742676   207 launcher.cc:21] Job status will be uploaded to http://sim-dash.qcraftai.com/results/1717833444491428746
+W1130 06:29:29.872267   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:29.972374   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:30.172513   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:30.572655   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:31.460412   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:33.291597   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:36.577880   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:41.666393   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:49.178841   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:29:54.178995   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:30:14.667342   207 retry.h:21] 14 failed to connect to all addresses retrying
+E1130 06:30:19.667439   207 job.cc:67] Error Getting Job 14, failed to connect to all addresses
+W1130 06:31:26.419387   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:46.578815   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:46.778951   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:47.179091   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:47.979251   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:49.579412   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:52.779572   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:32:57.779747   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:33:02.779912   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:33:07.780084   207 retry.h:21] 14 failed to connect to all addresses retrying
+W1130 06:33:12.780243   207 retry.h:21] 14 failed to connect to all addresses retrying
+E1130 06:33:17.780347   207 job.cc:137] Error Getting Job 14, failed to connect to all addresses
+I1130 06:33:17.780385   207 launcher.cc:42] Job status FINISHED
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
