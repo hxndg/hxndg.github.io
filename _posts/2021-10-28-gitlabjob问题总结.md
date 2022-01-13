@@ -1022,18 +1022,73 @@ Events:
 
 
 
+pre
+
+```
+echo y |yum remove nvidia*
+shutdown -r now
+```
+
+middle-nvidia
+
+```
+cd /root
+#wget或者直接拷贝，目前两个需要的文件都安装了
+mkdir linux_nvidia_driver & cd linux_nvidia_driver
+wget https://cn.download.nvidia.com/XFree86/Linux-x86_64/470.94/NVIDIA-Linux-x86_64-470.94.run
+yum update
+echo y| yum groupinstall "Development Tools"
+echo y| yum install kernel-devel epel-release
+chmod +x ./NVIDIA-Linux-x86_64-470.94.run 
+./NVIDIA-Linux-x86_64-470.94.run x && cd NVIDIA-Linux-x86_64-470.94
+./nvidia-installer -s --no-install-compat32-libs
+```
+
+middle-cuda
+
+```
+cd /root
+#wget或者直接拷贝，目前两个需要的文件都安装了
+mkdir linux_nvidia_cuda & cd linux_nvidia_cuda
+wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run
+chmod +x ./cuda_11.4.0_470.42.01_linux.run
+#目前并不确定这样子行不行， 或者直接不安装驱动，然后--driver安装驱动？
+./cuda_11.4.0_470.42.01_linux.run --silent # 这个并不行--driver=false
+# path覆盖一下
+export PATH=/usr/local/cuda-11.4/bin:$PATH
+export LD_LIBRARY_PATH=$LDLIBRARY_PATH:/usr/local/cuda-11.4/lib64
+source ~/.bashrc
+```
+
+finish-nvidia-docker2
+
+```
+# 第一步的时候把nvidia-docker啥的都删除了，所以需要重新添加repo源
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)    && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+# 更新 yum cache
+yum clean expire-cache
+# 安装nvidia-docker
+yum install -y nvidia-docker2
+# 重启docker
+systemctl restart docker
+```
+
+
+
+
+
 
 
 要了一台ack-cn的gpu机器，然后发现虽然有驱动，但是驱动版本和cuda版本太老了。所以更新下安装流程和命令：
 
 ```
 # 以root用户登录进centos7.9系统，删除旧的nvidia驱动
-yum remoe nvidia*
+yum remove nvidia*
 # 需要重启才能卸载当前正在运行的nvidia mod
 shutdown -r now
 # 大部分的驱动安装都说要禁用nouveau，但是我使用默认的centos7检查的时候lsmod nouveau直接就没有，所以我们省略了这一步
 # 下载nvidia驱动文件
-wget https://cn.download.nvidia.com/XFree86/Linux-x86_64/470.94/NVIDIA-Linux-x86_64-470.94.run
+
 # 更新依赖组件和包
 yum update
 yum groupinstall "Development Tools"
@@ -1674,7 +1729,47 @@ I1130 06:33:17.780385   207 launcher.cc:42] Job status FINISHED
 
 
 
+gpu内存不足导致的问题，这个是申请内存不足导致的，rerun一般能通过，我目前改了一些sync_test让单独跑应该能一定程度缓解问题。
 
+```
+[0x56452ec76fd0]:4 :Quantization: weight scales in internalAllocate: at runtime/common/weightsPtr.cpp: 100 idx: 46 time: 1.09e-07
+[0x56452ece45e0]:4 :Quantization: weight scales in internalAllocate: at runtime/common/weightsPtr.cpp: 100 idx: 52 time: 1.61e-07
+[0x56452ec50060]:4 :Quantization: weight scales in internalAllocate: at runtime/common/weightsPtr.cpp: 100 idx: 44 time: 1.77e-07
+[0x56452eceb4d0]:4 :Quantization: weight scales in internalAllocate: at runtime/common/weightsPtr.cpp: 100 idx: 54 time: 1.28e-07
+[0x56452ed2be00]:4 :Quantization: weight scales in internalAllocate: at runtime/common/weightsPtr.cpp: 100 idx: 56 time: 1.84e-07
+-------------- The current device memory allocations dump as below --------------
+[0]:2109440000 :GPU context memory in ExecutionContext: at runtime/api/executionContext.cpp: 208 idx: 2 time: 0.0227677
+[0x7f24d8000000]:287578112 :GPU per-runner memory in ExecutionContext: at runtime/api/executionContext.cpp: 159 idx: 1 time: 0.00108015
+[0x7f250a000000]:287578112 :GpuGlob deserialization in load: at runtime/deserialization/safeDeserialize.cpp: 349 idx: 0 time: 0.00288393
+E0106 05:15:11.824108 12990 tensor_net.h:496] [TRT]    Requested amount of GPU memory (2109440000 bytes) could not be allocated. There may not be enough free memory for allocation to succeed.
+I0106 05:15:11.844661 12990 tensor_net.h:492] [TRT]    [MemUsageChange] Init cuBLAS/cuBLASLt: CPU +0, GPU +0, now: CPU 1509, GPU 8844 (MiB)
+E0106 05:15:11.844966 12990 tensor_net.h:496] [TRT]    2: [executionContext.cpp::ExecutionContext::208] Error Code 2: OutOfMemory (no further information)
+E0106 05:15:11.844991 12990 tensor_net.cc:892] [TRT]    device GPU, failed to create execution context
+E0106 05:15:11.845000 12990 tensor_net.cc:872] [TRT]    device GPU, failed to create resources for CUDA engine
+E0106 05:15:11.845007 12990 tensor_net.cc:813] [TRT]    failed to create TensorRT engine for onboard/params/nets/depth_net/depth_net_1122/depth_net.onnx, device GPU
+E0106 05:15:11.845016 12990 tensor_net.cc:339] [TRT]    failed to load onboard/params/nets/depth_net/depth_net_1122/depth_net.onnx
+================================================================================
+INFO: Elapsed time: 628.470s, Critical Path: 542.68s
+INFO: 25246 processes: 13893 remote cache hit, 10952 internal, 1 local, 400 processwrapper-sandbox.
+INFO: Build completed, 2 tests FAILED, 25246 total actions
+Test cases: finished with 4258 passing and 2 failing out of 4260 test cases
+Executed 257 out of 3091 tests: 3089 tests pass and 2 fail locally.
+INFO: Build completed, 2 tests FAILED, 25246 total actions
+Running after_script
+00:02
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 105448
+================= CI_JOB_ID ID 2292015
+================= CI Runner aliyun-edge-2080ti-05
+================= Docker Instance runner-evgkcu2b-project-4-concurrent-1nncxl
+================= Current Path /builds/root/qcraft
+================= PULL MAP true
+================= CI_MERGE_REQUEST_LABELS 
+$ scripts/ci_cleanup.sh
+
+```
 
 
 
