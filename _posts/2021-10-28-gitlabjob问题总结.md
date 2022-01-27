@@ -521,7 +521,7 @@ ERROR: Job failed: command terminated with exit code 1
 
 
 
-
+没找到相对应的node，需要添加label？
 
 ```
 	Unschedulable: "0/6 nodes are available: 1 Insufficient pods, 1 node(s) were unschedulable, 4 node(s) had taints that the pod didn't tolerate."
@@ -1022,63 +1022,6 @@ Events:
 
 
 
-pre
-
-```
-echo y |yum remove nvidia*
-shutdown -r now
-```
-
-middle-nvidia
-
-```
-cd /root
-#wget或者直接拷贝，目前两个需要的文件都安装了
-mkdir linux_nvidia_driver & cd linux_nvidia_driver
-wget https://cn.download.nvidia.com/XFree86/Linux-x86_64/470.94/NVIDIA-Linux-x86_64-470.94.run
-yum update
-echo y| yum groupinstall "Development Tools"
-echo y| yum install kernel-devel epel-release
-chmod +x ./NVIDIA-Linux-x86_64-470.94.run 
-./NVIDIA-Linux-x86_64-470.94.run x && cd NVIDIA-Linux-x86_64-470.94
-./nvidia-installer -s --no-install-compat32-libs
-```
-
-middle-cuda
-
-```
-cd /root
-#wget或者直接拷贝，目前两个需要的文件都安装了
-mkdir linux_nvidia_cuda & cd linux_nvidia_cuda
-wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run
-chmod +x ./cuda_11.4.0_470.42.01_linux.run
-#目前并不确定这样子行不行， 或者直接不安装驱动，然后--driver安装驱动？
-./cuda_11.4.0_470.42.01_linux.run --silent # 这个并不行--driver=false
-# path覆盖一下
-export PATH=/usr/local/cuda-11.4/bin:$PATH
-export LD_LIBRARY_PATH=$LDLIBRARY_PATH:/usr/local/cuda-11.4/lib64
-source ~/.bashrc
-```
-
-finish-nvidia-docker2
-
-```
-# 第一步的时候把nvidia-docker啥的都删除了，所以需要重新添加repo源
-distribution=$(. /etc/os-release;echo $ID$VERSION_ID)    && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
-# 更新 yum cache
-yum clean expire-cache
-# 安装nvidia-docker
-yum install -y nvidia-docker2
-# 重启docker
-systemctl restart docker
-```
-
-
-
-
-
-
-
 要了一台ack-cn的gpu机器，然后发现虽然有驱动，但是驱动版本和cuda版本太老了。所以更新下安装流程和命令：
 
 ```
@@ -1150,6 +1093,137 @@ systemctl restart docker
 
 
 
+最后整理出来的总共的初始化脚本如下：
+
+```shell
+#!/bin/bash
+
+set -e
+
+function add_current_script_to_rc_local() {
+  script_path=$(realpath $0)
+  echo "Adding boot shell $script_path"
+  echo "$script_path" >> /etc/rc.d/rc.local
+}
+
+function remove_current_script_from_rc_local() {
+  script_path=$(realpath $0)
+  echo "Removing boot shell $script_path"
+  sed -i "s#$script_path##g" /etc/rc.d/rc.local
+}
+
+function remove_nvidia_driver() {
+  echo "Remove existing driver"
+  echo "Remove existing nvidia driver container cli"
+  yum remove -y nvidia*
+
+  # Use default nvidia-uninstall bin to perform uninstall
+  if [[ -x "/usr/bin/nvidia-uninstall" ]]; then
+    echo "Remove existing nvidia driver using nvidia-uninstall"
+    /usr/bin/nvidia-uninstall --silent
+  fi
+}
+
+function create_nvidia_cuda_folder() {
+  echo "Create folder /root/nvidia_cuda"
+  if [[ ! -d "/root/nvidia_cuda" ]]; then
+    mkdir "/root/nvidia_cuda"
+  fi
+}
+
+function get_nvidia_driver_version() {
+  echo $(nvidia-smi --query-gpu=driver_version --format=csv,noheader)
+}
+
+function download_nvidia_11_4_0_470_42_01() {
+  wget -O cuda_11.4.0_470.42.01_linux.run "https://qcraft-images.oss-cn-zhangjiakou-internal.aliyuncs.com/cuda_470_42_01/cuda_11.4.0_470.42.01_linux.run"
+  cuda_md5=$(md5sum ./cuda_11.4.0_470.42.01_linux.run | awk '{print $1}')
+  if [[ $cuda_md5 == "cbcc1bca492d449c53ab51c782ffb0a2" ]]; then
+    echo "Download cuda successfull" >> /root/nvidia_cuda/install.log
+  else
+    echo "Download cuda failed" >> /root/nvidia_cuda/install.log
+    exit 1
+  fi
+}
+
+function install_driver_needed_files() {
+  echo "Installing needed header files" >> /root/nvidia_cuda/install.log
+  yum update -y
+  yum groupinstall -y "Development Tools"
+  yum install -y kernel-devel epel-release
+}
+
+function install_nvidia_cuda_driver() {
+  driver_installed=$(get_nvidia_driver_version)
+  if [[ $driver_installed == "470.42.01" ]]; then
+    echo "Already install nvidia driver 470.42.01, Abort install" >> /root/nvidia_cuda/install.log
+    exit 0
+  else
+    echo "Planning to install 470.42.01 cuda & driver" >> /root/nvidia_cuda/install.log
+    install_driver_needed_files
+    download_nvidia_11_4_0_470_42_01
+    echo "Start to install 470.42.01 cuda & driver" >> /root/nvidia_cuda/install.log
+    chmod +x ./cuda_11.4.0_470.42.01_linux.run
+    ./cuda_11.4.0_470.42.01_linux.run --silent
+    echo "Success installed 470.42.01 cuda & driver" >> /root/nvidia_cuda/install.log
+  fi
+}
+
+function install_nvidia_docker_2() {
+  echo "Installing nvidia-docker 2" >> /root/nvidia_cuda/install.log
+  distribution=$(
+    . /etc/os-release
+    echo $ID$VERSION_ID
+  ) && curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+  yum clean expire-cache
+  yum install -y nvidia-docker2
+  echo "Installed nvidia-docker 2" >> /root/nvidia_cuda/install.log
+}
+
+function overwrite_daemon_json() {
+  wget -O daemon.json "https://qcraft-images.oss-cn-zhangjiakou-internal.aliyuncs.com/cuda_470_42_01/daemon.json"
+  json_md5=$(md5sum ./daemon.json | awk '{print $1}')
+  if [[ $json_md5 == "8f8be065977394c8c75c0b4c23a2258d" ]]; then
+    echo "Download daemon.json successfull" >> /root/nvidia_cuda/install.log
+  else
+    echo "Download daemon.json failed" >> /root/nvidia_cuda/install.log
+    exit 1
+  fi
+  mv -f daemon.json /etc/docker/daemon.json
+}
+
+function modify_docker_sock_permission() {
+  if [[ -f "/var/run/docker.sock" ]]; then
+    echo "Modify docker.sock permission to 666"
+    chmod 666 /var/run/docker.sock
+  fi
+}
+
+if [ ! -d "/root/nvidia_cuda" ]; then
+  remove_nvidia_driver
+  create_nvidia_cuda_folder
+  add_current_script_to_rc_local
+  echo "Finish fisrt stage: remove current nvidia driver & add current stage to boot" >> /root/nvidia_cuda/install.log
+  shutdown -r now
+else
+  remove_current_script_from_rc_local
+  cd /root/nvidia_cuda
+  install_nvidia_cuda_driver
+  install_nvidia_docker_2
+  overwrite_daemon_json
+  echo "Finish second stage: install nvidia driver & cuda & nvidia docker 2 & daemon.json" >> /root/nvidia_cuda/install.log
+fi
+
+modify_docker_sock_permission
+
+echo "Install nvidia driver & cuda success" >> /root/nvidia_cuda/install.log
+
+```
+
+
+
+
+
 
 
 这里的报错虽然是driver name nasplugin.csi.alibabacloud.com not found，但是实际上是运行在每个node上的daemonset没有启动，因此需要启动相对应的守护进程集。之所以出现这个问题是因为在上一步我更新驱动文件的时候将所有的nvidia相关的组件/驱动全删除了，也就罢nvidia-docker2也给删除了，因此日志里面报错：
@@ -1171,8 +1245,6 @@ Events:
   Warning  FailedMount  67s                   kubelet            Unable to attach or mount volumes: unmounted volumes=[bazel-distdir qcraft-maps-china bazel-repo-cache], unattached volumes=[bazel-distdir qcraft-maps-china default-token-g2v9p docksock logs hosthostname aws repo bazel-repo-cache scripts]: timed out waiting for the condition
 
 ```
-
-
 
 
 
@@ -1203,6 +1275,8 @@ Events:
         "registry-mirrors": ["https://pqbap4ya.mirror.aliyuncs.com"]
 }
 ```
+
+
 
 报错信息为
 
@@ -1591,7 +1665,7 @@ $ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "===============
 
 
 
-新加的机器，权限问题没解决，解决了就好了
+新加的机器，权限问题没解决，解决了就好了。解决的方法是`chmod 666 /var/run/docker.sock`，理论上加了就好。不过有个有趣的问题，为什么gpu机器就不需要加这个东西？直接就能用？
 
 ```
 settings.gradle
@@ -1773,6 +1847,294 @@ $ scripts/ci_cleanup.sh
 
 
 
+buildfarm错误，目前
+
+```shell
+[15,887 / 15,964] Compiling offboard/mapping/pose_graph_mapping/imagery_run_segment.cc; 354s remote ... (30 actions, 25 running)
+ERROR: /builds/sJYWyPQz/2/root/qcraft/offboard/ml/data_processing/rain_filter/BUILD:24:10: Compiling offboard/ml/data_processing/rain_filter/simulator_with_map_version.cc failed: (Exit 34): 3 errors during bulk transfer
+com.google.devtools.build.lib.remote.BulkTransferException: 3 errors during bulk transfer
+	at com.google.devtools.build.lib.remote.RemoteCache.waitForBulkTransfer(RemoteCache.java:291)
+	at com.google.devtools.build.lib.remote.RemoteExecutionCache.ensureInputsPresent(RemoteExecutionCache.java:72)
+	at com.google.devtools.build.lib.remote.RemoteExecutionService.uploadInputsIfNotPresent(RemoteExecutionService.java:439)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.lambda$exec$2(RemoteSpawnRunner.java:236)
+	at com.google.devtools.build.lib.remote.Retrier.execute(Retrier.java:244)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:125)
+	at com.google.devtools.build.lib.remote.RemoteRetrier.execute(RemoteRetrier.java:114)
+	at com.google.devtools.build.lib.remote.RemoteSpawnRunner.exec(RemoteSpawnRunner.java:230)
+	at com.google.devtools.build.lib.exec.SpawnRunner.execAsync(SpawnRunner.java:238)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:144)
+	at com.google.devtools.build.lib.exec.AbstractSpawnStrategy.exec(AbstractSpawnStrategy.java:106)
+	at com.google.devtools.build.lib.actions.SpawnStrategy.beginExecution(SpawnStrategy.java:47)
+	at com.google.devtools.build.lib.exec.SpawnStrategyResolver.beginExecution(SpawnStrategyResolver.java:65)
+	at com.google.devtools.build.lib.rules.cpp.CppCompileAction.beginExecution(CppCompileAction.java:1451)
+	at com.google.devtools.build.lib.actions.Action.execute(Action.java:127)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$5.execute(SkyframeActionExecutor.java:855)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.continueAction(SkyframeActionExecutor.java:1016)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.run(SkyframeActionExecutor.java:975)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.runStateMachine(ActionExecutionState.java:129)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.getResultOrDependOnFuture(ActionExecutionState.java:81)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor.executeAction(SkyframeActionExecutor.java:472)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.checkCacheAndExecuteIfNeeded(ActionExecutionFunction.java:834)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.compute(ActionExecutionFunction.java:307)
+	at com.google.devtools.build.skyframe.AbstractParallelEvaluator$Evaluate.run(AbstractParallelEvaluator.java:477)
+	at com.google.devtools.build.lib.concurrent.AbstractQueueVisitor$WrappedRunnable.run(AbstractQueueVisitor.java:398)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+	Suppressed: java.io.IOException: Error while uploading artifact with digest 'a6fab537e4fde1e80058855399bca551b7cdb9ef98a40221c7ac03d999abbf2b/249'
+		at com.google.devtools.build.lib.remote.ByteStreamUploader.lambda$uploadBlobAsync$1(ByteStreamUploader.java:265)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:192)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:124)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at io.grpc.stub.ClientCalls$GrpcFuture.setException(ClientCalls.java:563)
+		at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+		at io.grpc.PartialForwardingClientCallListener.onClose(PartialForwardingClientCallListener.java:39)
+		at io.grpc.ForwardingClientCallListener.onClose(ForwardingClientCallListener.java:23)
+		at io.grpc.ForwardingClientCallListener$SimpleForwardingClientCallListener.onClose(ForwardingClientCallListener.java:40)
+		at com.google.devtools.build.lib.remote.ReferenceCountedChannel$ConnectionCleanupCall$1.onClose(ReferenceCountedChannel.java:94)
+		at io.grpc.internal.ClientCallImpl.closeObserver(ClientCallImpl.java:617)
+		at io.grpc.internal.ClientCallImpl.access$300(ClientCallImpl.java:70)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInternal(ClientCallImpl.java:803)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInContext(ClientCallImpl.java:782)
+		at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+		at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:123)
+		... 3 more
+	Caused by: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+		at io.grpc.Status.asRuntimeException(Status.java:524)
+		at com.google.devtools.build.lib.remote.ByteStreamUploader$AsyncUpload$1.onClose(ByteStreamUploader.java:551)
+		... 13 more
+		Suppressed: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+			at io.grpc.Status.asRuntimeException(Status.java:533)
+			at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+			... 13 more
+	Suppressed: java.io.IOException: Error while uploading artifact with digest '740fddd47606ef3cc0ad43a7e65cbce155266f9c1c1c30cc59783ed7a94c9c4f/1424'
+		at com.google.devtools.build.lib.remote.ByteStreamUploader.lambda$uploadBlobAsync$1(ByteStreamUploader.java:265)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:192)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:124)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at io.grpc.stub.ClientCalls$GrpcFuture.setException(ClientCalls.java:563)
+		at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+		at io.grpc.PartialForwardingClientCallListener.onClose(PartialForwardingClientCallListener.java:39)
+		at io.grpc.ForwardingClientCallListener.onClose(ForwardingClientCallListener.java:23)
+		at io.grpc.ForwardingClientCallListener$SimpleForwardingClientCallListener.onClose(ForwardingClientCallListener.java:40)
+		at com.google.devtools.build.lib.remote.ReferenceCountedChannel$ConnectionCleanupCall$1.onClose(ReferenceCountedChannel.java:94)
+		at io.grpc.internal.ClientCallImpl.closeObserver(ClientCallImpl.java:617)
+		at io.grpc.internal.ClientCallImpl.access$300(ClientCallImpl.java:70)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInternal(ClientCallImpl.java:803)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInContext(ClientCallImpl.java:782)
+		at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+		at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:123)
+		... 3 more
+	Caused by: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+		at io.grpc.Status.asRuntimeException(Status.java:524)
+		at com.google.devtools.build.lib.remote.ByteStreamUploader$AsyncUpload$1.onClose(ByteStreamUploader.java:551)
+		... 13 more
+		Suppressed: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+			at io.grpc.Status.asRuntimeException(Status.java:533)
+			at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+			... 13 more
+	Suppressed: java.io.IOException: Error while uploading artifact with digest '8c7ae2c436cace2f45c804f7d5a2630b1e2b39010ee503b4a94232e6cc40dac1/811'
+		at com.google.devtools.build.lib.remote.ByteStreamUploader.lambda$uploadBlobAsync$1(ByteStreamUploader.java:265)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:192)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:124)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setFuture(AbstractFuture.java:800)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:203)
+		at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.setResult(AbstractCatchingFuture.java:179)
+		at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:133)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at com.google.common.util.concurrent.AbstractTransformFuture.run(AbstractTransformFuture.java:100)
+		at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+		at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1174)
+		at com.google.common.util.concurrent.AbstractFuture.complete(AbstractFuture.java:969)
+		at com.google.common.util.concurrent.AbstractFuture.setException(AbstractFuture.java:760)
+		at io.grpc.stub.ClientCalls$GrpcFuture.setException(ClientCalls.java:563)
+		at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+		at io.grpc.PartialForwardingClientCallListener.onClose(PartialForwardingClientCallListener.java:39)
+		at io.grpc.ForwardingClientCallListener.onClose(ForwardingClientCallListener.java:23)
+		at io.grpc.ForwardingClientCallListener$SimpleForwardingClientCallListener.onClose(ForwardingClientCallListener.java:40)
+		at com.google.devtools.build.lib.remote.ReferenceCountedChannel$ConnectionCleanupCall$1.onClose(ReferenceCountedChannel.java:94)
+		at io.grpc.internal.ClientCallImpl.closeObserver(ClientCallImpl.java:617)
+		at io.grpc.internal.ClientCallImpl.access$300(ClientCallImpl.java:70)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInternal(ClientCallImpl.java:803)
+		at io.grpc.internal.ClientCallImpl$ClientStreamListenerImpl$1StreamClosed.runInContext(ClientCallImpl.java:782)
+		at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+		at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:123)
+		... 3 more
+	Caused by: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+		at io.grpc.Status.asRuntimeException(Status.java:524)
+		at com.google.devtools.build.lib.remote.ByteStreamUploader$AsyncUpload$1.onClose(ByteStreamUploader.java:551)
+		... 13 more
+		Suppressed: io.grpc.StatusRuntimeException: UNAVAILABLE: no available workers
+			at io.grpc.Status.asRuntimeException(Status.java:533)
+			at io.grpc.stub.ClientCalls$UnaryStreamToFuture.onClose(ClientCalls.java:533)
+			... 13 more
+INFO: Elapsed time: 1190.402s, Critical Path: 414.85s
+INFO: 15917 processes: 8589 remote cache hit, 6033 internal, 1295 remote.
+FAILED: Build did NOT complete successfully
+FAILED: Build did NOT complete successfully
+```
 
 
 
@@ -1780,10 +2142,169 @@ $ scripts/ci_cleanup.sh
 
 
 
+RFC模板https://qcraft.feishu.cn/docs/doccn5Vgkr1N7vZrvS2sLCFxd1c#FxyDgh
+
+```
+.k8s-bazel-test-template
+	k8s-bazel-test-postsubmit
+	.k8s-bazel-test-schedule-template:
+		k8s-bazel-test-schedule-tsan
+		k8s-bazel-test-schedule-asan
+		k8s-bazel-test-schedule-ubsan
+
+```
+
+
+
+问题，为什么https://gitlab.qcraft.ai/root/qcraft/-/merge_requests/15613 的pipeline会出现多个pipeline passed？
+
+
+```
+
+```
+
+
+
+bazel内部错误，retry即可
+
+```
+Analyzing: 7510 targets (1034 packages loaded, 36333 targets configured)
+Analyzing: 7510 targets (1047 packages loaded, 38275 targets configured)
+Analyzing: 7510 targets (1056 packages loaded, 39778 targets configured)
+Analyzing: 7510 targets (1072 packages loaded, 44313 targets configured)
+Analyzing: 7510 targets (1085 packages loaded, 62517 targets configured)
+Analyzing: 7510 targets (1174 packages loaded, 63306 targets configured)
+INFO: Analyzed 7510 targets (1278 packages loaded, 64206 targets configured).
+INFO: Found 7510 targets...
+[0 / 562] [Prepa] BazelWorkspaceStatusAction stable-status.txt
+FATAL: bazel crashed due to an internal error. Printing stack trace:
+java.lang.RuntimeException: Unrecoverable error while evaluating node 'UnshareableActionLookupData{actionLookupKey=com.google.devtools.build.lib.skyframe.WorkspaceStatusValue$BuildInfoKey@1ade3d14, actionIndex=0}' (requested by nodes )
+	at com.google.devtools.build.skyframe.AbstractParallelEvaluator$Evaluate.run(AbstractParallelEvaluator.java:563)
+	at com.google.devtools.build.lib.concurrent.AbstractQueueVisitor$WrappedRunnable.run(AbstractQueueVisitor.java:398)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+Caused by: java.lang.ArrayIndexOutOfBoundsException: Index 424 out of bounds for length 424
+	at com.google.devtools.build.lib.profiler.TimeSeries.addRange(TimeSeries.java:80)
+	at com.google.devtools.build.lib.profiler.TimeSeries.addRange(TimeSeries.java:35)
+	at com.google.devtools.build.lib.profiler.Profiler.completeTask(Profiler.java:728)
+	at com.google.devtools.build.lib.profiler.Profiler.lambda$profileAction$1(Profiler.java:677)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor$ActionRunner.run(SkyframeActionExecutor.java:976)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.runStateMachine(ActionExecutionState.java:129)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionState.getResultOrDependOnFuture(ActionExecutionState.java:81)
+	at com.google.devtools.build.lib.skyframe.SkyframeActionExecutor.executeAction(SkyframeActionExecutor.java:472)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.checkCacheAndExecuteIfNeeded(ActionExecutionFunction.java:834)
+	at com.google.devtools.build.lib.skyframe.ActionExecutionFunction.compute(ActionExecutionFunction.java:307)
+	at com.google.devtools.build.skyframe.AbstractParallelEvaluator$Evaluate.run(AbstractParallelEvaluator.java:477)
+	... 4 more
+Running after_script
+00:01
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 108207
+================= CI_JOB_ID ID 2358222
+================= CI Runner us-edge-09
+================= Docker Instance runner-9csnzycb-project-4-concurrent-7j2vr6
+================= Current Path /builds/9CsNzyCB/7/root/qcraft
+================= PULL MAP true
+================= CI_MERGE_REQUEST_LABELS 
+$ scripts/ci_cleanup.sh
+Cleaning up file based variables
+00:00
+ERROR: Job failed: command terminated with exit code 1
+```
 
 
 
 
+
+
+
+```
+INFO: Build options --copt and --define have changed, discarding analysis cache.
+Analyzing: target //offboard/simulation/tools/regression:regression_helper_main (0 packages loaded, 0 targets configured)
+INFO: Analyzed target //offboard/simulation/tools/regression:regression_helper_main (0 packages loaded, 3653 targets configured).
+INFO: Found 1 target...
+[0 / 3] [Prepa] BazelWorkspaceStatusAction stable-status.txt
+Target //offboard/simulation/tools/regression:regression_helper_main up-to-date:
+  bazel-bin/offboard/simulation/tools/regression/regression_helper_main
+INFO: Elapsed time: 8.853s, Critical Path: 0.09s
+INFO: 890 processes: 889 remote cache hit, 1 internal.
+INFO: Build completed successfully, 890 total actions
+INFO: Build completed successfully, 890 total actions
+Traceback (most recent call last):
+  File "/builds/9CsNzyCB/7/root/qcraft/./bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_qcraft/offboard/simulation/tools/regression/regression_helper_main.py", line 130, in <module>
+    main()
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/qcraft_py3_deps_pypi__click/click/core.py", line 1128, in __call__
+    return self.main(*args, **kwargs)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/qcraft_py3_deps_pypi__click/click/core.py", line 1053, in main
+    rv = self.invoke(ctx)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/qcraft_py3_deps_pypi__click/click/core.py", line 1659, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/qcraft_py3_deps_pypi__click/click/core.py", line 1395, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/qcraft_py3_deps_pypi__click/click/core.py", line 754, in invoke
+    return __callback(*args, **kwargs)
+  File "/builds/9CsNzyCB/7/root/qcraft/./bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_qcraft/offboard/simulation/tools/regression/regression_helper_main.py", line 98, in calculate_regression
+    include_metric_detail,
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_qcraft/offboard/simulation/tools/regression/implements/qsim_result_impl.py", line 194, in calculate_regression
+    include_metric_diff)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_qcraft/offboard/simulation/tools/regression/implements/qsim_result_impl.py", line 185, in compare_job_result
+    include_metric_diff)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_qcraft/offboard/simulation/tools/regression/rpc_service/qsim_result_rpc.py", line 27, in compare_job_result
+    metric = stub.GetJobCompareMetrics(request)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_github_grpc_grpc/src/python/grpcio/grpc/_channel.py", line 946, in __call__
+    return _end_unary_response_blocking(state, call, False, None)
+  File "/builds/9CsNzyCB/7/root/qcraft/bazel-bin/offboard/simulation/tools/regression/regression_helper_main.runfiles/com_github_grpc_grpc/src/python/grpcio/grpc/_channel.py", line 849, in _end_unary_response_blocking
+    raise _InactiveRpcError(state)
+grpc._channel._InactiveRpcError: <_InactiveRpcError of RPC that terminated with:
+	status = StatusCode.UNKNOWN
+	details = "Unexpected error in RPC handling"
+	debug_error_string = "{"created":"@1642559035.377663377","description":"Error received from peer ipv4:52.34.189.4:3401","file":"external/com_github_grpc_grpc/src/core/lib/surface/call.cc","file_line":1070,"grpc_message":"Unexpected error in RPC handling","grpc_status":2}"
+>
+Running after_script
+00:01
+Running after script...
+$ rsync -a --prune-empty-dirs --include '*/' --include 'test.xml' --exclude '*' bazel-out/k8-opt/testlogs .
+$ echo "================= CI_PIPELINE_ID $CI_PIPELINE_ID"; echo "================= CI_JOB_ID ID $CI_JOB_ID"; echo "================= CI Runner `cat /etc/host_hostname`"; echo "================= Docker Instance `hostname`"; echo "================= Current Path `pwd`"; echo "================= PULL MAP $PULL_MAP"; echo "================= CI_MERGE_REQUEST_LABELS $CI_MERGE_REQUEST_LABELS";
+================= CI_PIPELINE_ID 108300
+================= CI_JOB_ID ID 2360385
+================= CI Runner us-edge-05
+================= Docker Instance runner-9csnzycb-project-4-concurrent-745gdd
+================= Current Path /builds/9CsNzyCB/7/root/qcraft
+================= PULL MAP false
+================= CI_MERGE_REQUEST_LABELS 
+```
+
+
+
+job忽然失败，根本原因是ack机器重启
+
+```
+bazel-out/k8-opt/bin/onboard/proto/perception.pb.h:6693:3: note: 'obstacle_centers_deprecated' has been explicitly marked deprecated here
+  PROTOBUF_DEPRECATED const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::qcraft::Vec2dProto >&
+  ^
+external/com_google_protobuf/src/google/protobuf/port_def.inc:305:45: note: expanded from macro 'PROTOBUF_DEPRECATED'
+# define PROTOBUF_DEPRECATED __attribute__((deprecated))
+                                            ^
+3 warnings generated.
+INFO: From Action onboard/camera/codec/libgpujpeg_huffman_encoder_cuda.so:
+ptxas warning : Value of threads per SM for entry _Z44gpujpeg_huffman_encoder_serialization_kernelP15gpujpeg_segmentiPKhPh is out of range. .minnctapersm will be ignored
+INFO: From Action onboard/camera/codec/libgpujpeg_huffman_decoder_cuda.so:
+ptxas warning : Value of threads per SM for entry _Z37gpujpeg_huffman_decoder_decode_kernelILb0ELi192EEv27gpujpeg_huffman_gpu_decoderP17gpujpeg_componentP15gpujpeg_segmentiiPhPKmPs is out of range. .minnctapersm will be ignored
+ptxas warning : Value of threads per SM for entry _Z37gpujpeg_huffman_decoder_decode_kernelILb1ELi192EEv27gpujpeg_huffman_gpu_decoderP17gpujpeg_componentP15gpujpeg_segmentiiPhPKmPs is out of range. .minnctapersm will be ignored
+[5,702 / 5,713] Compiling onboard/autonomy_state/autonomy_state_manager.cc; 46s remote-cache, processwrapper-sandbox ... (8 actions running)
+[5,703 / 5,713] Compiling onboard/autonomy/thread_module_manager.cc; 78s remote-cache, processwrapper-sandbox ... (6 actions running)
+[5,704 / 5,713] Compiling onboard/lite/launch_autonomy_main.cc; 134s remote-cache, processwrapper-sandbox ... (4 actions running)
+[5,705 / 5,713] Action onboard/nets/custom_ops/libcustom_op.so; 196s remote-cache, processwrapper-sandbox
+[5,705 / 5,713] Action onboard/nets/custom_ops/libcustom_op.so; 274s remote-cache, processwrapper-sandbox
+Running after_script
+00:00
+Cleaning up file based variables
+00:00
+ERROR: Job failed: pod "runner-sjywypqz-project-4-concurrent-3j89fq" status is "Failed"
+```
 
 
 
