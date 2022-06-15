@@ -2390,6 +2390,1210 @@ sim-pipe248252spot
 
 
 
+```
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+
+```
+
+
+
+```
+
+root@sim-pipe248112spot:/qcraft-bins# 
+root@sim-pipe248112spot:/qcraft-bins# ps -aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0 760712 41188 ?        Ssl  10:48   0:01 /var/run/argo/argoexec emissary -- offboard/simulation/scenario_test_parallel --step=1 --input=91 --step_setup=offboard/sim_pipe/scripts/setup_step_ack_cn.sh --repository=offboard/simulation/scenario_test_par
+root          18  0.0  0.0 554024 35216 ?        SLl  10:48   0:01 offboard/simulation/scenario_test_parallel --step=1 --input=91 --step_setup=offboard/sim_pipe/scripts/setup_step_ack_cn.sh --repository=offboard/simulation/scenario_test_parallel --cpu_only --workflows_server
+root          53  4.7  9.1 26336588 24094936 ?   RLl  10:48   3:43 offboard/simulation/simulator_main --variation=0 --qevents_dir=/tmp/3cce-860a-fa65-cede --qevents_whitelist=* --logtostderr --enable_run_analysis=false --run_analysis_config_file= --run_analysis_server_addres
+root          96  0.0  0.0   6072  3276 pts/0    Ss   12:00   0:00 /bin/bash
+root         426  0.0  0.0      0     0 pts/0    Z    12:04   0:00 [gdb] <defunct>
+root         431  0.0  0.0  17900  2624 pts/0    R+   12:06   0:00 ps -aux
+root@sim-pipe248112spot:/qcraft-bins# pidstat -p 53
+Linux 4.19.91-22.2.al7.x86_64 (sim-pipe248112spot) 	06/14/22 	_x86_64_	(32 CPU)
+
+12:06:49      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+12:06:49        0        53    2.30    0.24    0.00   49.74    2.54    14  simulator_main
+root@sim-pipe248112spot:/qcraft-bins# pidstat -p 53 1
+Linux 4.19.91-22.2.al7.x86_64 (sim-pipe248112spot) 	06/14/22 	_x86_64_	(32 CPU)
+
+12:06:51      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+12:06:52        0        53   26.00    0.00    0.00   73.00   26.00    14  simulator_main
+12:06:53        0        53   10.00    0.00    0.00   89.00   10.00    14  simulator_main
+12:06:54        0        53   19.00    0.00    0.00   80.00   19.00    14  simulator_main
+12:06:55        0        53   12.00    0.00    0.00   90.00   12.00    15  simulator_main
+12:06:56        0        53   11.00    0.00    0.00   88.00   11.00    15  simulator_main
+12:06:57        0        53   14.00    0.00    0.00   87.00   14.00    15  simulator_main
+12:06:58        0        53   18.00    0.00    0.00   82.00   18.00    15  simulator_main
+12:06:59        0        53   21.00    0.00    0.00   78.00   21.00    14  simulator_main
+12:07:00        0        53   17.00    0.00    0.00   82.00   17.00    14  simulator_main
+12:07:01        0        53   25.00    0.00    0.00   76.00   25.00    15  simulator_main
+^C
+Average:        0        53   17.30    0.00    0.00   82.50   17.30     -  simulator_main
+root@sim-pipe248112spot:/qcraft-bins# gdb attach 53
+GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+attach: No such file or directory.
+Attaching to process 53
+[New LWP 54]
+[New LWP 55]
+[New LWP 56]
+[New LWP 57]
+[New LWP 58]
+[New LWP 59]
+[New LWP 60]
+[New LWP 61]
+[New LWP 62]
+[New LWP 63]
+[New LWP 64]
+[New LWP 65]
+[New LWP 66]
+[New LWP 67]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) 
+
+
+
+
+
+
+
+
+(gdb) bt
+#0  0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+=> 0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---q
+Quit
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+=> 0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---q
+Quit
+(gdb) 
+(gdb) info thread
+  Id   Target Id         Frame 
+* 1    Thread 0x7fbcfc514000 (LWP 53) "simulator_main" 0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+  2    Thread 0x7fbcfb91a000 (LWP 54) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  3    Thread 0x7fbcfb109000 (LWP 55) "default-executo" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  4    Thread 0x7fbcfa908000 (LWP 56) "resolver-execut" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  5    Thread 0x7fbcfa107000 (LWP 57) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  6    Thread 0x7fbcf9906000 (LWP 58) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  7    Thread 0x7fbcf9105000 (LWP 59) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  8    Thread 0x7fbcf8904000 (LWP 60) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  9    Thread 0x7fbcebfff000 (LWP 61) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  10   Thread 0x7fbcea724000 (LWP 62) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  11   Thread 0x7fbce9f23000 (LWP 63) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  12   Thread 0x7fbce9722000 (LWP 64) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  13   Thread 0x7fbce8f21000 (LWP 65) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  14   Thread 0x7fbce3fff000 (LWP 66) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  15   Thread 0x7fbce37fe000 (LWP 67) "simulator_main" 0x00007fbd217d97b1 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib/x86_64-linux-gnu/libpthread.so.0
+(gdb) thread 2
+[Switching to thread 2 (Thread 0x7fbcfb91a000 (LWP 54))]
+#0  0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+(gdb) bt
+#0  0x00007fbd1fe6b76d in syscall () at /lib/x86_64-linux-gnu/libc.so.6
+#1  0x000056547371dd89 in absl::lts_20211102::synchronization_internal::Waiter::Wait(absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#2  0x000056547371da70 in AbslInternalPerThreadSemWait_lts_20211102 ()
+#3  0x000056547371d414 in absl::lts_20211102::CondVar::WaitCommon(absl::lts_20211102::Mutex*, absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#4  0x0000565473240d2e in std::thread::_State_impl<std::thread::_Invoker<std::tuple<qcraft::ThreadPool::ThreadPool(int, std::function<void (int)> const&)::$_0> > >::_M_run() ()
+#5  0x00007fbd78d5ede4 in  () at /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#6  0x00007fbd217d2609 in start_thread () at /lib/x86_64-linux-gnu/libpthread.so.0
+#7  0x00007fbd1fe72163 in clone () at /lib/x86_64-linux-gnu/libc.so.6
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+[Switching to Thread 0x7fbcfc514000 (LWP 53)]
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) thread 2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(gdb) thread 2
+[Switching to thread 2 (Thread 0x7fbcfb91a000 (LWP 54))]
+#0  0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+(gdb) bt
+#0  0x00007fbd1fe6b76d in syscall () at /lib/x86_64-linux-gnu/libc.so.6
+#1  0x000056547371dd89 in absl::lts_20211102::synchronization_internal::Waiter::Wait(absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#2  0x000056547371da70 in AbslInternalPerThreadSemWait_lts_20211102 ()
+#3  0x000056547371d414 in absl::lts_20211102::CondVar::WaitCommon(absl::lts_20211102::Mutex*, absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#4  0x0000565473240d2e in std::thread::_State_impl<std::thread::_Invoker<std::tuple<qcraft::ThreadPool::ThreadPool(int, std::function<void (int)> const&)::$_0> > >::_M_run() ()
+#5  0x00007fbd78d5ede4 in  () at /usr/lib/x86_64-linux-gnu/libstdc++.so.6
+#6  0x00007fbd217d2609 in start_thread () at /lib/x86_64-linux-gnu/libpthread.so.0
+#7  0x00007fbd1fe72163 in clone () at /lib/x86_64-linux-gnu/libc.so.6
+(gdb) info thread
+  Id   Target Id         Frame 
+  1    Thread 0x7fbcfc514000 (LWP 53) "simulator_main" 0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+* 2    Thread 0x7fbcfb91a000 (LWP 54) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  3    Thread 0x7fbcfb109000 (LWP 55) "default-executo" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  4    Thread 0x7fbcfa908000 (LWP 56) "resolver-execut" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  5    Thread 0x7fbcfa107000 (LWP 57) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  6    Thread 0x7fbcf9906000 (LWP 58) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  7    Thread 0x7fbcf9105000 (LWP 59) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  8    Thread 0x7fbcf8904000 (LWP 60) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  9    Thread 0x7fbcebfff000 (LWP 61) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  10   Thread 0x7fbcea724000 (LWP 62) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  11   Thread 0x7fbce9f23000 (LWP 63) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  12   Thread 0x7fbce9722000 (LWP 64) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  13   Thread 0x7fbce8f21000 (LWP 65) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  14   Thread 0x7fbce3fff000 (LWP 66) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  15   Thread 0x7fbce37fe000 (LWP 67) "simulator_main" 0x00007fbd217d97b1 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib/x86_64-linux-gnu/libpthread.so.0
+(gdb) thread 3
+[Switching to thread 3 (Thread 0x7fbcfb109000 (LWP 55))]
+#0  0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+(gdb) bt
+#0  0x00007fbd1fe6b76d in syscall () at /lib/x86_64-linux-gnu/libc.so.6
+#1  0x000056547371dd89 in absl::lts_20211102::synchronization_internal::Waiter::Wait(absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#2  0x000056547371da70 in AbslInternalPerThreadSemWait_lts_20211102 ()
+#3  0x000056547371d414 in absl::lts_20211102::CondVar::WaitCommon(absl::lts_20211102::Mutex*, absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#4  0x000056547320c033 in gpr_cv_wait ()
+#5  0x00005654731fc601 in grpc_core::Executor::ThreadMain(void*) ()
+#6  0x000056547320fcac in grpc_core::(anonymous namespace)::ThreadInternalsPosix::ThreadInternalsPosix(char const*, void (*)(void*), void*, bool*, grpc_core::Thread::Options const&)::{lambda(void*)#1}::__invoke(void*) ()
+#7  0x00007fbd217d2609 in start_thread () at /lib/x86_64-linux-gnu/libpthread.so.0
+#8  0x00007fbd1fe72163 in clone () at /lib/x86_64-linux-gnu/libc.so.6
+(gdb) thread 4
+[Switching to thread 4 (Thread 0x7fbcfa908000 (LWP 56))]
+#0  0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+(gdb) bt
+#0  0x00007fbd1fe6b76d in syscall () at /lib/x86_64-linux-gnu/libc.so.6
+#1  0x000056547371dd89 in absl::lts_20211102::synchronization_internal::Waiter::Wait(absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#2  0x000056547371da70 in AbslInternalPerThreadSemWait_lts_20211102 ()
+#3  0x000056547371d414 in absl::lts_20211102::CondVar::WaitCommon(absl::lts_20211102::Mutex*, absl::lts_20211102::synchronization_internal::KernelTimeout) ()
+#4  0x000056547320c033 in gpr_cv_wait ()
+#5  0x00005654731fc601 in grpc_core::Executor::ThreadMain(void*) ()
+#6  0x000056547320fcac in grpc_core::(anonymous namespace)::ThreadInternalsPosix::ThreadInternalsPosix(char const*, void (*)(void*), void*, bool*, grpc_core::Thread::Options const&)::{lambda(void*)#1}::__invoke(void*) ()
+#7  0x00007fbd217d2609 in start_thread () at /lib/x86_64-linux-gnu/libpthread.so.0
+#8  0x00007fbd1fe72163 in clone () at /lib/x86_64-linux-gnu/libc.so.6
+(gdb) thread 5
+[Switching to thread 5 (Thread 0x7fbcfa107000 (LWP 57))]
+#0  0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+[Switching to Thread 0x7fbcfc514000 (LWP 53)]
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) 
+
+
+
+
+
+
+(gdb) bt
+#0  0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+=> 0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---q
+Quit
+(gdb) quit
+A debugging session is active.
+
+	Inferior 1 [process 53] will be detached.
+
+Quit anyway? (y or n) y
+Detaching from program: /qcraft-bins/offboard/simulation/simulator_main, process 53
+root@sim-pipe248112spot:/qcraft-bins# 
+root@sim-pipe248112spot:/qcraft-bins# pidstat -p 53 1
+Linux 4.19.91-22.2.al7.x86_64 (sim-pipe248112spot) 	06/14/22 	_x86_64_	(32 CPU)
+
+12:10:06      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+12:10:07        0        53   42.00    0.00    0.00   58.00   42.00    15  simulator_main
+12:10:08        0        53   48.00    0.00    0.00   52.00   48.00    15  simulator_main
+12:10:09        0        53   47.00    0.00    0.00   53.00   47.00    15  simulator_main
+12:10:10        0        53   49.00    0.00    0.00   50.00   49.00    15  simulator_main
+12:10:11        0        53   29.00    0.00    0.00   71.00   29.00    15  simulator_main
+12:10:12        0        53   24.00    0.00    0.00   73.00   24.00    14  simulator_main
+^C
+Average:        0        53   39.83    0.00    0.00   59.50   39.83     -  simulator_main
+root@sim-pipe248112spot:/qcraft-bins# ps -aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root           1  0.0  0.0 760712 41116 ?        Ssl  10:48   0:01 /var/run/argo/argoexec emissary -- offboard/simulation/scenario_test_parallel --step=1 --input=91 --step_setup=offboard/sim_pipe/scripts/setup_step_ack_cn.sh --repository=offboard/simulation/scenario_test_par
+root          18  0.0  0.0 554024 35216 ?        SLl  10:48   0:01 offboard/simulation/scenario_test_parallel --step=1 --input=91 --step_setup=offboard/sim_pipe/scripts/setup_step_ack_cn.sh --repository=offboard/simulation/scenario_test_parallel --cpu_only --workflows_server
+root          53  5.0  9.1 26336588 24094936 ?   RLl  10:48   4:06 offboard/simulation/simulator_main --variation=0 --qevents_dir=/tmp/3cce-860a-fa65-cede --qevents_whitelist=* --logtostderr --enable_run_analysis=false --run_analysis_config_file= --run_analysis_server_addres
+root          96  0.0  0.0   6072  3280 pts/0    Ss   12:00   0:00 /bin/bash
+root         426  0.0  0.0      0     0 pts/0    Z    12:04   0:00 [gdb] <defunct>
+root         437  0.0  0.0      0     0 pts/0    Z    12:07   0:00 [gdb] <defunct>
+root         440  0.0  0.0  17900  2648 pts/0    R+   12:10   0:00 ps -aux
+root@sim-pipe248112spot:/qcraft-bins# gdb attach 53
+GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+attach: No such file or directory.
+Attaching to process 53
+[New LWP 54]
+[New LWP 55]
+[New LWP 56]
+[New LWP 57]
+[New LWP 58]
+[New LWP 59]
+[New LWP 60]
+[New LWP 61]
+[New LWP 62]
+[New LWP 63]
+[New LWP 64]
+[New LWP 65]
+[New LWP 66]
+[New LWP 67]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+(gdb) bt
+#0  0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+   0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb6bc <+268>:	lea    (%r12,%rax,8),%rax
+   0x0000565472afb6c0 <+272>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb6c4 <+276>:	jmp    0x565472afb6de <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+302>
+   0x0000565472afb6c6 <+278>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb6d0 <+288>:	add    $0x8,%r12
+   0x0000565472afb6d4 <+292>:	cmp    -0x38(%rbp),%r12
+   0x0000565472afb6d8 <+296>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+   0x0000565472afb6de <+302>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6e2 <+306>:	movslq 0x28(%rax),%rbx
+   0x0000565472afb6e6 <+310>:	test   %rbx,%rbx
+   0x0000565472afb6e9 <+313>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb6eb <+315>:	mov    (%r12),%r13
+   0x0000565472afb6ef <+319>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6f3 <+323>:	mov    0x30(%rax),%r15
+   0x0000565472afb6f7 <+327>:	shl    $0x3,%rbx
+   0x0000565472afb6fb <+331>:	xor    %r14d,%r14d
+   0x0000565472afb6fe <+334>:	jmp    0x565472afb709 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+345>
+   0x0000565472afb700 <+336>:	add    $0x8,%r14
+   0x0000565472afb704 <+340>:	cmp    %r14,%rbx
+   0x0000565472afb707 <+343>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb709 <+345>:	mov    0xa0(%r13),%rax
+=> 0x0000565472afb710 <+352>:	cmp    (%r15,%r14,1),%rax
+   0x0000565472afb714 <+356>:	jne    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb716 <+358>:	mov    0x90(%r13),%rsi
+   0x0000565472afb71d <+365>:	test   %rsi,%rsi
+   0x0000565472afb720 <+368>:	jne    0x565472afb729 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+377>
+   0x0000565472afb722 <+370>:	lea    0xe13b27(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb729 <+377>:	add    $0x10,%rsi
+   0x0000565472afb72d <+381>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb731 <+385>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb736 <+390>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb73a <+394>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb73e <+398>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb742 <+402>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb746 <+406>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb74b <+411>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb74f <+415>:	test   %rdi,%rdi
+   0x0000565472afb752 <+418>:	je     0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb754 <+420>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb759 <+425>:	jmp    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb75b <+427>:	lea    -0x70(%rbp),%rsi
+   0x0000565472afb75f <+431>:	mov    -0x78(%rbp),%rbx
+   0x0000565472afb763 <+435>:	mov    %rbx,%rdi
+   0x0000565472afb766 <+438>:	callq  0x565472b05170 <_ZN6qcraft7mapping12_GLOBAL__N_127ComputePatchIdsForRefPointsERKSt6vectorINS_4Vec2IdEESaIS4_EE>
+   0x0000565472afb76b <+443>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb76f <+447>:	test   %rdi,%rdi
+   0x0000565472afb772 <+450>:	je     0x565472afb779 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+457>
+   0x0000565472afb774 <+452>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb779 <+457>:	mov    %rbx,%rax
+   0x0000565472afb77c <+460>:	add    $0x58,%rsp
+   0x0000565472afb780 <+464>:	pop    %rbx
+   0x0000565472afb781 <+465>:	pop    %r12
+   0x0000565472afb783 <+467>:	pop    %r13
+   0x0000565472afb785 <+469>:	pop    %r14
+   0x0000565472afb787 <+471>:	pop    %r15
+   0x0000565472afb789 <+473>:	pop    %rbp
+   0x0000565472afb78a <+474>:	retq   
+   0x0000565472afb78b <+475>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb78d <+477>:	jmp    0x565472afb791 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+481>
+   0x0000565472afb78f <+479>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb791 <+481>:	mov    %rax,%rbx
+   0x0000565472afb794 <+484>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb798 <+488>:	test   %rdi,%rdi
+   0x0000565472afb79b <+491>:	je     0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb79d <+493>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7a2 <+498>:	jmp    0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb7a4 <+500>:	mov    %rax,%rbx
+   0x0000565472afb7a7 <+503>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb7ab <+507>:	test   %rdi,%rdi
+   0x0000565472afb7ae <+510>:	je     0x565472afb7b5 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+517>
+   0x0000565472afb7b0 <+512>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7b5 <+517>:	mov    %rbx,%rdi
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb7b8 <+520>:	callq  0x5654737e1a50 <_Unwind_Resume@plt>
+End of assembler dump.
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) disass
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+   0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb6bc <+268>:	lea    (%r12,%rax,8),%rax
+   0x0000565472afb6c0 <+272>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb6c4 <+276>:	jmp    0x565472afb6de <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+302>
+   0x0000565472afb6c6 <+278>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb6d0 <+288>:	add    $0x8,%r12
+   0x0000565472afb6d4 <+292>:	cmp    -0x38(%rbp),%r12
+   0x0000565472afb6d8 <+296>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+   0x0000565472afb6de <+302>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6e2 <+306>:	movslq 0x28(%rax),%rbx
+   0x0000565472afb6e6 <+310>:	test   %rbx,%rbx
+   0x0000565472afb6e9 <+313>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb6eb <+315>:	mov    (%r12),%r13
+   0x0000565472afb6ef <+319>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6f3 <+323>:	mov    0x30(%rax),%r15
+   0x0000565472afb6f7 <+327>:	shl    $0x3,%rbx
+   0x0000565472afb6fb <+331>:	xor    %r14d,%r14d
+   0x0000565472afb6fe <+334>:	jmp    0x565472afb709 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+345>
+   0x0000565472afb700 <+336>:	add    $0x8,%r14
+   0x0000565472afb704 <+340>:	cmp    %r14,%rbx
+   0x0000565472afb707 <+343>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb709 <+345>:	mov    0xa0(%r13),%rax
+=> 0x0000565472afb710 <+352>:	cmp    (%r15,%r14,1),%rax
+   0x0000565472afb714 <+356>:	jne    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb716 <+358>:	mov    0x90(%r13),%rsi
+   0x0000565472afb71d <+365>:	test   %rsi,%rsi
+   0x0000565472afb720 <+368>:	jne    0x565472afb729 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+377>
+   0x0000565472afb722 <+370>:	lea    0xe13b27(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb729 <+377>:	add    $0x10,%rsi
+   0x0000565472afb72d <+381>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb731 <+385>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb736 <+390>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb73a <+394>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb73e <+398>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb742 <+402>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb746 <+406>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb74b <+411>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb74f <+415>:	test   %rdi,%rdi
+   0x0000565472afb752 <+418>:	je     0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb754 <+420>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb759 <+425>:	jmp    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb75b <+427>:	lea    -0x70(%rbp),%rsi
+   0x0000565472afb75f <+431>:	mov    -0x78(%rbp),%rbx
+   0x0000565472afb763 <+435>:	mov    %rbx,%rdi
+   0x0000565472afb766 <+438>:	callq  0x565472b05170 <_ZN6qcraft7mapping12_GLOBAL__N_127ComputePatchIdsForRefPointsERKSt6vectorINS_4Vec2IdEESaIS4_EE>
+   0x0000565472afb76b <+443>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb76f <+447>:	test   %rdi,%rdi
+   0x0000565472afb772 <+450>:	je     0x565472afb779 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+457>
+   0x0000565472afb774 <+452>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb779 <+457>:	mov    %rbx,%rax
+   0x0000565472afb77c <+460>:	add    $0x58,%rsp
+   0x0000565472afb780 <+464>:	pop    %rbx
+   0x0000565472afb781 <+465>:	pop    %r12
+   0x0000565472afb783 <+467>:	pop    %r13
+   0x0000565472afb785 <+469>:	pop    %r14
+   0x0000565472afb787 <+471>:	pop    %r15
+   0x0000565472afb789 <+473>:	pop    %rbp
+   0x0000565472afb78a <+474>:	retq   
+   0x0000565472afb78b <+475>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb78d <+477>:	jmp    0x565472afb791 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+481>
+   0x0000565472afb78f <+479>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb791 <+481>:	mov    %rax,%rbx
+   0x0000565472afb794 <+484>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb798 <+488>:	test   %rdi,%rdi
+   0x0000565472afb79b <+491>:	je     0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb79d <+493>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7a2 <+498>:	jmp    0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb7a4 <+500>:	mov    %rax,%rbx
+   0x0000565472afb7a7 <+503>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb7ab <+507>:	test   %rdi,%rdi
+   0x0000565472afb7ae <+510>:	je     0x565472afb7b5 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+517>
+   0x0000565472afb7b0 <+512>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7b5 <+517>:	mov    %rbx,%rdi
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb7b8 <+520>:	callq  0x5654737e1a50 <_Unwind_Resume@plt>
+End of assembler dump.
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) 
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) info thread
+  Id   Target Id         Frame 
+* 1    Thread 0x7fbcfc514000 (LWP 53) "simulator_main" 0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+  2    Thread 0x7fbcfb91a000 (LWP 54) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  3    Thread 0x7fbcfb109000 (LWP 55) "default-executo" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  4    Thread 0x7fbcfa908000 (LWP 56) "resolver-execut" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  5    Thread 0x7fbcfa107000 (LWP 57) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  6    Thread 0x7fbcf9906000 (LWP 58) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  7    Thread 0x7fbcf9105000 (LWP 59) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  8    Thread 0x7fbcf8904000 (LWP 60) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  9    Thread 0x7fbcebfff000 (LWP 61) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  10   Thread 0x7fbcea724000 (LWP 62) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  11   Thread 0x7fbce9f23000 (LWP 63) "grpc_global_tim" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  12   Thread 0x7fbce9722000 (LWP 64) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  13   Thread 0x7fbce8f21000 (LWP 65) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  14   Thread 0x7fbce3fff000 (LWP 66) "simulator_main" 0x00007fbd1fe6b76d in syscall () from /lib/x86_64-linux-gnu/libc.so.6
+  15   Thread 0x7fbce37fe000 (LWP 67) "simulator_main" 0x00007fbd217d97b1 in pthread_cond_timedwait@@GLIBC_2.3.2 () from /lib/x86_64-linux-gnu/libpthread.so.0
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+(gdb) 
+(gdb) disass
+Dump of assembler code for function _ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_:
+   0x0000565472afb5b0 <+0>:	push   %rbp
+   0x0000565472afb5b1 <+1>:	mov    %rsp,%rbp
+   0x0000565472afb5b4 <+4>:	push   %r15
+   0x0000565472afb5b6 <+6>:	push   %r14
+   0x0000565472afb5b8 <+8>:	push   %r13
+   0x0000565472afb5ba <+10>:	push   %r12
+   0x0000565472afb5bc <+12>:	push   %rbx
+   0x0000565472afb5bd <+13>:	sub    $0x58,%rsp
+   0x0000565472afb5c1 <+17>:	mov    %rdx,-0x30(%rbp)
+   0x0000565472afb5c5 <+21>:	mov    %rdi,-0x78(%rbp)
+   0x0000565472afb5c9 <+25>:	vxorps %xmm0,%xmm0,%xmm0
+   0x0000565472afb5cd <+29>:	vmovaps %xmm0,-0x70(%rbp)
+   0x0000565472afb5d2 <+34>:	movq   $0x0,-0x60(%rbp)
+   0x0000565472afb5da <+42>:	mov    0x38(%rsi),%rax
+   0x0000565472afb5de <+46>:	lea    0x8(%rax),%r14
+   0x0000565472afb5e2 <+50>:	test   %rax,%rax
+   0x0000565472afb5e5 <+53>:	cmove  %rax,%r14
+   0x0000565472afb5e9 <+57>:	mov    %rsi,-0x80(%rbp)
+   0x0000565472afb5ed <+61>:	movslq 0x30(%rsi),%rax
+   0x0000565472afb5f1 <+65>:	test   %rax,%rax
+   0x0000565472afb5f4 <+68>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb5fa <+74>:	lea    (%r14,%rax,8),%rax
+   0x0000565472afb5fe <+78>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb602 <+82>:	jmp    0x565472afb61e <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+110>
+   0x0000565472afb604 <+84>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb60e <+94>:	xchg   %ax,%ax
+   0x0000565472afb610 <+96>:	add    $0x8,%r14
+   0x0000565472afb614 <+100>:	cmp    -0x38(%rbp),%r14
+   0x0000565472afb618 <+104>:	je     0x565472afb69c <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+236>
+   0x0000565472afb61e <+110>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb622 <+114>:	movslq 0x18(%rax),%r12
+   0x0000565472afb626 <+118>:	test   %r12,%r12
+   0x0000565472afb629 <+121>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb62b <+123>:	mov    (%r14),%r15
+   0x0000565472afb62e <+126>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb632 <+130>:	mov    0x20(%rax),%r13
+   0x0000565472afb636 <+134>:	shl    $0x3,%r12
+   0x0000565472afb63a <+138>:	xor    %ebx,%ebx
+   0x0000565472afb63c <+140>:	jmp    0x565472afb649 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+153>
+   0x0000565472afb63e <+142>:	xchg   %ax,%ax
+   0x0000565472afb640 <+144>:	add    $0x8,%rbx
+   0x0000565472afb644 <+148>:	cmp    %rbx,%r12
+   0x0000565472afb647 <+151>:	je     0x565472afb610 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+96>
+   0x0000565472afb649 <+153>:	mov    0x1a8(%r15),%rax
+   0x0000565472afb650 <+160>:	cmp    0x0(%r13,%rbx,1),%rax
+   0x0000565472afb655 <+165>:	jne    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb657 <+167>:	mov    0x188(%r15),%rsi
+   0x0000565472afb65e <+174>:	test   %rsi,%rsi
+   0x0000565472afb661 <+177>:	jne    0x565472afb66a <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+186>
+   0x0000565472afb663 <+179>:	lea    0xe13be6(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb66a <+186>:	add    $0x10,%rsi
+   0x0000565472afb66e <+190>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb672 <+194>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb677 <+199>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb67b <+203>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb67f <+207>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb683 <+211>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb687 <+215>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb68c <+220>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb690 <+224>:	test   %rdi,%rdi
+   0x0000565472afb693 <+227>:	je     0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb695 <+229>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb69a <+234>:	jmp    0x565472afb640 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+144>
+   0x0000565472afb69c <+236>:	mov    -0x80(%rbp),%rcx
+   0x0000565472afb6a0 <+240>:	mov    0x20(%rcx),%rax
+   0x0000565472afb6a4 <+244>:	lea    0x8(%rax),%r12
+   0x0000565472afb6a8 <+248>:	test   %rax,%rax
+   0x0000565472afb6ab <+251>:	cmove  %rax,%r12
+   0x0000565472afb6af <+255>:	movslq 0x18(%rcx),%rax
+   0x0000565472afb6b3 <+259>:	test   %rax,%rax
+   0x0000565472afb6b6 <+262>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb6bc <+268>:	lea    (%r12,%rax,8),%rax
+   0x0000565472afb6c0 <+272>:	mov    %rax,-0x38(%rbp)
+   0x0000565472afb6c4 <+276>:	jmp    0x565472afb6de <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+302>
+   0x0000565472afb6c6 <+278>:	nopw   %cs:0x0(%rax,%rax,1)
+   0x0000565472afb6d0 <+288>:	add    $0x8,%r12
+   0x0000565472afb6d4 <+292>:	cmp    -0x38(%rbp),%r12
+   0x0000565472afb6d8 <+296>:	je     0x565472afb75b <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+427>
+   0x0000565472afb6de <+302>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6e2 <+306>:	movslq 0x28(%rax),%rbx
+   0x0000565472afb6e6 <+310>:	test   %rbx,%rbx
+   0x0000565472afb6e9 <+313>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb6eb <+315>:	mov    (%r12),%r13
+   0x0000565472afb6ef <+319>:	mov    -0x30(%rbp),%rax
+   0x0000565472afb6f3 <+323>:	mov    0x30(%rax),%r15
+   0x0000565472afb6f7 <+327>:	shl    $0x3,%rbx
+   0x0000565472afb6fb <+331>:	xor    %r14d,%r14d
+   0x0000565472afb6fe <+334>:	jmp    0x565472afb709 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+345>
+   0x0000565472afb700 <+336>:	add    $0x8,%r14
+   0x0000565472afb704 <+340>:	cmp    %r14,%rbx
+   0x0000565472afb707 <+343>:	je     0x565472afb6d0 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+288>
+   0x0000565472afb709 <+345>:	mov    0xa0(%r13),%rax
+=> 0x0000565472afb710 <+352>:	cmp    (%r15,%r14,1),%rax
+   0x0000565472afb714 <+356>:	jne    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb716 <+358>:	mov    0x90(%r13),%rsi
+   0x0000565472afb71d <+365>:	test   %rsi,%rsi
+   0x0000565472afb720 <+368>:	jne    0x565472afb729 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+377>
+   0x0000565472afb722 <+370>:	lea    0xe13b27(%rip),%rsi        # 0x56547390f250 <_ZN6qcraft7mapping35_GeoPolylineProto_default_instance_E>
+   0x0000565472afb729 <+377>:	add    $0x10,%rsi
+   0x0000565472afb72d <+381>:	lea    -0x50(%rbp),%rdi
+   0x0000565472afb731 <+385>:	callq  0x565472b05360 <_ZN6qcraft7mapping12_GLOBAL__N_116GeoPointsToVec2dIN6google8protobuf16RepeatedPtrFieldINS0_13GeoPointProtoEEEEESt6vectorINS_4Vec2IdEESaISA_EERKT_>
+   0x0000565472afb736 <+390>:	mov    -0x68(%rbp),%rsi
+   0x0000565472afb73a <+394>:	mov    -0x50(%rbp),%rdx
+   0x0000565472afb73e <+398>:	mov    -0x48(%rbp),%rcx
+   0x0000565472afb742 <+402>:	lea    -0x70(%rbp),%rdi
+   0x0000565472afb746 <+406>:	callq  0x5654716d5c80 <_ZNSt6vectorIN6qcraft4Vec2IdEESaIS2_EE15_M_range_insertIN9__gnu_cxx17__normal_iteratorIPKS2_S4_EEEEvNS7_IPS2_S4_EET_SD_St20forward_iterator_tag>
+   0x0000565472afb74b <+411>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb74f <+415>:	test   %rdi,%rdi
+   0x0000565472afb752 <+418>:	je     0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb754 <+420>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb759 <+425>:	jmp    0x565472afb700 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+336>
+   0x0000565472afb75b <+427>:	lea    -0x70(%rbp),%rsi
+   0x0000565472afb75f <+431>:	mov    -0x78(%rbp),%rbx
+   0x0000565472afb763 <+435>:	mov    %rbx,%rdi
+   0x0000565472afb766 <+438>:	callq  0x565472b05170 <_ZN6qcraft7mapping12_GLOBAL__N_127ComputePatchIdsForRefPointsERKSt6vectorINS_4Vec2IdEESaIS4_EE>
+   0x0000565472afb76b <+443>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb76f <+447>:	test   %rdi,%rdi
+   0x0000565472afb772 <+450>:	je     0x565472afb779 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+457>
+   0x0000565472afb774 <+452>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb779 <+457>:	mov    %rbx,%rax
+   0x0000565472afb77c <+460>:	add    $0x58,%rsp
+   0x0000565472afb780 <+464>:	pop    %rbx
+   0x0000565472afb781 <+465>:	pop    %r12
+   0x0000565472afb783 <+467>:	pop    %r13
+   0x0000565472afb785 <+469>:	pop    %r14
+   0x0000565472afb787 <+471>:	pop    %r15
+   0x0000565472afb789 <+473>:	pop    %rbp
+   0x0000565472afb78a <+474>:	retq   
+   0x0000565472afb78b <+475>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb78d <+477>:	jmp    0x565472afb791 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+481>
+   0x0000565472afb78f <+479>:	jmp    0x565472afb7a4 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+500>
+   0x0000565472afb791 <+481>:	mov    %rax,%rbx
+   0x0000565472afb794 <+484>:	mov    -0x50(%rbp),%rdi
+   0x0000565472afb798 <+488>:	test   %rdi,%rdi
+   0x0000565472afb79b <+491>:	je     0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb79d <+493>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7a2 <+498>:	jmp    0x565472afb7a7 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+503>
+   0x0000565472afb7a4 <+500>:	mov    %rax,%rbx
+   0x0000565472afb7a7 <+503>:	mov    -0x70(%rbp),%rdi
+   0x0000565472afb7ab <+507>:	test   %rdi,%rdi
+   0x0000565472afb7ae <+510>:	je     0x565472afb7b5 <_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_+517>
+   0x0000565472afb7b0 <+512>:	callq  0x5654737e1aa0 <_ZdlPv@plt>
+   0x0000565472afb7b5 <+517>:	mov    %rbx,%rdi
+---Type <return> to continue, or q <return> to quit---
+   0x0000565472afb7b8 <+520>:	callq  0x5654737e1a50 <_Unwind_Resume@plt>
+End of assembler dump.
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) finish
+Run till exit from #0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+(gdb) 
+(gdb) bt
+#0  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#1  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#2  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#3  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#4  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#5  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#6  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#7  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#8  0x000056547166dbcc in main ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb650 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) c
+Continuing.
+^C
+Thread 1 "simulator_main" received signal SIGINT, Interrupt.
+0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+(gdb) bt
+#0  0x0000565472afb710 in absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > qcraft::mapping::(anonymous namespace)::ComputePatchIdsForMapFeature<qcraft::mapping::SectionProto>(qcraft::mapping::SemanticMapProto const&, qcraft::mapping::SectionProto const&) ()
+#1  0x0000565472af6cb3 in qcraft::mapping::SubDivideSemanticMap(qcraft::mapping::SemanticMapProto const&, absl::lts_20211102::flat_hash_map<long, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> >, absl::lts_20211102::hash_internal::Hash<long>, std::equal_to<long>, std::allocator<std::pair<long const, absl::lts_20211102::flat_hash_set<unsigned long, absl::lts_20211102::hash_internal::Hash<unsigned long>, std::equal_to<unsigned long>, std::allocator<unsigned long> > > > >*) ()
+#2  0x0000565472b01736 in qcraft::mapping::SaveSemanticMapAsBinary(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::mapping::SemanticMapProto const&) ()
+#3  0x0000565472704d67 in qcraft::LoggingModule::SaveSemanticMapMeta() ()
+#4  0x00005654729e6038 in qcraft::LiteModule::Init() ()
+#5  0x00005654726f829f in qcraft::DSimulator::InitSimModule(qcraft::LiteModuleName const&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> > const&, qcraft::SimModuleConf const&) ()
+#6  0x00005654726ff8cf in qcraft::Simulator::PrepareSimModules(qcraft::Simulator::Options const&) ()
+#7  0x00005654726f7582 in qcraft::DSimulator::Prepare(qcraft::Simulator::Options const&) ()
+#8  0x0000565471679170 in qcraft::SimulateScenario(qcraft::ScenarioProto*) ()
+#9  0x000056547166dbcc in main ()
+
+
+_ZN6qcraft7mapping12_GLOBAL__N_128ComputePatchIdsForMapFeatureINS0_12SectionProtoEEEN4absl12lts_2021110213flat_hash_setImNS5_13hash_internal4HashImEESt8equal_toImESaImEEERKNS0_16SemanticMapProtoERKT_
+```
+
+
+
+
+
 ## 结尾
 唉，尴尬
 
