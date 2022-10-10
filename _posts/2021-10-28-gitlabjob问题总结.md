@@ -1,6 +1,6 @@
 ---
 layout:     post   				    # 使用的布局（不需要改）
-title:      ci_cd相关学习
+title:      gitlab常见问题总结
 subtitle:   看起来有好多要学要做 #副标题
 date:       2021-10-11 				# 时间
 author:     大狗 						# 作者
