@@ -606,6 +606,37 @@ mkfs.xfs -f /dev/vdb
 
 
 
+### 1.10 git的奇怪问题
+
+我们有一个巨大的地图仓库，里面混杂着大量的git lfs文件，这个仓库非常大，因此我拉取了重点关注的单个分支即clone的时候挤上了--single-branch的选项。这两天遇到了一个奇怪的问题，执行git push 会报错
+
+```shell
+Locking support detected on remote "origin". Consider enabling it with:
+  $ git config lfs.https://xxxxxxx.git/info/lfs.locksverify true
+ref HEAD:: missing object: 003d38e4b3d22ee0610d9ec800bca7ce3cf70ef9
+Uploading LFS objects: 100% (125882/125882), 16 GB | 3.9 MB/s, done.
+error: failed to push some refs to 'xxxxxxxxx.git'
+git push [MAP-CI-DAILY/20221126_0252] failed.
+```
+
+
+
+查了一部分issue:https://github.com/git-lfs/git-lfs/issues/3587, https://stackoverflow.com/questions/70923109/git-lfs-missing-object-on-push-even-if-it-shouldnt-be
+
+执行了下面的命令，修复了单次的push，但是第二天又出现了问题，简单来说发现是只要拉single-branch就会出现这个问题
+
+```
+ git repack -adf
+```
+
+怎么办。。。头太大了，最后我切换了新版本的git并且除了拉取单个分支，并且拉取了所有的分支之后，再次进行track就没问题了
+
+
+
+
+
+
+
 
 
 
