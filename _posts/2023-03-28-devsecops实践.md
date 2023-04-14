@@ -34,19 +34,212 @@ tags:
 
 
 
-#### 1.1.1 CodeChecker调研
+#### 1.1.1 SAST PARTS
 
-CodeChecker本身是可以做多种审计的，针对C/C++而言，可以拆分为四步
 
-+ 生成compile_commands.json
-+ 根据compile_commands.json，调用analysis流程
-+ 调用parse部分分析结果
+
+目前问题总结
+
+1. 目前CI的Clang-Tidy Check开启的Checker不充足，需要扫描代码库检查存在哪些代码问题，从而判断开启哪些Checker。
+2. Clang-Tidy Check只针对用户编辑的文件进行扫描，用户不编辑的文件无法发现问题。
+
+使用场景：
+
+每天定时触发一次对onboard & offboard下以gpu模式编译的cc_library，cc_binary对象的SAST扫描，检查结果上传至coverage.qcraftai.com/sast下，经由TPM同学进行分诊，并创建Issue到具体协同者。
+
+从用户角度来看，最终只会看到一个codecheck_report文件，包含各个代码文件（可能）存在的问题，报告末尾汇总各种Checker的错误报告数量，和对应文件的错误数量，参考
+
+```Go
+Found no defects in parse_pos_to_traj.cc
+[HIGH] /home/qcrafter/.cache/bazel/_bazel_qcrafter/4207c8486d34138987115c0107ecb5f8/execroot/com_qcraft/onboard/planner/assist/lcc_map_builder.cc:148:7: 2nd function call argument is an uninitialized value [core.CallAndMessage]
+      mapping::LanePathData(lane_path.start_fraction(), end_fraction,
+      ^
+
+Found 1 defect(s) in lcc_map_builder.cc
+
+----==== Severity Statistics ====----
+----------------------------
+Severity | Number of reports
+----------------------------
+HIGH     |               882
+MEDIUM   |             13814
+LOW      |              1973
+STYLE    |                20
+----------------------------
+----=================----
+
+----==== Checker Statistics ====----
+---------------------------------------------------------------------------------------
+Checker name                                             | Severity | Number of reports
+---------------------------------------------------------------------------------------
+core.CallAndMessage                                      | HIGH     |               136
+security.FloatLoopCounter                                | MEDIUM   |               214
+cppcoreguidelines-special-member-functions               | LOW      |              1264
+...
+
+----==== File Statistics ====----
+-------------------------------------------------------------------------
+File name                                             | Number of reports
+-------------------------------------------------------------------------
+lcc_map_builder.cc                                    |                 2
+ground_line.cc                                        |                12
+```
+
+
+
+目前开启的Checker包括
+
+```Shell
+---------------------------------------------------------------------
+Checker name                                             | Severity |
+---------------------------------------------------------------------
+core.CallAndMessage                                      | HIGH     |
+security.FloatLoopCounter                                | MEDIUM   |
+cppcoreguidelines-special-member-functions               | LOW      |
+clang-diagnostic-sign-compare                            | MEDIUM   |
+clang-diagnostic-unused-parameter                        | MEDIUM   |
+bugprone-sizeof-container                                | HIGH     |
+bugprone-undefined-memory-manipulation                   | MEDIUM   |
+optin.cplusplus.UninitializedObject                      | MEDIUM   |
+cert-dcl58-cpp                                           | HIGH     |
+clang-diagnostic-deprecated-copy-with-user-provided-copy | MEDIUM   |
+performance-noexcept-move-constructor                    | MEDIUM   |
+clang-diagnostic-deprecated-declarations                 | MEDIUM   |
+readability-suspicious-call-argument                     | LOW      |
+performance-move-const-arg                               | MEDIUM   |
+misc-definitions-in-headers                              | MEDIUM   |
+optin.cplusplus.VirtualCall                              | MEDIUM   |
+deadcode.DeadStores                                      | LOW      |
+bugprone-forwarding-reference-overload                   | LOW      |
+core.NullDereference                                     | HIGH     |
+bugprone-use-after-move                                  | HIGH     |
+misc-unconventional-assign-operator                      | MEDIUM   |
+clang-diagnostic-missing-field-initializers              | MEDIUM   |
+google-global-names-in-headers                           | STYLE    |
+performance-no-automatic-move                            | LOW      |
+cert-dcl59-cpp                                           | MEDIUM   |
+google-build-namespaces                                  | MEDIUM   |
+bugprone-integer-division                                | MEDIUM   |
+core.UndefinedBinaryOperatorResult                       | HIGH     |
+bugprone-unused-return-value                             | MEDIUM   |
+misc-redundant-expression                                | MEDIUM   |
+bugprone-unhandled-exception-at-new                      | MEDIUM   |
+core.uninitialized.Assign                                | HIGH     |
+bugprone-misplaced-widening-cast                         | HIGH     |
+bugprone-virtual-near-miss                               | MEDIUM   |
+core.NonNullParamChecker                                 | HIGH     |
+bugprone-incorrect-roundings                             | HIGH     |
+misc-misplaced-const                                     | LOW      |
+unix.Malloc                                              | MEDIUM   |
+cplusplus.NewDeleteLeaks                                 | HIGH     |
+bugprone-suspicious-missing-comma                        | HIGH     |
+bugprone-lambda-function-name                            | LOW      |
+core.uninitialized.UndefReturn                           | HIGH     |
+optin.portability.UnixAPI                                | MEDIUM   |
+bugprone-signed-char-misuse                              | MEDIUM   |
+core.DivideZero                                          | HIGH     |
+core.StackAddressEscape                                  | HIGH     |
+bugprone-swapped-arguments                               | HIGH     |
+bugprone-forward-declaration-namespace                   | LOW      |
+cert-err09-cpp                                           | HIGH     |
+unix.API                                                 | MEDIUM   |
+bugprone-not-null-terminated-result                      | MEDIUM   |
+cplusplus.NewDelete                                      | HIGH     |
+bugprone-fold-init-type                                  | HIGH     |
+bugprone-sizeof-expression                               | HIGH     |
+cplusplus.Move                                           | HIGH     |
+bugprone-inaccurate-erase                                | HIGH     |
+bugprone-string-constructor                              | HIGH     |
+clang-diagnostic-unused-result                           | MEDIUM   |
+clang-diagnostic-#pragma-messages                        | MEDIUM   |
+bugprone-signal-handler                                  | MEDIUM   |
+bugprone-too-small-loop-variable                         | MEDIUM   |
+misc-uniqueptr-reset-release                             | MEDIUM   |
+---------------------------------------------------------------------
+```
+
+
+
+发现问题：
+
+内存泄露，空指针调用，move后调用
+
+
+
+附加SAST软件分析
+
+SAST的软件有很多，比方说sonarqube，codechecker.针对C++我使用的是codechecker
+
++ sonarqube
++ codechecker
++ 
+
+
+
+codechecker流程，如何安装？直接使用pip3 install codechecker即可，最终工程治理组将codechecker装进了docker里面，就不需要指定目录了，直接可以调用CodeChecker
+
++ `CodeChecker log` runs the given build command and records the executed compilation steps. These steps are written to an output file (Compilation Database) in a JSON format。这个实践起来并不是一个好的方法，因为本身在本地做编译就比较荒谬。实际上使用https://github.com/grailbio/bazel-compilation-database/可以方便的生成compile database，不需要再用codechecker本身的注入式log
+
+  ```
+  #这种做法不推荐
+  /home/qcraft/.local/bin/CodeChecker log -o ./sim_server_compile_commands.json -b   "bazel --batch \
+     build \
+       --spawn_strategy=local \
+       --strategy=Genrule=local \
+       --copt=-DLEVELDB_PLATFORM_POSIX \
+       --action_env=LD_PRELOAD=\$LD_PRELOAD \
+       --action_env=LD_LIBRARY_PATH=\$LD_LIBRARY_PATH \
+       --action_env=CC_LOGGER_GCC_LIKE=\$CC_LOGGER_GCC_LIKE \
+       --action_env=CC_LOGGER_FILE=\$CC_LOGGER_FILE \
+     //offboard/dashboard:sim_server"
+  
+  #这种做法推荐
+  (
+    cd "${INSTALL_DIR}" \
+    && curl -L "https://github.com/grailbio/bazel-compilation-database/archive/${VERSION}.tar.gz" | tar -xz \
+    && ln -f -s "${INSTALL_DIR}/bazel-compilation-database-${VERSION}/generate.py" bazel-compdb
+  )
+  
+  # This will generate compile_commands.json in your workspace root.
+  # ./bazel-compdb
+  
+  # Only generate some folder
+  ./bazel-compdb -q //offboard/simulation/simulator/...
+  ```
+
+  
+
++ `CodeChecker analyze` uses the previously created JSON Compilation Database to perform an analysis on the project, outputting analysis results in a machine-readable (plist) format。这里的skip file能帮忙过滤掉proto文件，只分析我们感兴趣的文件
+
+  + ```
+    #skip file
+    -*/proto/*
+    +*/offboard/*
+    +*/onboard/*
+    -*
+    ```
+
+  + ```
+    /home/qcraft/.local/bin/CodeChecker analyze ./sim_server_compile_commands.json -o codechecker_report
+    ```
+
+
+
+
 
 
 
 如何减少误报：
 
 + 可以使用codechecker的代码内部[in-code-suppression](https://codechecker.readthedocs.io/en/v6.9.0/user_guide/#suppression-code)来标记代码中这部分是误报，
+
+
+
+
+
+
+
+
 
 
 
@@ -63,6 +256,42 @@ CodeChecker本身是可以做多种审计的，针对C/C++而言，可以拆分�
 + raw sql执行，`db.Raw(sql)`，只要用户能控制sql的内容就存在注入。发现了这个问题
 + exec sql执行，和上面的raw sql执行一样，
 + db.order，采用预编译执行SQL语句传入的参数不能作为SQL语句的一部分，那么OrderBy所代表的的列名、或者是后面跟随的ASC/DESC也无法进行预编译处理。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
