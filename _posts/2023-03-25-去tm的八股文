@@ -130,6 +130,16 @@
 
 + 原子操作怎么实现
 
+  + in pre-C++ 11 times, had to be performed using (for example) [interlocked functions](https://msdn.microsoft.com/en-us/library/windows/desktop/ms686360(v=vs.85).aspx#interlocked_functions) with MSVC or [atomic bultins](https://gcc.gnu.org/onlinedocs/gcc-4.4.3/gcc/Atomic-Builtins.html) in case of GCC.
+
+  + A regular `int` has atomic loads and stores. Whats the point of wrapping it with `atomic<>`?our statement is only true for architectures that provide such guarantee of atomicity for stores and/or loads. There are architectures that do not do this. Also, it is usually required that operations must be performed on word-/dword-aligned address to be atomic
+
+  + User level locks involve utilizing the atomic instructions of processor to atomically update a memory space. The atomic instructions involve utilizing a lock prefix on the instruction and having the destination operand assigned to a memory address. The following instructions can run atomically with a lock prefix on current Intel processors: ADD, ADC, AND, BTC, BTR, BTS, CMPXCHG, CMPXCH8B, DEC, INC, NEG, NOT, OR, SBB, SUB, XOR, XADD, and XCHG. [...] On most instructions a lock prefix must be explicitly used except for the xchg instruction where the lock prefix is implied if the instruction involves a memory address
+
+    In the days of Intel 486 processors, the lock prefix used to assert a lock on the bus along with a large hit in performance. Starting with the Intel Pentium Pro architecture, the bus lock is transformed into a cache lock. A lock will still be asserted on the bus in the most modern architectures if the lock resides in uncacheable memory or if the lock extends beyond a cache line boundary splitting cache lines. Both of these scenarios are unlikely, so most lock prefixes will be transformed into a cache lock which is much less expensive.
+
+    This means the CPU delays responding to MESI requests to invalidate or share the cache line, keeping exclusive access so no other CPU can look at it. MESI cache coherency always requires exclusive ownership of a cache line before a core can modify it so this is cheap if we already owned the line
+
 + 
 
   
@@ -151,10 +161,33 @@
     + 和数据结构的堆和栈有什么区别
   + 进程之间私有和共享的资源
   + 线程之间共享和私有的资源
+    + 私有：线程的栈区、程序计数器、栈指针以及函数运行使用的寄存器是线程私有的（线程的上下文）。还有就是TLS
+    + 堆，代码，进程代码段、进程的公有数据(利用这些共享的数据，线程很容易的实现相互之间的通讯)、进程打开的文件描述符、信号的处理器、进程的当前目录和进程用户ID与进程组ID
 + ELF相关
 + 程序通信的手段
+
+  + 1、无名管道( pipe )；2、高级管道(popen)；3、有名管道 (named pipe)；4、消息队列( message queue )；5、信号量( semophore )；7、共享内存( shared memory )；8、套接字( socket )。
+
 + 线程通信的手段
 + 大端序和小端序
+
+  + **大端**模式，是指数据的高字节保存在内存的低地址中，而数据的低字节保存在内存的高地址中
+
+    + Little-Endian就是低位字节排放在内存的低地址端，高位字节排放在内存的高地址端。
+    + Big-Endian就是高位字节排放在内存的低地址端，低位字节排放在内存的高地址端。
+
+    举一个例子，比如数字0x12 34 56 78在内存中的表示形式为：
+
+    **1)大端模式：**
+
+    低地址 -----------------> 高地址
+    0x12  |  0x34  |  0x56  |  0x78
+
+    **2)小端模式：**
+
+    低地址 ------------------> 高地址
+    0x78  |  0x56  |  0x34  |  0x12
+
 + 页面置换算法
   + fifo
   + lru
@@ -185,7 +218,7 @@
   + 三次握手
     + 为什么需要三次握手：因为信道不可靠，而 TCP 想在不可靠信道上建立可靠地传输，那么三次通信是理论上的最小值。（而 UDP 则不需建立可靠传输，因此 UDP 不需要三次握手。）简单来说就是攀岩，山上扽扽绳子，山下扽扽绳子
     + 
-  + 四次挥手<img src="/Users/xiaonan/Documents/GitHub/hxndg.github.io/img/tcp_close.png" alt="tcp_close" style="zoom:50%;" />
+  + 四次挥手<img src="../img/tcp_close.png" alt="tcp_close" style="zoom:50%;" />
     + TCP 为什么要进行四次挥手？ / 为什么 TCP 建立连接需要三次，而释放连接则需要四次？因为 TCP 是全双工模式，客户端请求关闭连接后，客户端向服务端的连接关闭（一二次挥手），服务端继续传输之前没传完的数据给客户端（数据传输），服务端向客户端的连接关闭（三四次挥手）。所以 TCP 释放连接时服务器的 ACK 和 FIN 是分开发送的（中间隔着数据传输），而 TCP 建立连接时服务器的 ACK 和 SYN 是一起发送的（第二次握手），所以 TCP 建立连接需要三次，而释放连接则需要四次。
     + 为什么 TCP 连接时可以 ACK 和 SYN 一起发送，而释放时则 ACK 和 FIN 分开发送呢？（ACK 和 FIN 分开是指第二次和第三次挥手）因为客户端请求释放时，服务器可能还有数据需要传输给客户端，因此服务端要先响应客户端 FIN 请求（服务端发送 ACK），然后数据传输，传输完成后，服务端再提出 FIN 请求（服务端发送 FIN）；而连接时则没有中间的数据传输，因此连接时可以 ACK 和 SYN 一起发送。
     + 为什么客户端释放最后需要 TIME-WAIT 等待 2MSL 呢？为了保证客户端发送的最后一个 ACK 报文能够到达服务端。若未成功到达，则服务端超时重传 FIN+ACK 报文段，客户端再重传 ACK，并重新计时；另外防止已失效的连接请求报文段出现在本连接中。TIME-WAIT 持续 2MSL 可使本连接持续的时间内所产生的所有报文段都从网络中消失，这样可使下次连接中不会出现旧的连接报文段。
