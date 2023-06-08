@@ -229,9 +229,115 @@ codechecker流程，如何安装？直接使用pip3 install codechecker即可，
 
 
 
-如何减少误报：
+#### 1.1.2 如何避免误报
 
-+ 可以使用codechecker的代码内部[in-code-suppression](https://codechecker.readthedocs.io/en/v6.9.0/user_guide/#suppression-code)来标记代码中这部分是误报，
+以CodeChecker为例，说一下怎么避免误报
+
+1. **终极方法**，忽略或者屏蔽，analyzor支持skip文件级别。即
+
+   - 直接在文件层面skip掉这些报错的文件，这种粒度比较大，可能会有导致其它问题被隐蔽，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#skip
+   - 使用codechecker支持的注释或者comment内容来避免false positive误报，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#source-code-comments
+   - 在web interface能够配置，某些是false positive的。不过这个是网络层面，还没做
+
+2. **代码层面避免**，语言层面的保障应该是高于逻辑层面的。也就是说如果用户说逻辑层面能保证这种行为，这个就不能算作是false positive
+
+   - 使用const等手段，来避免编译器认为出现对应的问题
+
+   - 使用好理解的代码比方说，下面的情况保证了在宏`__clang_analyzer__`生效的情况下，static analysis会正确地找到对应的代码，从而不会出现错误的理解。这个宏的作用实际上并不止这些还
+
+     For example the following code:
+
+     ```cpp
+     unsigned f(unsigned x) {
+       return (x >> 1) & 1;
+     }
+     ```
+
+     Could be rewritten as:
+
+     ```cpp
+     #ifndef __clang_analyzer__
+     unsigned f(unsigned x) {
+       return (x >> 1) & 1;
+     }
+     #else
+     unsigned f(unsigned x) {
+       return (x / 2) % 2;
+     }
+     #endif
+     ```
+
+   + 防御式编程，这个和语言就强相关了，简单的例子
+
+     Clang-Tidy has lots of useful syntax based checks. Some of these checks find bug-prone code snippets. When these snippets are intentional, usually there is a natural way to make the intent more explicit. Unfortunately, it is hard to give a general guideline, because the details are different for each check. The documentation of the check might contain hints how to express intention more clearly. Let us look at an example:
+
+     ```cpp
+     double f(int i) {
+       return 32 / (2 + i); // Warning, integer division, loss of precision.
+     }
+     ```
+
+     It can be rewritten to as the following to suppress the warning:
+
+     ```cpp
+     double f(int i) {
+       return (int)(32 / (2 + i)); // No warning, the intention is explicit.
+     }
+     ```
+
+     The second version makes it clear even though the return value is a floating point value the loss of precision during integer division is intentional. Adding a comment why this is intentional would make this even clearer. Such edits makes the code easier to understand for fellow developers.
+
+3. **逻辑层面，确实不可执行到的路径**
+
+   + 对函数/部分代码添加正确的annotations，比方说C++ 11 的noreturn，https://en.cppreference.com/w/cpp/language/attributes
+
+   + analyzor支持assert检查，编译debug对象的时候这些assert能够有效的避免出现相应的flase positive报错，编译器会检查到assert必然满足了某些条件，从而不会出现对应的问题。参考https://clang-analyzer.llvm.org/annotations.html#custom_assertions
+
+   + 也是用assert代码来保证一定不会出错，认为走入了错误的path会导致报错
+
+     ```cpp
+     int f(MyEnum Val) {
+       int x = 0;
+       switch (Val) {
+         case MyEnumA: x = 1; break;
+         case MyEnumB: x = 5; break;
+       }
+       return 5/x; // Division by zero when Val == MyEnumC.
+     }
+     ```
+
+     It can be rewritten to as the following to suppress the warning:
+
+     ```cpp
+     int f(MyEnum Val) {
+       int x = 0;
+       switch (Val) {
+         case MyEnumA: x = 1; break;
+         case MyEnumB: x = 5; break;
+         default: assert(false); break;
+       }
+       return 5/x; // No warning.
+     }
+     ```
+
+     Other macros or builtins expressing unreachable code may be used. Note that the rewritten code is also safer, since debug builds now check for more precondition violations.
+
+     In case of C++11 or later, another option is to use Immediately-Invoked Function Expression (IIFE) to avoid assigning a meaningless value.
+
+     ```cpp
+     int f(MyEnum Val) {
+       const int x = [&] { // Note the lambda.
+         switch (Val) {
+           case MyEnumA: return 1;
+           case MyEnumB: return 5;
+           default: assert(false); return 0;
+         }
+       } ();
+       return 5/x; // No warning.
+     }
+     ```
+
+   
 
 
 
