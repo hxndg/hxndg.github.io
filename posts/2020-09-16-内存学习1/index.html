@@ -1,0 +1,309 @@
+<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>内存学习(1) &#183; 菜狗的blog</title>
+<meta name=title content="内存学习(1) &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="内存,linux kernel,"><link rel=canonical href=https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity="sha512-ujd1vr1SorSDf42mTjLuNuXFK/KEoM4iYlYngjmLcBVDlHUnrRSYSHcXsblv4qTkjTZaAuC10A4iSJMFLpnYPA=="><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="内存学习(1)"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-09-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-16T00:00:00+00:00"><meta property="article:tag" content="内存"><meta property="article:tag" content="Linux Kernel"><meta name=twitter:card content="summary"><meta name=twitter:title content="内存学习(1)"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"内存学习(1)","headline":"内存学习(1)","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2020","dateCreated":"2020-09-16T00:00:00\u002b00:00","datePublished":"2020-09-16T00:00:00\u002b00:00","dateModified":"2020-09-16T00:00:00\u002b00:00","keywords":["内存","linux kernel"],"mainEntityOfPage":"true","wordCount":"3806"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
+<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></button>
+<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">内存学习(1)</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time><span class="px-2 text-primary-500">&#183;</span><span>3806 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>8 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#絮叨几句>絮叨几句</a></li><li><a href=#内存管理小前言>内存管理小前言</a></li><li><a href=#从页框说起--基本的物理内存管理>从页框说起&ndash;基本的物理内存管理</a></li><li><a href=#结尾的闲言碎语>结尾的闲言碎语</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#絮叨几句>絮叨几句</a></li><li><a href=#内存管理小前言>内存管理小前言</a></li><li><a href=#从页框说起--基本的物理内存管理>从页框说起&ndash;基本的物理内存管理</a></li><li><a href=#结尾的闲言碎语>结尾的闲言碎语</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">内存学习(1)<div id=%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01 aria-label=锚点>#</a></span></h1><h2 class="relative group">前言<div id=%E5%89%8D%E8%A8%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%89%8D%E8%A8%80 aria-label=锚点>#</a></span></h2><p>内存这块我很早之前看过，但是一直没怎么做记录。这次姑且记录下这次的阅读的书籍分别为：《Linux内核0.11完全注释》，《Linux内核源代码情景分析》，《ATCP内存实现》(这个是我司的代码管理)。啊，对了，这次我同时在看SICP的东西，希望顺便打打基础。当然，纸上得来终觉浅，绝知此事要躬行，还是从已经分配好的内存看起吧，从用户态的开始看。</p><h2 class="relative group">絮叨几句<div id=%E7%B5%AE%E5%8F%A8%E5%87%A0%E5%8F%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%B5%AE%E5%8F%A8%E5%87%A0%E5%8F%A5 aria-label=锚点>#</a></span></h2><p>简单来说linux2.6的内存管理方式并不能说麻烦，来来去去东西就那么多，但是有很多东西属于前置知识，也就是说你知道它是为了解决什么问题才可能理解为什么会有这种解决方式，单纯的看代码只会觉得仿佛是看天书。我第一次看《深入详解linux内核》只感觉是天书，毕竟毕业好多年，操作系统的东西差不多都还给老师了，后来为了学习就买了一本《操作系统真象还原》然后哆哆嗦嗦看完了，再看《深入理解linux内核》才大致明白是什么回事，可是内核庞大，经常前面的东西裹挟着后面的内容，所以经常会看看忽然看不懂，暂且释怀，总会明白，无非多看几次。</p><h2 class="relative group">内存管理小前言<div id=%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%B0%8F%E5%89%8D%E8%A8%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%B0%8F%E5%89%8D%E8%A8%80 aria-label=锚点>#</a></span></h2><p>linux2.6的内存管理，总结来说分为下面两块</p><ul><li>虚拟内存管理</li><li>物理内存管理
+这其中，虚拟内存管理分为</li><li>应用层虚拟内存管理(0-3GB的内存管理)</li><li>kernel虚拟内存管理(3-4GB的内存管理)</li><li>虚拟内存的初始化
+这里面无论是0-3GB还是3-4GB都是虚拟内存的概念，每个程序都认为自己有四GB的空间，但是实际使用的时候会根据需求进行调页。虚拟内存初始化讲道理和前两种分类并不一致，但是又没多少其他合适的地方放，所以姑且放到一起
+物理内存管理层面分为</li><li>物理内存的分配管理</li><li>物理内存的回收和置换</li><li>物理内存管理方式之slab管理器
+严格来说，slab管理器实际上属于物理内存的分配管理，但是由于其管理方式非常常见也很重要所以单独拿出来了。下面我会一边捋思路，一边记录多种数据结构。因为这两者都互相影响，所以虚拟内存和物理内存的管理会穿插着来。</li></ul><h2 class="relative group">从页框说起&ndash;基本的物理内存管理<div id=%E4%BB%8E%E9%A1%B5%E6%A1%86%E8%AF%B4%E8%B5%B7--%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E4%BB%8E%E9%A1%B5%E6%A1%86%E8%AF%B4%E8%B5%B7--%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86 aria-label=锚点>#</a></span></h2><p>大部分书籍说起内存管理，都先说什么线性地址，可是每个人都知道什么是线性地址，也不需要我多少。我们从页框(Page Frame)说起，假设我们有个12KB的内存，我们认为一个4k是一个页框，第一个4k，我们称为第一页，第二个4k我们称为第二页，第三个4k我们称为第三页，简单而言每4k大小的物理内存我们称为一页。为了管理每个页框，我们为每个页框生成一个管理单元，该数据结构称为“页描述符”(以后我们page也指一页，也指对应的页描述符)，数据结构写在下面了。</p><p>unsigned long flags用于表明page目前正处在哪种类型，用该标志来表示该页框的状态，常见的标志为</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>	<span class=n>PG_locked</span>			<span class=c1>//页被锁定，比方说在做I/O操作，这几次对内存的梳理我们都不会涉及到
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_referenced</span>		<span class=c1>//该页刚刚被访问过，我们等到“物理内存的回收和置换”再讨论
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_active</span>			<span class=c1>//该页在活动或者非活动链表里，我们等到“物理内存的回收和置换”再讨论
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_reserved</span>			<span class=c1>//该页给内存保留使用，或者无法使用
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_reclaim</span>			<span class=c1>//该页将要写入内存
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_swapcache</span>		<span class=c1>//该页属于兑换高速缓存
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=n>PG_private</span>			<span class=c1>//该页的private字段有用，是有特殊含义的(比方说伙伴系统用这个记录位阶)
+</span></span></span></code></pre></div><p>atomic_t _count字段说明该页框当前有有几个进程使用，比方说多个fork出来的进程同样拥有一个页框
+atomic_t _mapcount 字段说明该页框当中有多少个页表项，如果一个没有为-1</p><p>struct address_space *mapping 如果该PAGE属于匿名区，那么mapping用于指向某个还没涉及到的数据结构，从而找到页表项。如果属于页高速缓存</p><p>unsigned long index</p><p>struct list_head lru 非常好玩的东西，只要是个list_head的链表都能挂，当然最常见的是挂在物理内存伙伴算法和活动链表和非活动链表上。</p><p>剩下的几个结构要么涉及不到，要么我暂时不想理。略过了。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>page</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>flags</span><span class=p>;</span>		<span class=cm>/* Atomic flags, some possibly
+</span></span></span><span class=line><span class=cl><span class=cm>					 * updated asynchronously */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>atomic_t</span> <span class=n>_count</span><span class=p>;</span>		<span class=cm>/* Usage count, see below. */</span>
+</span></span><span class=line><span class=cl>	<span class=k>union</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=kt>atomic_t</span> <span class=n>_mapcount</span><span class=p>;</span>	<span class=cm>/* Count of ptes mapped in mms,
+</span></span></span><span class=line><span class=cl><span class=cm>					 * to show when page is mapped
+</span></span></span><span class=line><span class=cl><span class=cm>					 * &amp; limit reverse map searches.
+</span></span></span><span class=line><span class=cl><span class=cm>					 */</span>
+</span></span><span class=line><span class=cl>		<span class=k>struct</span> <span class=p>{</span>		<span class=cm>/* SLUB */</span>
+</span></span><span class=line><span class=cl>			<span class=n>u16</span> <span class=n>inuse</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>			<span class=n>u16</span> <span class=n>objects</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>		<span class=p>};</span>
+</span></span><span class=line><span class=cl>	<span class=p>};</span>
+</span></span><span class=line><span class=cl>	<span class=k>union</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	    <span class=k>struct</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>private</span><span class=p>;</span>		<span class=cm>/* Mapping-private opaque data:
+</span></span></span><span class=line><span class=cl><span class=cm>					 	 * usually used for buffer_heads
+</span></span></span><span class=line><span class=cl><span class=cm>						 * if PagePrivate set; used for
+</span></span></span><span class=line><span class=cl><span class=cm>						 * swp_entry_t if PageSwapCache;
+</span></span></span><span class=line><span class=cl><span class=cm>						 * indicates order in the buddy
+</span></span></span><span class=line><span class=cl><span class=cm>						 * system if PG_buddy is set.
+</span></span></span><span class=line><span class=cl><span class=cm>						 */</span>
+</span></span><span class=line><span class=cl>		<span class=k>struct</span> <span class=n>address_space</span> <span class=o>*</span><span class=n>mapping</span><span class=p>;</span>	<span class=cm>/* If low bit clear, points to
+</span></span></span><span class=line><span class=cl><span class=cm>						 * inode address_space, or NULL.
+</span></span></span><span class=line><span class=cl><span class=cm>						 * If page mapped as anonymous
+</span></span></span><span class=line><span class=cl><span class=cm>						 * memory, low bit is set, and
+</span></span></span><span class=line><span class=cl><span class=cm>						 * it points to anon_vma object:
+</span></span></span><span class=line><span class=cl><span class=cm>						 * see PAGE_MAPPING_ANON below.
+</span></span></span><span class=line><span class=cl><span class=cm>						 */</span>
+</span></span><span class=line><span class=cl>	    <span class=p>};</span>
+</span></span><span class=line><span class=cl><span class=cp>#if USE_SPLIT_PTLOCKS
+</span></span></span><span class=line><span class=cl><span class=cp></span>	    <span class=kt>spinlock_t</span> <span class=n>ptl</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	    <span class=k>struct</span> <span class=n>kmem_cache</span> <span class=o>*</span><span class=n>slab</span><span class=p>;</span>	<span class=cm>/* SLUB: Pointer to slab */</span>
+</span></span><span class=line><span class=cl>	    <span class=k>struct</span> <span class=n>page</span> <span class=o>*</span><span class=n>first_page</span><span class=p>;</span>	<span class=cm>/* Compound tail pages */</span>
+</span></span><span class=line><span class=cl>	<span class=p>};</span>
+</span></span><span class=line><span class=cl>	<span class=k>union</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=kt>pgoff_t</span> <span class=n>index</span><span class=p>;</span>		<span class=cm>/* Our offset within mapping. */</span>
+</span></span><span class=line><span class=cl>		<span class=kt>void</span> <span class=o>*</span><span class=n>freelist</span><span class=p>;</span>		<span class=cm>/* SLUB: freelist req. slab lock */</span>
+</span></span><span class=line><span class=cl>	<span class=p>};</span>
+</span></span><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>list_head</span> <span class=n>lru</span><span class=p>;</span>		<span class=cm>/* Pageout list, eg. active_list
+</span></span></span><span class=line><span class=cl><span class=cm>					 * protected by zone-&gt;lru_lock !
+</span></span></span><span class=line><span class=cl><span class=cm>					 */</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * On machines where all RAM is mapped into kernel address space,
+</span></span></span><span class=line><span class=cl><span class=cm>	 * we can simply calculate the virtual address. On machines with
+</span></span></span><span class=line><span class=cl><span class=cm>	 * highmem some memory is mapped into kernel virtual memory
+</span></span></span><span class=line><span class=cl><span class=cm>	 * dynamically, so we need a place to store that address.
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Note that this field could be 16 bits on x86 ... ;)
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Architectures with slow multiplication can define
+</span></span></span><span class=line><span class=cl><span class=cm>	 * WANT_PAGE_VIRTUAL in asm/page.h
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl><span class=cp>#if defined(WANT_PAGE_VIRTUAL)
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=kt>void</span> <span class=o>*</span><span class=n>virtual</span><span class=p>;</span>			<span class=cm>/* Kernel virtual address (NULL if
+</span></span></span><span class=line><span class=cl><span class=cm>					   not kmapped, ie. highmem) */</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif </span><span class=cm>/* WANT_PAGE_VIRTUAL */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_WANT_PAGE_DEBUG_FLAGS
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>debug_flags</span><span class=p>;</span>	<span class=cm>/* Use atomic bitops on this */</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_KMEMCHECK
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * kmemcheck wants to track the status of each byte in a page; this
+</span></span></span><span class=line><span class=cl><span class=cm>	 * is a pointer to such a status block. NULL if not tracked.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>void</span> <span class=o>*</span><span class=n>shadow</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=p>};</span>
+</span></span></code></pre></div><p>数据结构列在上面了，这样一个结构大概40字节，用来表示4k字节，也就是说用1的内存来表示大小为100的内存，似乎还可以？好，我们继续向下说。管理那么多的物理内存，不可能都临时管理，肯定都是初始化好的，所以操作系统中会有一个全局的page数组，称为mem_map数组。平时页表或者页目录项里面存储的也是页帧号Page Frame Number。</p><p>对于X86系统，我们人为的将内存划成几个管理区：</p><ul><li>ZONE_DMA包含低于16MB的内存页框</li><li>ZONE_NORMAL包含高于16MB且低于896MB的内存页框</li><li>ZONE_HIGHMEEM包含高于896MB的内存</li></ul><p>让我们直接看内核里面的ZONE_TYPE的意思：</p><ul><li>ZONE_DMA是给设备用的，因为不能直接对所有的可寻址地址做DMA操作，&ldquo;that are not able to do DMA to all of addressable memory&rdquo;</li><li>ZONE_DMA32是给X86_64用的，因为有设备只能对32bit地址下做DMA</li><li>ZONE_NORMAL真正的可寻址范围</li><li>ZONE_HIGHMEM是高端地址，不过X86_64是不需要用的</li><li>ZONE_MOVABLE 这部分建议直接看英文原版https://lwn.net/Articles/224829/，不会出现理解错误</li></ul><p>我在公司的电脑，就三个ZONE，ZONE_DMA，ZONE_DMA32和ZONE_NORMAL</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=k>enum</span> <span class=n>zone_type</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_ZONE_DMA
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * ZONE_DMA is used when there are devices that are not able
+</span></span></span><span class=line><span class=cl><span class=cm>	 * to do DMA to all of addressable memory (ZONE_NORMAL). Then we
+</span></span></span><span class=line><span class=cl><span class=cm>	 * carve out the portion of memory that is needed for these devices.
+</span></span></span><span class=line><span class=cl><span class=cm>	 * The range is arch specific.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Some examples
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Architecture		Limit
+</span></span></span><span class=line><span class=cl><span class=cm>	 * ---------------------------
+</span></span></span><span class=line><span class=cl><span class=cm>	 * parisc, ia64, sparc	&lt;4G
+</span></span></span><span class=line><span class=cl><span class=cm>	 * s390, powerpc	&lt;2G
+</span></span></span><span class=line><span class=cl><span class=cm>	 * arm			Various
+</span></span></span><span class=line><span class=cl><span class=cm>	 * alpha		Unlimited or 0-16MB.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * i386, x86_64 and multiple other arches
+</span></span></span><span class=line><span class=cl><span class=cm>	 * 			&lt;16M.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=n>ZONE_DMA</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_ZONE_DMA32
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * x86_64 needs two ZONE_DMAs because it supports devices that are
+</span></span></span><span class=line><span class=cl><span class=cm>	 * only able to do DMA to the lower 16M but also 32 bit devices that
+</span></span></span><span class=line><span class=cl><span class=cm>	 * can only do DMA areas below 4G.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=n>ZONE_DMA32</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Normal addressable memory is in ZONE_NORMAL. DMA operations can be
+</span></span></span><span class=line><span class=cl><span class=cm>	 * performed on pages in ZONE_NORMAL if the DMA devices support
+</span></span></span><span class=line><span class=cl><span class=cm>	 * transfers to all addressable memory.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=n>ZONE_NORMAL</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_HIGHMEM
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * A memory area that is only addressable by the kernel through
+</span></span></span><span class=line><span class=cl><span class=cm>	 * mapping portions into its own address space. This is for example
+</span></span></span><span class=line><span class=cl><span class=cm>	 * used by i386 to allow the kernel to address the memory beyond
+</span></span></span><span class=line><span class=cl><span class=cm>	 * 900MB. The kernel will set up special mappings (page
+</span></span></span><span class=line><span class=cl><span class=cm>	 * table entries on i386) for each page that the kernel needs to
+</span></span></span><span class=line><span class=cl><span class=cm>	 * access.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=n>ZONE_HIGHMEM</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=n>ZONE_MOVABLE</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_ZONE_DEVICE
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=n>ZONE_DEVICE</span><span class=p>,</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=n>__MAX_NR_ZONES</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=p>};</span>
+</span></span></code></pre></div><p>有一个<code>GFP_ZONE_TABLE</code>，<code>ZONES_SHIFT</code>实际上就是多少位的移位的意思。默认是从ZONE_NORMAL开始计算方法如下：</p><pre tabindex=0><code>#define GFP_ZONE_TABLE ( \
+	(ZONE_NORMAL &lt;&lt; 0 * GFP_ZONES_SHIFT)				       \
+	| (OPT_ZONE_DMA &lt;&lt; ___GFP_DMA * GFP_ZONES_SHIFT)		       \
+	| (OPT_ZONE_HIGHMEM &lt;&lt; ___GFP_HIGHMEM * GFP_ZONES_SHIFT)	       \
+	| (OPT_ZONE_DMA32 &lt;&lt; ___GFP_DMA32 * GFP_ZONES_SHIFT)		       \
+	| (ZONE_NORMAL &lt;&lt; ___GFP_MOVABLE * GFP_ZONES_SHIFT)		       \
+	| (OPT_ZONE_DMA &lt;&lt; (___GFP_MOVABLE | ___GFP_DMA) * GFP_ZONES_SHIFT)    \
+	| (ZONE_MOVABLE &lt;&lt; (___GFP_MOVABLE | ___GFP_HIGHMEM) * GFP_ZONES_SHIFT)\
+	| (OPT_ZONE_DMA32 &lt;&lt; (___GFP_MOVABLE | ___GFP_DMA32) * GFP_ZONES_SHIFT)\
+)
+</code></pre><pre tabindex=0><code>#if MAX_NR_ZONES &lt; 2
+#define ZONES_SHIFT 0
+#elif MAX_NR_ZONES &lt;= 2
+#define ZONES_SHIFT 1
+#elif MAX_NR_ZONES &lt;= 4
+#define ZONES_SHIFT 2
+#elif MAX_NR_ZONES &lt;= 8
+#define ZONES_SHIFT 3
+</code></pre><p>外部碎片或者说迁移类型的问题，看这个页面https://pingcap.com/blog-cn/linux-kernel-vs-memory-fragmentation-1/和https://article.itxueyuan.com/pWkBe页面。此外，为了对抗碎片化的问题，把一些文章贴进来：</p><table><thead><tr><th style=text-align:left>lwn 发布时间</th><th style=text-align:left>标题</th></tr></thead><tbody><tr><td style=text-align:left>2004-09-08</td><td style=text-align:left><a href=https://lwn.net/Articles/101230/ target=_blank>Kswapd and high-order allocations</a></td></tr><tr><td style=text-align:left>2004-05-10</td><td style=text-align:left><a href=https://lwn.net/Articles/105021/ target=_blank>Active memory defragmentation</a></td></tr><tr><td style=text-align:left>2005-02-01</td><td style=text-align:left><a href=https://lwn.net/Articles/121618/ target=_blank>Yet another approach to memory fragmentation</a></td></tr><tr><td style=text-align:left>2005-11-02</td><td style=text-align:left><a href=https://lwn.net/Articles/158211/ target=_blank>Fragmentation avoidance</a></td></tr><tr><td style=text-align:left>2005-11-08</td><td style=text-align:left><a href=https://lwn.net/Articles/159110/ target=_blank>More on fragmentation avoidance</a></td></tr><tr><td style=text-align:left>2006-11-28</td><td style=text-align:left><a href=https://lwn.net/Articles/211505/ target=_blank>Avoiding - and fixing - memory fragmentation</a></td></tr><tr><td style=text-align:left>2010-01-06</td><td style=text-align:left><a href=https://lwn.net/Articles/368869/ target=_blank>Memory compaction</a></td></tr><tr><td style=text-align:left>2014-03-26</td><td style=text-align:left><a href=https://lwn.net/Articles/591998/ target=_blank>Memory compaction issues</a></td></tr><tr><td style=text-align:left>2015-07-14</td><td style=text-align:left><a href=https://lwn.net/Articles/650917/ target=_blank>Making kernel pages movable</a></td></tr><tr><td style=text-align:left>2016-04-23</td><td style=text-align:left><a href=https://lwn.net/Articles/684611/ target=_blank>CMA and compaction</a></td></tr><tr><td style=text-align:left>2016-05-10</td><td style=text-align:left><a href=https://lwn.net/Articles/686801/ target=_blank>make direct compaction more deterministic</a></td></tr><tr><td style=text-align:left>2017-03-21</td><td style=text-align:left><a href=https://lwn.net/Articles/717656/ target=_blank>Proactive compaction</a></td></tr><tr><td style=text-align:left>2018-10-31</td><td style=text-align:left><a href=https://lwn.net/Articles/770235/ target=_blank>Fragmentation avoidance improvements</a></td></tr><tr><td style=text-align:left>2020-04-21</td><td style=text-align:left><a href=https://lwn.net/Articles/817905/ target=_blank>Proactive compaction for the kernel</a></td></tr></tbody></table><p>对于物理内存的回收，释放交换等等内容，都是针对管理区而言的。我们看看每个管理区的结构</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>zone</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Fields commonly accessed by the page allocator */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* zone watermarks, access with *_wmark_pages(zone) macros */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>watermark</span><span class=p>[</span><span class=n>NR_WMARK</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * When free pages are below this point, additional steps are taken
+</span></span></span><span class=line><span class=cl><span class=cm>	 * when reading the number of free pages to avoid per-cpu counter
+</span></span></span><span class=line><span class=cl><span class=cm>	 * drift allowing watermarks to be breached
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span> <span class=n>percpu_drift_mark</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * We don&#39;t know if the memory that we&#39;re going to allocate will be freeable
+</span></span></span><span class=line><span class=cl><span class=cm>	 * or/and it will be released eventually, so to avoid totally wasting several
+</span></span></span><span class=line><span class=cl><span class=cm>	 * GB of ram we must reserve some of the lower zone memory (otherwise we risk
+</span></span></span><span class=line><span class=cl><span class=cm>	 * to run OOM on the lower zones despite there&#39;s tons of freeable ram
+</span></span></span><span class=line><span class=cl><span class=cm>	 * on the higher zones). This array is recalculated at runtime if the
+</span></span></span><span class=line><span class=cl><span class=cm>	 * sysctl_lowmem_reserve_ratio sysctl changes.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>lowmem_reserve</span><span class=p>[</span><span class=n>MAX_NR_ZONES</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_NUMA
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=kt>int</span> <span class=n>node</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * zone reclaim becomes active if more unmapped pages exist.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>min_unmapped_pages</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>min_slab_pages</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=k>struct</span> <span class=n>per_cpu_pageset</span> <span class=n>__percpu</span> <span class=o>*</span><span class=n>pageset</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * free areas of different sizes
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>spinlock_t</span>		<span class=n>lock</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>int</span>                     <span class=n>all_unreclaimable</span><span class=p>;</span> <span class=cm>/* All pages pinned */</span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_MEMORY_HOTPLUG
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/* see spanned/present_pages for more description */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>seqlock_t</span>		<span class=n>span_seqlock</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=k>struct</span> <span class=n>free_area</span>	<span class=n>free_area</span><span class=p>[</span><span class=n>MAX_ORDER</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=cp>#ifndef CONFIG_SPARSEMEM
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Flags for a pageblock_nr_pages block. See pageblock-flags.h.
+</span></span></span><span class=line><span class=cl><span class=cm>	 * In SPARSEMEM, this map is stored in struct mem_section
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=o>*</span><span class=n>pageblock_flags</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif </span><span class=cm>/* CONFIG_SPARSEMEM */</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=cp>#ifdef CONFIG_COMPACTION
+</span></span></span><span class=line><span class=cl><span class=cp></span>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * On compaction failure, 1&lt;&lt;compact_defer_shift compactions
+</span></span></span><span class=line><span class=cl><span class=cm>	 * are skipped before trying again. The number attempted since
+</span></span></span><span class=line><span class=cl><span class=cm>	 * last failure is tracked with compact_considered.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>int</span>		<span class=n>compact_considered</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>int</span>		<span class=n>compact_defer_shift</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=cp>#endif
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl>	<span class=nf>ZONE_PADDING</span><span class=p>(</span><span class=n>_pad1_</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Fields commonly accessed by the page reclaim scanner */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>spinlock_t</span>		<span class=n>lru_lock</span><span class=p>;</span>	
+</span></span><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>zone_lru</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>		<span class=k>struct</span> <span class=n>list_head</span> <span class=n>list</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=p>}</span> <span class=n>lru</span><span class=p>[</span><span class=n>NR_LRU_LISTS</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>zone_reclaim_stat</span> <span class=n>reclaim_stat</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>pages_scanned</span><span class=p>;</span>	   <span class=cm>/* since last reclaim */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>flags</span><span class=p>;</span>		   <span class=cm>/* zone flags, see below */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Zone statistics */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>atomic_long_t</span>		<span class=n>vm_stat</span><span class=p>[</span><span class=n>NR_VM_ZONE_STAT_ITEMS</span><span class=p>];</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * The target ratio of ACTIVE_ANON to INACTIVE_ANON pages on
+</span></span></span><span class=line><span class=cl><span class=cm>	 * this zone&#39;s LRU.  Maintained by the pageout code.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>int</span> <span class=n>inactive_ratio</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=nf>ZONE_PADDING</span><span class=p>(</span><span class=n>_pad2_</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* Rarely used or read-mostly fields */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * wait_table		-- the array holding the hash table
+</span></span></span><span class=line><span class=cl><span class=cm>	 * wait_table_hash_nr_entries	-- the size of the hash table array
+</span></span></span><span class=line><span class=cl><span class=cm>	 * wait_table_bits	-- wait_table_size == (1 &lt;&lt; wait_table_bits)
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * The purpose of all these is to keep track of the people
+</span></span></span><span class=line><span class=cl><span class=cm>	 * waiting for a page to become available and make them
+</span></span></span><span class=line><span class=cl><span class=cm>	 * runnable again when possible. The trouble is that this
+</span></span></span><span class=line><span class=cl><span class=cm>	 * consumes a lot of space, especially when so few things
+</span></span></span><span class=line><span class=cl><span class=cm>	 * wait on pages at a given time. So instead of using
+</span></span></span><span class=line><span class=cl><span class=cm>	 * per-page waitqueues, we use a waitqueue hash table.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * The bucket discipline is to sleep on the same queue when
+</span></span></span><span class=line><span class=cl><span class=cm>	 * colliding and wake all in that wait queue when removing.
+</span></span></span><span class=line><span class=cl><span class=cm>	 * When something wakes, it must check to be sure its page is
+</span></span></span><span class=line><span class=cl><span class=cm>	 * truly available, a la thundering herd. The cost of a
+</span></span></span><span class=line><span class=cl><span class=cm>	 * collision is great, but given the expected load of the
+</span></span></span><span class=line><span class=cl><span class=cm>	 * table, they should be so rare as to be outweighed by the
+</span></span></span><span class=line><span class=cl><span class=cm>	 * benefits from the saved space.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * __wait_on_page_locked() and unlock_page() in mm/filemap.c, are the
+</span></span></span><span class=line><span class=cl><span class=cm>	 * primary users of these fields, and in mm/page_alloc.c
+</span></span></span><span class=line><span class=cl><span class=cm>	 * free_area_init_core() performs the initialization of them.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>wait_queue_head_t</span>	<span class=o>*</span> <span class=n>wait_table</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>wait_table_hash_nr_entries</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>wait_table_bits</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * Discontig memory support fields.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=k>struct</span> <span class=n>pglist_data</span>	<span class=o>*</span><span class=n>zone_pgdat</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>	<span class=cm>/* zone_start_pfn == zone_start_paddr &gt;&gt; PAGE_SHIFT */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>zone_start_pfn</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * zone_start_pfn, spanned_pages and present_pages are all
+</span></span></span><span class=line><span class=cl><span class=cm>	 * protected by span_seqlock.  It is a seqlock because it has
+</span></span></span><span class=line><span class=cl><span class=cm>	 * to be read outside of zone-&gt;lock, and it is done in the main
+</span></span></span><span class=line><span class=cl><span class=cm>	 * allocator path.  But, it is written quite infrequently.
+</span></span></span><span class=line><span class=cl><span class=cm>	 *
+</span></span></span><span class=line><span class=cl><span class=cm>	 * The lock is declared along with zone-&gt;lock because it is
+</span></span></span><span class=line><span class=cl><span class=cm>	 * frequently read in proximity to zone-&gt;lock.  It&#39;s good to
+</span></span></span><span class=line><span class=cl><span class=cm>	 * give them a chance of being in the same cacheline.
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>spanned_pages</span><span class=p>;</span>	<span class=cm>/* total size, including holes */</span>
+</span></span><span class=line><span class=cl>	<span class=kt>unsigned</span> <span class=kt>long</span>		<span class=n>present_pages</span><span class=p>;</span>	<span class=cm>/* amount of memory (excluding holes) */</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>	<span class=cm>/*
+</span></span></span><span class=line><span class=cl><span class=cm>	 * rarely used fields:
+</span></span></span><span class=line><span class=cl><span class=cm>	 */</span>
+</span></span><span class=line><span class=cl>	<span class=k>const</span> <span class=kt>char</span>		<span class=o>*</span><span class=n>name</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span> <span class=n>____cacheline_internodealigned_in_smp</span><span class=p>;</span>
+</span></span></code></pre></div><p>这些内存管理区统统划为一个节点。</p><p>上面这些代码都只是偏向于理解，并不难，还是得RTFSC。</p><h2 class="relative group">结尾的闲言碎语<div id=%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD aria-label=锚点>#</a></span></h2><p>写到这里差不多就可以结束了，就不多说了。<figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2020-09-16-内存学习(1)\\index.md",oid_likes="likes_posts\\2020-09-16-内存学习(1)\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">内存学习(10)</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time>
+</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">到底该怎么写自动机</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time>
+</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
+<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>

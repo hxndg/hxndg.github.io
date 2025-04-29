@@ -1,0 +1,1004 @@
+<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>如何进行性能分析和诊断 &#183; 菜狗的blog</title>
+<meta name=title content="如何进行性能分析和诊断 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="perf,debug,fun,"><link rel=canonical href=https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity="sha512-ujd1vr1SorSDf42mTjLuNuXFK/KEoM4iYlYngjmLcBVDlHUnrRSYSHcXsblv4qTkjTZaAuC10A4iSJMFLpnYPA=="><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="如何进行性能分析和诊断"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-12-15T00:00:00+00:00"><meta property="article:modified_time" content="2020-12-15T00:00:00+00:00"><meta property="article:tag" content="Perf"><meta property="article:tag" content="Debug"><meta property="article:tag" content="Fun"><meta property="og:image" content="https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/featured.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/featured.png"><meta name=twitter:title content="如何进行性能分析和诊断"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"如何进行性能分析和诊断","headline":"如何进行性能分析和诊断","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2020","dateCreated":"2020-12-15T00:00:00\u002b00:00","datePublished":"2020-12-15T00:00:00\u002b00:00","dateModified":"2020-12-15T00:00:00\u002b00:00","keywords":["perf","debug","fun"],"mainEntityOfPage":"true","wordCount":"34566"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
+<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></button>
+<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><div id=hero class="h-[150px] md:h-[200px]"></div><div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom" style=background-image:url(/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/featured_hu18177204623469070809.png)><div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div><div class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div></div><div id=background-blur class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div><script>window.addEventListener("scroll",function(){var t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n=document.getElementById("background-blur");n.style.opacity=t/300})</script><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">如何进行性能分析和诊断</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2020-12-15T00:00:00+00:00>2020 年 12 月 15 日</time><span class="px-2 text-primary-500">&#183;</span><span>34566 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>69 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言和性能测试综述>0 前言和性能测试综述</a><ul><li><a href=#01-性能测试综述>0.1 性能测试综述</a><ul><li><a href=#011-性能测试的分类>0.1.1 性能测试的分类</a></li><li><a href=#012-性能测试挑战性的来源>0.1.2 性能测试挑战性的来源</a></li><li><a href=#013-性能测试的常见方法>0.1.3 性能测试的常见方法</a></li></ul></li></ul></li><li><a href=#1-性能分析总览>1 性能分析总览</a><ul><li><a href=#11-性能分析的起步和大致的方法>1.1 性能分析的起步和大致的方法</a><ul><li><a href=#111-资源分析法>1.1.1 资源分析法</a></li><li><a href=#112-工作负载法>1.1.2 工作负载法</a></li></ul></li><li><a href=#113-延时分析法>1.1.3 延时分析法</a></li><li><a href=#12-性能分析的工具>1.2 性能分析的工具</a><ul><li><a href=#121-计数器类型工具>1.2.1 计数器类型工具</a></li><li><a href=#122-追踪类型工具>1.2.2 追踪类型工具</a></li></ul></li></ul></li><li><a href=#2-针对具体方面的分析>2 针对具体方面的分析</a><ul><li><a href=#21-cpu>2.1 CPU</a><ul><li><a href=#210-关于cpu>2.1.0 关于CPU</a></li><li><a href=#211-cpu分析的方法>2.1.1 CPU分析的方法</a></li><li><a href=#212-cpu分析的工具>2.1.2 CPU分析的工具</a></li></ul></li><li><a href=#213-分析cpu的几种具体方法>2.1.3 分析CPU的几种具体方法</a><ul><li><a href=#2130-通用分析>2.1.3.0 通用分析</a></li><li><a href=#2131-分析锁>2.1.3.1 分析锁</a></li><li><a href=#2132-分析负载或者进程线程睡眠>2.1.3.2 分析负载或者进程/线程睡眠</a></li><li><a href=#2133-分析软中断soft-interruptsyscall和硬中断>2.1.3.3 分析软中断soft interrupt（syscall）/和硬中断</a></li></ul></li><li><a href=#22-内存>2.2 内存</a><ul><li><a href=#221-内存排查的工具>2.2.1 内存排查的工具</a></li></ul></li><li><a href=#23-文件系统>2.3 文件系统</a></li><li><a href=#24-io>2.4 IO</a><ul><li><a href=#231-io的基本知识>2.3.1 IO的基本知识</a></li></ul></li><li><a href=#232-io分析的方法>2.3.2 IO分析的方法</a></li><li><a href=#233-磁盘io分析的工具>2.3.3 磁盘io分析的工具</a></li><li><a href=#25-网络>2.5 网络</a></li><li><a href=#25-安全>2.5 安全</a></li></ul></li><li><a href=#2-性能分析的案例和常见的调优手段>2 性能分析的案例和常见的调优手段</a><ul><li><a href=#21-git慢的问题排查>2.1 git慢的问题排查</a></li><li><a href=#22-cassandra连接内存泄露>2.2 cassandra连接内存泄露</a></li><li><a href=#23-crypto_c-慢>2.3 crypto_c++ 慢</a></li><li><a href=#24-分析git仓库corrupt问题>2.4 分析git仓库corrupt问题</a></li><li><a href=#25-gitlab-runner崩溃问题>2.5 gitlab runner崩溃问题</a></li><li><a href=#26-buildfarm-worker-构建问题分析>2.6 Buildfarm Worker 构建问题分析</a></li><li><a href=#27-xavier机器的io问题>2.7 Xavier机器的IO问题</a></li><li><a href=#28-丢包的原因>2.8 丢包的原因</a></li><li><a href=#29-优化检测程序性能>2.9 优化检测程序性能</a></li><li><a href=#210-排查超时>2.10 排查超时</a></li><li><a href=#可以参考的链接>可以参考的链接</a></li><li><a href=#211-优化后分析慢的原因>2.11 优化后分析慢的原因</a></li></ul></li><li><a href=#2-half-云环境的资源限制>2 Half 云环境的资源限制</a></li><li><a href=#3-附加如何安装bcc工具包到ubuntu1804>3 （附加）如何安装bcc工具包到ubuntu18.04</a></li><li><a href=#4-bpf的学习>4 BPF的学习</a><ul><li><a href=#41-bpf支持的插桩>4.1 BPF支持的插桩</a></li><li><a href=#42-bcc和bpftrace>4.2 bcc和bpftrace</a><ul><li><a href=#41-bcc内部实现和调试>4.1 BCC内部实现和调试</a></li></ul></li><li><a href=#42-bpftrace工具的内部实现和调试>4.2 bpftrace工具的内部实现和调试</a></li><li><a href=#421-bpftrace一行编程>4.2.1 bpftrace一行编程</a></li></ul></li><li><a href=#5-如何做性能优化>5 如何做性能优化</a><ul><li><a href=#理解cpu架构>理解CPU架构</a></li><li><a href=#如何测量性能-通用方法>如何测量性能-通用方法</a></li><li><a href=#发现问题>发现问题</a><ul><li><a href=#定向优化>定向优化</a></li></ul></li></ul></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言和性能测试综述>0 前言和性能测试综述</a><ul><li><a href=#01-性能测试综述>0.1 性能测试综述</a><ul><li><a href=#011-性能测试的分类>0.1.1 性能测试的分类</a></li><li><a href=#012-性能测试挑战性的来源>0.1.2 性能测试挑战性的来源</a></li><li><a href=#013-性能测试的常见方法>0.1.3 性能测试的常见方法</a></li></ul></li></ul></li><li><a href=#1-性能分析总览>1 性能分析总览</a><ul><li><a href=#11-性能分析的起步和大致的方法>1.1 性能分析的起步和大致的方法</a><ul><li><a href=#111-资源分析法>1.1.1 资源分析法</a></li><li><a href=#112-工作负载法>1.1.2 工作负载法</a></li></ul></li><li><a href=#113-延时分析法>1.1.3 延时分析法</a></li><li><a href=#12-性能分析的工具>1.2 性能分析的工具</a><ul><li><a href=#121-计数器类型工具>1.2.1 计数器类型工具</a></li><li><a href=#122-追踪类型工具>1.2.2 追踪类型工具</a></li></ul></li></ul></li><li><a href=#2-针对具体方面的分析>2 针对具体方面的分析</a><ul><li><a href=#21-cpu>2.1 CPU</a><ul><li><a href=#210-关于cpu>2.1.0 关于CPU</a></li><li><a href=#211-cpu分析的方法>2.1.1 CPU分析的方法</a></li><li><a href=#212-cpu分析的工具>2.1.2 CPU分析的工具</a></li></ul></li><li><a href=#213-分析cpu的几种具体方法>2.1.3 分析CPU的几种具体方法</a><ul><li><a href=#2130-通用分析>2.1.3.0 通用分析</a></li><li><a href=#2131-分析锁>2.1.3.1 分析锁</a></li><li><a href=#2132-分析负载或者进程线程睡眠>2.1.3.2 分析负载或者进程/线程睡眠</a></li><li><a href=#2133-分析软中断soft-interruptsyscall和硬中断>2.1.3.3 分析软中断soft interrupt（syscall）/和硬中断</a></li></ul></li><li><a href=#22-内存>2.2 内存</a><ul><li><a href=#221-内存排查的工具>2.2.1 内存排查的工具</a></li></ul></li><li><a href=#23-文件系统>2.3 文件系统</a></li><li><a href=#24-io>2.4 IO</a><ul><li><a href=#231-io的基本知识>2.3.1 IO的基本知识</a></li></ul></li><li><a href=#232-io分析的方法>2.3.2 IO分析的方法</a></li><li><a href=#233-磁盘io分析的工具>2.3.3 磁盘io分析的工具</a></li><li><a href=#25-网络>2.5 网络</a></li><li><a href=#25-安全>2.5 安全</a></li></ul></li><li><a href=#2-性能分析的案例和常见的调优手段>2 性能分析的案例和常见的调优手段</a><ul><li><a href=#21-git慢的问题排查>2.1 git慢的问题排查</a></li><li><a href=#22-cassandra连接内存泄露>2.2 cassandra连接内存泄露</a></li><li><a href=#23-crypto_c-慢>2.3 crypto_c++ 慢</a></li><li><a href=#24-分析git仓库corrupt问题>2.4 分析git仓库corrupt问题</a></li><li><a href=#25-gitlab-runner崩溃问题>2.5 gitlab runner崩溃问题</a></li><li><a href=#26-buildfarm-worker-构建问题分析>2.6 Buildfarm Worker 构建问题分析</a></li><li><a href=#27-xavier机器的io问题>2.7 Xavier机器的IO问题</a></li><li><a href=#28-丢包的原因>2.8 丢包的原因</a></li><li><a href=#29-优化检测程序性能>2.9 优化检测程序性能</a></li><li><a href=#210-排查超时>2.10 排查超时</a></li><li><a href=#可以参考的链接>可以参考的链接</a></li><li><a href=#211-优化后分析慢的原因>2.11 优化后分析慢的原因</a></li></ul></li><li><a href=#2-half-云环境的资源限制>2 Half 云环境的资源限制</a></li><li><a href=#3-附加如何安装bcc工具包到ubuntu1804>3 （附加）如何安装bcc工具包到ubuntu18.04</a></li><li><a href=#4-bpf的学习>4 BPF的学习</a><ul><li><a href=#41-bpf支持的插桩>4.1 BPF支持的插桩</a></li><li><a href=#42-bcc和bpftrace>4.2 bcc和bpftrace</a><ul><li><a href=#41-bcc内部实现和调试>4.1 BCC内部实现和调试</a></li></ul></li><li><a href=#42-bpftrace工具的内部实现和调试>4.2 bpftrace工具的内部实现和调试</a></li><li><a href=#421-bpftrace一行编程>4.2.1 bpftrace一行编程</a></li></ul></li><li><a href=#5-如何做性能优化>5 如何做性能优化</a><ul><li><a href=#理解cpu架构>理解CPU架构</a></li><li><a href=#如何测量性能-通用方法>如何测量性能-通用方法</a></li><li><a href=#发现问题>发现问题</a><ul><li><a href=#定向优化>定向优化</a></li></ul></li></ul></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">如何进行性能分析和诊断<div id=%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD aria-label=锚点>#</a></span></h1><h2 class="relative group">0 前言和性能测试综述<div id=0-%E5%89%8D%E8%A8%80%E5%92%8C%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0-%E5%89%8D%E8%A8%80%E5%92%8C%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0 aria-label=锚点>#</a></span></h2><p>为什么写这个呢，毕竟性能分析往往是整个系统的最后一环，而且目前很多时候像什么cpu/内存往往都可以拓展的情况下，性能分析的意义不再像原先那么大。但是现在做CI，CI运行的稳定，对CI中每个测试都有一定的依赖，以目前轻舟的实例来说：如果format test 或者仿真测试scenario-test-presubmit-cn运行过久，那么就会占用大量的CI运算资源，从而干扰其他的测试。我们目前虽然启用了buildfarm来加速编译和测试过程，但是仿真测试在编译完成之后就在云端运行，就脱离了编译的范畴了。</p><p>这里面揉杂着三个方面的内容和经历：</p><ul><li>在华耀排查内存泄露的问题，到底是哪里花了太多cpu？malloc的linux内存？还是直接接管的hugepage内存？</li><li>轻舟排查CI运行的性能问题，比方说为什么仿真运行过久，占用了太多的ci资源</li><li>《性能之巅》+《bpf之巅》等很多东西，估计写起来会比较复杂</li><li>linux性能优化实战</li><li>。。。</li></ul><p>可能第一遍写也会比较乱，慢慢写吧。</p><h3 class="relative group">0.1 性能测试综述<div id=01-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#01-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%BB%BC%E8%BF%B0 aria-label=锚点>#</a></span></h3><p>我下面先简单对性能测试做个分类，再介绍性能测试挑战性的来源，之后给出性能测试的方法和套路，最后给出性能测试可视化的常见手段。这里需要说下，很多内容都是抄的《性能之巅》这本书，我建议直接阅读这本书（已经捐到了图书角），先对xxx表示感谢</p><h4 class="relative group">0.1.1 性能测试的分类<div id=011-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E5%88%86%E7%B1%BB class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#011-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E5%88%86%E7%B1%BB aria-label=锚点>#</a></span></h4><p>按照我个人习惯，我将性能测试按照阶段和复杂度进行分类。按照测试场景可以分为下面几种：</p><ul><li>软件开发阶段<ul><li>设置性能目标和建立基本的性能模型：做简单的性能测试，定性分析。</li><li>针对软件发布后的基准测试：理想情况下的软件综合性能测试，定量分析。</li></ul></li><li>真实集成阶段<ul><li>目标环境的概念测试：集成环境或者说ontest环境的性能测试，定量分析。依赖的数据源可能成为受限因素。</li><li>特定问题的性能分析：针对实际生产环境性能不达标所做的分析。故障分析</li></ul></li></ul><p>按照复杂度将测试分为两种单一测试和集成测试</p><ul><li>单一测试一般只测试单一模块，其它的资源（网络，IO。。。）是充足的，属于设置性能目标和性能建模阶段做的测试。</li><li>集成测试，对应软件发布后的基准测试，是理想情况下一个软件系统所能提供的性能的量化</li></ul><p>因为测试阶段的不同，其常用的方法和手段都是不同。针对单一测试，抽象出关键资源的性能指标，然后做资源USE分析即可估算出性能模型，提供性能参考。而集成测试需要以单一测试为起点，对工作负载做分析，最终量化性能数据。</p><h4 class="relative group">0.1.2 性能测试挑战性的来源<div id=012-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8C%91%E6%88%98%E6%80%A7%E7%9A%84%E6%9D%A5%E6%BA%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#012-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%8C%91%E6%88%98%E6%80%A7%E7%9A%84%E6%9D%A5%E6%BA%90 aria-label=锚点>#</a></span></h4><p>性能测试是一个具有挑战性的话题，其挑战性来源于标准的主观性，系统结构的复杂，和系统多问题并存的可能性。</p><ul><li>主观：之所以说性能测试是主观的，是因为性能问题是否存在的判断标准往往是模糊的：响应时间或者说是延时虽然是比较清楚的衡量标准之一，如果只说延迟1ms，实际上并不能确定是否存在性能问题。简单来说如果不明确最终用户的性能预期，那这个性能评测往往就是主观的。这个问题的解决方法可以通过定义清晰的目标，或者对落进一定响应延时范围内的请求统计百分比可以将主观的性能变得客观化。</li><li>复杂：系统的复杂性导致我们往往缺少一个明确的分析起点，即使子系统隔离时表现得都很好，也可能因为故障连锁（出故障的组件导致其它组件出现性能问题）。这种问题的解决往往要不同角色的工程师通力合作，有时还需要子系统隔离做性能分析</li><li>多问题并存：做软件测试</li></ul><p>因此当我们做性能测试的时候，需要明确地针对上面三种问题，给出前提条件，从而论证性能测试时合理有效的，</p><h4 class="relative group">0.1.3 性能测试的常见方法<div id=013-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#013-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E5%B8%B8%E8%A7%81%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h4><p>无论哪种性能测试，都需要明确具体的测试目的，测试用例和前提假设</p><p>首先我们需要明确一些术语，这些一致的术语能够帮我们讨论性能问题时快速地统一背景。讨论性能测试时第一步就是明确哪些是关键指标，如何衡量这些指标</p><ul><li>IOPS：每秒进行读写(I/O)操作的次数，多用于数据库等场合</li><li>响应时间：在网络上，指从空载到负载发生一个步进值的变化时，举个简单例子是TLS握手的服务端返回ServerHello报文时间。</li><li>延时：延迟是指某个操作从开始到结束所经过的时间</li><li>使用率：使用率可以认为是资源所占的比例，一般常说的都是CPU使用率，IO使用率</li></ul><p>性能测试常见方法可以分成三种</p><ul><li>最常见的就是我直接benchmark工具做压测，什么线程模型，软件模型一把梭！这种方法术语“死道友不死贫道”的性能测试，即我就测试请求，至于可靠性啥的完全不管，只要数字。</li><li>从上到下-工作负载分析法：工作负载法往往是用来对外给出定量分析使用，常用来衡量QPS，延时等指标</li><li>从下到上-资源分析法：资源负载重点考察资源是否已经处于极限或者接近极限，一些资源负载分析的关键指标为IOPS，吞吐量，使用率</li></ul><p>后两种方法是相辅相成的，工作负载测试出来的数据需要有合理性的论证，这时就需要做资源分析；做工作负载分析时，要明确具体的工作负载是什么，除了工作负载之外假定的前提的是什么，注意这里的前提是需要重点展示的。但是无论如何都要对软件应用场景有充分的理解</p><p>下面针对性的聊下这几个方法</p><h5 class="relative group">0.1.3.1 USE法<div id=0131-use%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0131-use%E6%B3%95 aria-label=锚点>#</a></span></h5><p>USE 方法可以概括为：检查所有的资源（服务器功能性的物理组成硬件（CPU， 硬盘, 总线））的利用率（资源执行某工作的平均时间），饱和度（衡量资源超载工作的程度，往往会被塞入队列），和错误信息。</p><p>其流程如下</p><ul><li><p>先列出资源列表，比方说下面的资源类型</p><ul><li>CPUs： sockets, cores, hardware threads (virtual CPUs)</li><li>内存： 容量</li><li>网络接口</li><li>存储设备： I/O, 容量</li><li>控制器： 存储, 网卡</li><li>通道： CPUs, memory, I/O</li></ul></li><li><p>绘制数据流图，利用数据流图做瓶颈分析。确定数据流转的关键流程。比方说编解码是主要的功耗，那么我就直接拿CPU的资源做估算即可评估QPS。</p></li></ul><p>我一般用USE法的时候不会直接对着CPU或者网络做资源分析，因为那样子过于基础。相反一般是先用benchmark测试几个关键路径qps等数据，之后利用排队理论里面的little law做性能估测。这个little law的内容为<em>L</em> = *λW。*即：一个排队系统在稳定状态下，在系统里面的个体的数量的平均值 L， 等于<a href="https://www.zhihu.com/search?q=%e5%b9%b3%e5%9d%87%e4%b8%aa%e4%bd%93%e5%88%b0%e8%be%be%e7%8e%87&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A%2251284376%22%7d" target=_blank>平均个体到达率</a><em>λ</em> （单位是 个每单位时间）乘以 个体的<a href="https://www.zhihu.com/search?q=%e5%b9%b3%e5%9d%87%e9%80%97%e7%95%99%e6%97%b6%e9%97%b4&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A%2251284376%22%7d" target=_blank>平均逗留时间</a>W。这里有一个点，如果系统是串行的，那么可以参考CPU发射，将他们的L累加；如果是并行的，需要取最小的L作为结果。</p><p>举个简单的例子，分析一个负载均衡的TLS Offload系统的性能，首先分析数据是通过轮询网卡直接拷贝到用户态，然后CPU做解码分包，再之后送入SSL硬件卡做加ECC计算。因此硬件负载均衡网卡，CPU的数据普遍都强于加解密卡，就能直接从理论确定上，这里新建的性能瓶颈是来自加解密卡的性能，那加解密卡做性能建模即可。</p><p>如果想计算延时，那么little law就派上了用场，就拿上面的例子来说，网卡的qps是1000，延时是2ms；cpu的qps是10000，延时是1ms；加解密卡的qps是100，延时是1ms，那么系统的并发总量可以计算为<code>1000*2+10000*1+100*1</code>，并发度就算出来了，接下来我们非常清楚qps是100，那么延时就可以用这个值直接除以100计算得出。</p><p>这里面可能有一些要正常研发注意的地方，对于延时而言，普通的C++程序延迟内部延迟（从进程收到消息到进程发出消息）做到几百<a href="https://www.zhihu.com/search?q=%e5%be%ae%e7%a7%92&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A23853729%7d" target=_blank>微秒</a>（即亚毫秒级）是不需要特殊的努力的。<strong>而最有效的优化方式是“<a href="https://www.zhihu.com/search?q=%e5%bc%ba%e5%ba%a6%e6%b6%88%e5%87%8f&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A23853729%7d" target=_blank>强度消减</a>”，即不在于怎么做得快，而在于怎么做得少</strong>。有三个实际注意点要看到：</p><ul><li><strong>延迟和吞吐量是矛盾的</strong>，通常吞吐量上去了延迟也会跟着飚上去，因此控制负载是控制延迟的重要手段。延迟跟吞吐量的关系通常是个<a href="https://www.zhihu.com/search?q=U%e5%9e%8b%e6%9b%b2%e7%ba%bf&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A23853729%7d" target=_blank>U型曲线</a>。负载低延迟高；负载中，延迟低；负载高，延迟高</li><li><strong>延迟和资源使用率是矛盾的</strong>，做高吞吐的服务程序，恨不得把CPU和IO都跑满，资源都用完。而低延迟的服务程序的资源占用率通常低得可怜，让人认为闲着没干什么事，可以再“加码”，要抵住这种压力。就算系统到了前面说的“发烫”的程度，其资源使用率也远没有到 100%。实际上平时资源使用率低是为了准备应付突发请求，请求或消息一来就可以立刻得到处理，尽量少排队，“排队”就意味着等待，等待就意味着长延迟。消除等待是最直接有效的降低延迟的办法，靠的就是富裕的容量。</li><li><strong>延迟和可靠传输也是矛盾的</strong>，TCP做到可靠传输的办法是<a href="https://www.zhihu.com/search?q=%e8%b6%85%e6%97%b6%e9%87%8d%e4%bc%a0&amp;search_source=Entity&amp;hybrid_search_source=Entity&amp;hybrid_search_extra=%7b%22sourceType%22%3A%22answer%22%2C%22sourceId%22%3A23853729%7d" target=_blank>超时重传</a>，一旦发生重传，几百毫秒的延迟就搭进去了，因此保持网络随时畅通，避免拥塞也是控制延迟的必要手段</li></ul><h5 class="relative group">0.1.3.3 工作负载特征归纳法<div id=0133-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E7%89%B9%E5%BE%81%E5%BD%92%E7%BA%B3%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0133-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E7%89%B9%E5%BE%81%E5%BD%92%E7%BA%B3%E6%B3%95 aria-label=锚点>#</a></span></h5><p>工作负载特征归纳法，从上到下进行分析，它需要开发者对实际场景有非常深入的了解。不断提问下面的问题来进行特征归纳，进而设计测试场景。</p><ul><li>负载时谁产生的？可以参考进程ID，用户ID，进程名</li><li>负载为什么会产生？是哪个代码路径，怎么样子的调用链</li><li>负载的组成是什么？是IO？是吞吐？</li><li>负载有什么的特点？这种问题一般需要用泛性的方法去分析</li></ul><p>我是用工作负载特征法的时候，一般只用来设计测试场景，就拿RPC的测试为例，RPC框架的工作主要是IO线程做发送+送到对应的计算线程编解码，其流量特征为部分长尾数据长度及其长，那么测试场景就可以设计为10%的数据为长尾数据，这些数据随机发出，测试响应时间/延时。</p><p>工作负载特征归纳法的问题是用户很多时候并不知道负载是从哪里来的：简单的echo程序，处理一个请求只需要200-300纳秒，单个线程可以达到300-500万的吞吐。但如果多个线程协作，即使在极其流畅的系统中，也要付出3-5微秒的上下文切换代价和1微秒的cache同步代价，这种代价对开发者往往是透明的，因此这种时候我的建议还是直接对着函数做个benchmark，测一下，然后二分式地找一下工作负载来自哪里。</p><h5 class="relative group">0.1.3.4 性能测试的一般套路<div id=0134-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E4%B8%80%E8%88%AC%E5%A5%97%E8%B7%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0134-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E4%B8%80%E8%88%AC%E5%A5%97%E8%B7%AF aria-label=锚点>#</a></span></h5><p>上面的两种方法说起来还是比较粗糙和抽象的，下面给通用一些套路。</p><p>首先</p><ul><li>确定好性能基线。使用资源分析法，明确响应时间，吞吐量以及资源利用率等性能测试中的关键指标。<ul><li>可以直接用gbenchmark跑一下理想情况的关键路径，以关键路径作为理论性能的基准</li></ul></li><li>设计测试用例，使用工作负载特征归纳法逐层分析，重点是需要分析清楚负载有什么样子的特点，或者说用户的真实使用场景是什么样子的。<ul><li>对于部分场景，请求的平均qps很低，但是瞬时冲击很高，那么做性能测试就需要针对性地测试瞬时冲击。</li></ul></li><li>REVIEW测试用例合理性，对比软件测试模型是否一致，并评估测试模型是否合理。需要计算机体系结构的基础知识。</li><li>执行具体的测试，明确性能测试中的关键指标后，选择具有统计意义的数据进行测试。如果做定量测试或者对比测试，需要给出自变量和因变量的测试结果。<ul><li>这里要注意，展示结果的时候需要明确地给出测试环境的前提假设。比方说依赖数据库，那么就需要确保数据库的吞吐和延时是正常的。</li></ul></li></ul><p>我们以原先的自定义RPC框架为例模拟一下定量测试。</p><ul><li>确定性能基线：因为网络属于不可控因素，先假设网络为理想情况，网络延时为0。接下来对protobuf编解码做benchmark评估延时和QPS等数据的量级，这个结果可以作为理论性能的上限，最终测试出的系统性能偏差20%都算正常。</li><li>设计测试用例：PC框架的工作主要是IO线程做发送+送到对应的计算线程编解码，其流量特征为部分长尾数据长度极其长，那么测试场景就可以设计为10%的数据为长尾数据，这些数据随机发出，我们需要测试正常的请求响应时间/延时，是不是受到影响。</li><li>REVIEW测试用例合理性：这个就可以写文档论述软件模型是什么样子的，测试写的程序架构是什么如何如何</li><li>执行具体测试并展示结果：这里要确定自变量和因变量是什么，比方说认为网络情况理想，自变量可以是发送线程的数量，因变量可以为QPS。或者自变量是发送数据包的大小，因变量是请求的QPS。如果对比不同框架的RPC，在固定QPS的情况下，可以自变量是延时，因变量是百分比等等</li></ul><p>最后</p><h2 class="relative group">1 性能分析总览<div id=1-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E6%80%BB%E8%A7%88 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E6%80%BB%E8%A7%88 aria-label=锚点>#</a></span></h2><p>性能分析是一个很复杂的事情，可能是多个方面造成的后果。性能问题很可能出在多个子系统复杂的联系上，即便是这些子系统隔离的时候表现很好，也可能由于连锁故障产生性能问题。要理解这些问题最重要的是搞清楚各个系统下的联系。因此要求对整个系统的理解就要深刻</p><p>在轻舟做CI我们重点针对的测试就是仿真测试，而仿真测试的代码非常复杂，揉杂着cache/bazel等一堆东西。它不单纯涉及到编译的耗时，还有仿真测试load cache的延时，另外还有cpu计算的耗时，也就是说它不单纯是个计算密集型还是个io密集型，而且它往往是多个问题的集合体，同时可能有多个瓶颈问题的存在</p><p>对这种东西的性能分析，往往要集合很多人才能做分析，诸如pod数量不够，或者存储pvc/oss挂载失败的问题浅层还能直接确定并解决，一旦深入到逻辑里比方说跑的慢，那么就手足无措了。</p><h3 class="relative group">1.1 性能分析的起步和大致的方法<div id=11-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E8%B5%B7%E6%AD%A5%E5%92%8C%E5%A4%A7%E8%87%B4%E7%9A%84%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E8%B5%B7%E6%AD%A5%E5%92%8C%E5%A4%A7%E8%87%B4%E7%9A%84%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h3><p>一般分析的时候先考虑程序是什么类型，在华耀做的负载均衡系统就是io密集型，而轻舟的仿真就是io密集+cpu密集型：它又能把cpu吃慢，还吃网络io来load cache（这种两者兼有的极为蛋疼）。之后，就需要衡量程序的性能，改进性能首先要研究评测哪些方面，如何评价，比方说吞吐量，响应时间，延时，并发，使用率，饱和度等等。最后就是针对性的采用各种方法。</p><h4 class="relative group">1.1.1 资源分析法<div id=111-%E8%B5%84%E6%BA%90%E5%88%86%E6%9E%90%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#111-%E8%B5%84%E6%BA%90%E5%88%86%E6%9E%90%E6%B3%95 aria-label=锚点>#</a></span></h4><p>资源分析分析是内部哪个资源达到了极限，从而导致问题的出现。我们目前可以简单地将资源分类为下面几个类别，内容是具体的术语来表明关注点。实际上针对性地我们就是在提问比方说使用率，饱和度，错误</p><ul><li>网络IO<ul><li>iops：每秒发生的输入/输出的次数</li><li>响应时间：一次操作完成的时间（比方说load cache）</li><li>延时：等待服务的时间，这里面实际上藏着很多问题，因为网络延时设计的范围很广：dns延时，tcp三次握手延时，数据传输延时等等</li></ul></li><li>磁盘IO<ul><li>iops：如上面，就不赘述了</li><li>响应时间</li><li>延时：</li><li>使用率：</li></ul></li><li>CPU：<ul><li>负载：这里又暗藏一个东西，负载可能不是说任务太多了，而是说任务跑的太久了</li></ul></li><li>内存：<ul><li>使用率</li></ul></li><li>文件系统：<ul><li>响应时间：</li></ul></li></ul><h4 class="relative group">1.1.2 工作负载法<div id=112-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#112-%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E6%B3%95 aria-label=锚点>#</a></span></h4><p>工作负载分析则分析是内部哪个部分在疯狂占用负载，从而导致问题。这个东西实际上就有点类似perf火焰图了，这里面藏着一个问题就是负载重的不一定就是导致延时增加的东西。比方说阿里云的人就是典型的工作负载法，直接查负载，哪里不对就往哪里blame。</p><p>业务负载画像需要直接理解实际运行的业务复杂， “消除不必要的工作”就往往是优化的起点，这要求用户了解</p><ul><li>负载时谁产生的？可以参考进程ID，用户ID，进程名</li><li>负载为什么会产生？是哪个代码路径，怎么样子的调用链</li><li>负载的组成是什么？是IO？是吞吐？</li><li>负载有什么的特点？这种问题一般需要用泛性的方法去分析</li></ul><p>这里要重点提出来一个60s观察法， 这个是在bpf之巅里面提到的分析，可以帮助我们建立一个直观的最初的印象，确定排查的方向。即先执行一些简单的命令看看有什么问题：</p><ul><li><p>uptime</p></li><li><p>dmesg|tail</p></li><li><p>vmstat 1，r的列表示cpu上正在执行和等待执行的进程数量，这个不包含IO，标准来说Average number of kernel threads that are runnable, which includes threads that are running and threads that are waiting for the CPU.。而b指的是被block的进程，一般是被IO阻塞，Average number of kernel threads in the VMM wait queue per second. This includes threads that are waiting on filesystem I/O or threads that have been suspended due to memory load control，free指空闲内存，si和so指示页换入和换出，这些值不为0，说明系统内存紧张。us,sy,id,wa,st都是cpu的运行时间戏份，st是指被窃取时间，主要针对虚拟化环境。cs代表每秒上下文切换次数，一般如果超过10000就意味着上下文过量了。此时一般祭出pidstat -w 5查看上下文抢占的情况。下面是我一次调试runner问题的记录，pidstat的使用看下面，有写<figure><img class="my-0 rounded-md" loading=lazy src=imgs/vmstat_analysis.png alt=1bcefd1d-42e7-495e-b931-892d41a9ccc6></figure></p></li><li><p>mpstat -P ALL 1，如果usr出现100的占用，一般是单个线程阻塞，如果是iowait高就得看看io，如果sys高就得看看系统调用</p></li><li><p>pidstat 1，针对进程显示cpu占用情况，-w显示上下文抢占情况，-w的结果重点关注下面两列。安装命令为<code>apt-get install sysstat 或者是sudo yum install sysstat</code></p><ul><li><strong>cswch</strong>：自愿上下文切换，进程运行时由于<strong>系统资源不足</strong>，如IO,内存等原因不得不进行切换。</li><li><strong>nvcswch</strong>：非自愿上下文切换，比如时间片用完，系统调度让其他任务运行，或者<strong>竞争CPU</strong>的时候也会发生。</li></ul></li><li><p>iostat -xz 1，r/s,w/s,rkB/s,wkB/s是指每秒向设备发出的读写次数，读写字节数。使用这些指标对业务负载画像即可察觉问题。await：IO的平均响应时间以ms为单位，超过预期的平均响应时间可以视为设备已经饱和或者设备层面有问题的表征。%util代表设备利用率，一般大于60代表性能变差</p></li><li><p>free -m</p></li><li><p>sar -n DEV 1</p></li><li><p>sar -n TCP,ETCP 1</p></li><li><p>top</p></li></ul><h3 class="relative group">1.1.3 延时分析法<div id=113-%E5%BB%B6%E6%97%B6%E5%88%86%E6%9E%90%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#113-%E5%BB%B6%E6%97%B6%E5%88%86%E6%9E%90%E6%B3%95 aria-label=锚点>#</a></span></h3><p>对于延时的分析方法存在延时分析法，这个方法就非常直接了，就是针对延时的二分法：</p><ol><li>存在请求延时吗？（有的）</li><li>请求时间花在cpu上吗？（不在）</li><li>不花在cpu的时间花在哪里了？（文件系统i/o）</li><li>文件系统的io花在了磁盘io/还是锁竞争？（磁盘io）</li></ol><h3 class="relative group">1.2 性能分析的工具<div id=12-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h3><p>我们现在可以使用的工具已经非常多了，这给我们带来很多的方便。</p><h4 class="relative group">1.2.1 计数器类型工具<div id=121-%E8%AE%A1%E6%95%B0%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#121-%E8%AE%A1%E6%95%B0%E5%99%A8%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h4><p>针对系统级别：</p><ul><li>vmstat</li><li>mpstat</li><li>iostat</li><li>netstat</li><li>sar</li></ul><p>针对进程级别：</p><ul><li><p>ps：用来查进程状态，延时分析的时候可以调研进程处于哪几种状态。</p><ul><li><p>可以用这个命令来判断进程（线程）on-cpu占wallclock总的时间比例：</p><pre tabindex=0><code>ps -eo time,pid,etime | grep [PID]
+</code></pre></li><li><p>进程状态的汇总：on-cpu（执行）；off-cpu（可运行；匿名换页；睡眠：等待包括网络，块设备和数据/文本页换入在内的io；锁：等待获取同步锁，或者等待其它线程；空闲：等待工作）</p></li><li><p>针对各个cpu状态可以做更细分工作</p><ul><li>执行：检查执行的是用户态还是内核态，确定哪些代码路径消耗cpu，消耗了多少</li><li>可运行：检查整个系统的cpu负载，可能是系统的资源不足？</li><li>匿名换页：检查整个系统的内存使用情况和限制</li><li>睡眠：分析阻塞应用程序的资源是什么，下面给一些具体的工具<ul><li>pidstat -d ：判断在等待磁盘io还是睡眠</li><li>pstack，这个一般是针对睡眠达到s级别的，这次对仿真运行过久的排查就是用pstack确定的</li></ul></li><li>锁：识别锁和持有锁过久线程，确定为什么花了那么久</li></ul></li></ul></li><li><p>top：top往往用来分析进程占用cpu的比例，对于cpu密集型程序，如果占用cpu很少，那明显确定有问题。</p><ul><li>top将执行时间汇报为%CPU，即</li></ul></li><li><p>pmap</p></li><li><p>/proc/[pid]下的各种进程信息的汇总</p><ul><li>stat进程状态和统计，直接看这个https://man7.org/linux/man-pages/man5/proc.5.html，里面有每个列的汇总</li><li>limits实际的资源限制</li></ul></li><li><p>pstack：直接打印线程栈，显示线程在干什么，如果几次打印线程都阻塞在curl上，那么大概率网络io有点问题</p></li></ul><h4 class="relative group">1.2.2 追踪类型工具<div id=122-%E8%BF%BD%E8%B8%AA%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#122-%E8%BF%BD%E8%B8%AA%E7%B1%BB%E5%9E%8B%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h4><p>追踪方面的工具相比较而言可以给我们更直接的观察</p><ul><li>dtrace</li><li>bpftrace</li><li>perf</li></ul><p>dtrace：针对dtrace我觉得不用多看了，毕竟bpftrace都出来那么久了，感觉没必要再坚持老黄历了。</p><h5 class="relative group">1.2.2.1 bpftrace<div id=1221-bpftrace class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1221-bpftrace aria-label=锚点>#</a></span></h5><p>bpftrace：bpftrace，比较新的内核都支持，注意这里比较新的是指4.19之后的linux kernel，所以目前实际上我们都可以做分析了，下面给出来几个简单的例子，这里注意我不会过多的纠结于语法，也就是说重点是介绍某个工具可用，给个简单的例子，然后继续</p><ul><li>funccount，统计内核态或者用户态函数是否被调用过，该函数被调用过几次。方向明确的时候，针对具体函数可以做分析。</li><li>stackcount，负责对内核态或者用户态函数发生调用链分析，比方说我们认为某个函数被调用是有问题，想查查到底是哪几个地方大量调用就可以使用这个函数。方向明确的时候，针对具体函数可以做分析</li><li>trace，trace函数是多用途函数。它可以用来显示包括：1某个函数被调用的时候，参数是什么？2函数的返回值是什么？3函数的调用链是什么？这个功能对于内存泄漏问题排查会有比较大的帮助。比方说我可以直接同时记录申请内存 & 释放内存的函数，然后查询哪些函数路径里面的内存没被释放掉。当然，这也是需要自己手动去比较的。方向明确的时候，针对具体函数可以做分析</li><li></li></ul><p>perf：具体的如何用perf做分析的就直接看这个链接好了https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/monitoring_and_managing_system_status_and_performance/monitoring-application-performance-with-perf_monitoring-and-managing-system-status-and-performance</p><h2 class="relative group">2 针对具体方面的分析<div id=2-%E9%92%88%E5%AF%B9%E5%85%B7%E4%BD%93%E6%96%B9%E9%9D%A2%E7%9A%84%E5%88%86%E6%9E%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E9%92%88%E5%AF%B9%E5%85%B7%E4%BD%93%E6%96%B9%E9%9D%A2%E7%9A%84%E5%88%86%E6%9E%90 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 CPU<div id=21-cpu class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-cpu aria-label=锚点>#</a></span></h3><h4 class="relative group">2.1.0 关于CPU<div id=210-%E5%85%B3%E4%BA%8Ecpu class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#210-%E5%85%B3%E4%BA%8Ecpu aria-label=锚点>#</a></span></h4><p>CPU和硬件资源直接的管理者是kernel，kernel决定了cpu的调度和状态的切换。这里的状态值得是用户态和内核态，用户态程序进入内核态有两种情况：发起syscall就会显式地进入内核态；如果有缺页中断会隐式地进入内核态。这里面藏着一点，如果有大量的中断，确实可能导致CPU上的进程被打断，在华耀的时候就见过网卡大量中断，中断上半段必须立刻执行从而干扰了进程执行。但是这种情况的确定是明显能从数据当中看出来的，会打断所有的程序。软件发起的中断一般是软中断，而硬件发起的中断是硬中断</p><p>从上面的描述可以看出来，使线程脱离cpu执行的情况有：</p><ul><li>主动脱离，线程阻塞于IO，锁或者主动休眠sleep</li><li>被动脱离，线程运行时长超过了调度器分配的时间片，或者高优先的任务抢占。</li></ul><p>这种线程的切换实际上要保存包括栈，页表等信息被称为上线问切换。</p><h4 class="relative group">2.1.1 CPU分析的方法<div id=211-cpu%E5%88%86%E6%9E%90%E7%9A%84%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#211-cpu%E5%88%86%E6%9E%90%E7%9A%84%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h4><p>方法，对cpu做性能分析的方法如此之多，可以分析的指标又如此之多，所以中断关注什么呢？可以看看系统负载是否均衡，cpu是不是调度的均匀：</p><ul><li>工具法：实际上就是可用的工具全用一遍，检查是不是有什么明显的问题。但是这个有个问题就是，工具爆出来的问题可能只是个红鲱鱼，真正的问题不在这里。而且这种排查方式往往占用大量的时间。针对工具法的流程如下，是一个从全程到细节的分析过程：<ul><li>uptime：检查负载平均数来确认cpu负载时随时间上升还是下降，负载平均数超过了cpu数量通常代表cpu饱和</li><li>vmstat：每秒运行vmstat，然后检查空余列</li><li>mpstat：检查单个热点cpu，挑出来可能的线程拓展性问题</li><li>top/prstat：看哪个进程和用户是cpu消耗大户。需要多赘述一句，top命令有很多种显示方法，默认情况下， <code>top</code> 显示单CPU的使用率结果. 在多核心操作系统上，使用shift+i可以让操作系统显示占整个进程的百分比个数。切换模式的结果如下。这引发了一个下面的问题，在云环境下，如果配置k8s的limit为1，那么每时每刻容器里面真正在CPU上面执行的确实只有一个线程（尽管它使用了时间片来显示多个进程/线程在同时运行）<ul><li><strong>Irix mode</strong>：进程的CPU使用率是基于单个CPU核心的，所有核心的使用率可以累加，因此可以超过100%。</li><li><strong>Solaris mode</strong>：进程的CPU使用率是针对整个系统的，不论有多少个CPU核心被使用，最多显示为100%。</li></ul></li><li>pidstat/prstat：把cpu消耗大户分解为用户和系统时间</li><li>Perf/dtrace/stap/cpustat:profile</li></ul></li><li>负载特征归纳：这个重点就是分析平均负载；用户时间和系统时间的比例；系统调用频率；中断频率；如果程序花了大量的时间在系统调用中，那么就可以用这个方法来确定到底为什么慢。</li><li>profiling：这个就是拿dtrace/perf等方面一点一点去看，究竟哪些path的频率高</li><li>优先级调优：这个说白了就是调整nice值，正的nice代表降低进程优先级，而负值代表提高优先级。</li></ul><h4 class="relative group">2.1.2 CPU分析的工具<div id=212-cpu%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#212-cpu%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h4><p>工具：</p><ul><li><p>uptime：用来显示系统的平均负载，如果认为是性能不足负载过重，可以用这个来检查。平均负载表示了对cpu资源的需求，通过汇总正在运行的线程数和正在排队等待运行的线程数计算得出。如果平均负载大于CPU数量，那么说明CPU不足以服务线程</p><pre tabindex=0><code>qcraft@BJ-vgdog:~$ uptime
+#最后三个值分别代表1min，5min，15min的平均负载
+ 16:12:45 up 4 days,  3:22,  2 users,  load average: 1.14, 1.65, 1.46
+</code></pre></li><li><p>vmstat：</p></li><li><p>mpstat: mpstatl报告每个cpu的统计信息，参考这个：https://man7.org/linux/man-pages/man1/mpstat.1.html，列CPU表示cpu号，%usr代表用户态，%sys为内核态，%iowait：io等待，%irq，硬件中断，%soft软件中断，%idle空闲；</p><pre tabindex=0><code>qcraft@BJ-vgdog:~$ mpstat -P ALL 1
+Linux 5.4.0-42-generic (BJ-vgdog) 	2022年06月05日 	_x86_64_	(24 CPU)
+
+16时23分21秒  CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+16时23分22秒  all    0.00    0.00    0.08    0.00    0.00    0.00    0.00    0.00    0.00   99.92
+16时23分22秒    0    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+16时23分22秒    1    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+16时23分22秒    2    0.99    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00   99.01
+16时23分22秒    3    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00    0.00  100.00
+</code></pre></li><li><p>ps：这个不用多说</p></li><li><p>gdb: 也不用多说</p></li><li><p>pidstat：这个命令按照进程或者线程数量打印CPU用量，很直接的结果，实际上</p></li><li><p>time & ptime:这个也不用多说了，输出运行用户态时间+sys时间+wallclock时间</p></li><li><p>来说说怎么使用bpftrace做分析，</p></li></ul><h3 class="relative group">2.1.3 分析CPU的几种具体方法<div id=213-%E5%88%86%E6%9E%90cpu%E7%9A%84%E5%87%A0%E7%A7%8D%E5%85%B7%E4%BD%93%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#213-%E5%88%86%E6%9E%90cpu%E7%9A%84%E5%87%A0%E7%A7%8D%E5%85%B7%E4%BD%93%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h3><p>我们来看下面几种重点的分析案例中的具体手段，注意，这下面都是给出工具，从工具出发的具体手段。这里使用的工具是bpf</p><h4 class="relative group">2.1.3.0 通用分析<div id=2130-%E9%80%9A%E7%94%A8%E5%88%86%E6%9E%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2130-%E9%80%9A%E7%94%A8%E5%88%86%E6%9E%90 aria-label=锚点>#</a></span></h4><p>通用分析的时候一般第一步是分析到底是什么问题，一般入手就是两种情况：</p><ol><li>目的非常明确，我知道我想分析的程序是什么，比方说就是仿真的主程序simulator_main跑得慢，那么直接针对性的用pidstat/pstack看花费时间在哪里，进而查询到底是本身在文件系统、io(磁盘，网络)上。还是单纯的cpu没抢到。</li><li>我不知道我要分析什么，我需要首先查询负载，检查每个cpu的状态mpstat。检查io的状态。如果能找到可疑的程序，那么检查这个程序的耗时等东西。</li></ol><p>通用分析的工具包括CPU分析的工具里面提到的东西，和下面的bpf的工具。</p><ul><li><p>execsnoop：这个工具会列出来新创建出来的进程，分析负载方面的问题。试想这样子的场景，pod启动失败，对应于一个docker进程，根据日志/启动时间+execsnoop的日志我们就能找到对应的进程号，然后就可以不断的看top里面该进程的状态是D？S？R？一个良好的起点就出现了。</p></li><li><p>gdb：gdb &ndash;q &ndash;n &ndash;ex bt &ndash;batch &ndash;pid xxx 使用这个命令打印出栈在干啥，有的时候发现进程不知道在干啥就可以打印出来具体的栈，看看到底在干啥</p></li><li><p>exitsnoop：这个工具可以列出来pid，ppid运行时长和退出码，分析进程之间的关系和它们所耗费的时间的时候是个非常有效的提示点</p></li><li><p>opensnoop：这个工具用来分析</p></li><li><p>profile：和perf一样，直接进行采样，设想这样的用法：我们使用profile发现某个函数比方说~SIM_CACHE花了大量时间，那么到底是跑的慢还是跑的次数很多呢？调用前面的functount算下调用多少次，就可以排查了。profile会以49hz的频率记录用户态和内核态的调用栈。除了在不知道咋回事的时候用profile看调用栈，使用profile也可以针对一两个函数做分析，比方说想分析malloc都是哪里申请的，那就调用profile查看到malloc的调用栈啥的。</p></li><li><p>offcputime：offcputime会打印出来进程阻塞时候的栈，或者说调用链。我们可以用火焰图进行分析。这里很有用的是火焰图片svg，可以点击进去继续进行分析</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>offcputime -f -p <span class=k>$(</span>pgrep mysqld<span class=k>)</span> <span class=m>10</span> &gt; out.offcputime.txt
+</span></span><span class=line><span class=cl>flamegraph.pl --width<span class=o>=</span><span class=m>800</span> --color<span class=o>=</span>io --title<span class=o>=</span><span class=s2>&#34;Off-CPU Time Flame Graph&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>	--countname<span class=o>=</span>us &lt; out.offcputime.txt &gt; out.offcputim.svg
+</span></span></code></pre></div></li><li><pre tabindex=0><code>/opt/homebrew/Cellar/flamegraph/1.0_1/bin/flamegraph.pl --width=800 --color=io --title=&#34;Off-CPU Time Flame Graph&#34; --countname=us &lt; out.offcputime.txt &gt; out.offcputim.svg
+</code></pre></li><li></li></ul><h4 class="relative group">2.1.3.1 分析锁<div id=2131-%E5%88%86%E6%9E%90%E9%94%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2131-%E5%88%86%E6%9E%90%E9%94%81 aria-label=锚点>#</a></span></h4><p>一般认为锁是导致程序睡眠的原因的话属于大部分问题分析的最后一步了，这种锁的争用要么及其冥想，要么很令人迷惑所幸bpf里面也有分析的软件</p><ul><li><p>pmlock：会显示出来调用锁的路径和等待的延迟，输出的格式一般是：先是锁的地址，然后具体的调用路径，最后是等待的时间</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/20220612154941499.png alt=image-20220612154941499></figure></p></li><li><p>pmheld：显示某些路径持有锁和持有的时间</p></li><li><p>deadlock：显示死锁，这个说起来是显示锁的调用顺序</p></li></ul><h4 class="relative group">2.1.3.2 分析负载或者进程/线程睡眠<div id=2132-%E5%88%86%E6%9E%90%E8%B4%9F%E8%BD%BD%E6%88%96%E8%80%85%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E7%9D%A1%E7%9C%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2132-%E5%88%86%E6%9E%90%E8%B4%9F%E8%BD%BD%E6%88%96%E8%80%85%E8%BF%9B%E7%A8%8B%E7%BA%BF%E7%A8%8B%E7%9D%A1%E7%9C%A0 aria-label=锚点>#</a></span></h4><p>线程/进程睡眠的时间原因就几种：</p><ul><li>负载重，进程优先级不高，被其它线程抢占了。可以看看uptime，runqlat，runqlen</li><li>本身代码的问题，有网络io/很重的磁盘io。这个针对具体进程分析cpudist</li><li>系统有大量的磁盘io/中断，强行打断了。调用mpstat看irqs，或者看下一小节。</li></ul><p>确认是不是负载重的问题，分析可以使用下面的工具进行分析。</p><ul><li><p>runqlat：当cpu负载很重，我们想证明这一点的时候，除了使用uptime的后三列来论证。也可以使用该工具，该工具统计的信息是每个线程（任务）等待CPU的耗时。这个工具有什么用呢？我们都知道编译的时候是clang多线程编译的，如果编译的线程数量设置的不对，可能就会发生资源利用不充分的情况。CPU超载的情况下就会发生下图，这样子就是明显的离群点。当然使用sar也能发现这样子的问题。下面的图片显示了线程等待时间的微秒是多少，可以看到0->15s有很多，16384 -> 32767有一个明显的离群点，这就证明了配置的错误，或者说是性能不足。</p><pre tabindex=0><code># runqlat
+Tracing run queue latency... Hit Ctrl-C to end.
+^C
+     usecs               : count     distribution
+         0 -&gt; 1          : 233      |***********                             |
+         2 -&gt; 3          : 742      |************************************    |
+         4 -&gt; 7          : 203      |**********                              |
+         8 -&gt; 15         : 173      |********                                |
+        16 -&gt; 31         : 24       |*                                       |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 30       |*                                       |
+       128 -&gt; 255        : 6        |                                        |
+       256 -&gt; 511        : 3        |                                        |
+       512 -&gt; 1023       : 5        |                                        |
+      1024 -&gt; 2047       : 27       |*                                       |
+      2048 -&gt; 4095       : 30       |*                                       |
+      4096 -&gt; 8191       : 20       |                                        |
+      8192 -&gt; 16383      : 29       |*                                       |
+     16384 -&gt; 32767      : 809      |****************************************|
+     32768 -&gt; 65535      : 64       |***                                     |
+</code></pre></li><li><p>runqlen：另一个显示性能是否繁忙的工具，显示有多少个线程在等待运行，显示等待队列的信息，同样可以确定负载。但是显示运行等待队列并不如显示运行等待时间靠谱，等待时间是一等指标，等待队列是二等指标，想想看超市排队的时候排队时间是关注重点，排队人数是稍次级的工具。那么为什么需要runqlen呢？因为它可以从侧面反映问题，而且它对性能造成的影响低。</p></li><li><p>cpudist：这个工具的作用是统计每次线程唤醒后在cpu上执行的时长分布，它可以针对具体的进程执行分析，只需要制定pid。我们实际上是希望某些程序能够尽量多占用cpu的，这个工具不用直接去查/proc/[pid]/stat里面的信息。设想我们某天保存了一个仿真测试正常执行的oncpu分布，过了两天仿真测试忽然变慢了，我们可以对比下看看到底是哪里的变化。下面是我在台式机上做分析的时候给出的统计，可以看到每个线程执行的时间很短。但整体还是一个正态分布的效果。</p><pre tabindex=0><code>root@BJ-vgdog:/# /usr/share/bcc/tools/cpudist  10 1
+Tracing on-CPU time... Hit Ctrl-C to end.
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 1095     |**                                      |
+         2 -&gt; 3          : 5130     |**********                              |
+         4 -&gt; 7          : 6286     |************                            |
+         8 -&gt; 15         : 7448     |**************                          |
+        16 -&gt; 31         : 20146    |****************************************|
+        32 -&gt; 63         : 7442     |**************                          |
+        64 -&gt; 127        : 2461     |****                                    |
+       128 -&gt; 255        : 527      |*                                       |
+       256 -&gt; 511        : 152      |                                        |
+       512 -&gt; 1023       : 112      |                                        |
+      1024 -&gt; 2047       : 59       |                                        |
+      2048 -&gt; 4095       : 40       |                                        |
+      4096 -&gt; 8191       : 47       |                                        |
+      8192 -&gt; 16383      : 28       |                                        |
+root@BJ-vgdog:/#
+</code></pre><p>对于任务很重的情况，可能会有线程超过了CPU调度器分配的运行失常，从而导致了被动的上下文切换的情况，下面的图有非常明显的离群点，4-15ms，</p><pre><code> root@BJ-vgdog:/# /usr/share/bcc/tools/cpudist  10 1
+ Tracing on-CPU time... Hit Ctrl-C to end.
+ usecs               : count     distribution
+     0 -&gt; 1          : 1095     |****************************************|
+     2 -&gt; 3          : 5130     |****                                    |
+     4 -&gt; 7          : 6286     |*****************************           |
+     8 -&gt; 15         : 7448     |*******************************         |
+    16 -&gt; 31         : 20146    |********                                |
+    32 -&gt; 63         : 7442     |******                                  |
+    64 -&gt; 127        : 2461     |****                                    |
+   128 -&gt; 255        : 527      |*                                       |
+</code></pre><p>root@BJ-vgdog:/#</p></li><li><p>threaded：很多时候，我们分析的软件时多线程的，那么这些线程多久使用一次cpu就需要采样分析，使用threaded.bt就能做这样子的事情</p></li><li><p>offcputime：虽然上面已经说过一次了，不过还是要专门提一下offcputime因为它确实好用，offcputime会统计并输出线程offcpu的原因和时间，换言之会给出来栈，因此可以分析为什么线程没在cpu上运行，这个工具可以用来分析为什么线程没在cpu上运行。如果是有睡眠或者syscall的原因可以用这个看出来。</p></li></ul><h4 class="relative group">2.1.3.3 分析软中断soft interrupt（syscall）/和硬中断<div id=2133-%E5%88%86%E6%9E%90%E8%BD%AF%E4%B8%AD%E6%96%ADsoft-interruptsyscall%E5%92%8C%E7%A1%AC%E4%B8%AD%E6%96%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2133-%E5%88%86%E6%9E%90%E8%BD%AF%E4%B8%AD%E6%96%ADsoft-interruptsyscall%E5%92%8C%E7%A1%AC%E4%B8%AD%E6%96%AD aria-label=锚点>#</a></span></h4><p>一般直观的可以用pstack或者软中断上去看下线程在干什么，然后调用相应的工具。</p><ul><li>syscount：这个工具用来调查syscall占用时间长的问题，它会打印出来系统调用的排行表。然后我们可以用profile发现到底是什么慢了</li><li>softirqs & hardirqs：mpstat工具用%soft & %irq来显示软中断，硬中断，也可以用这两个工具来做分析</li><li>argdist：</li><li>trace：</li><li>bpftrace：</li></ul><h3 class="relative group">2.2 内存<div id=22-%E5%86%85%E5%AD%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E5%86%85%E5%AD%98 aria-label=锚点>#</a></span></h3><p>对于内存方面，我发现有些人认识并不清楚，性能差了就往缺页终端，内存swap了方面去猜测，这种如果是内存引起的性能问题是需要明确数据证明的，不能靠猜测。按照bpf之巅的方法，一般排查流程是：</p><ul><li></li></ul><p>实际上这段时间我们遇到内存的问题并不多，一次是内存泄露的排查，最后用memleak查了出来；另一次是没有内存泄露，用memleak确定了一下，最后强制malloc把释放的内存还给了操作系统解决。</p><h4 class="relative group">2.2.1 内存排查的工具<div id=221-%E5%86%85%E5%AD%98%E6%8E%92%E6%9F%A5%E7%9A%84%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#221-%E5%86%85%E5%AD%98%E6%8E%92%E6%9F%A5%E7%9A%84%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h4><p>工具还是以bpf的为主：</p><ul><li>oomkill，用来追踪是什么程序需要内存从而触发的oom kill，和谁被oomkill掉了。同时还会显示当前系统的负载</li><li>memleak，用来排查没释放的内存，但这个工具依然只是调试工具，可能会导致性能降低到十分之一的级别</li><li>mmapsnoop，跟踪mmap系统调用，</li><li>brkstack，跟踪brk系统调用</li><li>faults，跟踪缺页中断触发时候的系统路径，会打印出来调用栈。这个时候可以用来解释进程内存的增长。这个是有火焰图可以用来统计具体是哪里触发的。</li><li>swapin</li></ul><h3 class="relative group">2.3 文件系统<div id=23-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F aria-label=锚点>#</a></span></h3><p>当问题出到文件系统和IO的时候，问题往往就不是那么好分析了。需要开发人员对于操作系统有基本的认识：</p><p>一般来说，应用程序向文件系统发送的请求是逻辑IO，如果这些逻辑IO最终由磁盘设备服务，那么就会变成物理IO&mdash;应用程序通过posxi到系统库，然后到系统调用。到了系统调用之后要么直接裸io，要么走文件系统io:用vfs一点一点到磁盘设备。linux为了应对性能的挑战，启用了多种缓存技术这些缓存包括：</p><ul><li>页缓存：页缓存是缓存的虚拟内存页，包括文件的内容和IO穿冲的信息，简单来说就是page cache。注意<strong>linux支持写回模式处理文件系统写操作，仙还村脏页，再写回，避免阻塞IO</strong></li><li>inode缓存：索引节点是文件系统用来描述所需对象的一个数据结构体，linux维持这个是因为检查权限或者读取其他数据的时候，这个经常用到</li><li>目录缓存：dcache，这个缓存了从目录元素名到VFS inode之间的映射关系，这可以提高路径名查找的速度。</li></ul><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/linux-fs-stack.jpeg alt=linux-fs-stack></figure></p><p>针对文件系统，我们通常需要解答很多细节的问题，比方说：</p><ul><li>发往文件系统的请求有哪些？按照类型计数</li><li>文件系统的读请求多少？</li><li>有多少写IO是同步请求？</li><li>文件系统的延迟来自哪里？磁盘？调用路径？还是锁？</li><li>文件系统延迟的分布情况如何？</li><li>Dcache和Icache的命中率和命空率是多少？</li></ul><p>下面给一种通用的IO排查方法：</p><ul><li>首先识别挂载了哪些盘，df/fdisk啥的</li><li>检查文件系统的容量，看看磁盘是不是满了。之后找个空闲的机器看看IO Usage多少</li><li>使用opensnoop查看正在打开那些文件，使用filelife查找是否存在短期稳健</li><li>查找非常慢的文件系统操作，按照进程和文件名观察，可以用ext4slower,btrfsslower,zfsslower</li><li>检查文件系统的延迟分布，比方说ext4dist，btrfsdist，zfsdist等</li><li>检查页缓存命中率</li><li>使用vfsstat比较逻辑IO和物理IO的命中率和数量的区别</li></ul><p>可用的BPF工具：</p><p>因为linux传统工具分析文件系统的不多，所以我直接写BPF工具了</p><ul><li><p>opensnoop，这个就不多赘述了</p></li><li><p>statsnoop，stat用来获取文件信息，这个东西过多也可能造成性能问题</p></li><li><p>fmapfault：用来跟踪内存映射文件的时候的缺页错误</p></li><li><p>filelife：显示文件的生命周期</p></li><li><p>vfsstat：这个是针对VFS调用，用来统计VFS调用，比方说读、写、创建、打开、的次数。文件打开是相对较慢的操作，需要进行路径查找，创建文件描述符啥的</p></li><li><p>vfscount：这个是用来显示vfs函数的次数的</p></li><li><p>vfssize：用直方图的方式统计VFS读取尺寸和写入尺寸，并且按照进程名，VFS文件名和操作类型分类</p></li><li><p>fileslower：显示延迟超过某个阈值的同步模式文件读取和写入，下面的命令可以看到写入了大量的源代码文件，其延迟非常恐怖，竟然达到了200甚至4000ms的级别</p><pre tabindex=0><code>root@hangzhou-arm03:/usr/share/bcc/tools# ./fileslower -p 24959
+Tracing sync read/writes slower than 10 ms
+TIME(s)  COMM           TID    D BYTES   LAT(ms) FILENAME
+0.261    skyframe-evalu 18233  W 1535     200.59 central_b_splines.svg
+0.261    skyframe-evalu 18248  W 4279     201.55 AccessKey.cpp
+0.464    skyframe-evalu 18233  W 1559     203.51 central_b_splines.svg
+0.464    skyframe-evalu 18248  W 989      203.48 AttachGroupPolicyRequest.cpp
+0.668    skyframe-evalu 18233  W 1606     203.55 central_b_splines.svg
+0.668    skyframe-evalu 18248  W 1283     203.42 ContextKeyTypeEnum.cpp
+4.968    skyframe-evalu 18233  W 1521    4299.95 central_b_splines.svg
+4.976    skyframe-evalu 18248  W 3424    4307.99 ContextKeyTypeEnum.cpp
+5.176    skyframe-evalu 18233  W 466      201.83 differential_entropy.svg
+5.184    skyframe-evalu 18248  W 1612     202.68 GetPolicyVersionResult.cpp
+5.380    skyframe-evalu 18233  W 3936     202.40 digamma____float128.svg
+5.388    skyframe-evalu 18248  W 4364     202.50 InstanceProfile.cpp
+</code></pre></li><li><p>filetop，关注读写最频繁的文件，这个可以用来找热点文件</p></li><li><p>writesync</p></li><li><p>cachestat：用来显示页缓存的命中率，一般来说页缓存命中率应该很高才对，如果命中率能达到100%，那么这个效率就很高了</p></li><li><p>writeback：显示页缓存的协会操作，包括：页扫描的时间，脏页写入磁盘的时间，写回时间的类型，持续的时间</p></li><li><p>dcstat和dcsnoop</p></li><li><p>xfsslower:跟踪xfs文件系统操作，对超过阈值的慢速操作打印出来每个事件的详细信息，跟踪的操作有read/write/open/fsync</p></li><li><p>xfsdist：以直方图的方式，统计操作的延迟read/write/open/fsync</p></li><li><p>ext4dist</p></li><li><p>ext4slower:用来追踪ext4比较慢的操作</p><pre tabindex=0><code>root@hangzhou-arm03:/usr/share/bcc/tools# ./ext4slower
+Tracing ext4 operations slower than 10 ms
+TIME     COMM           PID    T BYTES   OFF_KB   LAT(ms) FILENAME
+13:37:03 skyframe-evalu 27776  W 8192    110456    203.52 boost_1_76_0.tar.gz
+13:37:03 skyframe-evalu 26315  W 6929    1         203.96 Recommendation.h
+13:37:03 skyframe-evalu 25278  W 508     0         200.85 DescribeMapRequest.cpp
+13:37:03 skyframe-evalu 24408  W 6204    16        206.56 brent_minima.html
+13:37:03 skyframe-evalu 25278  W 2259    5         201.86 test_gcd.cpp
+13:37:03 skyframe-evalu 27439  W 8192    19        201.58 reverse_128.hpp
+13:37:03 skyframe-evalu 27439  W 2391    0         204.91 test_read_format_zip_encryption_
+13:37:03 skyframe-evalu 24959  W 2575    0         206.25 DeleteLogGroupRequest.h
+13:37:03 skyframe-evalu 27439  W 5428    0         206.37 UpdateVpcLinkRequest.h
+13:37:03 skyframe-evalu 26315  W 8192    427       207.77 pcl_horz_large_pos.bmp
+13:37:03 skyframe-evalu 28681  W 8192    86528     207.81 boost_1_76_0.tar.gz
+13:37:03 skyframe-evalu 26315  W 8192    3744      207.81 libxml2-2.9.12.tar.gz
+13:37:03 skyframe-evalu 27439  W 8192    20592     203.83 pcl-1d3622c1e624994bc013e3e66bc5
+13:37:03 skyframe-evalu 26315  W 884     0         202.81 bind.hpp
+13:37:03 skyframe-evalu 29981  W 2898    26        203.15 tokenizer.cc
+13:37:03 skyframe-evalu 24959  W 3825    296       207.59 hypergeometric_1f1_log_large.ipp
+13:37:03 skyframe-evalu 26315  W 422     0         202.99 UntagResourceRequest.h
+13:37:03 skyframe-evalu 25278  W 587     0         202.62 GetMapGlyphsRequest.cpp
+13:37:03 skyframe-evalu 24408  W 4754    90        207.67 brent_minima.html
+13:37:03 skyframe-evalu 25278  W 715     0         202.98 test_kn.cpp
+13:37:03 skyframe-evalu 27439  W 8192    7         207.62 reverse_256.hpp
+13:37:03 skyframe-evalu 27439  W 391     0         207.12 test_read_format_zip_filename_cp
+13:37:03 skyframe-evalu 24959  W 5520    0         207.10 DescribeLogGroupsRequest.h
+13:37:03 skyframe-evalu 26315  W 8192    3816      207.81 libxml2-2.9.12.tar.gz
+13:37:03 skyframe-evalu 27439  W 8192    20656     203.84 pcl-1d3622c1e624994bc013e3e66bc5
+13:37:08 skyframe-evalu 26315  W 8192    493      4715.70 pcl_horz_large_pos.bmp
+13:37:08 skyframe-evalu 27439  W 4462    3        4723.10 APIGatewayClient.cpp
+13:37:08 skyframe-evalu 28681  W 8192    86600    4723.81 boost_1_76_0.tar.gz
+13:37:08 skyframe-evalu 26315  W 8192    3824     4515.97 libxml2-2.9.12.tar.gz
+</code></pre></li><li><p>icstat：跟踪inode缓存的查找操作</p></li><li><p>bufgrow：查看换从缓存的内部情况，展示页缓存里面的块也增长情况</p></li></ul><h3 class="relative group">2.4 IO<div id=24-io class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#24-io aria-label=锚点>#</a></span></h3><p>我个人对io的认识并不深刻，前几天实际上就分析遇到过xavier（arm64）机器io占用极高的问题，大概四个核的iowait高达90%，但是无论使用iotop还是iftop都没看到什么可疑的东西。最后我重启了系统，恢复正常。但是这个事情算是无疾而终，实际上我后来回想出问题的地方，觉得我的分析有两大谬误：</p><ul><li>iowait高是起因还是结果？如何分析这个事情？iowait高智能说明操作延时很高</li><li>磁盘或者网络io只是外因，重点应该分析文件系统，只关注磁盘/网络往往是错误的。</li></ul><h4 class="relative group">2.3.1 IO的基本知识<div id=231-io%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#231-io%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86 aria-label=锚点>#</a></span></h4><p>这里的IO和文件系统拆开说了，我们只说IO了。IO操作在块IO层会进入一个队列，由调度器进行调度，传统调度器使用一个全局共享请求队列，这个队列有单独的锁保护，在高IO的情况下就有性能瓶颈。新的IO调度器拆分为不同的CPU不同的队列，但是总体来讲，等待时长是在块服务层调度器队列和设备分发队列中等待的时间。服务时长是从设备发布请求到请求完成的时间。</p><p>现在的IO设备往往自己还有一个缓存，所以这个是时候的问题分析就变得复杂，总之</p><p>所以实际上我们分析的事情应该针对</p><h3 class="relative group">2.3.2 IO分析的方法<div id=232-io%E5%88%86%E6%9E%90%E7%9A%84%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#232-io%E5%88%86%E6%9E%90%E7%9A%84%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h3><p>分析的时候一般需要先分析一些基础信息：</p><ul><li>操作频率和操作类型</li><li>文件io吞吐量：需要考虑文件系统缓存有多大？</li><li>文件io大小</li><li>读写比例</li><li>同步读写比例</li><li>文件随机读写</li></ul><h3 class="relative group">2.3.3 磁盘io分析的工具<div id=233-%E7%A3%81%E7%9B%98io%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#233-%E7%A3%81%E7%9B%98io%E5%88%86%E6%9E%90%E7%9A%84%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h3><p>传统工具部分，观察</p><ul><li><p>iostat，最常用的工具一般是iostat -dxz 1使用，其中rrqm/s是每秒进入对了和被合并的读请求，wrqm/s是每秒进入对了和被合并的写请求。当系统发现一个新的io读写请求和另一个io读写请求位置相邻的时候，两个io就会被合并。r/s和w/s是合并一哦呼每秒完成的读或者写请求。这里面对于同步io，我们要管线r_await或者w_await，await是平均IO请求市场，也就是设备的响应时间，包括在驱动队列中的等待时间和设备的实际响应时长，单位为ms</p><pre tabindex=0><code>Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+loop0            0.00    0.00      0.00      0.00     0.00     0.00   0.00   0.00    0.00    0.00   0.00     2.50     0.00   0.00   0.00
+vda              6.61 1021.96    136.05  25014.27     0.00  2482.40   0.06  70.84    0.43    0.41   0.37    20.58    24.48   0.05   4.86
+
+Device            r/s     w/s     rkB/s     wkB/s   rrqm/s   wrqm/s  %rrqm  %wrqm r_await w_await aqu-sz rareq-sz wareq-sz  svctm  %util
+vda              1.00    8.00      8.00    360.00     0.00    82.00   0.00  91.11    0.00    0.00   0.00     8.00    45.00   0.00   0.00
+</code></pre></li><li><p>blktrace</p></li></ul><p>上面都是传统工具，我们重点看bpf的工具了，针对磁盘IO发生的性能诊断工具其应用的层次如下</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/bcc_io_tools.jpeg alt=bcc_io_tools></figure></p><ul><li><p>biolatency。该工具用直方图统计块IO设备的延迟信息，这里的设备延迟是从向设备发出请求到请求完成的全部时间，包括了在操作系统内部的派对时间。给一个简单例子，下面按照10s来统计写入./biolatency -Q -F 10，这个会包括操作系统的排队时间（-Q，A -Q option can be used to include time queued in the kernel.），按照IO操作的类型区分（-F），从而区分同步写等flag的区别。下面的图片，同步写有明显的双峰</p><pre tabindex=0><code>root@hangzhou-arm03:/usr/share/bcc/tools# ./biolatency -Q  -F 10
+Tracing block device I/O... Hit Ctrl-C to end.
+
+
+flags = Write
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 18       |******                                  |
+       256 -&gt; 511        : 35       |***********                             |
+       512 -&gt; 1023       : 111      |*************************************   |
+      1024 -&gt; 2047       : 120      |****************************************|
+      2048 -&gt; 4095       : 67       |**********************                  |
+      4096 -&gt; 8191       : 9        |***                                     |
+
+flags = Sync-Write
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 10       |****************************************|
+       256 -&gt; 511        : 1        |****                                    |
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 4        |****************                        |
+
+flags = NoMerge-Write
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 0        |                                        |
+       512 -&gt; 1023       : 20       |********************************        |
+      1024 -&gt; 2047       : 25       |****************************************|
+      2048 -&gt; 4095       : 9        |**************                          |
+      4096 -&gt; 8191       : 1        |*                                       |
+
+flags = NoMerge-Sync-Write
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 0        |                                        |
+       512 -&gt; 1023       : 19       |****************************************|
+      1024 -&gt; 2047       : 18       |*************************************   |
+</code></pre></li><li><p>biosnoop，biosnoop用来针对每个磁盘IO打印一行信息，可以方便地确定写入的延迟。下面的例子发现一只在写入jbd2/vda3-8的进程的写操作。</p><pre tabindex=0><code>30.954642   jbd2/vda3-8    471    vda     W 17496216   65536     3.16
+30.954707   jbd2/vda3-8    471    vda     W 17499928   65536     2.30
+30.954861   jbd2/vda3-8    471    vda     W 17500056   65536     2.43
+30.954873   jbd2/vda3-8    471    vda     W 17496344   65536     3.38
+</code></pre></li><li><p>biotop，可以认为是iotop的现代版本，用来显示正在操作的io行为</p></li><li><p>bitesize</p></li><li><p>seeksize</p></li><li><p>biopattern</p></li><li><p>biostacks：跟踪完整io栈，一些后台进程可以被追踪</p></li><li><p>bioerr</p></li><li><p>iosched：跟踪io请求在io调度器里面排队的时间，并且安装调度器名称分组显示</p></li><li><p>scsilatency：跟踪scsi命令以及对应的延迟分布的工具</p></li><li><p>nvmelatency：</p></li></ul><h3 class="relative group">2.5 网络<div id=25-%E7%BD%91%E7%BB%9C class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#25-%E7%BD%91%E7%BB%9C aria-label=锚点>#</a></span></h3><p>或许有点奇怪，实际上网络的问题我查的不多，因为很多时候网络的问题都是直接看统计报表即可</p><p>常用工具</p><ul><li>ss</li><li>Ip</li></ul><h3 class="relative group">2.5 安全<div id=25-%E5%AE%89%E5%85%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#25-%E5%AE%89%E5%85%A8 aria-label=锚点>#</a></span></h3><p>作为新兴工具，bpf在安全方面还是很先进的。bpf可以协助检查正在执行进程，检查网络连接和系统权限，检查正在被调用系统内核。此外bpf也可以用来追踪检查软件漏洞</p><p>常用工具：</p><ul><li>elfsnoop</li><li>modsnoop</li><li>bashreadline：跟踪bash交互的命令</li><li>shellsnoop：镜像另一个shell会话的输出</li><li>ttysnoop</li><li>eperm：舰艇permission失败，但是在具有高IO的系统里，开销可能会很高</li><li>tcpreset：跟踪tcp发送重置数据包</li><li>capable：检查线程能力模型（参考零信任学习）的进程，会显示安全能力号，安全能力代码名称，</li></ul><h2 class="relative group">2 性能分析的案例和常见的调优手段<div id=2-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%A1%88%E4%BE%8B%E5%92%8C%E5%B8%B8%E8%A7%81%E7%9A%84%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E7%9A%84%E6%A1%88%E4%BE%8B%E5%92%8C%E5%B8%B8%E8%A7%81%E7%9A%84%E8%B0%83%E4%BC%98%E6%89%8B%E6%AE%B5 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 git慢的问题排查<div id=21-git%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-git%E6%85%A2%E7%9A%84%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5 aria-label=锚点>#</a></span></h3><p>我为啥写这个事情呢？因为这个过程当中我一开始以为是性能问题，后来发现似乎和性能无关，最后还是发现性能问题。这个属于第二类性能问题，即一开始没有明确目标，需要先找到问题是啥然后再解决。</p><p>2022年6月的时候，我们的gitlab出现两个问题：1 push代码忽然很慢，2 提交代码经常报错500</p><p>这里面两个问题同时出现，以至于我们以为这是同一个问题，实际上是两个问题，提交代码报错500，经过追踪是gitlab内部ruby报的错误。然后开始查push慢的问题，一开始以为是gitaly和gitlab-workhorse的东西（这两个干啥的可以直接搜索下），在机器负载重的情况下这两个占用cpu能占到5个cpu，负载重的时候uptime显示的负载能到60多（我们机器才32c），但是后来发现及时是负载清的时候，push代码也很慢，Nmmmm，换个思路。排查下push代码的时候发生了什么</p><p>启动execsnoop监控启动的进程和参数，exec log可以清晰的看到参数和具体启动的时间戳，看了下发现似乎29307也就是git rev-list花了好长的时间啊，那么到底是这样子吗？还是说启动的早，退出的早？</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>exec.log
+</span></span><span class=line><span class=cl>10:37:21 git              <span class=m>28706</span>   <span class=m>2005</span>      <span class=m>0</span> /opt/gitlab/embedded/bin/git -c core.fsyncObjectFiles<span class=o>=</span><span class=nb>true</span> -c gc.auto<span class=o>=</span><span class=m>0</span> -c core.autocrlf<span class=o>=</span>input -c core.alternateRefsCommand<span class=o>=</span><span class=nb>exit</span> <span class=m>0</span> <span class=c1># -c receive.fsckObjects=true -c receive.fsck.badTimezone=ignore -c receive.advertisePushOptions=true -c receive.hideRefs=refs/environments/ -c receive.hideRefs=refs/keep-around/ -c ...</span>
+</span></span><span class=line><span class=cl>10:37:33 git              <span class=m>29306</span>   <span class=m>28706</span>     <span class=m>0</span> /opt/gitlab/embedded/libexec/git-core/git unpack-objects --pack_header<span class=o>=</span>2,5 --strict<span class=o>=</span><span class=nv>badtimezone</span><span class=o>=</span>ignore
+</span></span><span class=line><span class=cl>10:37:33 ps               <span class=m>29307</span>   <span class=m>1975</span>      <span class=m>0</span> /bin/ps -o <span class=nv>rss</span><span class=o>=</span> -p <span class=m>1975</span>
+</span></span><span class=line><span class=cl><span class=c1>#为什么你这个慢？你到底干了什么？这时候它还是个黑盒</span>
+</span></span><span class=line><span class=cl>10:37:33 git              <span class=m>29309</span>   <span class=m>28706</span>     <span class=m>0</span> /opt/gitlab/embedded/libexec/git-core/git rev-list --objects --stdin --not --all --quiet --alternate-refs --progress<span class=o>=</span>Checking connectivity 
+</span></span><span class=line><span class=cl>10:37:57 pre-receive      <span class=m>30076</span>   <span class=m>28706</span>     <span class=m>0</span> /opt/gitlab/embedded/service/gitaly-ruby/git-hooks/pre-receive
+</span></span><span class=line><span class=cl>10:37:57 gitaly-hooks     <span class=m>30076</span>   <span class=m>28706</span>     <span class=m>0</span> /opt/gitlab/embedded/bin/gitaly-hooks pre-receive
+</span></span><span class=line><span class=cl>10:37:58 update           <span class=m>30116</span>   <span class=m>28706</span>     <span class=m>0</span> /opt/gitlab/embedded/service/gitaly-ruby/git-hooks/update refs/heads/x x x x x/y y y y y y/z z z z z 051676603877ed329f2e525227dc46a71ff4987f 2e2d1501e78d1ac69cc1072d4d9dd5a14e245fdf
+</span></span></code></pre></div><p>启动exitsnoop监控启动的进程运行的时常，发现这个29309确实很慢，花了23.36s，那么它干啥了呢？</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>exit.log
+</span></span><span class=line><span class=cl>10:37:33.790 git              <span class=m>29306</span>   <span class=m>28706</span>   <span class=m>29306</span>   0.03    <span class=m>0</span>
+</span></span><span class=line><span class=cl>10:37:57.156 git              <span class=m>29309</span>   <span class=m>28706</span>   <span class=m>29309</span>   23.36   <span class=m>0</span>
+</span></span><span class=line><span class=cl>10:37:58.384 gitaly-hooks     <span class=m>30076</span>   <span class=m>28706</span>   <span class=m>30076</span>   1.23    <span class=m>0</span>
+</span></span><span class=line><span class=cl>10:37:58.395 gitaly-hooks     <span class=m>30116</span>   <span class=m>28706</span>   <span class=m>30116</span>   0.01    <span class=m>0</span>
+</span></span><span class=line><span class=cl>10:37:58.474 git              <span class=m>28706</span>   <span class=m>2005</span>    <span class=m>28706</span>   36.70   <span class=m>0</span>
+</span></span></code></pre></div><p>启动opensnoop看看开了哪些文件，我猜测git就是个版本管理（文件管理）所以超时可能和文件有关。打开以后一看，时间非常均匀的分布在遍历gitlab的objects目录下，它检索了所有的文件，使用ls -laR ｜ wc -l看看多少个文件，哇，286313个，看起来是文件太多导致的，奇怪了git gc哪里去了？</p><p>我们的代码库曾经出现过几次bad object大型事故，因此直接执行git gc会出错，会不会是这个原因导致文件越来越多，越来越慢呢？首先执行fsck找到broken link，然后删除掉这些坏掉的ref，大部分是keep-around/xxxxxx，然后执行git gc，看了下文件数量减少到3万多，重新git rev-list，时间减少为4s，bingo</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1># --name-objects是需要的，找到broken的ref</span>
+</span></span><span class=line><span class=cl>git fsck --full --name-objects
+</span></span><span class=line><span class=cl><span class=c1>#多次操作</span>
+</span></span><span class=line><span class=cl>git update-ref -d broken_ref_0
+</span></span><span class=line><span class=cl>git update-ref -d broken_ref_1
+</span></span><span class=line><span class=cl>git update-ref -d broken_ref_3
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl><span class=c1># 最后操作</span>
+</span></span><span class=line><span class=cl>git gc
+</span></span></code></pre></div><h3 class="relative group">2.2 cassandra连接内存泄露<div id=22-cassandra%E8%BF%9E%E6%8E%A5%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-cassandra%E8%BF%9E%E6%8E%A5%E5%86%85%E5%AD%98%E6%B3%84%E9%9C%B2 aria-label=锚点>#</a></span></h3><p>这几天在排查仿真运行过慢的时候，发现我们的一部分服务器会出现严重的内存的泄露，这些服务的共同点都是连接cassandra服务器。然后开始协助排查，本来想祭出ebpf排查，发现线上环境的linux kernel是3.10.xxx，是个阿里云的内部kernel，装不了perf也装不了ebpf，Nmmmm，本地起了个虚拟机，然后同事写了个MR加了一个test发送数据来测试，观测到明显的内存增长。这时候祭出ebpf memleak：</p><pre tabindex=0><code>#这个路径是我在宿主机用源码装的memleak路径
+# -a, --show-allocs     show allocation addresses and sizes as well as callstacks，显示调用次数，申请的大小，返回的地址和调用栈
+# -p 指定pid，就是那个79xxxx
+# 最后的500，interval in seconds to print outstanding allocations，就是显示malloc 和 free没有抵消掉的地址，
+/usr/share/bcc/tools/memleak             -ap      79xxxx     500
+</code></pre><p>使用ebpf的memleak的时候要注意两点：</p><ul><li>record一次的时间要比较长，最好保证一个测试连接的完整完成，从而去除那些智能指针引起的内存泄漏错误判断，我这里设置的是500，bazel test small size 300 s，这里放了500s</li><li>record的时候，最好加上-a来显示call stack，会有很大帮助</li></ul><p>最后发现Session::prepare大量调用malloc没释放，按照这个函数的名字找了一下我们调用cassandra sdk的代码，发现里面犯了一个经典的内存错误，一个变量存储一块必须被释放的内存地址，这个变量后来又直接赋值了新的内存地址，没释放这个老得内存，总之就是申请的内存地址直接覆盖了，然后第一次申请的内存没释放导致的。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=m>36696</span> bytes in <span class=m>1529</span> allocations from stack
+</span></span><span class=line><span class=cl>                xxxxx  datastax::internal::core::Session::prepare<span class=o>(</span>char const*, unsigned long<span class=o>)</span>+0x219 <span class=o>[</span>libcassandra.so.2.14.1<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=m>210744</span> bytes in <span class=m>8781</span> allocations from stack
+</span></span><span class=line><span class=cl>                xxxxx  datastax::internal::core::Session::prepare<span class=o>(</span>char const*, unsigned long<span class=o>)</span>+0x219 <span class=o>[</span>libcassandra.so.2.14.1<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=m>600000</span> bytes in <span class=m>25000</span> allocations from stack
+</span></span><span class=line><span class=cl>                xxxxx  datastax::internal::core::SimpleDataTypeCache::by_value_type<span class=o>(</span>unsigned short<span class=o>)</span>+0x3f <span class=o>[</span>libcassandra.so.2.14.1<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=m>3000000</span> bytes in <span class=m>12500</span> allocations from stack
+</span></span><span class=line><span class=cl>                datastax::internal::core::Session::prepare<span class=o>(</span>char const*, unsigned long<span class=o>)</span>+0x4f <span class=o>[</span>libcassandra.so.2.14.1<span class=o>]</span>
+</span></span><span class=line><span class=cl>                0x000000000000005f      <span class=o>[</span>unknown<span class=o>]</span>
+</span></span><span class=line><span class=cl>                0x65766571204f544e      <span class=o>[</span>unknown<span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=m>3299736</span> bytes in <span class=m>12499</span> allocations from stack
+</span></span><span class=line><span class=cl>                xxxxx  datastax::internal::core::Session::prepare<span class=o>(</span>char const*, unsigned long<span class=o>)</span>+0x1ac <span class=o>[</span>libcassandra.so.2.14.1<span class=o>]</span>
+</span></span><span class=line><span class=cl>                0x000000000000005f      <span class=o>[</span>unknown<span class=o>]</span>
+</span></span><span class=line><span class=cl>                0x00007fdc600008d0      <span class=o>[</span>unknown<span class=o>]</span>
+</span></span><span class=line><span class=cl>        <span class=m>9400000</span> bytes in <span class=m>12500</span> allocations from stack
+</span></span></code></pre></div><h3 class="relative group">2.3 crypto_c++ 慢<div id=23-crypto_c-%E6%85%A2 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-crypto_c-%E6%85%A2 aria-label=锚点>#</a></span></h3><p>事情的起因是这几天（在美团的时候）在开发给网关用的auth sdk，功能性测试通过了，然后给出性能测试时候发现性能低的令人发指，数据如下：</p><table><thead><tr><th>Crypto++算法</th><th>签发QPS</th><th>验签QPS</th></tr></thead><tbody><tr><td>HMAC</td><td>15475</td><td></td></tr><tr><td>ECDSA</td><td>358</td><td></td></tr><tr><td>RSA</td><td>206</td><td></td></tr></tbody></table><p>我本来是想用perf的，但是不知道为啥一直收不到数据，就切换成了gperftools。对签名/验签算法优化是不能更进一步了，因此注释掉代码里面的编码解码部分，然后用gbenchmark测试，发现结果为编码需要44054ns。我傻了，这也太长了！</p><pre tabindex=0><code>---------------------------------------------------------------------
+Benchmark                           Time             CPU   Iterations
+---------------------------------------------------------------------
+BM_MultiThreaded/threads:1      44054 ns        43773 ns        15721
+
+
+Load Average: 0.31, 0.12, 0.03
+---------------------------------------------------------------------
+Benchmark                           Time             CPU   Iterations
+---------------------------------------------------------------------
+BM_MultiThreaded/threads:1      28770 ns        28596 ns        24289
+</code></pre><p>使用gperftool分析调用时长，发现cryptopp库的base64编解码性能太差了！所以再次修改base64/base64 url safe编码的实现，从新测试性能得到上面第二个benchamark结果。</p><pre tabindex=0><code>Total: 85 samples
+			 /*使用了过多的临时对象并释放，对内存消耗比较大  */
+       7   8.2%   8.2%        7   8.2% _int_free   //整数释放,具体的调用链
+       6   7.1%  22.4%        6   7.1% _int_malloc //整数申请
+       5   5.9%  28.2%       11  12.9% __GI___libc_malloc
+       /* cryptopp库性能太低，消耗太大直接拖慢了性能 */
+       4   4.7%  38.8%        7   8.2% CryptoPP::BaseN_Encoder::Put2
+       2   2.4%  61.2%        2   2.4% CryptoPP::AlgorithmParametersTemplate::~AlgorithmParametersTemplate
+       1   1.2%  75.3%        2   2.4% CryptoPP::Filter::AttachedTransformation
+       1   1.2%  76.5%        1   1.2% CryptoPP::SecBlock::New
+       1   1.2%  77.6%        1   1.2% CryptoPP::StringSinkTemplate::Put2
+       1   1.2%  78.8%        1   1.2% CryptoPP::member_ptr::get
+       1   1.2%  94.1%        1   1.2% boost::any_cast
+       1   1.2%  96.5%        1   1.2% operator delete
+</code></pre><p>再次使用gperf分析得到：</p><pre tabindex=0><code>Total: 28 samples
+       2   7.1%   7.1%        2   7.1% _int_free
+       2   7.1%  14.3%        2   7.1% _int_malloc
+       2   7.1%  21.4%        4  14.3% std::unique_ptr::reset
+       1   3.6%  25.0%        4  14.3% AuthBasicClaim::AuthBasicClaim
+       1   3.6%  28.6%        1   3.6% AuthBasicClaim::InputParamType
+       1   3.6%  32.1%        5  17.9% AuthClaim::AuthClaim@684c54
+       1   3.6%  35.7%        1   3.6% AuthClaim::operator&lt;
+       1   3.6%  39.3%        1   3.6% AuthToken::SetAud
+       1   3.6%  42.9%        3  10.7% __GI___libc_malloc
+       1   3.6%  46.4%        1   3.6% __gnu_cxx::__normal_iterator::operator++
+       1   3.6%  50.0%        1   3.6% __gnu_cxx::__ops::_Iter_equals_val::operator
+       1   3.6%  53.6%        1   3.6% __gnu_cxx::operator!=
+       1   3.6%  57.1%        1   3.6% std::_Head_base::_M_head
+       1   3.6%  60.7%        5  17.9% std::_Rb_tree::_M_create_node
+       1   3.6%  64.3%        8  28.6% std::_Rb_tree::_M_insert_unique
+       1   3.6%  67.9%        1   3.6% std::_Tuple_impl::_Tuple_impl
+       1   3.6%  71.4%        3  10.7% std::__find_if
+       1   3.6%  75.0%        1   3.6% std::allocator_traits::select_on_container_copy_construction
+       1   3.6%  78.6%        1   3.6% std::forward
+       1   3.6%  82.1%        2   7.1% std::get
+       1   3.6%  85.7%        2   7.1% std::replace
+       1   3.6%  89.3%        1   3.6% std::string::assign
+       1   3.6%  92.9%        1   3.6% std::swap
+       1   3.6%  96.4%        2   7.1% std::unique_ptr::operator bool
+       1   3.6% 100.0%        2   7.1% std::unique_ptr::unique_ptr
+       0   0.0% 100.0%        3  10.7% AuthBasicClaim::AuthBasicClaim@68872c
+</code></pre><p>优化之后的sample结果，有大量的内存申请和释放，这很正常，内部编码没开启优化，有大量的临时变量分配之后再释放。修改成O3级别的优化，再benchmark一次看下</p><pre tabindex=0><code>---------------------------------------------------------------------
+Benchmark                           Time             CPU   Iterations
+---------------------------------------------------------------------
+BM_MultiThreaded/threads:1       9402 ns         9348 ns        74714
+</code></pre><p>还有一些问题，比方说使用shared_ptr从而避免申请释放内存，会不会比unique_ptr的效果好呢？这个优化以后发现性能提高了1/20，算是比较小就暂时不再考虑了。</p><h3 class="relative group">2.4 分析git仓库corrupt问题<div id=24-%E5%88%86%E6%9E%90git%E4%BB%93%E5%BA%93corrupt%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#24-%E5%88%86%E6%9E%90git%E4%BB%93%E5%BA%93corrupt%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>仓库经常性的崩溃，我目前有一个怀疑这是个by design git corrupted issue，我查明白之后会总结线索</p><h3 class="relative group">2.5 gitlab runner崩溃问题<div id=25-gitlab-runner%E5%B4%A9%E6%BA%83%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#25-gitlab-runner%E5%B4%A9%E6%BA%83%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>有一天我们的gitlab runner经常莫名其妙的被unregistered，从具体的操作来看就是runner自己cancel了自己的pod，奇特！简单看了下syslog发现提示探活失败</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>Apr <span class=m>13</span> 23:23:57 ack-ci-172 kubelet: E0413 23:23:57.435661    <span class=m>1786</span> remote_runtime.go:394<span class=o>]</span> <span class=s2>&#34;ExecSync cmd from runtime service failed&#34;</span> <span class=nv>err</span><span class=o>=</span><span class=s2>&#34;rpc error: code = DeadlineExceeded desc = context deadline exceeded&#34;</span> <span class=nv>containerID</span><span class=o>=</span><span class=s2>&#34;b7afd8d170b2542888f710fce5f6f994da5c40fdb9d943c0d779058250b49415&#34;</span> <span class=nv>cmd</span><span class=o>=[</span>/usr/bin/pgrep gitlab.*runner<span class=o>]</span>
+</span></span><span class=line><span class=cl>...
+</span></span></code></pre></div><p>莫名其妙，感觉不太正常重新开始检查，IT的同学给了一个探活超时的issue，感觉有点可能，到宿主机上开始找相关信息，dmesg没有关键信息，然后如下：！四核cpu负载高出来这么多！太tm离谱了</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1># uptime</span>
+</span></span><span class=line><span class=cl> 00:30:11 up  1:49,  <span class=m>1</span> user,  load average: 24.28, 22.19, 21.74
+</span></span><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1># cat /proc/cpuinfo| grep &#34;processor&#34;| wc -l</span>
+</span></span><span class=line><span class=cl><span class=m>4</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1>#</span>
+</span></span></code></pre></div><p>直接关闭</p><h3 class="relative group">2.6 Buildfarm Worker 构建问题分析<div id=26-buildfarm-worker-%E6%9E%84%E5%BB%BA%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#26-buildfarm-worker-%E6%9E%84%E5%BB%BA%E9%97%AE%E9%A2%98%E5%88%86%E6%9E%90 aria-label=锚点>#</a></span></h3><p>CI后台编译服务性能下降，机器并没有减配，但是速度确实减慢了，找了一个满负载的机器，buildfarm-worker-868bs（100%功率运转），先把环境装上</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1># lsb_release -a</span>
+</span></span><span class=line><span class=cl>LSB Version:	:core-4.1-amd64:core-4.1-noarch
+</span></span><span class=line><span class=cl>Distributor ID:	CentOS
+</span></span><span class=line><span class=cl>Description:	CentOS Linux release 7.9.2009 <span class=o>(</span>Core<span class=o>)</span>
+</span></span><span class=line><span class=cl>Release:	7.9.2009
+</span></span><span class=line><span class=cl>Codename:	Core
+</span></span><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1># uname -a</span>
+</span></span><span class=line><span class=cl>Linux ack-ci-172.20.6.26-online-buildfarm-worker 3.10.0-1160.76.1.el7.x86_64 <span class=c1>#1 SMP Wed Aug 10 16:21:17 UTC 2022 x86_64 x86_64 x86_64 GNU/Linux</span>
+</span></span><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1>#  yum -y install bcc-tools</span>
+</span></span></code></pre></div><p>vmstat的结果显示还好，但是看clang有比较明显的非自愿切换。做出猜测，是不是clang确实编译速度减慢了？clang被抢占是直接原因，或者说也还只是结果，而不是根本原因</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span>root@ack-ci-172 ~<span class=o>]</span><span class=c1># vmstat 1</span>
+</span></span><span class=line><span class=cl>procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+</span></span><span class=line><span class=cl> r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+</span></span><span class=line><span class=cl><span class=m>25</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>1608516</span>  <span class=m>73508</span> <span class=m>65077532</span>    <span class=m>0</span>    <span class=m>0</span>    <span class=m>24</span>   <span class=m>154</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>7</span>  <span class=m>4</span> <span class=m>89</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>27</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>1164052</span>  <span class=m>73504</span> <span class=m>64969344</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>4564</span> <span class=m>235986</span> <span class=m>76844</span> <span class=m>62002</span> <span class=m>34</span> <span class=m>10</span> <span class=m>56</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>29</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>934664</span>  <span class=m>73432</span> <span class=m>64629188</span>     <span class=m>0</span>    <span class=m>0</span>  <span class=m>1664</span> <span class=m>67045</span> <span class=m>84336</span> <span class=m>72251</span> <span class=m>35</span> <span class=m>17</span> <span class=m>48</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>27</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>1246500</span>  <span class=m>73364</span> <span class=m>64221360</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>2256</span> <span class=m>125096</span> <span class=m>96714</span> <span class=m>87624</span> <span class=m>36</span> <span class=m>11</span> <span class=m>53</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>24</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>2644012</span>  <span class=m>73372</span> <span class=m>64221348</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>2352</span> <span class=m>824785</span> <span class=m>96807</span> <span class=m>65267</span> <span class=m>35</span> <span class=m>13</span> <span class=m>51</span>  <span class=m>1</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>27</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>1990800</span>  <span class=m>73372</span> <span class=m>64227796</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>3840</span> <span class=m>13154</span> <span class=m>90636</span> <span class=m>88460</span> <span class=m>33</span> <span class=m>14</span> <span class=m>53</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>25</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>1572856</span>  <span class=m>73336</span> <span class=m>64037344</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>2288</span> <span class=m>14159</span> <span class=m>100520</span> <span class=m>97671</span> <span class=m>34</span> <span class=m>18</span> <span class=m>48</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>23</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>3231344</span>  <span class=m>73312</span> <span class=m>63839116</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>5736</span> <span class=m>171691</span> <span class=m>85444</span> <span class=m>82650</span> <span class=m>34</span> <span class=m>17</span> <span class=m>49</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=m>30</span>  <span class=m>0</span>      <span class=m>0</span> <span class=m>2974904</span>  <span class=m>73320</span> <span class=m>63843980</span>    <span class=m>0</span>    <span class=m>0</span>  <span class=m>2540</span>  <span class=m>6776</span> <span class=m>67446</span> <span class=m>46092</span> <span class=m>33</span> <span class=m>10</span> <span class=m>57</span>  <span class=m>0</span>  <span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>05:50:02      UID       PID   cswch/s nvcswch/s  Command
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>         <span class=m>1</span>      1.00      0.00  tini
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>654787</span>      0.00     14.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>654842</span>      0.00     10.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>654892</span>      0.00      2.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>654920</span>      0.00     10.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>654929</span>      0.00      2.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655140</span>      0.00      4.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655157</span>      1.00      0.00  pidstat
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655163</span>      1.00      7.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655186</span>    157.00      2.00  multi_camera_fu
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655195</span>      0.00      2.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655205</span>      0.00      3.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655214</span>      0.00     18.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655220</span>      0.00      4.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655246</span>      0.00     17.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655322</span>      0.00     15.00  clang
+</span></span><span class=line><span class=cl>05:50:03        <span class=m>0</span>    <span class=m>655360</span>      1.00     15.00  clang
+</span></span></code></pre></div><p>开始考虑查找是不是进程被非自愿地抢占了，使用命令/usr/share/bcc/tools/cpudist -P就能够针对每个进程查看在CPU上运行的时间，（偶尔）可以非常明显地可以看到java的运行非常不规律，针对clang同样发现了同样非常明显的离群点</p><pre tabindex=0><code>pid = 3034488 java
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 19       |***                                     |
+        16 -&gt; 31         : 169      |**********************************      |
+        32 -&gt; 63         : 194      |****************************************|
+        64 -&gt; 127        : 58       |***********                             |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 29       |*****                                   |
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 25       |*****                                   |
+      2048 -&gt; 4095       : 33       |******                                  |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 123      |*************************               |
+     16384 -&gt; 32767      : 88       |******************                      |
+
+pid = 3180430 clang
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 5        |***********                             |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 4        |*********                               |
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 1        |**                                      |
+      2048 -&gt; 4095       : 3        |*******                                 |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 0        |                                        |
+     16384 -&gt; 32767      : 0        |                                        |
+     32768 -&gt; 65535      : 0        |                                        |
+     65536 -&gt; 131071     : 0        |                                        |
+    131072 -&gt; 262143     : 17       |****************************************|
+</code></pre><p>再随便找一个针对具体的clang作分析，明显地看到clang被中断了好几次。所以需要查找为什么clang被中断</p><pre tabindex=0><code>[root@ack-ci-172 ~]# pidstat -w 1 | grep clang
+02:30:57 PM     0   3268780      0.00     36.00  clang
+^C[root@ack-ci-172 ~]# /usr/share/bcc/tools/cpudist -p 3268780
+Tracing on-CPU time... Hit Ctrl-C to end.
+^C
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 5        |****************************************|
+        32 -&gt; 63         : 1        |********                                |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 3        |************************                |
+       512 -&gt; 1023       : 1        |********                                |
+      1024 -&gt; 2047       : 1        |********                                |
+      2048 -&gt; 4095       : 3        |************************                |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 0        |                                        |
+     16384 -&gt; 32767      : 0        |                                        |
+     32768 -&gt; 65535      : 0        |                                        |
+     65536 -&gt; 131071     : 0        |                                        |
+    131072 -&gt; 262143     : 1        |********                                |
+    262144 -&gt; 524287     : 1        |********                                |
+    524288 -&gt; 1048575    : 1        |********                                |
+   1048576 -&gt; 2097151    : 0        |                                        |
+   2097152 -&gt; 4194303    : 1        |********                                |
+</code></pre><p>从统计的角度进行一些分析，下面的部分会从两个bazel的profile文件提取出来同样的cpp编译文件，这两个profile文件内部的编译数量是基本一致的（注意，这依然不是严格证明，因为黑盒太多，无法严格对比）之后对比两个文件执行控制流里面cpp编译的时间。bazel的编译是并行运行的，但是总体依然是反映了单“执行线程”的规律。从下面的结果可以看出来，单纯执行阶段clang的编译速度确实下降了一倍左右</p><pre tabindex=0><code># 第一个比较慢，remote编译4329个target，耗时132min。第二个快不少，remote编译4301个target，耗时66min
+mv 455610-27325538.profile slow.profile
+mv 458377-27662235.profile fast.profile
+# 提取编译的C++目标
+cat slow.profile | grep CppCompile &gt; slow.cppcompile
+cat fast.profile | grep CppCompile &gt; fast.cppcompile
+# 提取C++目标的编译文件和时间
+cat slow.cppcompile| awk  -F  &#39;,&#39; &#39;{print $2,$5}&#39; &gt; slow_simple.cppcompile
+cat fast.cppcompile| awk  -F  &#39;,&#39; &#39;{print $2,$5}&#39; &gt; fast_simple.cppcompile
+# 提取C++目标的编译文件， 本次分析slow目标共3472个，fast目标共3502个
+cat fast.cppcompile| awk  -F  &#39;,&#39; &#39;{print $2}&#39; &gt; fast_targets.cppcompile
+cat slow.cppcompile| awk  -F  &#39;,&#39; &#39;{print $2}&#39; &gt; slow_targets.cppcompile
+# 找到共同的编译文件, 共同编译的对象共2798个
+cat slow_targets.cppcompile fast_targets.cppcompile| sort | uniq -d &gt; common_targets.cppcompile
+
+# 从慢和快的profile提取共同编译的文件
+cat common_targets.cppcompile| while read line; do cat slow_simple.cppcompile|grep $line &gt;&gt; slow_common.cppcompile; done
+cat common_targets.cppcompile| while read line; do cat fast_simple.cppcompile|grep $line &gt;&gt; fast_common.cppcompile; done
+
+# 检索慢的编译平均速度
+cat slow_common.cppcompile| awk -F &#39;:&#39; &#39;{print $3}&#39; &gt; slow_time.cppcompile
+cat slow_common.cppcompile| awk -F &#39;:&#39; &#39;{print $3}&#39; &gt; slow_time.cppcompile
+
+# 求和，看下累加起来的总c++编译的时间是多少，慢的编译时间是快的1.7倍，符合我对应bazel编译慢的猜想
+awk &#39;BEGIN{sum=0}{sum+=$1}END{print sum}&#39;  slow_time.cppcompile
+168695103574
+awk &#39;BEGIN{sum=0}{sum+=$1}END{print sum}&#39;  fast_time.cppcompile
+97473692742
+</code></pre><p>那么问题就需要进一步排查，为什么clang的编译变慢了？对这一步的分析会非常麻烦，因为缺乏环境+有很多外部因素的干扰。</p><p>使用<code>ps -eLfc</code>可以在<code>CLS</code>一栏中查看进程的调度策略，clang用的是TS即SCHED_OTHER，SCHED_OTHER也被称为SCHED_NORMAL，下面的一些东西是我的猜想，机器使用的是3.10的linux kernel，SCHED_NORMAL基本上默认的linux进程调度算法，而sched_nomal实际上是倾向于优先处理io bound的进程的，所以是否会由于受到IO密集型ld.ldd的flto的影响呢？</p><p>（非完备）测试方法很简单，空闲状态下跟踪一个clang进程的cpudist，之后启动大量flto的进程做测试，再次跟踪。不启动flto的时候按照5s的频率跟踪，clang基本都是 524288 -> 1048575长时间运行，出现明显离群点的比例统计为3/121。启动flto任务之后，等待ld.ldd启用flto操作之后再去检查clang的cpudist发现出现大量下面的类型，比例为5/13（分母比较小是因为ld.ldd停止了我就退出了统计）。尽管不能证明历史原因就是因为ld.ldd引起的，不过也找到了一个影响因素。</p><pre tabindex=0><code>pid = 1429291 clang
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 2        |**************************              |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 0        |                                        |
+       512 -&gt; 1023       : 1        |*************                           |
+      1024 -&gt; 2047       : 1        |*************                           |
+      2048 -&gt; 4095       : 1        |*************                           |
+      4096 -&gt; 8191       : 2        |**************************              |
+      8192 -&gt; 16383      : 0        |                                        |
+     16384 -&gt; 32767      : 0        |                                        |
+     32768 -&gt; 65535      : 1        |*************                           |
+     65536 -&gt; 131071     : 0        |                                        |
+    131072 -&gt; 262143     : 0        |                                        |
+    262144 -&gt; 524287     : 3        |****************************************|
+pid = 1429010 clang
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 2        |**************************              |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 3        |****************************************|
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 0        |                                        |
+      2048 -&gt; 4095       : 2        |**************************              |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 0        |                                        |
+     16384 -&gt; 32767      : 0        |                                        |
+     32768 -&gt; 65535      : 0        |                                        |
+     65536 -&gt; 131071     : 1        |*************                           |
+    131072 -&gt; 262143     : 3        |****************************************|
+pid = 1429010 clang    #还是上面那个clang进程，可以看到它被打断多次
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 2        |**************************              |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 3        |****************************************|
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 0        |                                        |
+      2048 -&gt; 4095       : 2        |**************************              |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 0        |                                        |
+     16384 -&gt; 32767      : 0        |                                        |
+     32768 -&gt; 65535      : 0        |                                        |
+     65536 -&gt; 131071     : 1        |*************                           |
+    131072 -&gt; 262143     : 3        |****************************************|
+pid = 1427996 clang
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 0        |                                        |
+         2 -&gt; 3          : 0        |                                        |
+         4 -&gt; 7          : 0        |                                        |
+         8 -&gt; 15         : 0        |                                        |
+        16 -&gt; 31         : 0        |                                        |
+        32 -&gt; 63         : 0        |                                        |
+        64 -&gt; 127        : 0        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 0        |                                        |
+       512 -&gt; 1023       : 0        |                                        |
+      1024 -&gt; 2047       : 0        |                                        |
+      2048 -&gt; 4095       : 0        |                                        |
+      4096 -&gt; 8191       : 0        |                                        |
+      8192 -&gt; 16383      : 1        |****************************************|
+     16384 -&gt; 32767      : 1        |****************************************|
+     32768 -&gt; 65535      : 0        |                                        |
+     65536 -&gt; 131071     : 0        |                                        |
+    131072 -&gt; 262143     : 0        |                                        |
+    262144 -&gt; 524287     : 0        |                                        |
+    524288 -&gt; 1048575    : 1        |****************************************|
+</code></pre><h3 class="relative group">2.7 Xavier机器的IO问题<div id=27-xavier%E6%9C%BA%E5%99%A8%E7%9A%84io%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#27-xavier%E6%9C%BA%E5%99%A8%E7%9A%84io%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>依然是多个个核存在非常高的iowait，</p><pre tabindex=0><code>Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+Average:     all    2.50    0.03    1.21   38.81    0.00    0.00    0.00    0.00    0.00   57.46
+Average:       0    0.61    0.40    3.43   34.55    0.00    0.00    0.00    0.00    0.00   61.01
+Average:       1    0.80    0.00    1.20   34.27    0.00    0.00    0.00    0.00    0.00   63.73
+Average:       2    2.01    0.00    1.61   33.53    0.00    0.00    0.00    0.00    0.00   62.85
+Average:       3    0.80    0.00    2.21   15.86    0.00    0.00    0.00    0.00    0.00   81.12
+Average:       4    9.72    0.00    2.02   54.45    0.00    0.00    0.00    0.00    0.00   33.81
+Average:       5    7.24    0.00    0.80   31.39    0.00    0.00    0.00    0.00    0.00   60.56
+Average:       6    1.20    0.00    0.40   32.53    0.00    0.00    0.00    0.00    0.00   65.86
+Average:       7    1.80    0.00    1.40    0.20    0.00    0.00    0.00    0.00    0.00   96.60
+Average:       8    1.21    0.00    0.20   98.59    0.00    0.00    0.00    0.00    0.00    0.00
+Average:       9    0.80    0.00    0.40   98.80    0.00    0.00    0.00    0.00    0.00    0.00
+Average:      10    0.80    0.00    0.40   43.06    0.00    0.00    0.00    0.00    0.00   55.73
+Average:      11    5.21    0.00    1.00   27.86    0.00    0.00    0.00    0.00    0.00   65.93
+Average:      12    0.80    0.00    0.40   20.24    0.00    0.00    0.00    0.00    0.00   78.56
+Average:      13    3.81    0.00    0.40    0.00    0.00    0.00    0.00    0.00    0.00   95.79
+Average:      14    1.81    0.00    1.01   78.67    0.00    0.00    0.00    0.00    0.00   18.51
+Average:      15    1.60    0.00    2.00   17.64    0.00    0.00    0.00    0.00    0.00   78.76
+</code></pre><p>针对一个bazel进程做分析，发现等待的时间有点久</p><pre tabindex=0><code>1000     29057  1.6  0.6 26199204 429660 ?     Ssl  00:44   0:17 bazel(qcraft) --add-opens=java.base/java.nio=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED -Xverify:none -Djava.util.logging.config.file=/home/qcrafter/.cache/bazel/_bazel_qcrafter/c418f5acab2a0d971f0829ca9f48d1c3/javalog.properties -Dcom.google.devtools.build.lib.util.LogHandlerQuerier.class=com.google.devtools.build.lib.util.SimpleLogHandler$HandlerQuerier -XX:-MaxFDLimit -Djava.library.path=/home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb/embedded_tools/jdk/lib/jli:/home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb/embedded_tools/jdk/lib:/home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb/embedded_tools/jdk/lib/server:/home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb/ -Dfile.encoding=ISO-8859-1 -jar /home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb/A-server.jar --max_idle_secs=10800 --noshutdown_on_low_sys_mem --connect_timeout_secs=30 --output_user_root=/home/qcrafter/.cache/bazel/_bazel_qcrafter --install_base=/home/qcrafter/.cache/bazel/_bazel_qcrafter/install/0f213247804519331681f5a8469944bb --install_md5=0f213247804519331681f5a8469944bb --output_base=/home/qcrafter/.cache/bazel/_bazel_qcrafter/c418f5acab2a0d971f0829ca9f48d1c3 --workspace_directory=/builds/root/qcraft --default_system_javabase= --failure_detail_out=/home/qcrafter/.cache/bazel/_bazel_qcrafter/c418f5acab2a0d971f0829ca9f48d1c3/failure_detail.rawproto --expand_configs_in_place --idle_server_tasks --write_command_log --nowatchfs --nofatal_event_bus_exceptions --nowindows_enable_symlinks --client_debug=false --product_name=Bazel --option_sources=
+root@hangzhou-arm03:~# ps -eo time,pid,etime | grep 29057
+00:00:17 29057       18:20
+</code></pre><p>针对性地去看vmstat的结果，发现b那一列明显数量大，也就是说被(IO)阻塞的进程很多</p><pre tabindex=0><code>root@hangzhou-arm03:~# vmstat 1
+procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+ r  b   swpd   free   buff  cache   si   so    bi    bo   in   cs us sy id wa st
+ 2 16      0 3457712 13946072 38106688    0    0     8  1574    0    0 15  2 82  1  0
+ 1 17      0 3458236 13946072 38106692    0    0     0     0 6445 10341 10  1 31 59  0
+ 1 17      0 3458508 13946072 38106692    0    0     0     0 5005 8231  7  0 38 55  0
+ 0 13      0 3442008 13946440 38122648    0    0     0 15836 18856 33676  2  2 47 49  0
+ 0 15      0 3442112 13946440 38122648    0    0     0   356 3911 6790  0  0 43 57  0
+ 1 16      0 3442452 13946440 38122648    0    0     0     0 7766 13444  1  2 29 68  0
+ 0 17      0 3443040 13946440 38122656    0    0     0     0 4313 7236  0  0 24 75  0
+ 0 18      0 3441648 13946440 38122660    0    0     0     0 7302 12236  0  2 21 77  0
+ 1 19      0 3441072 13946440 38122660    0    0     0    20 4924 8226  4  1 25 71  0
+ 0 19      0 3440940 13946440 38122660    0    0     0   128 4747 8105  2  1 41 57  0
+ 1 19      0 3438976 13946440 38122660    0    0     0     0 4615 7832  1  1 40 59  0
+ 0 19      0 3441968 13946440 38122660    0    0     0     0 5105 8807  0  0 34 65  0
+ 0 19      0 3441712 13946440 38122660    0    0     0     0 4047 7055  1  0 29 71  0
+ 1 19      0 3441024 13946440 38122660    0    0     0    44 6129 9746  7  1 32 60  0
+ 
+root@hangzhou-arm03:~# dstat
+You did not select any stats, using -cdngy by default.
+--total-cpu-usage-- -dsk/total- -net/total- ---paging-- ---system--
+usr sys idl wai stl| read  writ| recv  send|  in   out | int   csw
+ 15   2  82   1   0| 136k   25M|   0     0 |   0     0 |6964    10k
+  0   0  18  81   0|   0     0 | 362B 2974B|   0     0 |4228  7259
+  0   1   8  91   0|   0     0 | 218k 3841B|   0     0 |5665  9887
+  7   1   6  87   0| 344k    0 | 118B  424B|   0     0 |5220  8267
+  3   1   8  88   0|  56k 4096B|1919B 4682B|   0     0 |5440  9258
+  1   1  12  86   0|   0     0 |3501B   58k|   0     0 |5478  9222
+  0   0  14  86   0|   0   136k| 118B  424B|   0     0 |4487  7801
+  1   1  12  86   0|   0     0 | 803B 1057B|   0     0 |5172  8713
+  0   0   1  98   0|   0     0 | 118B  424B|   0     0 |4651  8057
+  2   2   7  89   0|   0  2796k|  43k 2207B|   0     0 |  11k   19k
+  5   4   6  85   0|8192B    0 |  73k 2623B|   0     0 |7246    12k^C
+</code></pre><p>又看了下文件的写入延迟，这也太离谱了。。。</p><pre tabindex=0><code>root@hangzhou-arm03:/usr/share/bcc/tools# ./fileslower -p 27439
+Tracing sync read/writes slower than 10 ms
+TIME(s)  COMM           TID    D BYTES   LAT(ms) FILENAME
+47.455   skyframe-evalu 29133  W 3317     202.95 unicode_iterator.hpp
+52.190   skyframe-evalu 29151  W 8192    34993.71 pcl-1d3622c1e624994bc013e3e66...
+52.194   skyframe-evalu 29137  W 4735    34995.38 ComputeEnvironmentOrder.h
+52.402   skyframe-evalu 29151  W 8192     207.66 pcl-1d3622c1e624994bc013e3e66...
+52.414   skyframe-evalu 29137  W 2860     206.61 LinuxParameters.cpp
+82.242   skyframe-evalu 29133  W 1013    34787.80 w32_regex_traits.hpp
+82.458   skyframe-evalu 29133  W 400      206.21 integer.hpp
+</code></pre><p>然而，查看biolatency的结果发现实际上，QUEUE，就是倒数第二列（操作系统队列的排队时间），(从IO创建到发送到设备的时间并不长)，那么问题是这么回事？</p><pre tabindex=0><code>110.154892  skyframe-evalu 25278  vda     R 113660304  4096      0.00    0.69
+110.180021  skyframe-evalu 29981  vda     R 908345936  4096      0.01    0.16
+110.180148  skyframe-evalu 29981  vda     R 908345944  16384     0.00    0.09
+110.180447  skyframe-evalu 29981  vda     R 908345976  32768     0.00    0.28
+110.180936  skyframe-evalu 29981  vda     R 908345800  16384     0.01    0.26
+110.181238  skyframe-evalu 29981  vda     R 908345832  32768     0.00    0.26
+110.181454  skyframe-evalu 29981  vda     R 908345896  20480     0.00    0.46
+110.182545  skyframe-evalu 29981  vda     R 908346040  45056     0.01    0.15
+110.183457  skyframe-evalu 29981  vda     R 908148672  4096      0.00    0.28
+110.183700  skyframe-evalu 29981  vda     R 908148680  16384     0.00    0.22
+110.184168  skyframe-evalu 29981  vda     R 908148712  4096      0.00    0.09
+110.184338  skyframe-evalu 29981  vda     R 908148728  8192      0.01    0.25
+110.184377  skyframe-evalu 29981  vda     R 908148752  4096      0.00    0.29
+110.187430  skyframe-evalu 29981  vda     R 908148968  16384     0.01    0.11
+110.187906  skyframe-evalu 29981  vda     R 908149088  4096      0.01    0.08
+</code></pre><p>然后针对bazel统计下每5s的io操作强度，pidstat -dl 5，发现最慢的bazel进程也就写个4kb，一个文件解压前170MB，需要花170*1024/4*5/60 = 60h。。。这明显超时，所以io这么慢的根本原因是什么？</p><h3 class="relative group">2.8 丢包的原因<div id=28-%E4%B8%A2%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#28-%E4%B8%A2%E5%8C%85%E7%9A%84%E5%8E%9F%E5%9B%A0 aria-label=锚点>#</a></span></h3><p>在理想，有一天接入层往WAF建立连接报了大量错误</p><p>查看ss发现tcp连接为6033个</p><h3 class="relative group">2.9 优化检测程序性能<div id=29-%E4%BC%98%E5%8C%96%E6%A3%80%E6%B5%8B%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#29-%E4%BC%98%E5%8C%96%E6%A3%80%E6%B5%8B%E7%A8%8B%E5%BA%8F%E6%80%A7%E8%83%BD aria-label=锚点>#</a></span></h3><p>这两天写一个libevent+Suricata的检测程序，libevent是通信框架，Suricata是检测框架。遇到一个问题，程序性能打不上去，每个线程撑死4k的QPS，配置的Limits是8，CPU才不到200，这不是浪费了（公司收费竟然算limit收费。。。），perf暂时无法运行，先用pidstat排查，发现system很高。</p><p>一半system比较高原因有如下几种：</p><ol><li><strong>I/O 密集任务</strong>: 该进程正在执行大量的 I/O 操作，如频繁的磁盘读写或网络通信。</li><li><strong>系统调用频繁</strong>: 该进程频繁地调用系统函数，例如文件操作、网络功能、或进程间通信。</li><li><strong>进程调度频繁</strong>: 该进程可能引发了频繁的上下文切换。</li><li><strong>中断处理</strong>: 该进程可能与设备驱动程序或硬件密切交互，导致高频率的中断处理。</li></ol><pre tabindex=0><code>root@cloud-proxy-uds-test-5488b8f6c9-qxxnn:/suricata# pidstat -p 1 1
+Linux 5.10.0-3.0.1.5 (cloud-proxy-uds-test-5488b8f6c9-qxxnn)    06/18/24        _x86_64_        (32 CPU)
+
+11:48:11      UID       PID    %usr %system  %guest   %wait    %CPU   CPU  Command
+11:48:12        0         1   62.00   88.00    0.00    0.00  150.00    28  Suricata-Main
+11:48:13        0         1   82.00   84.00    0.00    0.00  166.00     0  Suricata-Main
+11:48:14        0         1   70.00   77.00    0.00    0.00  147.00    12  Suricata-Main
+11:48:15        0         1   73.00   78.00    0.00    0.00  151.00     0  Suricata-Main
+11:48:16        0         1   64.00   87.00    0.00    0.00  151.00    16  Suricata-Main
+11:48:17        0         1   75.00   79.00    0.00    0.00  154.00    10  Suricata-Main
+11:48:18        0         1   72.00   89.00    0.00    0.00  161.00    24  Suricata-Main
+11:48:19        0         1   88.00   77.00    0.00    0.00  165.00     4  Suricata-Main
+11:48:20        0         1   76.00   74.00    0.00    0.00  150.00    12  Suricata-Main
+11:48:21        0         1   73.00   75.00    0.00    0.00  148.00    30  Suricata-Main
+11:48:22        0         1   70.00   77.00    0.00    1.00  147.00    24  Suricata-Main
+11:48:23        0         1   70.00   81.00    0.00    0.00  151.00     2  Suricata-Main
+11:48:24        0         1   76.00   89.00    0.00    0.00  165.00    22  Suricata-Main
+11:48:25        0         1   90.00   77.00    0.00    0.00  167.00     6  Suricata-Main
+11:48:26        0         1   76.00   93.00    0.00    0.00  169.00     6  Suricata-Main
+11:48:27        0         1   66.00   83.00    0.00    0.00  149.00    18  Suricata-Main
+11:48:28        0         1   65.00   73.00    0.00    0.00  138.00    26  Suricata-Main
+^C
+Average:        0         1   73.41   81.24    0.00    0.06  154.65     -  Suricata-Main
+root@cloud-proxy-uds-test-5488b8f6c9-qxxnn:/suricata#
+</code></pre><p>看看进程是不是自愿发生的切换比较，使用pidstat -w -p 1，卧槽，每秒钟切换出现了几千次，这有点狠呀。第一反应是IO导致了频繁的上下文切换。</p><pre tabindex=0><code>Average:        0         1         -   3816.67      0.33  Suricata-Main
+Average:        0         -         1   3817.00      0.33  |__Suricata-Main
+Average:        0         -         7   1090.33      0.00  |__Suricata-Main
+Average:        0         -         8  15931.33      0.00  |__Suricata-Main
+Average:        0         -         9   1107.33      0.00  |__Suricata-Main
+Average:        0         -        10  15287.00      0.00  |__Suricata-Main
+Average:        0         -        11   1091.33      0.00  |__Suricata-Main
+Average:        0         -        12  15859.67      0.00  |__Suricata-Main
+Average:        0         -        13   1103.33      0.00  |__Suricata-Main
+Average:        0         -        14  15358.33      0.00  |__Suricata-Main
+Average:        0         -        15   1092.00      0.00  |__Suricata-Main
+Average:        0         -        16  15860.33      0.00  |__Suricata-Main
+Average:        0         -        17   1110.00      0.00  |__Suricata-Main
+Average:        0         -        18  15172.67      0.00  |__Suricata-Main
+Average:        0         -        19   1090.33      0.00  |__Suricata-Main
+Average:        0         -        20  15924.00      0.00  |__Suricata-Main
+Average:        0         -        21   1105.67      0.00  |__Suricata-Main
+Average:        0         -        22  15319.67      0.00  |__Suricata-Main
+Average:        0         -        23   1090.33      0.00  |__Suricata-Main
+Average:        0         -        24  15974.33      0.00  |__Suricata-Main
+Average:        0         -        25   1107.67      0.00  |__Suricata-Main
+Average:        0         -        26  15347.67      0.00  |__Suricata-Main
+Average:        0         -        27   1091.00      0.00  |__Suricata-Main
+Average:        0         -        28  15839.33      0.00  |__Suricata-Main
+Average:        0         -        29   1111.67      0.00  |__Suricata-Main
+Average:        0         -        30  15391.33      0.00  |__Suricata-Main
+Average:        0         -        31   1092.33      0.00  |__Suricata-Main
+Average:        0         -        32  15854.67      0.00  |__Suricata-Main
+Average:        0         -        33   1115.00      0.00  |__Suricata-Main
+Average:        0         -        34  15314.00      0.00  |__Suricata-Main
+Average:        0         -        35   1091.00      0.00  |__Suricata-Main
+Average:        0         -        36  15922.67      0.00  |__Suricata-Main
+Average:        0         -        37   1109.00      0.00  |__Suricata-Main
+Average:        0         -        38  15271.33      0.00  |__Suricata-Main
+Average:        0         -        39      0.00      0.00  |__Suricata-Main
+</code></pre><p>strace看下系统调用，epoll_wait占用的比例最高</p><pre tabindex=0><code>root@cloud-proxy-uds-test-5488b8f6c9-qxxnn:/suricata# strace -c -p 1
+strace: Process 1 attached
+^Cstrace: Process 1 detached
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 94.58   17.637016        3498      5042           epoll_wait
+  1.37    0.255808           8     30627           write
+  0.84    0.157116           7     20416           openat
+  0.79    0.147240           9     15250      5042 accept4
+  0.72    0.133498           6     20416           newfstatat
+  0.65    0.120828           5     20416           close
+  0.43    0.080023           7     10208           epoll_ctl
+  0.32    0.059370           5     10208           setsockopt
+  0.30    0.056014           7      7689           futex
+------ ----------- ----------- --------- --------- ----------------
+100.00   18.646913         132    140272      5042 total
+
+root@cloud-proxy-uds-test-5488b8f6c9-qxxnn:/suricata#
+</code></pre><p>第一次修改，2IO，4检测线程</p><pre tabindex=0><code>Average:        0         1         -   4699.60      0.00  Suricata-Main
+Average:        0         -         1   4699.40      0.00  |__Suricata-Main
+Average:        0         -         7   9740.40      0.00  |__Suricata-Main
+Average:        0         -         8  11321.80      0.00  |__Suricata-Main
+Average:        0         -         9  13638.20      0.20  |__Suricata-Main
+Average:        0         -        10  13704.60      0.20  |__Suricata-Main
+Average:        0         -        11  13730.00      0.20  |__Suricata-Main
+Average:        0         -        12  13689.20      0.00  |__Suricata-Main
+Average:        0         -        13      0.00      0.00  |__Suricata-Main
+</code></pre><p>第二次修改，1IO，1检测线程</p><h3 class="relative group">2.10 排查超时<div id=210-%E6%8E%92%E6%9F%A5%E8%B6%85%E6%97%B6 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#210-%E6%8E%92%E6%9F%A5%E8%B6%85%E6%97%B6 aria-label=锚点>#</a></span></h3><p>这几天盯一个超时的问题，发现每次准点CPU的使用率不高但是有大量超时，怀疑是工作负载上来处理来不及。但是只看CPU使用率很难解释，开始收集统计数据，发现一些奇怪的点</p><p>pidstat查看进程非自助切换</p><pre tabindex=0><code># 平时没有问题，进程的非自愿切换比较少
+10:46:48      UID       PID   cswch/s nvcswch/s  Command
+10:46:49        0        26     65.00      0.00  openresty
+10:46:49        0        27     60.00      0.00  openresty
+10:46:49        0        28     43.00      0.00  openresty
+10:46:49        0        29     66.00      0.00  openresty
+10:46:49        0        30     53.00      0.00  openresty
+10:46:49        0        31     58.00      0.00  openresty
+10:46:49        0        32     63.00      0.00  openresty
+10:46:49        0        33     65.00      0.00  openresty
+10:46:49        0        34     51.00      0.00  openresty
+10:46:49        0        35     54.00      0.00  openresty
+10:46:49        0        36     61.00      0.00  openresty
+10:46:49        0        37     54.00      0.00  openresty
+10:46:49        0        38     50.00      0.00  openresty
+10:46:49        0        39     57.00      0.00  openresty
+10:46:49        0        40     59.00      0.00  openresty
+</code></pre><pre tabindex=0><code>
+# 10:59出现一波明显的非自助切换
+10:58:59      UID       PID   cswch/s nvcswch/s  Command 
+10:59:00        0        26    101.00      2.00  openresty
+10:59:00        0        27    119.00      3.00  openresty
+10:59:00        0        28    134.00      0.00  openresty
+10:59:00        0        29    112.00      5.00  openresty
+10:59:00        0        30    134.00      1.00  openresty
+10:59:00        0        31    142.00      0.00  openresty
+10:59:00        0        32    132.00      2.00  openresty
+10:59:00        0        33    137.00      0.00  openresty
+10:59:00        0        34    119.00      0.00  openresty
+10:59:00        0        35    124.00      1.00  openresty
+10:59:00        0        36    113.00      2.00  openresty
+10:59:00        0        37    113.00      1.00  openresty
+10:59:00        0        38     95.00      1.00  openresty
+10:59:00        0        39    111.00      4.00  openresty
+10:59:00        0        40    138.00      1.00  openresty
+10:59:00        0        43    120.00      3.00  openresty
+10:59:00        0        44    122.00      2.00  openresty
+10:59:00        0        45    131.00      1.00  openresty
+10:59:00        0        46    110.00      6.00  openresty
+10:59:00        0        47    128.00      1.00  openresty
+10:59:00        0        48    112.00      2.00  openresty
+10:59:00        0        49    139.00      1.00  openresty
+10:59:00        0        50    114.00      2.00  openresty
+10:59:00        0        51    136.00      1.00  openresty
+10:59:00        0        52    108.00      2.00  openresty
+10:59:00        0        53    131.00      1.00  openresty
+10:59:00        0        54    109.00      2.00  openresty
+10:59:00        0        55    134.00      1.00  openresty
+10:59:00        0        56    110.00      1.00  openresty
+10:59:00        0        57    124.00      0.00  openresty
+10:59:00        0        58      3.00      0.00  openresty
+10:59:00        0      1648    119.00      2.00  openresty
+10:59:00        0      1937    100.00      1.00  openresty
+</code></pre><p>11点一波冲击，出现大量的非自愿context switch</p><pre tabindex=0><code>10:59:59      UID       PID   cswch/s nvcswch/s  Command
+11:00:00        0        25      1.00      0.00  openresty
+11:00:00        0        26     14.00     42.00  openresty
+11:00:00        0        27     14.00     49.00  openresty
+11:00:00        0        28     13.00     47.00  openresty
+11:00:00        0        29      3.00     60.00  openresty
+11:00:00        0        30     27.00     52.00  openresty
+11:00:00        0        31     17.00     61.00  openresty
+11:00:00        0        32     17.00     62.00  openresty
+11:00:00        0        33     43.00     72.00  openresty
+11:00:00        0        34     34.00     72.00  openresty
+11:00:00        0        35     20.00     46.00  openresty
+11:00:00        0        36     13.00     46.00  openresty
+11:00:00        0        37      7.00     48.00  openresty
+11:00:00        0        38     18.00     70.00  openresty
+11:00:00        0        39      9.00     64.00  openresty
+11:00:00        0        40     24.00     80.00  openresty
+11:00:00        0        43      1.00     51.00  openresty
+11:00:00        0        44     20.00     45.00  openresty
+11:00:00        0        45     17.00     56.00  openresty
+11:00:00        0        46     26.00     60.00  openresty
+11:00:00        0        47     19.00     46.00  openresty
+11:00:00        0        48     11.00     56.00  openresty
+11:00:00        0        49     20.00     60.00  openresty
+11:00:00        0        50      9.00     63.00  openresty
+11:00:00        0        51     23.00     49.00  openresty
+11:00:00        0        52     23.00     81.00  openresty
+11:00:00        0        53     10.00     49.00  openresty
+11:00:00        0        54     30.00     70.00  openresty
+11:00:00        0        55     24.00     57.00  openresty
+11:00:00        0        56     22.00     58.00  openresty
+11:00:00        0        57     22.00     49.00  openresty
+11:00:00        0        58      3.00      0.00  openresty
+11:00:00        0      1648     55.00     61.00  openresty
+11:00:00        0      1937      4.00     59.00  openresty
+
+
+11:00:00      UID       PID   cswch/s nvcswch/s  Command
+11:00:01        0        26     76.00      8.00  openresty
+11:00:01        0        27     75.00     11.00  openresty
+11:00:01        0        28     80.00      9.00  openresty
+11:00:01        0        29     78.00     12.00  openresty
+11:00:01        0        30     77.00      8.00  openresty
+11:00:01        0        31     63.00      8.00  openresty
+11:00:01        0        32     51.00     12.00  openresty
+11:00:01        0        33     59.00     23.00  openresty
+11:00:01        0        34     59.00     12.00  openresty
+11:00:01        0        35    105.00      7.00  openresty
+11:00:01        0        36     27.00     13.00  openresty
+11:00:01        0        37     52.00      9.00  openresty
+11:00:01        0        38     23.00     17.00  openresty
+11:00:01        0        39     68.00     14.00  openresty
+11:00:01        0        40     91.00      7.00  openresty
+11:00:01        0        43     51.00      9.00  openresty
+11:00:01        0        44     54.00     12.00  openresty
+11:00:01        0        45     36.00      8.00  openresty
+11:00:01        0        46     60.00     13.00  openresty
+11:00:01        0        47     61.00      9.00  openresty
+11:00:01        0        48     67.00     17.00  openresty
+11:00:01        0        49     51.00     11.00  openresty
+11:00:01        0        50     61.00     11.00  openresty
+11:00:01        0        51     74.00      7.00  openresty
+11:00:01        0        52     40.00     26.00  openresty
+11:00:01        0        53     45.00     11.00  openresty
+11:00:01        0        54     56.00     16.00  openresty
+11:00:01        0        55     40.00     11.00  openresty
+11:00:01        0        56     69.00     11.00  openresty
+11:00:01        0        57     32.00     13.00  openresty
+11:00:01        0        58      5.00      0.00  openresty
+11:00:01        0      1648     83.00     12.00  openresty
+11:00:01        0      1937     41.00     11.00  openresty
+</code></pre><p>runqlat查看</p><pre tabindex=0><code> usecs               : count     distribution
+         0 -&gt; 1          : 1284     |***********                             |
+         2 -&gt; 3          : 4408     |****************************************|
+         4 -&gt; 7          : 4381     |*************************************** |
+         8 -&gt; 15         : 1074     |*********                               |
+        16 -&gt; 31         : 156      |*                                       |
+        32 -&gt; 63         : 13       |                                        |
+        64 -&gt; 127        : 9        |                                        |
+       128 -&gt; 255        : 5        |                                        |
+       256 -&gt; 511        : 2        |                                        |
+       512 -&gt; 1023       : 22       |                                        |
+      1024 -&gt; 2047       : 2        |                                        |
+      2048 -&gt; 4095       : 12       |                                        |
+      4096 -&gt; 8191       : 10       |                                        |
+      8192 -&gt; 16383      : 6        |                                        |
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 984      |*******                                 |
+         2 -&gt; 3          : 5580     |****************************************|
+         4 -&gt; 7          : 4297     |******************************          |
+         8 -&gt; 15         : 1505     |**********                              |
+        16 -&gt; 31         : 248      |*                                       |
+        32 -&gt; 63         : 30       |                                        |
+        64 -&gt; 127        : 6        |                                        |
+       128 -&gt; 255        : 1        |                                        |
+       256 -&gt; 511        : 2        |                                        |
+       512 -&gt; 1023       : 19       |                                        |
+      1024 -&gt; 2047       : 5        |                                        |
+      2048 -&gt; 4095       : 6        |                                        |
+      4096 -&gt; 8191       : 5        |                                        |
+      8192 -&gt; 16383      : 3        |                                        |
+     16384 -&gt; 32767      : 1        |                                        |
+
+# 12:00整点几秒数据
+     usecs               : count     distribution
+         0 -&gt; 1          : 560      |******                                  |
+         2 -&gt; 3          : 3542     |****************************************|
+         4 -&gt; 7          : 3087     |**********************************      |
+         8 -&gt; 15         : 993      |***********                             |
+        16 -&gt; 31         : 486      |*****                                   |
+        32 -&gt; 63         : 363      |****                                    |
+        64 -&gt; 127        : 453      |*****                                   |
+       128 -&gt; 255        : 246      |**                                      |
+       256 -&gt; 511        : 129      |*                                       |
+       512 -&gt; 1023       : 316      |***                                     |
+      1024 -&gt; 2047       : 153      |*                                       |
+      2048 -&gt; 4095       : 493      |*****                                   |
+      4096 -&gt; 8191       : 828      |*********                               |
+      8192 -&gt; 16383      : 232      |**                                      |
+     16384 -&gt; 32767      : 4        |                                        |
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 571      |*****                                   |
+         2 -&gt; 3          : 3946     |************************************    |
+         4 -&gt; 7          : 4279     |****************************************|
+         8 -&gt; 15         : 1136     |**********                              |
+        16 -&gt; 31         : 695      |******                                  |
+        32 -&gt; 63         : 606      |*****                                   |
+        64 -&gt; 127        : 638      |*****                                   |
+       128 -&gt; 255        : 424      |***                                     |
+       256 -&gt; 511        : 271      |**                                      |
+       512 -&gt; 1023       : 580      |*****                                   |
+      1024 -&gt; 2047       : 277      |**                                      |
+      2048 -&gt; 4095       : 674      |******                                  |
+      4096 -&gt; 8191       : 979      |*********                               |
+      8192 -&gt; 16383      : 347      |***                                     |
+     16384 -&gt; 32767      : 18       |                                        |
+     32768 -&gt; 65535      : 6        |                                        |
+     65536 -&gt; 131071     : 0        |                                        |
+    131072 -&gt; 262143     : 1        |                                        |
+    262144 -&gt; 524287     : 1        |                                        |
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 1270     |**********                              |
+         2 -&gt; 3          : 3429     |*****************************           |
+         4 -&gt; 7          : 4695     |****************************************|
+         8 -&gt; 15         : 1138     |*********                               |
+        16 -&gt; 31         : 124      |*                                       |
+        32 -&gt; 63         : 7        |                                        |
+        64 -&gt; 127        : 2        |                                        |
+       128 -&gt; 255        : 5        |                                        |
+       256 -&gt; 511        : 8        |                                        |
+       512 -&gt; 1023       : 4        |                                        |
+      1024 -&gt; 2047       : 4        |                                        |
+      2048 -&gt; 4095       : 5        |                                        |
+      4096 -&gt; 8191       : 6        |                                        |
+      8192 -&gt; 16383      : 4        |                                        |
+     16384 -&gt; 32767      : 1        |                                        |
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 1419     |*********                               |
+         2 -&gt; 3          : 3267     |**********************                  |
+         4 -&gt; 7          : 5819     |****************************************|
+         8 -&gt; 15         : 1138     |*******                                 |
+        16 -&gt; 31         : 100      |                                        |
+        32 -&gt; 63         : 22       |                                        |
+        64 -&gt; 127        : 11       |                                        |
+       128 -&gt; 255        : 2        |                                        |
+       256 -&gt; 511        : 35       |                                        |
+       512 -&gt; 1023       : 11       |                                        |
+      1024 -&gt; 2047       : 2        |                                        |
+      2048 -&gt; 4095       : 3        |                                        |
+      4096 -&gt; 8191       : 4        |                                        |
+      8192 -&gt; 16383      : 3        |                                        |
+
+     usecs               : count     distribution
+         0 -&gt; 1          : 1090     |**********                              |
+         2 -&gt; 3          : 2792     |**************************              |
+         4 -&gt; 7          : 4143     |****************************************|
+         8 -&gt; 15         : 778      |*******                                 |
+        16 -&gt; 31         : 64       |                                        |
+        32 -&gt; 63         : 3        |                                        |
+        64 -&gt; 127        : 6        |                                        |
+       128 -&gt; 255        : 0        |                                        |
+       256 -&gt; 511        : 0        |                                        |
+       512 -&gt; 1023       : 1        |                                        |
+      1024 -&gt; 2047       : 3        |                                        |
+      2048 -&gt; 4095       : 3        |                                        |
+      4096 -&gt; 8191       : 1        |                                        |
+      8192 -&gt; 16383      : 3        |                                        |
+</code></pre><p>等待队列异常，等待时间过久。</p><p>之后对程序从CPU剥离的函数栈进行统计，发现函数并没有固定在某个地方被剥离CPU，换言之没有固定点。最终结论</p><ul><li>直接原因：基于Nginx做的二次开发，本身上层应用是一个耗时很长的任务，还不会有抢占，如果在某个时刻忽然受到了大量任务的冲击，一个CPU上同时排队100个任务，最后一个任务的等待时间就是100*但个任务的耗时，从而超时。而此时，其它的CPU可能只有两个任务，所以CPU使用率不均匀。</li><li>根本问题：计算时间花费时间过久，本身每次计算耗时都要花费4-5ms，这个时间对于时间敏感型程序是不可接受的</li></ul><p>这种属于哪哪都不行，就是慢，就很尴尬。</p><h3 class="relative group">可以参考的链接<div id=%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83%E7%9A%84%E9%93%BE%E6%8E%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%8F%AF%E4%BB%A5%E5%8F%82%E8%80%83%E7%9A%84%E9%93%BE%E6%8E%A5 aria-label=锚点>#</a></span></h3><p><a href=https://huataihuang.gitbooks.io/cloud-atlas/content/os/linux/kernel/tracing/diagnose_high_sys_cpu.html target=_blank>https://huataihuang.gitbooks.io/cloud-atlas/content/os/linux/kernel/tracing/diagnose_high_sys_cpu.html</a></p><p><a href=https://cloud.tencent.com/developer/article/1876605 target=_blank>https://cloud.tencent.com/developer/article/1876605</a></p><h3 class="relative group">2.11 优化后分析慢的原因<div id=211-%E4%BC%98%E5%8C%96%E5%90%8E%E5%88%86%E6%9E%90%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#211-%E4%BC%98%E5%8C%96%E5%90%8E%E5%88%86%E6%9E%90%E6%85%A2%E7%9A%84%E5%8E%9F%E5%9B%A0 aria-label=锚点>#</a></span></h3><p>参考工具库的<em>12 MPMC & SPSC</em> 和上面的2.10慢的原因分析，针对认为时任务调度到不同CPU，导致CPU使用率不均匀，超时设计了新的通信模型后，重新使用自定义的工具和线上软件（可以理解为Nginx）进行测试：</p><ul><li>自定义工具维持200/300个连接，测试，超时请求只有0.24%</li><li>线上工具测试发现结果不稳定，好的时候一个超时没有，差的时候10%都超时</li></ul><p>重新分析，按照如下步骤</p><ol><li><p>新的通信模型可以记录每毫秒来的请求个数，打出来每毫秒创建的任务数量</p></li><li><p>以每个请求的超时时延作为滑动窗口，将这个滑动窗口之内的创建请求数量累加，相当于原先的请求数量*滑动窗口的个数。需要绘制两种情况</p><ol><li>绘制线上工具测试超时很多的情况</li><li>绘制线上工具测试超时的情况</li></ol></li><li><p>计算每个窗口内能处理的请求个数，简单来说就是</p><blockquote><p>1/每个请求计算时延*CPU核心数量*超时时延$</p></blockquote></li><li><p>将第二个拿到的图和第三个拿到的图对比一下发现，红色是超时很多的情况，绿色是超时很少的情况，红色确实出现了很多超过处理请求能力的时刻，绿色则没有达到。</p></li></ol><p>最终得出的结论，线上工具打请求冲击过快。。。</p><img src=imgs/alot_timeout.png alt=image-20250312101612806 style=zoom:50%><pre tabindex=0><code></code></pre><h2 class="relative group">2 Half 云环境的资源限制<div id=2-half-%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-half-%E4%BA%91%E7%8E%AF%E5%A2%83%E7%9A%84%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6 aria-label=锚点>#</a></span></h2><p>和常规的CPU使用不同，在云环境下，出现了很多新问题，因为k8s limit关键字的出现，很多新的问题爆发出来。错误地配置CPU limit，导致程序响应不及时，触发了大量的限流。可以参考有趣的BUG内容里面的<code>21 低性能的Unix Domain Socket</code>（一个BUG水了一堆字）。</p><p>通过<code>cat /sys/fs/cgroup/cpu,cpuacct/cpu.stat</code>来确定有没有触发限流</p><p>今天主要是想解决一个问题，TOP显示的CPU使用率能不能作为配置K8S的CPU limit的限制呢？</p><h2 class="relative group">3 （附加）如何安装bcc工具包到ubuntu18.04<div id=3-%E9%99%84%E5%8A%A0%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85bcc%E5%B7%A5%E5%85%B7%E5%8C%85%E5%88%B0ubuntu1804 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-%E9%99%84%E5%8A%A0%E5%A6%82%E4%BD%95%E5%AE%89%E8%A3%85bcc%E5%B7%A5%E5%85%B7%E5%8C%85%E5%88%B0ubuntu1804 aria-label=锚点>#</a></span></h2><p>安装方式有两种，一种是直接安装binary，另一种从源码编译安装。我选择从源码编译。主要是出了问题也好修复。使用源代码编译的时候还有一点要注意，首先，安装的实际上是python3的bcc，而默认安装到/usr/share/bcc/tool下面之后的各种工具，指明的语言版本都是python，需要手动更改为python3，这可能是个小坑。另外用户必须是root才能正常启用。</p><p>一种方法是安装最新版的llvm，和最新版的github上面的bcc，这种方法要求能连接github</p><ul><li><p>安装llvm-13，之所以选择llvm 13是因为14安装的很多依赖过新，所以装llvm13。而且很多编译的工具平时开发也用，所以全安装</p><pre tabindex=0><code>wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh 13 all
+</code></pre></li><li><p>安装bcc需要的依赖，命令如下，一部分llvm的东西已经装上了</p><pre tabindex=0><code>sudo apt install -y bison build-essential cmake flex git libedit-dev \
+libllvm13 llvm-13-dev libclang-13-dev python3 zlib1g-dev libelf-dev libfl-dev python3-distutils
+</code></pre></li><li><p>最后从源头编译bcc，直接安装bcc binary的方式只会安装上老旧的版本，缺失部分工具</p><pre tabindex=0><code>git clone https://github.com/iovisor/bcc.git
+mkdir bcc/build; cd bcc/build
+cmake ..
+make
+sudo make install
+cmake -DPYTHON_CMD=python3 .. # build python3 binding
+pushd src/python/
+make
+sudo make install
+popd
+</code></pre></li></ul><p>另一种方法适用于连接不上github，只能用gitee的情况下，因为代码兼容性的问题，需要切换到旧的版本。如果能连接github，那么不需要用gitee，直接安装然后切换到v0.24.0也可以</p><ul><li><p>首先安装依赖</p><pre tabindex=0><code># For Bionic (18.04 LTS)
+sudo apt-get -y install bison build-essential cmake flex git libedit-dev \
+  libllvm6.0 llvm-6.0-dev libclang-6.0-dev python zlib1g-dev libelf-dev libfl-dev
+</code></pre></li><li><p>接着clone bcc的代码，如果是只能连接gitee，需要把git配置内部的submodule都替换为gitee的网址。因为submodule会下载</p><pre tabindex=0><code>#git clone https://gitee.com/ershou10/bcc.git
+git clone https://github.com/iovisor/bcc.git
+# 切换到0.24.0的版本是为了避免兼容性的问题
+cd bcc
+git checkout v0.24.0
+mkdir bcc/build; cd bcc/build
+cmake ..
+make
+sudo make install
+cmake -DPYTHON_CMD=python3 .. # build python3 binding
+pushd src/python/
+make
+sudo make install
+popd
+</code></pre></li></ul><p>CENTOS7 的安装</p><pre tabindex=0><code>yum -y install bcc-tools
+yum -y install kernel-devel-$(uname -r)
+</code></pre><h2 class="relative group">4 BPF的学习<div id=4-bpf%E7%9A%84%E5%AD%A6%E4%B9%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-bpf%E7%9A%84%E5%AD%A6%E4%B9%A0 aria-label=锚点>#</a></span></h2><p>实际上上面是纯应用，但是除了纯应用的方面，我们还需要关注更基本的东西</p><p>BPF是什么不写了，网上一堆抄来抄去</p><h3 class="relative group">4.1 BPF支持的插桩<div id=41-bpf%E6%94%AF%E6%8C%81%E7%9A%84%E6%8F%92%E6%A1%A9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#41-bpf%E6%94%AF%E6%8C%81%E7%9A%84%E6%8F%92%E6%A1%A9 aria-label=锚点>#</a></span></h3><p>支持动态插桩和静态插桩</p><p>动态插桩，动态性地插桩，但是需要用户对软件函数有所了解，且不会被编译器内联处理</p><ul><li>kprobes<ul><li>工作原理：<ul><li>对于krpobe插桩，首先复制插桩地址的字节码<ul><li>单步中断指令覆盖目标地址，x86_64是int3</li><li>指令执行到断点，断电处理函数检查是不是kprobe插桩。<ul><li>kprobe插桩是的话就执行krpobe函数</li></ul></li><li>原始指令继续执行。当不需要kprobe时，再把原始的字节内容放回去</li></ul></li><li>对于kretprobe<ul><li>对入口做kprobe插桩，如果入口命中，将返回地址保存并替换为蹦床函数</li><li>在返回的时候，跳到蹦床函数。如果不需要就移除蹦床</li></ul></li></ul></li></ul></li><li>uprobes：用户态动态插桩<ul><li>工作原理：和krpobe基本一致</li></ul></li></ul><p>静态插桩，静态插桩需要由开发者维护，就比较麻烦，一般是推荐用户优先用静态</p><ul><li>tracepoint</li><li>USDT<ul><li>工作原理，在USDT探针的地址放置了一个not指令。插桩的事哦呼这个地址会被内核修改为一个端点指令，so damned genius</li></ul></li></ul><h3 class="relative group">4.2 bcc和bpftrace<div id=42-bcc%E5%92%8Cbpftrace class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42-bcc%E5%92%8Cbpftrace aria-label=锚点>#</a></span></h3><p>一般来说，当真正使用bpf相关观测工具的时候，我推荐用户直接根据问题的需要去看bpftools来查阅相关工具。所以下面的内容实际上更针对性一种学习。</p><h4 class="relative group">4.1 BCC内部实现和调试<div id=41-bcc%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E5%92%8C%E8%B0%83%E8%AF%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#41-bcc%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E5%92%8C%E8%B0%83%E8%AF%95 aria-label=锚点>#</a></span></h4><p>内部实现</p><p>调试</p><h3 class="relative group">4.2 bpftrace工具的内部实现和调试<div id=42-bpftrace%E5%B7%A5%E5%85%B7%E7%9A%84%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E5%92%8C%E8%B0%83%E8%AF%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42-bpftrace%E5%B7%A5%E5%85%B7%E7%9A%84%E5%86%85%E9%83%A8%E5%AE%9E%E7%8E%B0%E5%92%8C%E8%B0%83%E8%AF%95 aria-label=锚点>#</a></span></h3><p>bpf前端用lex和yacc对bpftrace编程语言做语法和此法分析，然后交给clang解析，最后丢给bpftrace程序编译成llvm中间形式，并最终编译为bpf程序。</p><p>bpf支持很多种事件源，比方说动态插桩，静态插桩，定期事件采样，周期事件PMC事件，合成事件。目前已经存在的bpftrace工具如下图</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/bpftrace-tools.jpeg alt=bpftrace-tools></figure></p><h3 class="relative group">4.2.1 bpftrace一行编程<div id=421-bpftrace%E4%B8%80%E8%A1%8C%E7%BC%96%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#421-bpftrace%E4%B8%80%E8%A1%8C%E7%BC%96%E7%A8%8B aria-label=锚点>#</a></span></h3><p>参考文档参考bpftrace one-liner tutorial和bpftrrace reference guide</p><pre tabindex=0><code># 执行bpf程序，直到退出。所以后年的program可以是单行程序，也可以是一个.bt，即bpf执行程序
+bpftrace -e program
+
+#程序的内部结构往往是探针加对应的动作
+probes { actions }
+# 可以在前面加上一些filter，类似awk的匹配替换一样
+probes /filter/ { actions }
+# 可以通过// 添加单行主食，或者/* */添加多行主食，类似c++
+
+#探针格式以类型名启动，然后以冒号分割的标识符
+type:identifier1[:identifier2[...]]
+# 举个例子
+# krpobe探针对内核太函数插桩，只用一个标识符：内核函数名字
+# uprobe探针对用户态函数插桩，需要两个标识符，文件名字和函数名
+kprobe:vfs_read
+uprobe:/bin/bash:readline
+# 过滤器
+# 变量，内置变量，临时变量，映射表变量以@前缀可以用作全局存储，在不通动作之间同步。可以提供由多个或者耽搁元素组成的ekey，将映射表作为hash表使用
+@start[tid] = nsecs;
+# 内置变量有pid,tid,uid,username,nsecs,elapsed,cpu,comm（进程名）,kstack,ustak内核调用栈和用户态调用栈，retval函数返回值，func被跟踪的函数名称，cgroup，cgroup的ID，
+# 映射表函数
+# bpftrace的探针类型
+# tracepoint内核静态插桩点，usdt用户态静态定义插桩点，kprobe，kretprobe内核动态插转和返回插桩，uprobe和ureteprobe，用户态动态插桩和返回插桩
+# profile，cpu采样，interval，周期性报告
+
+# bpftrace的函数
+# 
+</code></pre><p>给一个简单的例子</p><pre tabindex=0><code></code></pre><p>工作原理，如何内部运作</p><h2 class="relative group">5 如何做性能优化<div id=5-%E5%A6%82%E4%BD%95%E5%81%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%E5%A6%82%E4%BD%95%E5%81%9A%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96 aria-label=锚点>#</a></span></h2><h3 class="relative group">理解CPU架构<div id=%E7%90%86%E8%A7%A3cpu%E6%9E%B6%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%90%86%E8%A7%A3cpu%E6%9E%B6%E6%9E%84 aria-label=锚点>#</a></span></h3><p>理解CPU架构就理解CPU为了加速做了哪些操作，进而就可以知道系统的性能问题出在哪里了，CPU执行指令一般分为如下几步</p><ul><li>取指(Instruction Fetch，IF)。</li><li>译码(Instruction Decode，ID)。</li><li>执行(EXE)。</li><li>访存(MEM)。</li><li>回写(Write Back，WB)。</li></ul><p>这几步使用流水线的方式拆解以后，CPU会同时运行多个指令，这里流水线的性能制约为流水线冒险(Pipeline Hazards)，从而导致停顿。这三种冒险分别是</p><ul><li>结构冒险</li><li>数据冒险<ul><li>写后读(Read-After-Write，RAW）</li><li>读后写(Write-After-Read，WAR)</li><li>写后写(Write-After-Write，WAW)</li></ul></li><li>控制冒险。</li></ul><p>为了能够起到加速的作用，现代CPU启用如下手段</p><ul><li>乱序执行：支持乱序执行的CPU仍必须给出相同的结果，就好像所有指令都是按程序顺序执行一样。指令在最终执行时称为退休，其结</li><li>超标量：它们可以在一个时钟周期内发射多条指令</li><li>投机执行： 控制冒险可能会导致流水线中显著的性能损失。硬件分支预测逻辑是一种避免这种性能损失的技术，用于预测分支的可能方向并从预测路径执行指令（投机执行）</li></ul><p>为了支撑指令快速运行（避免因为访问内存造成的性能延时），CPU还会启用高速缓存，现代CPU中典型的缓存行大小是64字节。最接近执行流水线的高速缓存大小通常在8KiB到32KiB之间。在现代CPU中，层次结构中更远的高速缓存可以在64KiB到16MiB。任何层级的高速缓存的架构都由以下四个属性定义。</p><p>高速缓存的映射方法有：</p><ul><li>直接映射</li><li>全关联高速缓存</li><li>组关联高速缓存</li></ul><p>到这里我们就可以给出CPU的架构图了</p><ul><li><p>CPU前端</p><ul><li>CPU前端由许多数据结构构成，其主要目的是有效地从内存中获取指令并解码。步骤如下<ul><li>从L1缓存获取16字节X86指令，解码转换为微操作并进入指令解码队列(Instruction Decode Queue，IDQ)。</li></ul></li></ul></li><li><p>CPU后段</p><ul><li>乱序(Out-Of-Order)引擎来执行指令并存储结果。</li></ul></li></ul><h3 class="relative group">如何测量性能-通用方法<div id=%E5%A6%82%E4%BD%95%E6%B5%8B%E9%87%8F%E6%80%A7%E8%83%BD-%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%A6%82%E4%BD%95%E6%B5%8B%E9%87%8F%E6%80%A7%E8%83%BD-%E9%80%9A%E7%94%A8%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h3><p>性能是一个很难测量的东西，因为环境噪声和“生产环境”隔离的原因，有时候测试是非常不准确的。有几种非常愚蠢的方式做自动化测量</p><ul><li>第一个办法是安排人员看图来比较结果，愚蠢在于人很容易因注意力不集中而错过性能退化缺陷，只会关注大的退化</li><li>第二个办法是设定一个简单的阈值门限，比低一点好一些，这个主要糟糕在门限很难确定</li></ul><p>一些开源软件使用了一些其它方法做限制，比方说mongodb的evergreen或者autoperf使用pmc</p><p>因为自动化的问题，导致我们常常需要使用手动化测试，手动化测试问题也很多需要多次运行基准测试，这样基线程序有N个测量值，改动过的程序也有N个测量值。这样子画出统计图能够发现基准测试的问题，比方说双峰问题代表缓存或者锁。一般我们也会采用箱形图。</p><p>测量性能时有两种计时器</p><ul><li>系统级高分辨率计时器 它是一个系统计时器，通过统计自某任意时间（称为Epoch）起开始流逝的嘀嗒数而实现。该时钟是单调递增的。系统计时器的分辨率是纳秒级的，这个运行比较慢，访问一次需要200个CPU Clock</li><li>时间戳计时器(Time Stamp Counter，TSC)这是一个通过硬件寄存器实现的硬件计时器。TSC也是单调递增的，并且以固定速率增长，也就是说它与频率无关。这个运行比较快，访问一次也就20个CPU Clock</li></ul><p>因此，我们的测量说白了就是利用多种计时器来针对性的分析，常见的技术手段为</p><ul><li>代码插桩：让开发者观察应用程序的整体架构和流程，但它不能提供进程调度执行的频率（可从操作系统获得）或发生了多少次分支预测错误（可从CPU获得）的信息。另外插桩本身就会造成性能影响。常用软件为Intel Pin，eBPF，</li><li>Trace：依赖现有的插桩，适合黑盒</li><li>负载表征：负载表征是通过量化参数和函数来描述负载的过程，它的目标是定义负载的行为及主要特征，比方说自顶向下的微架构分析(TMA)方法，它试图通过将应用程序划分为4种特征中的一类，4种特征分别为前端绑定(Front End Bound)、后端绑定(BackEnd Bound)、退休(Retiring)和错误投机(BadSpeculation)</li><li>采样：用于查找热点</li></ul><h3 class="relative group">发现问题<div id=%E5%8F%91%E7%8E%B0%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%8F%91%E7%8E%B0%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>这里我们来到了具体的方法</p><ul><li><p>自顶向下微架构分析技术</p><p><img src=imgs/image-20240819113513744.png alt=image-20240819113513744 style=zoom:30%>使用</p><ul><li>perf就可以分析这种问题，简单来说就是加topdown，步骤可以立即为</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>perf stat --topdown -a -- taskset -c <span class=m>0</span> ./7zip-1benchmark b retiring bad speculat FE bound BE bound
+</span></span></code></pre></div><ul><li>首先使用perf对上层进行分析，确定具体出现在哪一端的哪个类型</li><li>确定类型之后，使用perf record记录CPU事件发生的函数时哪个，产生统计。再调用perf report & perf annotatie，查找具体的符号。</li><li>根据类型加解决方案，比方说预取</li></ul></li><li><p>LBR最后分支记录。LBR可以直接在不插桩的情况下分析性能，针对基本块可以画出概率密度函数曲线，确定如何优化。另外LBR可以帮助分析热路径，即最经常执行的路径</p><ul><li>LBR分支记录的目的是最后跳转的路径，利用该特性可以持续地记录大量已经执行的分支跳转指令。这种方法可以快速确定调用的基本块。可以使用LBR对分支跳转指令进行采样，但是每次采样期间都需要查看LBR栈中已执行过的分支跳转指令。这可以实现比较合理的热点代码路径控制流覆盖度，并且也不会采集太多无用的信息，因为所有分支跳转指令中只有很小的一部分会被检查。使用dmesg | grep -i lbr来查看是否支持lbr。采集方法如下<ul><li>perf record -b。注意及时编译的时候没有启用（通过编译选项-fomit-frame-pointer控制，默认开启）或调试信息</li><li>从Skylake架构开始，LBR条目有了Cycle Count信息，这个新增字段记录了两个被选中的分支之间的时钟周期计数。如果前一个LBR条目中的目标地址是某个基本块(BB)的开始，而当前LBR条目中的源地址是该基本块中的最后一个指令，那么时钟周期计数就是该基本块的时延。</li></ul></li></ul></li><li><p>处理器事件采样</p></li><li><p>Intel处理器跟踪技术</p></li><li><p>编译器优化报告：比方说clang加上参数-Rpass*参数。看看报告写的未执行的优化是怎么回事</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>clang -03 -Rpass-analysis<span class=o>=</span>.* -Rpass<span class=o>=</span>.* -Rpass-missed<span class=o>=</span>.* a.c -c
+</span></span></code></pre></div></li><li><p>静态分析工具：比方说clang-sanitanzer</p></li></ul><p>前面了解</p><h4 class="relative group">定向优化<div id=%E5%AE%9A%E5%90%91%E4%BC%98%E5%8C%96 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%AE%9A%E5%90%91%E4%BC%98%E5%8C%96 aria-label=锚点>#</a></span></h4><p>前面了解了相关的分析手段，下面给出一些优化的方法。指导方法请参考下图</p><img src=imgs/image-20240819113141415.png alt=image-20240819113141415 style=zoom:40%><p>优化方法：</p><ul><li>CPU前端优化：CPU前端优化一般集中在如何确保微指令不会被丢弃上。绝大部分的真实应用程序都会有非零的“前端绑定”指标，该指标通常小于10%。如果看到“前端绑定”指标在20%左右，那么绝对值得花时间分析一下<ul><li>针对hot path，将cold path标记为UNLIKELY，确保编译器优化</li><li>基本块对齐：确保循环指令（经常执行的指令）不会垮缓存行</li><li>函数拆分：等同于拆分cold path</li><li>PGO：反馈式编译或者使用BOLT，这个就不多赘述了，非常经典。对llvm编译器而言，使用-fprofile-instr-generate选项编译程序，这样会告诉编译器生成插桩代码，这些插桩会在运行时采集剖析信息</li><li>TLB：大页，减少对TLB造成的miss</li></ul></li><li>CPU后段优化：后端优化往往是后端资源不足导致<ul><li>内存绑定：当应用程序执行大量的内存访问并且花比较长的时间等待内存访问完成时，那么该应用程序会被表征为内存绑定。利用缓存空间局部性的最佳方法是按顺序访问内存。</li><li>绑核：</li></ul></li><li>优化错误投机：对于常规应用程序，有5%～10%的“错误投机”率是正常的。建议是当该指标超过10%时才关注它。<ul><li>用查表法替代繁多ifelse：如果有多个ifelse，比方说一个数字所在的范围，那么可能因为分支过多导致预测失败，这种建议转换为加载一个数组，对应地址直接返回数组的值，会加快速度。于在超过CPU缓存大小的大数组搜索的场景，基于分支的二分搜索版本表现得更好，因为分支预测错误导致的性能损耗相比内存访问延迟（由于缓存未命中延迟比较高）造成的更小。对于能够全部填充到CPU缓存中的小数组，情况正好相反</li><li>用断言替代分支：这里的断言是指同时执行ifelse的两条结果，直接都执行。但是这个跟执行的代价强相关。如果不行的话考虑区分likely和unlikely啥的</li></ul></li><li>其它调优：<ul><li>编译时计算：实际上就是直接提前计算</li><li>缓存预热：</li><li>减少慢浮点数运算</li><li>系统调优</li></ul></li><li>优化多线程程序<ul><li>锁争用：锁争用可以通过perf -s探查到，</li><li>MESI<ul><li>真共享：真共享可能会造成互相干扰，解决手段有1 使用atomic<typename t> 2 使用TLS</li><li>伪共享：伪共享是因为MESI互相干扰使得县城互相打扰，因此通过内存对象对齐/填充可能会消除伪共享。参考https://joemario.github.io/blog/2016/09/01/c2c-blog/</li></ul></li></ul></li></ul><p>总结，一般思路如下</p><ul><li>业务架构层面</li><li>系统层优化<ul><li>缓存</li><li>减少中断和系统调用<ul><li>减少不必要的中断在我们写安全网关的时候是非常重要的一点：减少系统调用和缺页中断的次数！系统调用会导致上下文切换外加一些耗时的操作。举一个简单的例子：启用hugepage减少缺页中断，另一个方面很多小对象的分配和回收会导致内存空洞，这种情况下小对象应当使用slab的管理方式进行管理，减少不必要的操作。（我见过一部分的go的内存管理就是直接抄袭的slab的实现）</li></ul></li></ul></li><li>应用层优化<ul><li>STL容器和算法性能比较与选择</li><li>去掉全局变量</li><li>受限指针 - 别名优化</li><li>条件编译和编译时优化<ul><li>比方说浮点数运算等指令的“使用”是多余的，但是这种优化一般不推荐个人用户随便使用，一个很简单的例子，写代码写的是inline，只是对编译器的建议。具体是不是转换为inline代码是编译器的行为。这种情况下，自己对最终行为做出诸多假设往往不如启用编译器官方的优化：也就是 The <em>BOLT</em> + <em>LTO</em> + <em>PGO</em></li></ul></li><li>选择正确的第三方库<ul><li>另外一种减少不必要的指令级操作指具有一定专业性的操作：举一个简单的例子，对于大数除法或者大整数求分解的问题（这种一般都是数学上的NP问题）最简单的优化方法不是自己去翻翻数论里面的理论，自己实现一套。而是使用正确的第三方库，比方说openssl而不是cryptopp，openssl的大部分除法运算都是直接参考的理论论文，做汇编级别的运算。其效率会比自己写的效率高起码十几倍。</li><li>一些竞争频繁数据结构，使用无锁的结果可能会带来一定的性能提升</li><li>使用正确的序列化，反序列化库</li></ul></li></ul></li><li>函数层优化<ul><li>减少拷贝</li><li>针对C++而言：<ul><li>函数调用参数</li><li>内联函数，inline是建议层面，优化力度也要看编译器</li><li>C++ Devirtualization，解决方法还是LTO等操作，</li></ul></li><li>选择正确的数据结构<ul><li>比较细枝末节的效率了，比方说boost any的效率就是比C的void*效率低。但是这种优化往往属于最末端才会考虑的优化。</li></ul></li></ul></li><li>还有就是参考上面给的CPU前端/后端优化</li></ul><p>参考资料：</p><p><a href=https://juejin.cn/post/7102235375724625928 target=_blank>https://juejin.cn/post/7102235375724625928</a></p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2020-12-15-如何进行性能分析和诊断\\index.md",oid_likes="likes_posts\\2020-12-15-如何进行性能分析和诊断\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2020-12-15-%E5%BC%82%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%BC%96%E5%86%99%E6%97%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%95%99%E8%AE%AD/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">异步程序编写时候的一些小教训</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-12-15T00:00:00+00:00>2020 年 12 月 15 日</time>
+</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-01-02-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86%E6%9B%BE%E7%BB%8F%E5%81%9A%E8%BF%87%E7%9A%84leetcode/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">阅读整理曾经做过的leetcode</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-01-02T00:00:00+00:00>2021 年 1 月 2 日</time>
+</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
+<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>

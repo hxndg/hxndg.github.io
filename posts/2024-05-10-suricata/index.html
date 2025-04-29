@@ -1,0 +1,663 @@
+<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2024-05-10-suricata &#183; 菜狗的blog</title>
+<meta name=title content="2024-05-10-suricata &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="fun,debug,"><link rel=canonical href=https://hxndg.github.io/posts/2024-05-10-suricata/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity="sha512-ujd1vr1SorSDf42mTjLuNuXFK/KEoM4iYlYngjmLcBVDlHUnrRSYSHcXsblv4qTkjTZaAuC10A4iSJMFLpnYPA=="><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2024-05-10-suricata/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2024-05-10-suricata"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-05-10T00:00:00+00:00"><meta property="article:modified_time" content="2024-05-10T00:00:00+00:00"><meta property="article:tag" content="Fun"><meta property="article:tag" content="Debug"><meta name=twitter:card content="summary"><meta name=twitter:title content="2024-05-10-suricata"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2024-05-10-suricata","headline":"2024-05-10-suricata","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2024-05-10-suricata\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2024","dateCreated":"2024-05-10T00:00:00\u002b00:00","datePublished":"2024-05-10T00:00:00\u002b00:00","dateModified":"2024-05-10T00:00:00\u002b00:00","keywords":["fun","debug"],"mainEntityOfPage":"true","wordCount":"9401"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
+<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></button>
+<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2024-05-10-suricata</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2024-05-10T00:00:00+00:00>2024 年 5 月 10 日</time><span class="px-2 text-primary-500">&#183;</span><span>9401 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>19 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-suricata原理解释>0 Suricata原理解释</a></li><li><a href=#01-suricata提供的app检测关键字解释>0.1 Suricata提供的App检测关键字解释</a></li><li><a href=#1-suricata支持新协议>1 Suricata支持新协议</a><ul><li><a href=#11-suricata应用协议识别原理>1.1 Suricata应用协议识别原理</a></li><li><a href=#11-rust部分代码的编写>1.1 Rust部分代码的编写</a><ul><li><a href=#111-parserrs的编写>1.1.1 parser.rs的编写</a></li><li><a href=#112-对iotrs的编写>1.1.2 对iot.rs的编写</a></li><li><a href=#113-对loggerrs的编写>1.1.3 对logger.rs的编写</a></li><li><a href=#114-rust部分代码的编译和测试>1.1.4 Rust部分代码的编译和测试</a></li></ul></li><li><a href=#12-c语言部分代码的编写>1.2 C语言部分代码的编写</a></li></ul></li><li><a href=#2-suricata特殊功能支持>2 Suricata特殊功能支持</a><ul><li><a href=#21-支持多模式匹配>2.1 支持多模式匹配</a></li><li><a href=#22-支持频率匹配>2.2 支持频率匹配</a></li></ul></li><li><a href=#3-suricata规则加载流程>3 Suricata规则加载流程</a></li><li><a href=#4-suricata检测模式>4 suricata检测模式</a></li><li><a href=#5-说说suricata的flowbits>5 说说Suricata的flowbits</a></li><li><a href=#5-suricata的启动流程>5 Suricata的启动流程</a></li><li><a href=#6-suricata的源码分析>6 Suricata的源码分析</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-suricata原理解释>0 Suricata原理解释</a></li><li><a href=#01-suricata提供的app检测关键字解释>0.1 Suricata提供的App检测关键字解释</a></li><li><a href=#1-suricata支持新协议>1 Suricata支持新协议</a><ul><li><a href=#11-suricata应用协议识别原理>1.1 Suricata应用协议识别原理</a></li><li><a href=#11-rust部分代码的编写>1.1 Rust部分代码的编写</a><ul><li><a href=#111-parserrs的编写>1.1.1 parser.rs的编写</a></li><li><a href=#112-对iotrs的编写>1.1.2 对iot.rs的编写</a></li><li><a href=#113-对loggerrs的编写>1.1.3 对logger.rs的编写</a></li><li><a href=#114-rust部分代码的编译和测试>1.1.4 Rust部分代码的编译和测试</a></li></ul></li><li><a href=#12-c语言部分代码的编写>1.2 C语言部分代码的编写</a></li></ul></li><li><a href=#2-suricata特殊功能支持>2 Suricata特殊功能支持</a><ul><li><a href=#21-支持多模式匹配>2.1 支持多模式匹配</a></li><li><a href=#22-支持频率匹配>2.2 支持频率匹配</a></li></ul></li><li><a href=#3-suricata规则加载流程>3 Suricata规则加载流程</a></li><li><a href=#4-suricata检测模式>4 suricata检测模式</a></li><li><a href=#5-说说suricata的flowbits>5 说说Suricata的flowbits</a></li><li><a href=#5-suricata的启动流程>5 Suricata的启动流程</a></li><li><a href=#6-suricata的源码分析>6 Suricata的源码分析</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">Suricate<div id=suricate class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#suricate aria-label=锚点>#</a></span></h1><h2 class="relative group">0 Suricata原理解释<div id=0-suricata%E5%8E%9F%E7%90%86%E8%A7%A3%E9%87%8A class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0-suricata%E5%8E%9F%E7%90%86%E8%A7%A3%E9%87%8A aria-label=锚点>#</a></span></h2><h2 class="relative group">0.1 Suricata提供的App检测关键字解释<div id=01-suricata%E6%8F%90%E4%BE%9B%E7%9A%84app%E6%A3%80%E6%B5%8B%E5%85%B3%E9%94%AE%E5%AD%97%E8%A7%A3%E9%87%8A class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#01-suricata%E6%8F%90%E4%BE%9B%E7%9A%84app%E6%A3%80%E6%B5%8B%E5%85%B3%E9%94%AE%E5%AD%97%E8%A7%A3%E9%87%8A aria-label=锚点>#</a></span></h2><p>Suricata有非常多方便的检测关键字，这些关键字可以针对Payload或者Applayer的内容。下面列出来这些关键字的含义，我理解如果基于这些关键字做匹配，那么需要知道能提供的能力范畴</p><ul><li><p>content：conten关键字提供匹配能力，可打印的自负可以直接匹配，比方说content:&ldquo;abc&rdquo;，不可匹配字符使用|xx|来匹配，这里的||就类比十六进制的0x。一些特殊字符只能使用这种方式匹配，参考下面的内容。这里可能需要注意，content默认区分大小写</p><pre tabindex=0><code>&#34;     |22|
+;     |3B|
+:     |3A|
+|     |7C|
+
+#用法范例
+content:&#34;a|0D|bc&#34;;
+content:&#34;|61 0D 62 63|&#34;;
+content:&#34;a|0D|b|63|&#34;;
+</code></pre></li><li><p>nocase：用于指示不区分大小写，常常和content一块使用</p></li><li><p>depth：depth关键字必须放在content之后，depth后面必须跟一个数字，depth后面的数字表示将从代检查的数据的开头检查多少字节，包含content的内容。</p><pre tabindex=0><code># Payload
+# abcdefhjlj
+
+# 这个命中不了，depth为3，只检查头三位，这个明显头三位不包含def
+content: &#34;def&#34;; depth:3;
+# 这个可以命中，depth为3，只检查头三位，包含abc
+content: &#34;abc&#34;; depth:3;
+</code></pre></li><li><p>startswith：和depth类似，不过这个要求匹配必须就在payload的开始部分。该关键字必须跟着content的内容，且这个关键字不能和 <code>depth</code>, <code>offset</code>, <code>within</code> or <code>distance</code>组合使用。</p></li><li><p>endswith：顾名思义，和startswith类似，就不解释了</p></li><li><p>offset：offset关键字指定将从payload中的哪个字节开始检查以查找匹配项。这个和depth组合到一起的时候注意下，offset是从某个字符往后面找匹配，depth是从某个字符前面找。</p><pre tabindex=0><code># Payload
+# abcdefhjlj
+
+# 这个命中不了，depth为3，只检查头三位，这个明显头三位不包含def
+content: &#34;def&#34;; offset:3; depth:6;
+</code></pre></li><li><p>distance：distance表明content匹配的内容与之前content匹配的内容之间的关系。content紧跟的值决定了将从payload中的哪个字节开始相对于前一个匹配进行检查以查找匹配项。比方说distance:5;”意味着可以在前一个匹配的content+ 5 字节之后的任何位置匹配。distance紧跟的值可以为负数</p></li><li><p>within：和distance不同，distance是第一个content匹配之后多少去找匹配第二个content，within是第一个content之内多少的字符去匹配第二个content。</p></li><li><p>rawbytes：没啥用，纯粹兼容snort</p></li><li><p>isdataat：“isdataat”关键字的目的是查看payload的特定部分是否仍有数据。该关键字以一个数字（位置）开头，然后可选地跟着由逗号分隔的“relative”以及“rawbytes”选项。使用“relative”这个词是为了了解有效负载的特定部分相对于上次匹配是否仍有数据。</p><pre tabindex=0><code># Payload
+# abcdefghij
+
+# 这个可以命中，相对abc的第六个字符是i,还有数据
+content: &#34;abc&#34;; isdataat:6; relative; 
+</code></pre></li><li><p>bsize: 用于检测detection buffer的长度是否满足特定条件，具体写法如下</p><pre tabindex=0><code>bsize:&lt;number&gt;;
+bsize:=&lt;number&gt;;
+bsize:&lt;&lt;number&gt;;
+bsize:&gt;&lt;number&gt;;
+bsize:&lt;lo-number&gt;&lt;&gt;&lt;hi-number&gt;;
+</code></pre></li><li><p>dsize:用来检查payload/data的总的长度，用法为<code>dsize:[&lt;>!]number; || dsize:min&lt;>max;</code></p></li><li><p>byte_test：“byte_test”关键字提取<num of bytes>的内容，并且用<operator>和位于偏移<offset>的<test value>做比较。<bitmask value>的值会先做一遍mask。这里注意它的用法，byte_test是可以用来做relative的，也就是说它可以相对前面match的内容，做relative比较。比方说我可以直接先content匹配一个报文里面的key，然后在相对这个content匹配内容</p><pre tabindex=0><code>byte_test:&lt;num of bytes&gt; | &lt;variable_name&gt;, [!]&lt;operator&gt;, &lt;test value&gt;, &lt;offset&gt; [,relative] \
+[,&lt;endian&gt;][, string, &lt;num type&gt;][, dce][, bitmask &lt;bitmask value&gt;];
+</code></pre><table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><num of bytes></td><td>The number of bytes selected from the packet to be converted or the name of a byte_extract/byte_math variable.</td></tr><tr><td><operator></td><td>[!] Negation can prefix other operators<br>&lt; less than<br>> greater than<br>= equal<br>&lt;= less than or equal<br>>= greater than or equal<br>& bitwise AND<br>^ bitwise OR</td></tr><tr><td><value></td><td>Value to test the converted value against [hex or decimal accepted]</td></tr><tr><td><offset></td><td>Number of bytes into the payload</td></tr><tr><td>[relative]</td><td>Offset relative to last content match</td></tr><tr><td>[endian]</td><td>Type of number being read: - big (Most significant byte at lowest address) - little (Most significant byte at the highest address)</td></tr><tr><td>[string] <num></td><td>hex - Converted string represented in hex<br>dec - Converted string represented in decimal<br>oct - Converted string represented in octal</td></tr><tr><td>[dce]</td><td>Allow the DCE module to determine the byte order</td></tr><tr><td>[bitmask]</td><td>Applies the AND operator on the bytes converted</td></tr></tbody></table></li><li><p>byte_math:用来对提取出来的关键字做数学运算，用法为，就不多讲了。这里可能注意一点，它的oper的操作对象可以是使用byte_extract出来的对象</p><pre tabindex=0><code>byte_math:bytes &lt;num of bytes&gt; | &lt;variable-name&gt; , offset &lt;offset&gt;, oper &lt;operator&gt;, rvalue &lt;rvalue&gt;, \
+      result &lt;result_var&gt; [, relative] [, endian &lt;endian&gt;] [, string &lt;number-type&gt;] \
+      [, dce] [, bitmask &lt;value&gt;];
+</code></pre></li><li><p>byte_jump:</p></li><li><p>byte_extract:<code>byte_extract</code>关键字在特定的<code>&lt;num of bytes></code>和<code>&lt;offset></code>处提取，并将其存储在<code>&lt;var_name></code>中。<code>&lt;var_name></code>中的值可用于参与计算，作为<code>byte_test & byte_math</code>的运算符。</p></li><li><p>replace：这个说实话基本没用过，不提</p></li><li><p>pcre：pcre这个正则匹配对性能往往有负面影响，因此一般推荐和content一起使用，至于pcre可以提供什么匹配参考http://en.wikipedia.org/wiki/Regular_expression。语法参考</p><pre tabindex=0><code>pcre:&#34;/&lt;regex&gt;/opts&#34;;
+</code></pre><ul><li>Suricata新添加的改动</li></ul></li></ul><h2 class="relative group">1 Suricata支持新协议<div id=1-suricata%E6%94%AF%E6%8C%81%E6%96%B0%E5%8D%8F%E8%AE%AE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-suricata%E6%94%AF%E6%8C%81%E6%96%B0%E5%8D%8F%E8%AE%AE aria-label=锚点>#</a></span></h2><h3 class="relative group">1.1 Suricata应用协议识别原理<div id=11-suricata%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE%E8%AF%86%E5%88%AB%E5%8E%9F%E7%90%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-suricata%E5%BA%94%E7%94%A8%E5%8D%8F%E8%AE%AE%E8%AF%86%E5%88%AB%E5%8E%9F%E7%90%86 aria-label=锚点>#</a></span></h3><p>说白了就是识别端口，识别关键字，或者识别二进制magic</p><ul><li>Probing parser alproto detection</li><li>Pattern matcher alproto detection</li><li>Expectation alproto detection</li></ul><p>调用<code>scripts/setup-app-layer.py</code>生成新的基于TCP或者UDP协议的应用层协议解析，比方说，我现在想生成一个叫做IOT的协议，生成新协议支持时默认生成&ndash;logger（协议记录日志），&ndash;parser（协议解析）。还需要生成buffer，buffer可以理解为对IOT协议里面的协议字段匹配的名称。buffer可以多次调用生成不同的协议。</p><p>使用下面的代码，可以看到生成的一些新文件，rust文件夹里面的代码，是协议解析器，detect-iot-iot_header_type文件是C语言注册的Buffer类型。所以这里我们需要首先完成rust协议解析器的部分。</p><pre tabindex=0><code># 调用命令
+[root@iZ2ze7889ommtwxghsyd0iZ]/home/ops/vgdog/suricata_2# scripts/setup-app-layer.py --logger --parser --detect IOT iot_header_type
+ 
+# git查看新文件/修改文件，可以看到下面的内容
+On branch vgdog/support_iot
+Changes not staged for commit:
+  (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+  (use &#34;git restore &lt;file&gt;...&#34; to discard changes in working directory)
+	modified:   rust/src/lib.rs
+	modified:   src/Makefile.am
+	modified:   src/app-layer-parser.c
+	modified:   src/app-layer-protos.c
+	modified:   src/app-layer-protos.h
+	modified:   src/detect-engine-register.h
+	modified:   src/output.c
+	modified:   suricata.yaml.in
+
+Untracked files:
+  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+	rust/src/applayeriot/
+	src/detect-iot-iot_header_type.c
+	src/detect-iot-iot_header_type.h
+	src/output-json-iot.c
+	src/output-json-iot.h
+
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)
+</code></pre><h3 class="relative group">1.1 Rust部分代码的编写<div id=11-rust%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E5%86%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-rust%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E5%86%99 aria-label=锚点>#</a></span></h3><p>打开文件夹rust/src/applayeriot，可以发现里面包含四个文件，每个文件的功能为：</p><ul><li>mod.rs总结该文件夹下的rust模块如何组织</li><li>logger.rs针对IOT报文的协议transcation变化或者解析做日志记录，我只做一些type转换的时候记录，其它基本不做什么</li><li>parser.rs是针对单个IOT报文解析的关键文件，诸如IOT报文的结构都在这里完成，这里的数据结构需要暴露出来给同文件夹下面的其它文件使用。</li><li>iot.rs是针对IOT报文做transcation转换的代码文件，这里transcation可以理解为请求 & 回答的模式，不过处于简单，我这里认为一个单个报文就是一个完整的transcation，DHCP协议的transcation也是单报文transcation。</li></ul><p>将来写针对MPM的从transcation里面提取关键字的时候，还要再增加一个detect.rs，detect.rs负责从一个transcation里面提取出来待匹配的关键字内容。</p><pre tabindex=0><code>[root@iZ2ze7889ommtwxghsyd0iZ]/home/ops/vgdog/suricata_2# ll rust/src/applayeriot
+total 28
+-rw-r--r-- 1 root root  1347 Jul  9 08:58 logger.rs
+-rw-r--r-- 1 root root   807 Jul  9 08:58 mod.rs
+-rw-r--r-- 1 root root  2022 Jul  9 08:58 parser.rs
+-rw-r--r-- 1 root root 15927 Jul  9 08:58 iot.rs
+</code></pre><p>mod.rs内部是对其它组件可见性的定义，其中detect的定义被注释掉，将来写MPM的时候再涉及到这个。</p><pre tabindex=0><code>pub mod iot;
+pub mod logger;
+// pub mod detect;
+mod parser;
+</code></pre><h4 class="relative group">1.1.1 parser.rs的编写<div id=111-parserrs%E7%9A%84%E7%BC%96%E5%86%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#111-parserrs%E7%9A%84%E7%BC%96%E5%86%99 aria-label=锚点>#</a></span></h4><p>先完成parser的编写，这里假设IOT协议包含两部分，header和payload，我们基本就是完成两部分的编解码操作。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-rust data-lang=rust><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>nom7</span>::<span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>bytes</span>::<span class=n>streaming</span>::<span class=n>take</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>combinator</span>::<span class=n>map_res</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>IResult</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>Needed</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>error</span>::<span class=p>{</span><span class=n>ErrorKind</span><span class=p>,</span><span class=w> </span><span class=n>ParseError</span><span class=p>},</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>error</span>::<span class=n>Error</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nb>Err</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>error</span>::<span class=n>make_error</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=n>bytes</span>::<span class=n>streaming</span>::<span class=n>tag</span><span class=p>,</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>std</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>serde_json</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>serde_json</span>::<span class=n>Value</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>use</span><span class=w> </span><span class=n>serde</span>::<span class=p>{</span><span class=n>Serialize</span><span class=p>,</span><span class=w> </span><span class=n>Deserialize</span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=cp>#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>struct</span> <span class=nc>IOTHeader</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=cp>#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>struct</span> <span class=nc>IOTPayload</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=cp>#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>struct</span> <span class=nc>IOTMessage</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>parse_header</span><span class=p>(</span><span class=n>i</span>: <span class=kp>&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>])</span><span class=w> </span>-&gt; <span class=nc>IResult</span><span class=o>&lt;&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>],</span><span class=w> </span><span class=n>IOTHeader</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=c1>// For IOT, first char must be 0x5f, aka 0b01011111
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>_</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>tag</span><span class=p>([</span><span class=mh>0xff</span><span class=p>])(</span><span class=n>i</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>version_string</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=o>..</span><span class=p>.(</span><span class=n>i</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>iot_type_string</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=o>..</span><span class=p>.(</span><span class=n>i</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>iot_header</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>IOTHeader</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=nb>Ok</span><span class=p>((</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>iot_header</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>parse_payload</span><span class=p>(</span><span class=n>i</span>: <span class=kp>&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>])</span><span class=w> </span>-&gt; <span class=nc>IResult</span><span class=o>&lt;&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>],</span><span class=w> </span><span class=n>IOTPayload</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=k>pub</span><span class=w> </span><span class=k>fn</span> <span class=nf>parse_message</span><span class=p>(</span><span class=n>i</span>: <span class=kp>&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>])</span><span class=w> </span>-&gt; <span class=nc>IResult</span><span class=o>&lt;&amp;</span><span class=p>[</span><span class=kt>u8</span><span class=p>],</span><span class=w> </span><span class=n>IOTMessage</span><span class=o>&gt;</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>header</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>parse_header</span><span class=p>(</span><span class=n>i</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>payload</span><span class=p>)</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>parse_payload</span><span class=p>(</span><span class=n>i</span><span class=p>)</span><span class=o>?</span><span class=p>;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>let</span><span class=w> </span><span class=n>message</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>IOTMessage</span><span class=w> </span><span class=p>{</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=o>..</span><span class=p>.</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>};</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>return</span><span class=w> </span><span class=nb>Ok</span><span class=p>((</span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>message</span><span class=p>));</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
+</span></span></span></code></pre></div><h4 class="relative group">1.1.2 对iot.rs的编写<div id=112-%E5%AF%B9iotrs%E7%9A%84%E7%BC%96%E5%86%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#112-%E5%AF%B9iotrs%E7%9A%84%E7%BC%96%E5%86%99 aria-label=锚点>#</a></span></h4><p>接下来，完成对协议状态转换的代码编写，很多协议transcation一般是一问一答，这么一个来回才算是完成，出于简单维度考虑，这里只实现单个报文就是一个transcation的代码，或者说一个报文就会导致iot完成一个transcation，对应的英文术语为uni-direction。</p><p>默认生成的IOTTransaction的结构就是内部包含一个一个request和response，这里内部替换为单个的IOTMessage就可以了。</p><pre tabindex=0><code>
+pub struct IOTTransaction {
+    tx_id: u64,
+    
+    // pub request: Option&lt;String&gt;,
+    // pub response: Option&lt;String&gt;,
+    pub message: Option&lt;IOTMessage&gt;,
+    tx_data: AppLayerTxData,
+}
+</code></pre><p>接下来就是每一个IOT报文的消息转换，这里我们直接将IOT报文的具体类型，比方说Hello，Deny啥的报文类型认为是一个TranscationEvent即可。自然就可以得到下面的内容，这里的Event可以理解为transcation发生了状态转换，当transcation发生了状态转换，对tx做匹配就会发生。</p><p>这里我们还需要注意的是IOTState，里面保存着一系列相同状态的Transcation，检索事务时，它会匹配出来具体的tx是谁。这里要注意的是，在IOTState里面，完成了对报文的匹配，如果发现了一个报文，就会推动Event的变化，再将Transcation存储进入IOTState里面。</p><p>因为只认为包含单个消息，且状态必然转换，因此这里实际上删除掉了用不到的函数</p><pre tabindex=0><code>#[derive(AppLayerEvent)]
+enum IOTEvent {
+    TooManyTransactions,
+    IOTHelloEvent,
+    IOTHelloResEvent,
+    ...
+    IOTAlertEvent,
+}
+
+
+
+impl IOTState {
+    ......
+
+    fn parse(&amp;mut self, input: &amp;[u8]) -&gt; AppLayerResult {
+        // We&#39;re not interested in empty requests.
+        if input.is_empty() {
+            return AppLayerResult::ok();
+        }
+
+        let mut start = input;
+        while !start.is_empty() {
+            match parser::parse_message(start) {
+                Ok((rem, message)) =&gt; {
+                    start = rem;
+
+                    // SCLogNotice!(&#34;Message: {:?}&#34;, message);
+                    let mut tx = self.new_tx();
+                    if self.transactions.len() &gt;= unsafe { IOT_MAX_TX } {
+                        tx.tx_data.set_event(IOTEvent::TooManyTransactions as u8);
+                    }
+                    match message.header.iot_type.as_ref() {
+                        &#34;Hello&#34; =&gt; tx.tx_data.set_event(IOTEvent::IOTHelloEvent as u8),
+                        ...
+                        _ =&gt; {
+                            SCLogNotice!(&#34;Inpossible message header cmd not valid: {:?}&#34;, message);
+                        },
+                    }
+                    tx.message = Some(message);
+
+                    self.transactions.push_back(tx);
+                    if self.transactions.len() &gt;= unsafe { IOT_MAX_TX } {
+                        return AppLayerResult::err();
+                    }
+                }
+                Err(nom::Err::Incomplete(_)) =&gt; {
+                    // Not enough data. This parser doesn&#39;t give us a good indication
+                    // of how much data is missing so just ask for one more byte so the
+                    // parse is called as soon as more data is received.
+                    let consumed = input.len() - start.len();
+                    let needed = start.len() + 1;
+                    return AppLayerResult::incomplete(consumed as u32, needed as u32);
+                }
+                Err(_) =&gt; {
+                    return AppLayerResult::err();
+                }
+            }
+        }
+
+        // Input was fully consumed.
+        return AppLayerResult::ok();
+    }
+    ...
+}
+</code></pre><p>接下来就要在iot.rs里面写上注册parser，和判断是否为iot协议的代码了。注册parser就是写明白底层是TCP还是UDP，而判断用户态代码就是看一下magic number是否匹配，这里可以严格一些，比方说判断Header是否可以正常解析出来。</p><p>rs_iot_probing_parser用于检查报文是不是一个合法的iot报文。</p><p>rs_iot_tx_get_alstate_progress用于通知是否发生协议变化。</p><p>rs_iot_register_parser就是注册对iot的解析器。</p><pre tabindex=0><code>/// C entry point for a probing parser.
+unsafe extern &#34;C&#34; fn rs_iot_probing_parser(
+    _flow: *const Flow, _direction: u8, input: *const u8, input_len: u32, _rdir: *mut u8,
+) -&gt; AppProto {
+    // SCLogError!(&#34;Inside iot probing parser&#34;);
+    // Need at least 2 bytes.
+    if input_len &gt; 1 &amp;&amp; !input.is_null() {
+        // SCLogError!(&#34;Hit parse input&#34;);
+        let slice = build_slice!(input, input_len as usize);
+        if parse_header(slice).is_ok() {
+            // SCLogNotice!(&#34;Parse iot message success&#34;);
+            return ALPROTO_IOT;
+        }
+    }
+    return ALPROTO_UNKNOWN;
+}
+
+
+unsafe extern &#34;C&#34; fn rs_iot_tx_get_alstate_progress(tx: *mut c_void, _direction: u8) -&gt; c_int {
+    // uni-direction, stateless parser, simply use 1.
+    return 1;
+}
+
+
+#[no_mangle]
+pub unsafe extern &#34;C&#34; fn rs_iot_register_parser() {
+    let default_port = CString::new(&#34;[7000]&#34;).unwrap();
+    let parser = RustParser {
+        name: PARSER_NAME.as_ptr() as *const c_char,
+        default_port: default_port.as_ptr(),
+        ipproto: IPPROTO_TCP,
+        probe_ts: Some(rs_iot_probing_parser),
+        probe_tc: Some(rs_iot_probing_parser),
+        min_depth: 0,
+        max_depth: 16,
+        state_new: rs_iot_state_new,
+        state_free: rs_iot_state_free,
+        tx_free: rs_iot_state_tx_free,
+        parse_ts: rs_iot_parse,
+        parse_tc: rs_iot_parse,
+        get_tx_count: rs_iot_state_get_tx_count,
+        get_tx: rs_iot_state_get_tx,
+        tx_comp_st_ts: 1,
+        tx_comp_st_tc: 1,
+        tx_get_progress: rs_iot_tx_get_alstate_progress,
+        get_eventinfo: Some(IOTEvent::get_event_info),
+        get_eventinfo_byid: Some(IOTEvent::get_event_info_by_id),
+        localstorage_new: None,
+        localstorage_free: None,
+        get_tx_files: None,
+        get_tx_iterator: Some(applayer::state_get_tx_iterator::&lt;IOTState, IOTTransaction&gt;),
+        get_tx_data: rs_iot_get_tx_data,
+        get_state_data: rs_iot_get_state_data,
+        apply_tx_config: None,
+        flags: APP_LAYER_PARSER_OPT_ACCEPT_GAPS,
+        truncate: None,
+        get_frame_id_by_name: None,
+        get_frame_name_by_id: None,
+    };
+
+    let ip_proto_str = CString::new(&#34;tcp&#34;).unwrap();
+
+    if AppLayerProtoDetectConfProtoDetectionEnabled(ip_proto_str.as_ptr(), parser.name) != 0 {
+        let alproto = AppLayerRegisterProtocolDetection(&amp;parser, 1);
+        ALPROTO_IOT = alproto;
+        if AppLayerParserConfParserEnabled(ip_proto_str.as_ptr(), parser.name) != 0 {
+            let _ = AppLayerRegisterParser(&amp;parser, alproto);
+        }
+        if let Some(val) = conf_get(&#34;app-layer.protocols.iot.max-tx&#34;) {
+            if let Ok(v) = val.parse::&lt;usize&gt;() {
+                IOT_MAX_TX = v;
+            } else {
+                SCLogError!(&#34;Invalid value for iot.max-tx&#34;);
+            }
+        }
+        SCLogNotice!(&#34;Rust iot parser registered.&#34;);
+    } else {
+        SCLogNotice!(&#34;Protocol detector and parser disabled for IOT.&#34;);
+    }
+}
+</code></pre><p>对iot.rs最后一步，就是提取具体的buffer，这个buffer可以理解为SPM（单模态匹配）提取关键字，这一步完成对iot.rs的改造就进入了最后一步。</p><pre tabindex=0><code>
+/// Get the header type buffer for a transaction from C.
+///
+/// No required for parsing, but an example function for retrieving a
+/// pointer to the request buffer from C for detection.
+#[no_mangle]
+pub unsafe extern &#34;C&#34; fn rs_iot_get_header_type_buffer(
+    tx: *mut c_void, buf: *mut *const u8, len: *mut u32,
+) -&gt; u8 {
+    let tx = cast_pointer!(tx, IOTTransaction);
+    if let Some(ref message) = tx.message {
+        if !message.header.iot_type.is_empty() {
+            *len = message.header.iot_type.len() as u32;
+            *buf = message.header.iot_type.as_ptr();
+            return 1;
+        }
+    }
+    return 0;
+}
+</code></pre><h4 class="relative group">1.1.3 对logger.rs的编写<div id=113-%E5%AF%B9loggerrs%E7%9A%84%E7%BC%96%E5%86%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#113-%E5%AF%B9loggerrs%E7%9A%84%E7%BC%96%E5%86%99 aria-label=锚点>#</a></span></h4><p>logger.rs就没什么好说了，可以认为就是记录一个json对象，只需要状态转变时记录一下内容即可</p><pre tabindex=0><code>
+fn log_iot(tx: &amp;IOTTransaction, js: &amp;mut JsonBuilder) -&gt; Result&lt;(), JsonError&gt; {
+    js.open_object(&#34;iot&#34;)?;
+    if let Some(ref message) = tx.message {
+        match message.header.iot_type.as_ref() {
+            &#34;Hello&#34; =&gt; js.set_string(&#34;type&#34;, &#34;Connect&#34;)?,
+            ...
+            _ =&gt; js.set_string(&#34;cmd&#34;, &#34;unknown&#34;)?
+        };
+    }
+    ...
+    js.close()?;
+    Ok(())
+}
+</code></pre><h4 class="relative group">1.1.4 Rust部分代码的编译和测试<div id=114-rust%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E8%AF%91%E5%92%8C%E6%B5%8B%E8%AF%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#114-rust%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E8%AF%91%E5%92%8C%E6%B5%8B%E8%AF%95 aria-label=锚点>#</a></span></h4><p>Rust要求代码必须都正常编译才能执行具体的测试，所以直接在parser.rs里面写个UT，然后进入Suricata下面的Rust目录，执行Cargo test就可以测试代码是否正确了，比方说我的代码里面有一个编码网络字节序的函数，那么我就写上一个编码比较即可。</p><pre tabindex=0><code>
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use nom7::Err;
+    use std::time::{Instant, Duration};
+
+    #[test]
+    fn test_encode_bigendian_u16() {
+        let size = 2;
+...
+        let u16_1024 = 1024;
+        let expect_u16_1024_bigendian: [u8; 2] = [0x04, 0x00];
+...
+        match encode_bigendian_u16(u16_1024) {
+            Ok((_, array)) =&gt; {
+                assert_eq!(&amp;array[..size], &amp;expect_u16_1024_bigendian);
+            },
+            Err(e) =&gt; panic!(&#34;Encoding u16 1024 failed: {:?}&#34;, e),
+        }
+    }
+}
+</code></pre><p>这种调用cargo test test_encode_bigendian_u16，如果函数编写都正常，test也没问题就会出现下面的内容</p><pre tabindex=0><code>warning: `suricata` (lib test) generated 27 warnings (run `cargo fix --lib -p suricata --tests` to apply 20 suggestions)
+    Finished test [unoptimized + debuginfo] target(s) in 9.78s
+     Running unittests src/lib.rs (target/debug/deps/suricata-08d6b4a748e9dd8e)
+
+running 1 test
+test applayeriot::parser::tests::test_encode_bigendian_u16 ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 430 filtered out; finished in 0.00s
+</code></pre><h3 class="relative group">1.2 C语言部分代码的编写<div id=12-c%E8%AF%AD%E8%A8%80%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E5%86%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-c%E8%AF%AD%E8%A8%80%E9%83%A8%E5%88%86%E4%BB%A3%E7%A0%81%E7%9A%84%E7%BC%96%E5%86%99 aria-label=锚点>#</a></span></h3><p>现在我们回来看C语言部分的代码怎么写，还有如下文件需要修改。</p><p>使用git diff就可以发现，这里diff的的文件实际上是加了一些通用的定义或者声明：</p><ul><li>比方说定义protocol iot的({ ALPROTO_IOT, &ldquo;iot&rdquo; },)</li><li>注册协议解析器rs_iot_register_parser</li><li>注册Detection Buffer ：DETECT_AL_IOT_IOT_HEADER_TYPE</li><li>注册日志JsonIOTLogRegister</li></ul><p>真正需要做的东西要么在untracked files里面，要么没有显示在diff文件里面。我们一点一点看</p><pre tabindex=0><code>[root@iZ2ze7889ommtwxghsyd0iZ]/home/ops/vgdog/suricata_2# git status
+On branch vgdog/support_iot
+Changes not staged for commit:
+  (use &#34;git add &lt;file&gt;...&#34; to update what will be committed)
+  (use &#34;git restore &lt;file&gt;...&#34; to discard changes in working directory)
+        modified:   src/Makefile.am
+        modified:   src/app-layer-parser.c
+        modified:   src/app-layer-protos.c
+        modified:   src/app-layer-protos.h
+        modified:   src/detect-engine-register.h
+        modified:   src/output.c
+        modified:   suricata.yaml.in
+
+Untracked files:
+  (use &#34;git add &lt;file&gt;...&#34; to include in what will be committed)
+        src/detect-iot-iot_header_type.c
+        src/detect-iot-iot_header_type.h
+        src/output-json-iot.c
+        src/output-json-iot.h
+
+no changes added to commit (use &#34;git add&#34; and/or &#34;git commit -a&#34;)
+</code></pre><p>先看Detection Buffer注册解析器，函数为</p><pre tabindex=0><code>// 注册解析器
+void DetectIOTiot_header_typeRegister(void)
+{
+    sigmatch_table[DETECT_AL_IOT_BUFFER].name = &#34;iot_iot_header_type&#34;;
+    sigmatch_table[DETECT_AL_IOT_BUFFER].desc =
+            &#34;IOT content modifier to match on the iot buffers&#34;;
+    sigmatch_table[DETECT_AL_IOT_BUFFER].Setup = DetectIOTiot_header_typeSetup;
+#ifdef UNITTESTS
+    sigmatch_table[DETECT_AL_IOT_BUFFER].RegisterTests = DetectIOTiot_header_typeRegisterTests;
+#endif
+    sigmatch_table[DETECT_AL_IOT_BUFFER].flags |= SIGMATCH_NOOPT;
+
+    /* register inspect engines */
+    DetectAppLayerInspectEngineRegister(&#34;iot_buffer&#34;, ALPROTO_IOT, SIG_FLAG_TOSERVER, 0,
+            DetectEngineInspectIOTiot_header_type, NULL);
+    DetectAppLayerInspectEngineRegister(&#34;iot_buffer&#34;, ALPROTO_IOT, SIG_FLAG_TOCLIENT, 0,
+            DetectEngineInspectIOTiot_header_type, NULL);
+
+    g_iot_rust_id = DetectBufferTypeGetByName(&#34;iot_buffer&#34;);
+
+    SCLogNotice(&#34;IOT application layer detect registered.&#34;);
+}
+
+//真正的解析器
+static uint8_t DetectEngineInspectIOTiot_header_type(DetectEngineCtx *de_ctx,
+        DetectEngineThreadCtx *det_ctx, const struct DetectEngineAppInspectionEngine_ *engine,
+        const Signature *s, Flow *f, uint8_t flags, void *alstate, void *txv, uint64_t tx_id)
+{
+    uint8_t ret = DETECT_ENGINE_INSPECT_SIG_NO_MATCH;
+    const uint8_t *data = NULL;
+    uint32_t data_len = 0;
+
+    if (flags &amp; STREAM_TOSERVER) {
+        rs_iot_get_request_buffer(txv, &amp;data, &amp;data_len);
+    } else if (flags &amp; STREAM_TOCLIENT) {
+        rs_iot_get_response_buffer(txv, &amp;data, &amp;data_len);
+    }
+
+    if (data != NULL) {
+        const bool match = DetectEngineContentInspection(de_ctx, det_ctx, s, engine-&gt;smd, NULL, f,
+                data, data_len, 0, DETECT_CI_FLAGS_SINGLE,
+                DETECT_ENGINE_CONTENT_INSPECTION_MODE_STATE);
+        if (match) {
+            ret = DETECT_ENGINE_INSPECT_SIG_MATCH;
+        }
+    }
+
+    SCLogNotice(&#34;Returning %u.&#34;, ret);
+    return ret;
+}
+</code></pre><p>有很多地方需要改动：</p><ul><li>”注册解析器“函数里面将通用的DETECT_AL_IOT_BUFFER改为具体的Detection Buffer名字，这里比方说我要检查的是IOT里面Header的type字段，那就改名为DETECT_AL_IOT_IOT_HEADER_TYPE</li><li>”注册解析器“函数里面把iot_buffer这个通用的名字，改成具体的类型名字</li><li>”真正的解析器“里面，把rs_iot_get_request_buffer，改成我们刚才在rust里面写的提取函数</li><li>在两个函数之后，写上对IOT报文范例解析的Unit Test。</li></ul><p>这两个地方改完了就高枕无忧，万事大吉了吗？并非如此还有如下操作要做：</p><ul><li>untracked files的两个文件实际上没在编译路径里面，还需要添加到Makefile.am里面</li><li>DetectIOTiot_header_typeRegister函数需要添加到SigTableSetup函数里，注册这个detection buffer之后才能让signature做真正的匹配。这里记得把函数的头文件加到代码里面，否则就会报错</li></ul><p>上面修改完成了，Suricata的SPM匹配就算是完成了，调用make执行构建即可。</p><p>因为我们开启了Unittest，所以可以通过验证UnitTest是否运行正常，来判断我们的代码是否正确</p><pre tabindex=0><code># 好的，这里看来我们新加入的Unit Test正确地注册了
+[root@iZ2ze7889ommtwxghsyd0iZ]/home/ops/vgdog/suricata_2# ./src/suricata --list-unittests | grep IOT
+Notice: detect-iot-iot_header_type: IOT application layer detect registered. [DetectIOTiot_header_typeRegister:detect-iot-iot_header_type.c:73]
+Notice: output-json-iot: IOT JSON logger registered. [JsonIOTLogRegister:output-json-iot.c:170]
+DetectIOTiot_header_typeTest
+
+# 好的，看来我们的UT正确执行了
+[root@iZ2ze7889ommtwxghsyd0iZ]/home/ops/vgdog/suricata_2# ./src/suricata -u -U DetectIOTiot_header_typeTest
+Notice: limesh: Rust limesh parser registered. [suricata::applayerlimesh::limesh::rs_limesh_register_parser:limesh.rs:409]
+Notice: iot: Rust iot parser registered. [suricata::applayeriot::iot::rs_iot_register_parser:iot.rs:338]
+
+...
+
+pass
+==== TEST RESULTS ====
+PASSED: 1
+FAILED: 0
+======================
+</code></pre><h2 class="relative group">2 Suricata特殊功能支持<div id=2-suricata%E7%89%B9%E6%AE%8A%E5%8A%9F%E8%83%BD%E6%94%AF%E6%8C%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-suricata%E7%89%B9%E6%AE%8A%E5%8A%9F%E8%83%BD%E6%94%AF%E6%8C%81 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 支持多模式匹配<div id=21-%E6%94%AF%E6%8C%81%E5%A4%9A%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E6%94%AF%E6%8C%81%E5%A4%9A%E6%A8%A1%E5%BC%8F%E5%8C%B9%E9%85%8D aria-label=锚点>#</a></span></h3><p>多模式匹配的地方说起来很简单，如果是针对Applayer的transcation做多模态匹配，那就需要看看检测(detect)的时候，对Applayer执行多模态匹配注册的函数。除此之外，一般还需要实现对应的detection buffer从报文当中解析获得待匹配内容的能力。具体的实例很多代码都有，比方说对tls的某些关键字匹配，等等。</p><h3 class="relative group">2.2 支持频率匹配<div id=22-%E6%94%AF%E6%8C%81%E9%A2%91%E7%8E%87%E5%8C%B9%E9%85%8D class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E6%94%AF%E6%8C%81%E9%A2%91%E7%8E%87%E5%8C%B9%E9%85%8D aria-label=锚点>#</a></span></h3><p>频率匹配的调用栈需要先看一下，这里假设我们需要对一些特殊的关键字做匹配，实际上也是地址，比方说针对某种特殊协议的地址，它实际上是字符串类型。</p><pre tabindex=0><code>PacketAlertFinalize {
+	PacketAlertHandle {
+	  # 先获取DetectThresholdData数据
+		SigGetThresholdTypeIter {
+		
+		}
+		# 再根据threshold数据判断是否触发告警，这里姑且先分析TRACK_DST
+		PacketAlertThreshold {
+		    ...
+		    # Host是
+				Host *dst = HostGetHostFromHash(&amp;p-&gt;dst);
+        if (dst) {
+            # 查到了就进行匹配
+            ret = ThresholdHandlePacketHost(dst,p,td,s-&gt;id,s-&gt;gid,pa);
+            HostRelease(dst);
+        }
+        ...
+	
+		}
+	}
+}
+</code></pre><h2 class="relative group">3 Suricata规则加载流程<div id=3-suricata%E8%A7%84%E5%88%99%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-suricata%E8%A7%84%E5%88%99%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B aria-label=锚点>#</a></span></h2><p>规则处理顺序</p><p>按照顺序注册Signature注册函数，先注册的比较函数会挂载到比较函数前面，</p><pre tabindex=0><code>SigLoadSignatures {
+	...
+  SCSigRegisterSignatureOrderingFuncs {
+  	# 挂载一串函数到de_ctx-&gt;sc_sig_order_funcs，后面挂载的后面用。先挂载OrderByAction，再挂载OrderByPriority
+  	SCSigRegisterSignatureOrderingFunc(de_ctx, SCSigOrderByActionCompare);
+  	...
+  	SCSigRegisterSignatureOrderingFunc(de_ctx, SCSigOrderByPriorityCompare);
+  }
+  ...
+  SCSigOrderSignatures {
+  	# 排序，递归比较时使用de_ctx-&gt;sc_sig_order_funcs上面注册的顺序判断，用第一个能判断出来大小的比较。都相等的话用SID比较小的ID在前面。最终挂载到检测上下文det_ctx
+  	sigw_list = SCSigOrder(sigw_list, de_ctx-&gt;sc_sig_order_funcs)
+  	...
+  }
+  ...
+  # 真正构建signature组
+  # 需了解SGH和MPM的含义，参考https://forum.suricata.io/t/mpm-context-explanation/1463/3
+  # SGH理解为Signature HEAD Group，共享pattern的一堆signature
+  SigGroupBuild {
+  	# 针对每条规则使用RetrieveFPForSig提取single pattern，用于后面构建MPM。这里注意s-&gt;init_data-&gt;mpm_sm-&gt;ctx，这个就是fast pattern。
+  	SigPrepareStage1
+  	# 按照TCP/UDP/IP做大的分组。开始初步分配sgh
+  	SigPrepareStage2
+  	# 针对无法按照协议，端口，地址分类构建SGH分组
+  	SigPrepareStage3
+  	# 在这里真正调用每个detection buffer注册的mpm &amp; spm的函数，挂载prefilter engine。开始在sgh的tx_engine里面挂prefilter engine
+  	SigPrepareStage4 {
+  		PrefilterSetupRuleGroup {
+  			PatternMatchPrepareGroup {
+  				# 给已经建好的sgh的pktpayload分配mpm_store结构，包着一个mpm_ctx，准备对per sig附加signature
+  				MpmStorePrepareBuffer
+  				# 注册pktpayload的mpm
+  				PrefilterPktPayloadRegister {
+  					# 每个函数
+  					PrefilterAppendPayloadEngine
+  				}
+  				# 该注册applayer的tx mpm了
+  				PrepareMpms {
+  					for 遍历 DetectBufferMpmRegistry *a = de_ctx-&gt;app_mpms_list {
+  						# 如果有对应的同样direction呀，协议呀啥的mpm直接利用mpm。把自己的fast pattern加到mpm ctx里面
+							MpmStorePrepareBufferAppLayer {
+								# 这里开始将每个提取出来的fp添加到de_ctx的mpm store里面，可以理解为往hyperscan的db里面添加patter，存储id
+								MpmStoreSetup {
+									# 
+									for s = de_ctx-&gt;sig_array[sig] {
+										# 添加fp
+										PopulateMpmHelperAddPattern		
+									}
+								}
+								# 把内部mpmstore加到de_ctx-&gt;mpm_hash_table
+								MpmStoreAdd
+							}
+							# 这里实际上是spm，单模匹配加函数
+              a-&gt;PrefilterRegisterWithListId(PrefilterGenericMpmRegister) {
+                # 挂载到sgh-&gt;init-&gt;tx_engines上面
+                PrefilterAppendTxEngine {
+                  # 分配prefilter引擎，附加到de_ctx的enginelist
+                }
+              }					
+  					}
+  				}
+  			}
+  		}
+  	}
+  	...
+  }
+}
+</code></pre><p>至于规则自己，为了支持MPM需要，下面在不断的注册具体的Detection Buffer的MPM引擎（可以理解为注册回调函数用于提取内容）。</p><pre tabindex=0><code>DetectAppLayerMpmRegister {
+	# 注册PrefilterRegisterWithListId，实际上注册的是PrefilterGenericMpmRegister。PrefilterRegisterWithListId在PrepareMpms里面调用
+	# PrefilterGenericMpmRegister在运行时调用PrefilterAppendTxEngine，然后调用PrefilterGenericMpmFree
+	
+	# 这里挂载buffer id到sm list，用于一会拿fastpattern
+	SupportFastPatternForSigMatchList
+}
+</code></pre><h2 class="relative group">4 suricata检测模式<div id=4-suricata%E6%A3%80%E6%B5%8B%E6%A8%A1%E5%BC%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-suricata%E6%A3%80%E6%B5%8B%E6%A8%A1%E5%BC%8F aria-label=锚点>#</a></span></h2><p>真正的检测流程如下，这里注意我写的是针对app layer的检测函数。这里注意一点上面是PrepareMpms，这里是PrepareMpm别搞混了。。。</p><pre tabindex=0><code>// 参考src/detect-engine-prefilter.c
+
+// 单模式匹配用的是DetectRunPrefilterTx
+DetectFlow {
+	DetectRun {
+		DetectRunTx {
+			# 判断下是否发生了一次完整的事务，
+			GetDetectTx {
+				# 调用prefilterengine来先过滤一批检测，这里实际上调用的是engine-&gt;cb.PrefilterTx来处理函数，这里的engine-&gt;pectx是一个mpm_ctx
+        DetectRunPrefilterTx {
+        	# 这里才是真正的执行MPM prefilter的地方
+        	engine-&gt;cb.PrefilterTx(AKA PrefilterMpm) {
+        		# 这里实际上是真正执行search的操作，说白了就是hyperscan的多模式匹配
+        		mpm_table[mpm_ctx-&gt;mpm_type].Search
+        	}
+        	# 已经确定了命中的规则后，这里来了一次quicksort排序
+        	QuickSortSigIntId
+        }
+        # 请注意，这里返回的时候实际上是prefilter，还都是所有的规则都有的状态，也就是说即使命中的规则的action是pass，也有返回值
+        # 这里开始单条单条匹配，逐个规则判断是不是命中。
+        for (uint32_t i = 0; i &lt; array_idx {
+        	# 逐条检测命中，如果命中了还要把det_ctx-&gt;alert_queue
+					DetectRunTxInspectRule{
+						# 追加alert，增加alert_queue_size，追加alert到alert_queue
+						AlertQueueAppend
+        	}	
+        }
+        	
+			}
+			...
+			# 这里开始整理alert了
+			DetectRunPostRules {
+        # 在这里处理了pass类型的函数
+        # 在这个里面检查命中的signature的threshold，实际上对threshold就是在这里进行的比较
+        PacketAlertFinalize {
+        	# 先排序，这个排序
+    			qsort(det_ctx-&gt;alert_queue, det_ctx-&gt;alert_queue_size, sizeof(PacketAlert),
+            AlertQueueSortHelper);
+          
+          
+          PacketAlertHandle {
+            PacketAlertThreshold {
+
+          	}
+        	}
+        }
+      }
+		}
+	}
+}
+</code></pre><h2 class="relative group">5 说说Suricata的flowbits<div id=5-%E8%AF%B4%E8%AF%B4suricata%E7%9A%84flowbits class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%E8%AF%B4%E8%AF%B4suricata%E7%9A%84flowbits aria-label=锚点>#</a></span></h2><p>flow match或者说flowbits实际上和上述的匹配流程基本是一致的，只是多了一步，对于保存好的Flow，如果命中set会给Flow->flowvar挂上对应的bit，下一次走MPM命中再走单命中的时候再检查是不是isbitset</p><p>下面看一下suricata的flow match是怎么调用的，假设是两个报文，先连接，后丢弃</p><pre tabindex=0><code>alert tcp any any -&gt; any any (msg:&#34;flow usage test first packet&#34;;buffer; content:&#34;Connect&#34;;flowbits:set,connect;flowbits:noalert;sid: 6; rev: 1;)
+alert tcp any any -&gt; any any (msg:&#34;flow usage test second packet&#34;;buffer; content:&#34;Connect&#34;;flowbits:isset,connect; sid: 7; rev: 1;)
+</code></pre><p>第一个set, connect事件，实际上是</p><pre tabindex=0><code></code></pre><p>第二个isset,connect事件。一开始</p><pre tabindex=0><code>RunDetection {
+	DetectRun {
+		DetectRunTx {
+			DetectRunTxInspectRule {
+				DetectEnginePktInspectionRun {
+					DetectEngineInspectRulePacketMatches {
+						FlowBitIsset {
+							FlowBitGet {
+							
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+</code></pre><p>第二个没匹配因为StreamTcpDisableAppLayer将flow终止了，理论上不应该终止才对，问题出在哪里？387685</p><pre tabindex=0><code>Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x00007ffff6b9ae01 in AppLayerParserParse at app-layer-parser.c:1311
+        breakpoint already hit 2 times
+2       breakpoint     keep y   0x00007ffff6fd5d4f in suricata::applayershwp::shwp::SHWPState::parse at src/applayershwp/shwp.rs:132
+        breakpoint already hit 1 time
+3       breakpoint     keep y   0x00007ffff6b9b27b in AppLayerParserParse at app-layer-parser.c:1399
+        breakpoint already hit 2 times
+4       breakpoint     keep y   0x00007ffff6b9aad2 in AppLayerParserStateIssetFlag at app-layer-parser.c:1807
+        breakpoint already hit 2 times
+</code></pre><h2 class="relative group">5 Suricata的启动流程<div id=5-suricata%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-suricata%E7%9A%84%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B aria-label=锚点>#</a></span></h2><h2 class="relative group">6 Suricata的源码分析<div id=6-suricata%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-suricata%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90 aria-label=锚点>#</a></span></h2><pre tabindex=0><code>InitGlobal {
+	//注册runmodes，这里面需要添加各种新添加的module
+	RunModeRegisterRunModes {
+		// 注册各种模式，每个模式都有一个RunModeFunc函数注册来执行真正的注册
+		RunModeIdsAFPRegister
+		RunModeIdsNetmapRegister
+		...
+		RunModeDpdkRegister
+		
+	
+	}
+}
+
+// 执行诸如检查注册模式，设定权限，解析yaml等操作
+...
+
+PostConfLoadedSetup {
+	// 加载诸如hyperscan等多模态匹配的库准备函数
+	MpmTableSetup {}
+	SpmTableSetup {}
+	...
+	// tmqh是thread module queue handler的简写，
+	TmqhSetup {
+		TmqhSimpleRegister
+		//用于每个线程分配packet
+		TmqhPacketpoolRegister {}
+		TmqhFlowRegister
+	} 
+	RegisterAllModules {
+		// 填充tmm_modules，
+		TmModuleUnixManagerRegister
+		// ...各种个样的decoder &amp; receiver
+		TmModuleReceivePcapFileRegister
+		TmModuleDecodePcapFileRegister
+		
+	}
+}
+
+RunModeDispatch {
+	
+}
+</code></pre><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2024-05-10-suricata\\index.md",oid_likes="likes_posts\\2024-05-10-suricata\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2024-06-02-bazel%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E4%B8%AD%E7%BA%A7/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2024-06-02-bazel从入门到中级</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2024-05-10T00:00:00+00:00>2024 年 5 月 10 日</time>
+</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2024-07-04-c++20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2024-07-04-C++20设计模式</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2024-07-04T00:00:00+00:00>2024 年 7 月 4 日</time>
+</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
+<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>

@@ -1,0 +1,436 @@
+<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>gitlab常见问题总结 &#183; 菜狗的blog</title>
+<meta name=title content="gitlab常见问题总结 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="debug,"><link rel=canonical href=https://hxndg.github.io/posts/2021-10-28-gitlabjob%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity="sha512-ujd1vr1SorSDf42mTjLuNuXFK/KEoM4iYlYngjmLcBVDlHUnrRSYSHcXsblv4qTkjTZaAuC10A4iSJMFLpnYPA=="><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-10-28-gitlabjob%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="gitlab常见问题总结"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-10-11T00:00:00+00:00"><meta property="article:modified_time" content="2021-10-11T00:00:00+00:00"><meta property="article:tag" content="Debug"><meta name=twitter:card content="summary"><meta name=twitter:title content="gitlab常见问题总结"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"gitlab常见问题总结","headline":"gitlab常见问题总结","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-10-28-gitlabjob%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-10-11T00:00:00\u002b00:00","datePublished":"2021-10-11T00:00:00\u002b00:00","dateModified":"2021-10-11T00:00:00\u002b00:00","keywords":["debug"],"mainEntityOfPage":"true","wordCount":"5726"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
+<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></button>
+<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">gitlab常见问题总结</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-10-11T00:00:00+00:00>2021 年 10 月 11 日</time><span class="px-2 text-primary-500">&#183;</span><span>5726 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>12 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><ul><li><a href=#11-push镜像失败>1.1 push镜像失败</a></li><li><a href=#12-本地formatsh格式化过了ci还是不过>1.2 本地format.sh格式化过了，ci还是不过</a></li><li><a href=#13-job一直pending>1.3 Job一直pending</a></li><li><a href=#14-代码保护报错>1.4 代码保护报错</a></li><li><a href=#15-sim-server的奇怪错误>1.5 sim-server的奇怪错误</a></li><li><a href=#16-安装升级cuda和nvidia驱动>1.6 安装升级cuda和nvidia驱动</a></li><li><a href=#17-aliyun机器怎么格式化数据盘为xfs>1.7 aliyun机器怎么格式化数据盘为xfs</a></li><li><a href=#18-怎么计算需要机器>1.8 怎么计算需要机器</a></li><li><a href=#19-怎么拆分计算的runner的个数>1.9 怎么拆分计算的runner的个数</a></li><li><a href=#110-git的奇怪问题>1.10 git的奇怪问题</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><ul><li><a href=#11-push镜像失败>1.1 push镜像失败</a></li><li><a href=#12-本地formatsh格式化过了ci还是不过>1.2 本地format.sh格式化过了，ci还是不过</a></li><li><a href=#13-job一直pending>1.3 Job一直pending</a></li><li><a href=#14-代码保护报错>1.4 代码保护报错</a></li><li><a href=#15-sim-server的奇怪错误>1.5 sim-server的奇怪错误</a></li><li><a href=#16-安装升级cuda和nvidia驱动>1.6 安装升级cuda和nvidia驱动</a></li><li><a href=#17-aliyun机器怎么格式化数据盘为xfs>1.7 aliyun机器怎么格式化数据盘为xfs</a></li><li><a href=#18-怎么计算需要机器>1.8 怎么计算需要机器</a></li><li><a href=#19-怎么拆分计算的runner的个数>1.9 怎么拆分计算的runner的个数</a></li><li><a href=#110-git的奇怪问题>1.10 git的奇怪问题</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">gitlab常见问题总结<div id=gitlab%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#gitlab%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93 aria-label=锚点>#</a></span></h1><p>记录一些遇到的问题和解决方法</p><h3 class="relative group">1.1 push镜像失败<div id=11-push%E9%95%9C%E5%83%8F%E5%A4%B1%E8%B4%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-push%E9%95%9C%E5%83%8F%E5%A4%B1%E8%B4%A5 aria-label=锚点>#</a></span></h3><p>push到阿里云服务器时候失败，有两种可能的原因：</p><ol><li>没登录，需要登陆下</li><li>image的名字过于长了，简单说就是本来image的名字应该是repo_name/namespace/image_name:tag，如果image_name特别长比方说是/xxx/yyy/zzz/ddd/aaa/eee/ccc这种，name就会出现push失败的情况。提示requested access to the resource is denied。这种情况属于阿里云本身的问题</li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>The push refers to repository <span class=o>[</span>registry.qcraftai.com/qcraft/sim_server<span class=o>]</span>
+</span></span><span class=line><span class=cl>...
+</span></span><span class=line><span class=cl>21639b09744f: Waiting
+</span></span><span class=line><span class=cl>78220a8ee18f: Waiting
+</span></span><span class=line><span class=cl>c65cd6950943: Waiting
+</span></span><span class=line><span class=cl>29c579ad1c5a: Waiting
+</span></span><span class=line><span class=cl>767a7c7801b5: Waiting
+</span></span><span class=line><span class=cl>a24b8da85c42: Waiting
+</span></span><span class=line><span class=cl>denied: requested access to the resource is denied
+</span></span></code></pre></div><h3 class="relative group">1.2 本地format.sh格式化过了，ci还是不过<div id=12-%E6%9C%AC%E5%9C%B0formatsh%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BF%87%E4%BA%86ci%E8%BF%98%E6%98%AF%E4%B8%8D%E8%BF%87 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-%E6%9C%AC%E5%9C%B0formatsh%E6%A0%BC%E5%BC%8F%E5%8C%96%E8%BF%87%E4%BA%86ci%E8%BF%98%E6%98%AF%E4%B8%8D%E8%BF%87 aria-label=锚点>#</a></span></h3><p>错误原因是dev docker过旧，新版本的format.sh有变化，所以更新dev docker即可</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=o>[</span> OK <span class=o>]</span> Congrats, commit author check pass
+</span></span><span class=line><span class=cl><span class=o>[</span> OK <span class=o>]</span> Done buildifier /builds/root/qcraft/offboard/dashboard/BUILD
+</span></span><span class=line><span class=cl><span class=o>[</span>INFO<span class=o>]</span> Done formatting /builds/root/qcraft/offboard/dashboard/health.proto
+</span></span><span class=line><span class=cl><span class=o>[</span> OK <span class=o>]</span> Done buildifier /builds/root/qcraft/offboard/dashboard/services/health/BUILD
+</span></span><span class=line><span class=cl><span class=o>[</span>INFO<span class=o>]</span> Done formatting /builds/root/qcraft/offboard/dashboard/services/health/health.cc
+</span></span><span class=line><span class=cl><span class=o>[</span>INFO<span class=o>]</span> Done formatting /builds/root/qcraft/offboard/dashboard/services/health/health.h
+</span></span><span class=line><span class=cl><span class=o>[</span>INFO<span class=o>]</span> Done formatting /builds/root/qcraft/offboard/dashboard/services/health/health_client.cc
+</span></span><span class=line><span class=cl><span class=o>[</span>INFO<span class=o>]</span> Done formatting /builds/root/qcraft/offboard/dashboard/sim_server_main.cc
+</span></span><span class=line><span class=cl><span class=o>[</span> OK <span class=o>]</span> Done formatting /builds/root/qcraft/production/k8s/offboard/dashboard/sim_server_v2/deploy.sh
+</span></span><span class=line><span class=cl><span class=o>[</span>ERROR<span class=o>]</span> Format issue found, please run <span class=s2>&#34;scripts/format.sh --git&#34;</span> before commit
+</span></span><span class=line><span class=cl> offboard/dashboard/services/health/health_client.cc <span class=p>|</span> <span class=m>4</span> ++--
+</span></span><span class=line><span class=cl> <span class=m>1</span> file changed, <span class=m>2</span> insertions<span class=o>(</span>+<span class=o>)</span>, <span class=m>2</span> deletions<span class=o>(</span>-<span class=o>)</span>
+</span></span></code></pre></div><h3 class="relative group">1.3 Job一直pending<div id=13-job%E4%B8%80%E7%9B%B4pending class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#13-job%E4%B8%80%E7%9B%B4pending aria-label=锚点>#</a></span></h3><p>job一直在pending，任务很忙，一直拿不到？目前看起来有什么可能的原因呢？有多种可能：</p><ul><li>master发布升级命令，然后pod开始升级，包括拉取镜像，挂载设备等等。如果镜像仓库有问题，一直拉不下来，那么就会一直pending，比方说2021/11/11号早上，阿里云仓库出了问题，镜像一直拉不下来。这里多说一句，CI的镜像是在master里面通过对CN_IMG/USA_IMG指定的</li></ul><pre tabindex=0><code>Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+Waiting for pod gitlab-runner/runner-u15fg-a7-project-4-concurrent-0tw4c2 to be running, status is Pending
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+	ContainersNotReady: &#34;containers with unready status: [build helper]&#34;
+</code></pre><h3 class="relative group">1.4 代码保护报错<div id=14-%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4%E6%8A%A5%E9%94%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#14-%E4%BB%A3%E7%A0%81%E4%BF%9D%E6%8A%A4%E6%8A%A5%E9%94%99 aria-label=锚点>#</a></span></h3><p>代码保护导致的错误，代码保护软件似乎有个问题，即白名单加多了以后就不生效了，然后gitlab-runner拉代码就会出先下面的错误。今天虽然加了代码但是没生效的原因是因为gitlab-runner上的客户端死了，所以没同步配置。代码就没拉下来。</p><pre tabindex=0><code>[580s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access &#39;https://gitlab-cn.qcraftai.com/root/qcraft.git/&#39;: error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[585s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access &#39;https://gitlab-cn.qcraftai.com/root/qcraft.git/&#39;: error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[590s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access &#39;https://gitlab-cn.qcraftai.com/root/qcraft.git/&#39;: error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[595s] can not find refs/pipelines/90402, retry later ...
+fatal: unable to access &#39;https://gitlab-cn.qcraftai.com/root/qcraft.git/&#39;: error:1408F10B:SSL routines:ssl3_get_record:wrong version number
+[600s] can not find refs/pipelines/90402, retry later ...
+can not find refs/pipelines/90402, exit!
+Cleaning up file based variables
+00:01
+ERROR: Job failed: command terminated with exit code 1
+</code></pre><h3 class="relative group">1.5 sim-server的奇怪错误<div id=15-sim-server%E7%9A%84%E5%A5%87%E6%80%AA%E9%94%99%E8%AF%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#15-sim-server%E7%9A%84%E5%A5%87%E6%80%AA%E9%94%99%E8%AF%AF aria-label=锚点>#</a></span></h3><p>今天gitlab部署sim-server出错了，然后报错的地方和原因八杆子打不着，原来是配置文件写错哦了</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=w>           </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>GITLAB_ACCESS_TOKEN</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>valueFrom</span><span class=p>:</span><span class=w>  </span><span class=l>//这里多写了一行</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>              </span><span class=nt>valueFrom</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                </span><span class=nt>secretKeyRef</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>                  </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>gitlab-access-token</span><span class=w>
+</span></span></span></code></pre></div><p>具体报错信息在这里</p><pre tabindex=0><code>...
+Events:
+  Type     Reason     Age                 From               Message
+  ----     ------     ----                ----               -------
+  Normal   Scheduled  3m7s                default-scheduler  Successfully assigned staging/sim-server-grey-6bc7997545-mx4t8 to cn-zhangjiakou.172.20.2.197
+  Warning  Unhealthy  90s                 kubelet            Liveness probe failed: OCI runtime exec failed: exec failed: container_linux.go:346: starting container process caused &#34;process_linux.go:101: executing setns process caused \&#34;exit status 1\&#34;&#34;: unknown
+  Warning  Unhealthy  84s (x2 over 94s)   kubelet            Readiness probe failed:
+  Normal   Started    67s (x3 over 99s)   kubelet            Started container sim-server
+  Warning  Unhealthy  60s                 kubelet            Liveness probe failed:
+  Warning  Unhealthy  59s                 kubelet            Readiness probe errored: rpc error: code = Unknown desc = container not running (b47a56e00cddda91ee7e446a77ece77d8c6955320dd11a031a3d8c71372ab3d4)
+  Warning  BackOff    44s (x5 over 82s)   kubelet            Back-off restarting failed container
+  Normal   Pulling    28s (x4 over 3m5s)  kubelet            Pulling image &#34;registry.qcraftai.com/global/sim_server:c8ad37ec94ebfda0a08106f77210cb92ed67387d&#34;
+  Normal   Pulled     28s (x4 over 101s)  kubelet            Successfully pulled image &#34;registry.qcraftai.com/global/sim_server:c8ad37ec94ebfda0a08106f77210cb92ed67387d&#34;
+  Normal   Created    27s (x4 over 100s)  kubelet            Created container sim-server
+</code></pre><p>看起来是你不小心编辑了/home/qcraft/.aws/credentials 这个文件导致的，要么想办法还原，要么重新setup一次，删了重新跑aws configure</p><pre tabindex=0><code>有人碰到过这个问题吗？初始化tools报错
+[INFO] Start goofys mounting from /qcraftroaddata to /media/s3/run_data_2
+2021/12/20 11:02:22.424581 main.FATAL Unable to mount file system, see syslog for details
+查看syslog信息是
+Dec 20 11:18:28 yanguodong /usr/local/bin/goofys[7687]: main.ERROR Unable to setup backend: SharedConfigLoadError: failed to load config file, /home/qcraft/.aws/credentials#012caused by: INIParseError: invalid state with ASTKind {completed_stmt {0 NONE 0 []} false [{section_stmt {1 STRING 0 [78 111 110 101]} true []}]} and TokenType {4 NONE 0 [58]}
+Dec 20 11:18:28 yanguodong /usr/local/bin/goofys[7687]: main.FATAL Mounting file system: Mount: initialization failed
+</code></pre><h3 class="relative group">1.6 安装升级cuda和nvidia驱动<div id=16-%E5%AE%89%E8%A3%85%E5%8D%87%E7%BA%A7cuda%E5%92%8Cnvidia%E9%A9%B1%E5%8A%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#16-%E5%AE%89%E8%A3%85%E5%8D%87%E7%BA%A7cuda%E5%92%8Cnvidia%E9%A9%B1%E5%8A%A8 aria-label=锚点>#</a></span></h3><p>我们的cuda的runtime library已经是11.3了，但是新建的centos7没有装驱动，需要手动装驱动。参考的链接是https://blog.csdn.net/JimmyOrigin/article/details/112972883</p><pre tabindex=0><code>Events:
+  Type     Reason     Age    From               Message
+  ----     ------     ----   ----               -------
+  Normal   Scheduled  2m36s  default-scheduler  Successfully assigned gitlab-runner/runner-fcakjyg6-project-4-concurrent-0dgs2w to cn-gpu03016ack
+  Normal   Pulled     2m29s  kubelet            Container image &#34;registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95&#34; already present on machine
+  Normal   Created    2m29s  kubelet            Created container init-permissions
+  Normal   Started    2m29s  kubelet            Started container init-permissions
+  Normal   Pulling    2m28s  kubelet            Pulling image &#34;registry.qcraftai.com/global/qcraft-ci:dev-libgit-20211214_0012&#34;
+  Normal   Pulled     91s    kubelet            Successfully pulled image &#34;registry.qcraftai.com/global/qcraft-ci:dev-libgit-20211214_0012&#34; in 56.658518838s
+  Normal   Created    81s    kubelet            Created container build
+  Warning  Failed     81s    kubelet            Error: failed to start container &#34;build&#34;: Error response from daemon: OCI runtime create failed: container_linux.go:380: starting container process caused: process_linux.go:545: container init caused: Running hook #0:: error running hook: exit status 1, stdout: , stderr: nvidia-container-cli: requirement error: unsatisfied condition: cuda&gt;=11.3, please update your driver to a newer version, or use an earlier cuda container: unknown
+  Normal   Pulled     81s    kubelet            Container image &#34;registry.gitlab.com/gitlab-org/gitlab-runner/gitlab-runner-helper:x86_64-58ba2b95&#34; already present on machine
+  Normal   Created    81s    kubelet            Created container helper
+  Normal   Started    81s    kubelet            Started container helper
+</code></pre><p>centos7系统安装gpu机器驱动和cuda：</p><pre tabindex=0><code># 以root用户登录进centos7.9系统，删除旧的nvidia驱动
+yum remove nvidia*
+# 需要重启才能卸载当前正在运行的nvidia mod
+shutdown -r now
+# 大部分的驱动安装都说要禁用nouveau，但是我使用默认的centos7检查的时候lsmod nouveau直接就没有，所以我们省略了这一步
+# 下载nvidia驱动文件
+
+# 更新依赖组件和包
+yum update
+yum groupinstall &#34;Development Tools&#34;
+yum install kernel-devel epel-release
+# 确定提示出来的内核的版本一致，不一致使用yum -y upgrade kernel kernel-devel
+uname -r
+rpm -q kernel-devel
+# 运行驱动，执行安装.安装32bit nvidia驱动时选择no,update your x configuration选择yes。剩下的都ok即可
+chmod +x ./NVIDIA-Linux-x86_64-470.94.run 
+./NVIDIA-Linux-x86_64-470.94.run
+
+# 查看匹配的cuda版本
+nvidia smi
+#执行结果见下
+[root@cn-gpu03016ack ~]# nvidia-smi
+Tue Dec 21 13:06:23 2021       
++-----------------------------------------------------------------------------+
+| NVIDIA-SMI 470.94       Driver Version: 470.94       CUDA Version: 11.4     |
+|-------------------------------+----------------------+----------------------+
+| GPU  Name        Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf  Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                               |                      |               MIG M. |
+|===============================+======================+======================|
+|   0  NVIDIA GeForce ...  Off  | 00000000:00:08.0 Off |                  N/A |
+| 15%   41C    P0    64W / 250W |      0MiB / 11019MiB |      0%      Default |
+|                               |                      |                  N/A |
++-------------------------------+----------------------+----------------------+
+                                                                               
++-----------------------------------------------------------------------------+
+| Processes:                                                                  |
+|  GPU   GI   CI        PID   Type   Process name                  GPU Memory |
+|        ID   ID                                                   Usage      |
+|=============================================================================|
+|  No running processes found                                                 |
++-----------------------------------------------------------------------------+
+# 下载对应的CUDA版本
+wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.run
+
+# 进行安装,这里有几点要注意: 出现一个文档，这里要输入accept。然后CUDA installer里面组件选择去掉驱动的选中，我们已经装了驱动了，然后再Install
+sh cuda_11.4.0_470.42.01_linux.run
+
+# 添加CUDA到环境变量
+export PATH=/usr/local/cuda-11.4/bin:$PATH
+export LD_LIBRARY_PATH=$LDLIBRARY_PATH:/usr/local/cuda-11.4/lib64
+source ~/.bashrc
+
+# 测试cuda指令，可以看到cuda已经安装成功，版本为11.4
+nvcc -V
+
+# 第一步的时候把nvidia-docker啥的都删除了，所以需要重新添加repo源
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)    &amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.repo | sudo tee /etc/yum.repos.d/nvidia-docker.repo
+# 更新 yum cache
+yum clean expire-cache
+# 安装nvidia-docker
+yum install -y nvidia-docker2
+# 重启docker
+systemctl restart docker
+</code></pre><p>最后整理出来的总共的初始化脚本如下：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=cp>#!/bin/bash
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> add_current_script_to_rc_local<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nv>script_path</span><span class=o>=</span><span class=k>$(</span>realpath <span class=nv>$0</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Adding boot shell </span><span class=nv>$script_path</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$script_path</span><span class=s2>&#34;</span> &gt;&gt; /etc/rc.d/rc.local
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> remove_current_script_from_rc_local<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nv>script_path</span><span class=o>=</span><span class=k>$(</span>realpath <span class=nv>$0</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Removing boot shell </span><span class=nv>$script_path</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  sed -i <span class=s2>&#34;s#</span><span class=nv>$script_path</span><span class=s2>##g&#34;</span> /etc/rc.d/rc.local
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> remove_nvidia_driver<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Remove existing driver&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Remove existing nvidia driver container cli&#34;</span>
+</span></span><span class=line><span class=cl>  yum remove -y nvidia*
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=c1># Use default nvidia-uninstall bin to perform uninstall</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> -x <span class=s2>&#34;/usr/bin/nvidia-uninstall&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Remove existing nvidia driver using nvidia-uninstall&#34;</span>
+</span></span><span class=line><span class=cl>    /usr/bin/nvidia-uninstall --silent
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> create_nvidia_cuda_folder<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Create folder /root/nvidia_cuda&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> ! -d <span class=s2>&#34;/root/nvidia_cuda&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    mkdir <span class=s2>&#34;/root/nvidia_cuda&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> get_nvidia_driver_version<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=k>$(</span>nvidia-smi --query-gpu<span class=o>=</span>driver_version --format<span class=o>=</span>csv,noheader<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> download_nvidia_11_4_0_470_42_01<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  wget -O cuda_11.4.0_470.42.01_linux.run <span class=s2>&#34;https://qcraft-images.oss-cn-zhangjiakou-internal.aliyuncs.com/cuda_470_42_01/cuda_11.4.0_470.42.01_linux.run&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nv>cuda_md5</span><span class=o>=</span><span class=k>$(</span>md5sum ./cuda_11.4.0_470.42.01_linux.run <span class=p>|</span> awk <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> <span class=nv>$cuda_md5</span> <span class=o>==</span> <span class=s2>&#34;cbcc1bca492d449c53ab51c782ffb0a2&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Download cuda successfull&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Download cuda failed&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> install_driver_needed_files<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Installing needed header files&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  yum update -y
+</span></span><span class=line><span class=cl>  yum groupinstall -y <span class=s2>&#34;Development Tools&#34;</span>
+</span></span><span class=line><span class=cl>  yum install -y kernel-devel epel-release
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> install_nvidia_cuda_driver<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nv>driver_installed</span><span class=o>=</span><span class=k>$(</span>get_nvidia_driver_version<span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> <span class=nv>$driver_installed</span> <span class=o>==</span> <span class=s2>&#34;470.42.01&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Already install nvidia driver 470.42.01, Abort install&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Planning to install 470.42.01 cuda &amp; driver&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>    install_driver_needed_files
+</span></span><span class=line><span class=cl>    download_nvidia_11_4_0_470_42_01
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Start to install 470.42.01 cuda &amp; driver&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>    chmod +x ./cuda_11.4.0_470.42.01_linux.run
+</span></span><span class=line><span class=cl>    ./cuda_11.4.0_470.42.01_linux.run --silent
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Success installed 470.42.01 cuda &amp; driver&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> install_nvidia_docker_2<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Installing nvidia-docker 2&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  <span class=nv>distribution</span><span class=o>=</span><span class=k>$(</span>
+</span></span><span class=line><span class=cl>    . /etc/os-release
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=nv>$ID$VERSION_ID</span>
+</span></span><span class=line><span class=cl>  <span class=k>)</span> <span class=o>&amp;&amp;</span> curl -s -L https://nvidia.github.io/nvidia-docker/<span class=nv>$distribution</span>/nvidia-docker.repo <span class=p>|</span> sudo tee /etc/yum.repos.d/nvidia-docker.repo
+</span></span><span class=line><span class=cl>  yum clean expire-cache
+</span></span><span class=line><span class=cl>  yum install -y nvidia-docker2
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Installed nvidia-docker 2&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> overwrite_daemon_json<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  wget -O daemon.json <span class=s2>&#34;https://qcraft-images.oss-cn-zhangjiakou-internal.aliyuncs.com/cuda_470_42_01/daemon.json&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nv>json_md5</span><span class=o>=</span><span class=k>$(</span>md5sum ./daemon.json <span class=p>|</span> awk <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> <span class=nv>$json_md5</span> <span class=o>==</span> <span class=s2>&#34;8f8be065977394c8c75c0b4c23a2258d&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Download daemon.json successfull&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Download daemon.json failed&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>  mv -f daemon.json /etc/docker/daemon.json
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>function</span> modify_docker_sock_permission<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;/var/run/docker.sock&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Modify docker.sock permission to 666&#34;</span>
+</span></span><span class=line><span class=cl>    chmod <span class=m>666</span> /var/run/docker.sock
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> ! -d <span class=s2>&#34;/root/nvidia_cuda&#34;</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  remove_nvidia_driver
+</span></span><span class=line><span class=cl>  create_nvidia_cuda_folder
+</span></span><span class=line><span class=cl>  add_current_script_to_rc_local
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Finish fisrt stage: remove current nvidia driver &amp; add current stage to boot&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl>  shutdown -r now
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>  remove_current_script_from_rc_local
+</span></span><span class=line><span class=cl>  <span class=nb>cd</span> /root/nvidia_cuda
+</span></span><span class=line><span class=cl>  install_nvidia_cuda_driver
+</span></span><span class=line><span class=cl>  install_nvidia_docker_2
+</span></span><span class=line><span class=cl>  overwrite_daemon_json
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Finish second stage: install nvidia driver &amp; cuda &amp; nvidia docker 2 &amp; daemon.json&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>modify_docker_sock_permission
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Install nvidia driver &amp; cuda success&#34;</span> &gt;&gt; /root/nvidia_cuda/install.log
+</span></span></code></pre></div><p>这里的报错虽然是driver name nasplugin.csi.alibabacloud.com not found，但是实际上是运行在每个node上的daemonset没有启动，因此需要启动相对应的守护进程集。之所以出现这个问题是因为在上一步我更新驱动文件的时候将所有的nvidia相关的组件/驱动全删除了，也就罢nvidia-docker2也给删除了，因此日志里面报错：</p><pre tabindex=0><code>Warning  FailedCreatePodSandBox  4m2s (x4 over 4m5s)    kubelet            (combined from similar events): Failed to create pod sandbox: rpc error: code = Unknown desc = failed to start sandbox container for pod &#34;csi-plugin-n8wgn&#34;: Error response from daemon: OCI runtime create failed: unable to retrieve OCI runtime error (open /run/containerd/io.containerd.runtime.v1.linux/moby/238bd4e5cf01dd61498969daacae01454eb59624e9e11732d4bd8aa356fcbaec/log.json: no such file or directory): fork/exec /usr/bin/nvidia-container-runtime: no such file or directory: unknown
+</code></pre><p>表现出来的报错信息为</p><pre tabindex=0><code>Events:
+  Type     Reason       Age                   From               Message
+  ----     ------       ----                  ----               -------
+  Normal   Scheduled    3m9s                  default-scheduler  Successfully assigned gitlab-runner/runner-cm89m7vp-project-4-concurrent-0drj7g to cn-gpu03016ack
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume &#34;gitlab-runner-pvc-bazel-distdir&#34; : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume &#34;gitlab-runner-pvc-bazel-repo-cache&#34; : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  2m6s (x8 over 3m10s)  kubelet            MountVolume.MountDevice failed for volume &#34;gitlab-runner-pvc-qcraft-maps-china&#34; : kubernetes.io/csi: attacher.MountDevice failed to create newCsiDriverClient: driver name nasplugin.csi.alibabacloud.com not found in the list of registered CSI drivers
+  Warning  FailedMount  67s                   kubelet            Unable to attach or mount volumes: unmounted volumes=[bazel-distdir qcraft-maps-china bazel-repo-cache], unattached volumes=[bazel-distdir qcraft-maps-china default-token-g2v9p docksock logs hosthostname aws repo bazel-repo-cache scripts]: timed out waiting for the condition
+</code></pre><p>即使安装了完了诸如nvidia & cuda & nvidia-docker，依然会发现Job没有使用gpu运行，这个时候需要修改/etc/docker/daemon.json文件下面的文件.</p><p>还有一个要注意的地方，即使添加了gpu也不一定代表着test会一定rerun，</p><pre tabindex=0><code>{
+    &#34;default-runtime&#34;: &#34;nvidia&#34;,
+    &#34;runtimes&#34;: {
+        &#34;nvidia&#34;: {
+            &#34;path&#34;: &#34;nvidia-container-runtime&#34;,
+            &#34;runtimeArgs&#34;: []
+        }
+    },
+    &#34;registry-mirror&#34;: [
+             &#34;https://registry.docker-cn.com&#34;
+    ],
+        &#34;exec-opts&#34;: [&#34;native.cgroupdriver=systemd&#34;],
+        &#34;live-restore&#34;: true,
+        &#34;log-driver&#34;: &#34;json-file&#34;,
+        &#34;log-opts&#34;: {
+                &#34;max-size&#34;: &#34;50m&#34;,
+                &#34;max-file&#34;: &#34;5&#34;
+        },
+        &#34;bip&#34;: &#34;169.254.123.1/24&#34;,
+        &#34;registry-mirrors&#34;: [&#34;https://pqbap4ya.mirror.aliyuncs.com&#34;]
+}
+</code></pre><p>报错信息为</p><pre tabindex=0><code>  PASSED  ] 0 tests.
+[  FAILED  ] 2 tests, listed below:
+[  FAILED  ] list_add_test.ListAdd
+[  FAILED  ] list_add_test.ListAddHalf
+ 2 FAILED TESTS
+================================================================================
+FAIL: //onboard/nets/custom_ops:gen_coordinates_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/b7b2ac012bd759fe3fc931a5a52099ce/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/nets/custom_ops/gen_coordinates_test/test.log)
+INFO: From Testing //onboard/nets/custom_ops:gen_coordinates_test:
+==================== Test output for //onboard/nets/custom_ops:gen_coordinates_test:
+[NVBLAS] No Gpu available
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename &#39;nvblas.conf&#39;
+[NVBLAS] Cannot open default config file &#39;nvblas.conf&#39;
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+</code></pre><p>这里还有一个奇怪的问题，就是job报错找不到GPU，然后运行失败，但是在docker里面执行却没有问题执行成功。具体参考这个job 。为什么出这个错误？为此我把bazel run -c opt //onboard/nets/custom_ops:multiply_value_test这个扔到那个job里面。问题出现了bazel run是成功的，而bazel test是失败的。。。。有个类似的链接https://github.com/bazelbuild/rules_nodejs/issues/2325 为什么出现这个问题？因为指定了具体用不用cpu_only_flag，为了能够先跳过这个job，先</p><p>bazel run -c opt //onboard/nets/custom_ops:multiply_value_test</p><p>bazel test &ndash;cache_test_results=no -c opt &ndash;config=nolint $CPU_ONLY_PARAM &ndash;test_tag_filters=hxn &ndash; //&mldr;</p><p>是这两个commit</p><pre tabindex=0><code># Docker 内部运行的结果
+qcrafter@runner-yeb5xrzz-project-4-concurrent-0st2sc:/qcraft$ bazel run -c opt //onboard/nets/custom_ops:multiply_value_test
+INFO: Invocation ID: 99fdcd7d-047b-4086-a572-722da639841f
+INFO: Analyzed target //onboard/nets/custom_ops:multiply_value_test (9 packages loaded, 234 targets configured).
+INFO: Found 1 target...
+Target //onboard/nets/custom_ops:multiply_value_test up-to-date:
+  bazel-bin/onboard/nets/custom_ops/multiply_value_test
+INFO: Elapsed time: 6.002s, Critical Path: 0.36s
+INFO: 196 processes: 65 remote cache hit, 130 internal, 1 processwrapper-sandbox.
+INFO: Build completed successfully, 196 total actions
+INFO: Build completed successfully, 196 total actions
+exec ${PAGER:-/usr/bin/less} &#34;$0&#34; || exit 1
+Executing tests from //onboard/nets/custom_ops:multiply_value_test
+-----------------------------------------------------------------------------
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename &#39;nvblas.conf&#39;
+[NVBLAS] Cannot open default config file &#39;nvblas.conf&#39;
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+Running main() from gmock_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from multiply_value_test
+[ RUN      ] multiply_value_test.MultiplyValue
+[       OK ] multiply_value_test.MultiplyValue (117 ms)
+[ RUN      ] multiply_value_test.MultiplyValueHalf
+[       OK ] multiply_value_test.MultiplyValueHalf (0 ms)
+[----------] 2 tests from multiply_value_test (117 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (117 ms total)
+[  PASSED  ] 2 tests.
+
+# 在CI节点里面执行job的日志
+FAIL: //onboard/nets/custom_ops:multiply_value_test (see /home/qcrafter/.cache/bazel/_bazel_qcrafter/b7b2ac012bd759fe3fc931a5a52099ce/execroot/com_qcraft/bazel-out/k8-opt/testlogs/onboard/nets/custom_ops/multiply_value_test/test.log)
+INFO: From Testing //onboard/nets/custom_ops:multiply_value_test:
+==================== Test output for //onboard/nets/custom_ops:multiply_value_test:
+[NVBLAS] No Gpu available                这个失败的原因实际上可能是编译build导致的
+[NVBLAS] NVBLAS_CONFIG_FILE environment variable is NOT set : relying on default config filename &#39;nvblas.conf&#39;
+[NVBLAS] Cannot open default config file &#39;nvblas.conf&#39;
+[NVBLAS] Config parsed
+[NVBLAS] CPU Blas library need to be provided
+Running main() from gmock_main.cc
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from multiply_value_test
+[ RUN      ] multiply_value_test.MultiplyValue
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 7350900951613439, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 7350900951613440,
+kOutputResult[i] evaluates to 1, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 4, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 3.0677225980998895e-41,
+kOutputResult[i] evaluates to 4, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 5.9999999997455671, which exceeds kMaxDiffFloat, where
+result[i] evaluates to 2.544326138664843e-10,
+kOutputResult[i] evaluates to 6, and
+kMaxDiffFloat evaluates to 9.9999999747524271e-07.
+onboard/nets/custom_ops/multiply_value_test.cc:55: Failure
+The difference between result[i] and kOutputResult[i] is 4, which exceeds kMaxDiffFloat, where
+...
+kOutputResultHalf[i] evaluates to 18, and
+kMaxDiffHalf evaluates to 0.00039999998989515007.
+[  FAILED  ] multiply_value_test.MultiplyValueHalf (0 ms)
+[----------] 2 tests from multiply_value_test (1 ms total)
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (1 ms total)
+[  PASSED  ] 0 tests.
+[  FAILED  ] 2 tests, listed below:
+[  FAILED  ] multiply_value_test.MultiplyValue
+[  FAILED  ] multiply_value_test.MultiplyValueHalf
+ 2 FAILED TESTS
+</code></pre><h3 class="relative group">1.7 aliyun机器怎么格式化数据盘为xfs<div id=17-aliyun%E6%9C%BA%E5%99%A8%E6%80%8E%E4%B9%88%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%95%B0%E6%8D%AE%E7%9B%98%E4%B8%BAxfs class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#17-aliyun%E6%9C%BA%E5%99%A8%E6%80%8E%E4%B9%88%E6%A0%BC%E5%BC%8F%E5%8C%96%E6%95%B0%E6%8D%AE%E7%9B%98%E4%B8%BAxfs aria-label=锚点>#</a></span></h3><p>数据盘为/dev/vdb，默认是ext4的格式</p><pre tabindex=0><code>#给机器打掉label，避免相关的任务/pod/daemonset被调度这个机器上
+
+#一路umount,去掉所有正在使用vdb的挂载，执行完了还是不能做挂载或者格式化，因为有进程再用，需要重启
+umount -l /dev/vdb
+umount -l /var/lib/container
+umount -l /var/lib/kubelet/
+umount -l /var/lib/docker
+#注释掉原先挂载/dev/vdb的内容，里面有很多挂载的配置，避免重启后还是会挂载
+vim /etc/fstab 
+#重启
+shutdown -r now
+#格式化创建xfs的文件系统
+mkfs.xfs -f /dev/vdb
+#，把下面命令写入到/etc/fstab里面，保证正确的挂载
+/dev/vdb /var/lib/container xfs defaults 0 0
+/var/lib/container/kubelet /var/lib/kubelet none defaults,bind 0 0
+/var/lib/container/docker /var/lib/docker none defaults,bind 0 0
+#重启
+
+# 这个时候vdb已经是xfs的了，可以注册到阿里云的机器里面了
+# 首先进入节点节点，选择机器后批量移除，然后选择手动添加节点，需要每一台每一台操作，在具体的机器上执行拷贝的命令
+
+
+#给机器打上对应的label
+</code></pre><h3 class="relative group">1.8 怎么计算需要机器<div id=18-%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E9%9C%80%E8%A6%81%E6%9C%BA%E5%99%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#18-%E6%80%8E%E4%B9%88%E8%AE%A1%E7%AE%97%E9%9C%80%E8%A6%81%E6%9C%BA%E5%99%A8 aria-label=锚点>#</a></span></h3><p>这个问题一般是和实际的job运行时长相关的，实际上计算起来并不困难：</p><ul><li>计算相关任务的运行时间，统计近几天的job数量和运行时间，计算一个平均时长t</li><li>计算任务对资源的需求从而计算出目前的单台机器的qps，一般是qps=(并发数)/(运行时间)</li><li>统计每天job运行的时间分布范围，这里的运行时间是正常的平均时间，这里可以按照28定律估算需要的qps，简单来说就是每天的20%的时间，跑了80%的任务，所以一般是all-qps=(job count * 0.8)/(总运行时间*0.2)</li><li>使用all-qps/qps计算需要的机器数量，再留出30%的富余。最终得出机器总量。</li></ul><h3 class="relative group">1.9 怎么拆分计算的runner的个数<div id=19-%E6%80%8E%E4%B9%88%E6%8B%86%E5%88%86%E8%AE%A1%E7%AE%97%E7%9A%84runner%E7%9A%84%E4%B8%AA%E6%95%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#19-%E6%80%8E%E4%B9%88%E6%8B%86%E5%88%86%E8%AE%A1%E7%AE%97%E7%9A%84runner%E7%9A%84%E4%B8%AA%E6%95%B0 aria-label=锚点>#</a></span></h3><p>面临的问题主要有三个：</p><ol><li>如何按照所有job的运行时候的资源区分出来不同的runner（的个数）？</li><li>如果按照第一个问题正确地设置了不同的runner，那么如何设置每个runner的job运行时候的资源呢？</li><li>前两个问题都解决的情况下，怎么设置每个runner的并发数量呢？</li></ol><p>前两个问题感觉是一致的，是个散点图的聚类分类问题，类别确定了就可以计算。首先需要收集历史数据pod对于内存的需求，然后画出散点图。这个时候就可以开始按照范围进行筛选了，筛选完了之后1h内统计出来，min/midum/large = 2/1/3，使用加权平均，和取最大值同时考虑，内存request拆分为：0.5G，7G，17G。关于第三个问题，设置runner的并发数量，实际上是和资源的数量相关联的，有两种分析手段：</p><ul><li>统计一下一个下午并发的job的数量和种类，看应该设置runner的并发数量多少</li><li>单纯按照机器支持的最大量来计算同时能够跑多少</li></ul><p>实际上这里面的问题是，第二种方法是纯贪心，两个结合到一起更合理一些。统计了我们任务发现我们的job实际上分歧特别大，按照small:medium:large的比例和运行时间来简单加权，计算出来的比例为15:30:60，经过一个繁忙的一下午最后发现可以容纳为15:30:70的容量，基本就打到了极限</p><p>目前我们的资源利用率不够高，大概四五台机器的请求值为90%，其真正的使用值只有50%查出来了30%的余地</p><h3 class="relative group">1.10 git的奇怪问题<div id=110-git%E7%9A%84%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#110-git%E7%9A%84%E5%A5%87%E6%80%AA%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>我们有一个巨大的地图仓库，里面混杂着大量的git lfs文件，这个仓库非常大，因此我拉取了重点关注的单个分支即clone的时候挤上了&ndash;single-branch的选项。这两天遇到了一个奇怪的问题，执行git push 会报错</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>Locking support detected on remote <span class=s2>&#34;origin&#34;</span>. Consider enabling it with:
+</span></span><span class=line><span class=cl>  $ git config lfs.https://xxxxxxx.git/info/lfs.locksverify <span class=nb>true</span>
+</span></span><span class=line><span class=cl>ref HEAD:: missing object: 003d38e4b3d22ee0610d9ec800bca7ce3cf70ef9
+</span></span><span class=line><span class=cl>Uploading LFS objects: 100% <span class=o>(</span>125882/125882<span class=o>)</span>, <span class=m>16</span> GB <span class=p>|</span> 3.9 MB/s, <span class=k>done</span>.
+</span></span><span class=line><span class=cl>error: failed to push some refs to <span class=s1>&#39;xxxxxxxxx.git&#39;</span>
+</span></span><span class=line><span class=cl>git push <span class=o>[</span>MAP-CI-DAILY/20221126_0252<span class=o>]</span> failed.
+</span></span></code></pre></div><p>查了一部分issue:https://github.com/git-lfs/git-lfs/issues/3587, <a href=https://stackoverflow.com/questions/70923109/git-lfs-missing-object-on-push-even-if-it-shouldnt-be target=_blank>https://stackoverflow.com/questions/70923109/git-lfs-missing-object-on-push-even-if-it-shouldnt-be</a></p><p>执行了下面的命令，修复了单次的push，但是第二天又出现了问题，简单来说发现是只要拉single-branch就会出现这个问题</p><pre tabindex=0><code> git repack -adf
+</code></pre><p>怎么办。。。头太大了，最后我切换了新版本的git并且除了拉取单个分支，并且拉取了所有的分支之后，再次进行track就没问题了</p><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-10-28-gitlabjob问题总结\\index.md",oid_likes="likes_posts\\2021-10-28-gitlabjob问题总结\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-09-16-cpp%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">CPP奇技淫巧</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-09-16T00:00:00+00:00>2021 年 9 月 16 日</time>
+</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">ci_cd相关学习</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-10-11T00:00:00+00:00>2021 年 10 月 11 日</time>
+</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
+<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>

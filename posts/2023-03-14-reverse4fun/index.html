@@ -1,0 +1,542 @@
+<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2023-03-14-reverse4fun &#183; 菜狗的blog</title>
+<meta name=title content="2023-03-14-reverse4fun &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="security,"><link rel=canonical href=https://hxndg.github.io/posts/2023-03-14-reverse4fun/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity="sha512-ujd1vr1SorSDf42mTjLuNuXFK/KEoM4iYlYngjmLcBVDlHUnrRSYSHcXsblv4qTkjTZaAuC10A4iSJMFLpnYPA=="><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2023-03-14-reverse4fun/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2023-03-14-reverse4fun"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-03-14T00:00:00+00:00"><meta property="article:modified_time" content="2023-03-14T00:00:00+00:00"><meta property="article:tag" content="Security"><meta name=twitter:card content="summary"><meta name=twitter:title content="2023-03-14-reverse4fun"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2023-03-14-reverse4fun","headline":"2023-03-14-reverse4fun","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2023-03-14-reverse4fun\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2023","dateCreated":"2023-03-14T00:00:00\u002b00:00","datePublished":"2023-03-14T00:00:00\u002b00:00","dateModified":"2023-03-14T00:00:00\u002b00:00","keywords":["security"],"mainEntityOfPage":"true","wordCount":"4796"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
+<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
+<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+</span></button>
+<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2023-03-14-reverse4fun</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2023-03-14T00:00:00+00:00>2023 年 3 月 14 日</time><span class="px-2 text-primary-500">&#183;</span><span>4796 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>10 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#reverse-part>Reverse Part</a><ul><li><a href=#1-license-checker-0x03>1 license checker 0x03</a></li><li><a href=#2-trycrackme>2 trycrackme</a></li><li><a href=#3-fr0zien-的crackme>3 fr0zien 的crackme</a></li><li><a href=#3-rainerzimmermanhttpscrackmesoneuserrainerzimmermans-keygen>3 <a href=https://crackmes.one/user/RainerZimmerman>RainerZimmerman</a>&rsquo;s Keygen</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#reverse-part>Reverse Part</a><ul><li><a href=#1-license-checker-0x03>1 license checker 0x03</a></li><li><a href=#2-trycrackme>2 trycrackme</a></li><li><a href=#3-fr0zien-的crackme>3 fr0zien 的crackme</a></li><li><a href=#3-rainerzimmermanhttpscrackmesoneuserrainerzimmermans-keygen>3 <a href=https://crackmes.one/user/RainerZimmerman>RainerZimmerman</a>&rsquo;s Keygen</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">reverse4fun<div id=reverse4fun class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#reverse4fun aria-label=锚点>#</a></span></h1><h2 class="relative group">Reverse Part<div id=reverse-part class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#reverse-part aria-label=锚点>#</a></span></h2><h3 class="relative group">1 license checker 0x03<div id=1-license-checker-0x03 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-license-checker-0x03 aria-label=锚点>#</a></span></h3><p>crackme的下载路径在这里：https://crackmes.one/crackme/62072dd633c5d46c8bcbfd9b，本身的代码非常直接，所以可以直接看disass出来的代码</p><pre tabindex=0><code class=language-assembly data-lang=assembly>        (gdb) disass
+        Dump of assembler code for function main:
+           0x0000555555555179 &lt;+0&gt;:       push   %rbp             #标准开局，保存堆栈环境
+           0x000055555555517a &lt;+1&gt;:       mov    %rsp,%rbp
+           0x000055555555517d &lt;+4&gt;:       sub    $0x30,%rsp
+           #非常标准的对应main函数的两个参数int main(int argc, char** argv),这个是argc
+           0x0000555555555181 &lt;+8&gt;:     mov    %edi,-0x24(%rbp)
+           0x0000555555555184 &lt;+11&gt;:    mov    %rsi,-0x30(%rbp)  #对应argv
+           0x0000555555555188 &lt;+15&gt;:    mov    %fs:0x28,%rax
+           0x0000555555555191 &lt;+24&gt;:    mov    %rax,-0x8(%rbp)
+           0x0000555555555195 &lt;+28&gt;:    xor    %eax,%eax
+           # #比较有没有参数，换言之有没有输入参数，如果有输入参数跳转到下面箭头指的地方
+           0x0000555555555197 &lt;+30&gt;:    cmpl   $0x2,-0x24(%rbp)
+-------    0x000055555555519b &lt;+34&gt;:    je     0x5555555551c5 &lt;main+76&gt;
+|          # 没输入参数的话直接开始调用printf函数打印下面的格式
+|          0x000055555555519d &lt;+36&gt;:    mov    -0x30(%rbp),%rax
+|          0x00005555555551a1 &lt;+40&gt;:    mov    (%rax),%rax
+|          0x00005555555551a4 &lt;+43&gt;:    mov    %rax,%rsi
+|          # 格式的字符对应&#34;Usage : %s &lt;license pass code here [numbers only]&gt;\n&#34;
+|          0x00005555555551a7 &lt;+46&gt;:    lea    0xe5a(%rip),%rax        # 0x555555556008
+|          0x00005555555551ae &lt;+53&gt;:    mov    %rax,%rdi
+|          0x00005555555551b1 &lt;+56&gt;:    mov    $0x0,%eax
+|          0x00005555555551b6 &lt;+61&gt;:    callq  0x555555555050 &lt;printf@plt&gt;
+|          0x00005555555551bb &lt;+66&gt;:    mov    $0x0,%edi
+|          0x00005555555551c0 &lt;+71&gt;:    callq  0x555555555070 &lt;exit@plt&gt;
+|          #下面的两个地址存储着两个参数
+|          # 清空两个数值，这里存储着一个计算出来的和
+------&gt;    0x00005555555551c5 &lt;+76&gt;:    movl   $0x0,-0x10(%rbp)
+           #这个地址存储的是处理过的字符串的字符的个数
+           0x00005555555551cc &lt;+83&gt;:    movl   $0x0,-0xc(%rbp)
+        -- 0x00005555555551d3 &lt;+90&gt;:    jmp    0x555555555201 &lt;main+136&gt;
+--------&gt;  0x00005555555551d5 &lt;+92&gt;:    mov    -0x30(%rbp),%rax #还是拿到输入的数字的位置
+|       |  0x00005555555551d9 &lt;+96&gt;:    add    $0x8,%rax
+|       |  0x00005555555551dd &lt;+100&gt;:   mov    (%rax),%rdx
+|       |  0x00005555555551e0 &lt;+103&gt;:   mov    -0xc(%rbp),%eax     # 这个存储着处理过的字符串字符的个数，第一次是0
+|       |  0x00005555555551e3 &lt;+106&gt;:   cltq
+|       |  0x00005555555551e5 &lt;+108&gt;:   add    %rdx,%rax           #找到当前处理的字符
+|       |  #取rax，实际上就是输入的数字所在的字符串的1byte，拓展到eax里
+|       |  0x00005555555551e8 &lt;+111&gt;:   movzbl (%rax),%eax
+|       |  0x00005555555551eb &lt;+114&gt;:   mov    %al,-0x11(%rbp)  #丢到栈里面,可以看到是刚才-0x10(%rbp)的低一位
+|       |  0x00005555555551ee &lt;+117&gt;:   lea    -0x11(%rbp),%rax
+|       |  0x00005555555551f2 &lt;+121&gt;:   mov    %rax,%rdi
+|       |  #转换为整数，整个过程是一个循环，就是在不断地将每一位转换为数字，然后加到-0x10(%rbp)上
+|       |  0x00005555555551f5 &lt;+124&gt;:   callq  0x555555555060 &lt;atoi@plt&gt;
+|       |  #eax存储着从字符转换为数字的结果（返回值）,存储到求和到刚才舒适的存储和的位置
+|       |  0x00005555555551fa &lt;+129&gt;:   add    %eax,-0x10(%rbp)
+|       |  #addl加了一个1，实际上就是诸位比较，还是继续运行，
+|       |  0x00005555555551fd &lt;+132&gt;:   addl   $0x1,-0xc(%rbp)
+|       |  #argv的起始地址，
+|       ---&gt;0x0000555555555201 &lt;+136&gt;:  mov    -0x30(%rbp),%rax
+|          # 偏移8字节，实际上目的是找到第二个元素,也就是我们输入参数所对应字符串的地址
+|          0x0000555555555205 &lt;+140&gt;:   add    $0x8,%rax
+|          # 将元素的值赋值给rax，就是输入的数字的所在字符串的地址，
+|          0x0000555555555209 &lt;+144&gt;:   mov    (%rax),%rax
+|          0x000055555555520c &lt;+147&gt;:   mov    %rax,%rdi
+|          # 对字符串调用strlen判断长度
+|          0x000055555555520f &lt;+150&gt;:   callq  0x555555555040 &lt;strlen@plt&gt;
+|          # 返回的字符串长度放在了eax里面，和已经操作的字符串的字符个数比较一下，看看是不是处理完了
+|          0x0000555555555214 &lt;+155&gt;:   cmp    %eax,-0xc(%rbp)
+---        0x0000555555555217 &lt;+158&gt;:   jl     0x5555555551d5 &lt;main+92&gt;
+           #比较输入的参数字符串每一个转换为数字后加起来以后是不是0x32，所以构造一个字符串各位求和是0x32的即可
+           0x0000555555555219 &lt;+160&gt;:   cmpl   $0x32,-0x10(%rbp)
+           0x000055555555521d &lt;+164&gt;:   jne    0x555555555238 &lt;main+191&gt;
+           0x000055555555521f &lt;+166&gt;:   lea    0xe1a(%rip),%rax        # 0x555555556040
+           0x0000555555555226 &lt;+173&gt;:   mov    %rax,%rdi
+           0x0000555555555229 &lt;+176&gt;:   callq  0x555555555030 &lt;puts@plt&gt;
+           0x000055555555522e &lt;+181&gt;:   mov    $0x0,%edi
+           0x0000555555555233 &lt;+186&gt;:   callq  0x555555555070 &lt;exit@plt&gt;
+           0x0000555555555238 &lt;+191&gt;:   lea    0xe25(%rip),%rax        # 0x555555556064
+           0x000055555555523f &lt;+198&gt;:   mov    %rax,%rdi
+           0x0000555555555242 &lt;+201&gt;:   callq  0x555555555030 &lt;puts@plt&gt;
+           0x0000555555555247 &lt;+206&gt;:   mov    $0x0,%edi
+           0x000055555555524c &lt;+211&gt;:   callq  0x555555555070 &lt;exit@plt&gt;
+</code></pre><h3 class="relative group">2 trycrackme<div id=2-trycrackme class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-trycrackme aria-label=锚点>#</a></span></h3><p>trycrackme的下载地址为https://crackmes.one/crackme/61c8deff33c5d413767ca0ea，直接从汇编就能看出来到底在做什么</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl>     <span class=nf>Dump</span> <span class=no>of</span> <span class=no>assembler</span> <span class=no>code</span> <span class=no>for</span> <span class=no>function</span> <span class=no>main</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 标准开局，保存堆栈
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555551af</span> <span class=err>&lt;+</span><span class=mi>0</span><span class=err>&gt;</span><span class=p>:</span>        <span class=no>push</span>   <span class=nv>%rbp</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551b0</span> <span class=err>&lt;+</span><span class=mi>1</span><span class=err>&gt;</span><span class=p>:</span>        <span class=no>mov</span>    <span class=nv>%rsp</span><span class=p>,</span><span class=nv>%rbp</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551b3</span> <span class=err>&lt;+</span><span class=mi>4</span><span class=err>&gt;</span><span class=p>:</span>        <span class=no>sub</span>    <span class=no>$0xe0</span><span class=p>,</span><span class=nv>%rsp</span>
+</span></span><span class=line><span class=cl>        <span class=c1>#存储argc &amp; argv，不过这里没用到
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555551ba</span> <span class=err>&lt;+</span><span class=mi>11</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%edi</span><span class=p>,-</span><span class=mi>0xd4</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551c0</span> <span class=err>&lt;+</span><span class=mi>17</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%rsi</span><span class=p>,-</span><span class=mi>0xe0</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551c7</span> <span class=err>&lt;+</span><span class=mi>24</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%fs</span><span class=p>:</span><span class=mi>0x28</span><span class=p>,</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551d0</span> <span class=err>&lt;+</span><span class=mi>33</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,-</span><span class=mi>0x8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551d4</span> <span class=err>&lt;+</span><span class=mi>37</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>xor</span>    <span class=nv>%eax</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 注意这个常量，是我们比较的关键
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555551d6</span> <span class=err>&lt;+</span><span class=mi>39</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>movabs</span> <span class=no>$0x3534323773734034</span><span class=p>,</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 存储到了-0xbb(%rbp)的位置
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555551e0</span> <span class=err>&lt;+</span><span class=mi>49</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,-</span><span class=mi>0xbb</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 给上面的常量补充了两个字节的数字，拼接到最后面,拼接完以后看一下具体的内容
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1># (gdb) x/16xb 140737488347509
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1># 0x7fffffffe175: 0x34    0x40    0x73    0x73    0x37    0x32    0x34    0x35
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1># 0x7fffffffe17d: 0x33    0x36    0x00    0x00    0x00    0x00    0x00    0x00
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555551e7</span> <span class=err>&lt;+</span><span class=mi>56</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>movw</span>   <span class=no>$0x3633</span><span class=p>,-</span><span class=mi>0xb3</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551f0</span> <span class=err>&lt;+</span><span class=mi>65</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>movb</span>   <span class=no>$0x0</span><span class=p>,-</span><span class=mi>0xb1</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551f7</span> <span class=err>&lt;+</span><span class=mi>72</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>lea</span>    <span class=p>-</span><span class=mi>0xbb</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555551fe</span> <span class=err>&lt;+</span><span class=mi>79</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555201</span> <span class=err>&lt;+</span><span class=mi>82</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>callq</span>  <span class=mh>0x555555555050</span> <span class=p>&lt;</span><span class=no>strlen@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 存储我们刚才拼接出来的字符串长度，明确地看出来是10
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x0000555555555206</span> <span class=err>&lt;+</span><span class=mi>87</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=nv>%eax</span><span class=p>,-</span><span class=mi>0xc0</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555520c</span> <span class=err>&lt;+</span><span class=mi>93</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 调用banner打印一些flag，没有啥用，不用管
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x0000555555555211</span> <span class=err>&lt;+</span><span class=mi>98</span><span class=err>&gt;</span><span class=p>:</span>       <span class=no>callq</span>  <span class=mh>0x555555555199</span> <span class=p>&lt;</span><span class=no>banner</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 准备调用printf提示用户输入数据，格式化字符串为Put the key:
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x0000555555555216</span> <span class=err>&lt;+</span><span class=mi>103</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=mi>0xef9</span><span class=p>(</span><span class=nv>%rip</span><span class=p>),</span><span class=nv>%rax</span>        <span class=c1># 0x555555556116
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x000055555555521d</span> <span class=err>&lt;+</span><span class=mi>110</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555220</span> <span class=err>&lt;+</span><span class=mi>113</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555225</span> <span class=err>&lt;+</span><span class=mi>118</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555070</span> <span class=p>&lt;</span><span class=no>printf@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 记住这个-0xb0(%rbp)的地址，这个是存储scanf输入进来的地址
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x000055555555522a</span> <span class=err>&lt;+</span><span class=mi>123</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=p>-</span><span class=mi>0xb0</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555231</span> <span class=err>&lt;+</span><span class=mi>130</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rsi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555234</span> <span class=err>&lt;+</span><span class=mi>133</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=mi>0xee9</span><span class=p>(</span><span class=nv>%rip</span><span class=p>),</span><span class=nv>%rax</span>        <span class=c1># 0x555555556124
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x000055555555523b</span> <span class=err>&lt;+</span><span class=mi>140</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555523e</span> <span class=err>&lt;+</span><span class=mi>143</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555243</span> <span class=err>&lt;+</span><span class=mi>148</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555080</span> <span class=p>&lt;</span><span class=no>__isoc99_scanf@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 初始化两个变量，分别存储上面-0xbb(%rbp)字符串处理过的字符个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=c1># 和要算出来作为正确的code所处理过的字符个数
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x0000555555555248</span> <span class=err>&lt;+</span><span class=mi>153</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movl</span>   <span class=no>$0x0</span><span class=p>,-</span><span class=mi>0xc8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555252</span> <span class=err>&lt;+</span><span class=mi>163</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movl</span>   <span class=no>$0x0</span><span class=p>,-</span><span class=mi>0xc4</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>   <span class=err>|---</span> <span class=err>0</span><span class=nf>x000055555555525c</span> <span class=err>&lt;+</span><span class=mi>173</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>jmp</span>    <span class=mh>0x5555555552ab</span> <span class=p>&lt;</span><span class=no>main</span><span class=p>+</span><span class=mi>252</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=c1># -0xc8(%rbp)是刚才那个常量字符串处理过的byte数，所以cltq下面那句就很明显了
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|-----&gt;</span> <span class=err>0</span><span class=nf>x000055555555525e</span> <span class=err>&lt;+</span><span class=mi>175</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=p>-</span><span class=mi>0xc8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555264</span> <span class=err>&lt;+</span><span class=mi>181</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>cltq</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 这里的意思是把刚才-0xbb(%rbp)字符串的字符,hex形式丢到eax
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555266</span> <span class=err>&lt;+</span><span class=mi>183</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movzbl</span> <span class=p>-</span><span class=mi>0xbb</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>,</span><span class=nv>%rax</span><span class=p>,</span><span class=mi>1</span><span class=p>),</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 先做有符号数拓展，再做无符号数拓展，不过都小于0x80，所以无所谓了
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x000055555555526e</span> <span class=err>&lt;+</span><span class=mi>191</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movsbl</span> <span class=nv>%al</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555271</span> <span class=err>&lt;+</span><span class=mi>194</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movzbl</span> <span class=nv>%al</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555274</span> <span class=err>&lt;+</span><span class=mi>197</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=p>-</span><span class=mi>0xc4</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%edx</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x000055555555527a</span> <span class=err>&lt;+</span><span class=mi>203</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>movslq</span> <span class=nv>%edx</span><span class=p>,</span><span class=nv>%rdx</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># rcx存储了计算结果的首地址， -0x70(%rbp)是我们最后比较的参照物的地址
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x000055555555527d</span> <span class=err>&lt;+</span><span class=mi>206</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=p>-</span><span class=mi>0x70</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rcx</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 加上已经结算过的结果，实际上就是挪动指针,存储下面sprintf的结果
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555281</span> <span class=err>&lt;+</span><span class=mi>210</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>add</span>    <span class=nv>%rdx</span><span class=p>,</span><span class=nv>%rcx</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555284</span> <span class=err>&lt;+</span><span class=mi>213</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%eax</span><span class=p>,</span><span class=nv>%edx</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 这个字符是 %02x
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555286</span> <span class=err>&lt;+</span><span class=mi>215</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=mi>0xe9a</span><span class=p>(</span><span class=nv>%rip</span><span class=p>),</span><span class=nv>%rax</span>        <span class=c1># 0x555555556127
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x000055555555528d</span> <span class=err>&lt;+</span><span class=mi>222</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rsi</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555290</span> <span class=err>&lt;+</span><span class=mi>225</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rcx</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555293</span> <span class=err>&lt;+</span><span class=mi>228</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 这里调用sprintf的含义就非常清楚了，从hex编码转换为字符串
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 原先是hex 0x34，那么转换为字符串&#34;34&#34;
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x0000555555555298</span> <span class=err>&lt;+</span><span class=mi>233</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555090</span> <span class=p>&lt;</span><span class=no>sprintf@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1># hex 字符串处理过一byte后挪一
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=c1># 而sprintf处理的结果是2byte（两个char字符）
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x000055555555529d</span> <span class=err>&lt;+</span><span class=mi>238</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>addl</span>   <span class=no>$0x1</span><span class=p>,-</span><span class=mi>0xc8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552a4</span> <span class=err>&lt;+</span><span class=mi>245</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>addl</span>   <span class=no>$0x2</span><span class=p>,-</span><span class=mi>0xc4</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>  <span class=err>|</span>    <span class=c1>#开始处理，先找到第一个字符，看看和上面的字符串长度10的大小，判断有没有处理完
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=err>|</span>  <span class=err>---&gt;</span> <span class=err>0</span><span class=nf>x00005555555552ab</span> <span class=err>&lt;+</span><span class=mi>252</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=p>-</span><span class=mi>0xc8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|</span>       <span class=err>0</span><span class=nf>x00005555555552b1</span> <span class=err>&lt;+</span><span class=mi>258</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>cmp</span>    <span class=p>-</span><span class=mi>0xc0</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl><span class=err>|------</span> <span class=err>0</span><span class=nf>x00005555555552b7</span> <span class=err>&lt;+</span><span class=mi>264</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>jl</span>     <span class=mh>0x55555555525e</span> <span class=p>&lt;</span><span class=no>main</span><span class=p>+</span><span class=mi>175</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552b9</span> <span class=err>&lt;+</span><span class=mi>266</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=p>-</span><span class=mi>0x70</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552bd</span> <span class=err>&lt;+</span><span class=mi>270</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552c0</span> <span class=err>&lt;+</span><span class=mi>273</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555050</span> <span class=p>&lt;</span><span class=no>strlen@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552c5</span> <span class=err>&lt;+</span><span class=mi>278</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdx</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 算出来的正确的code
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555552c8</span> <span class=err>&lt;+</span><span class=mi>281</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=p>-</span><span class=mi>0x70</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rcx</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 输入的code
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555552cc</span> <span class=err>&lt;+</span><span class=mi>285</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=p>-</span><span class=mi>0xb0</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552d3</span> <span class=err>&lt;+</span><span class=mi>292</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rcx</span><span class=p>,</span><span class=nv>%rsi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552d6</span> <span class=err>&lt;+</span><span class=mi>295</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=c1># 比较
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x00005555555552d9</span> <span class=err>&lt;+</span><span class=mi>298</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555030</span> <span class=p>&lt;</span><span class=no>strncmp@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x00005555555552de</span> <span class=err>&lt;+</span><span class=mi>303</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>test</span>   <span class=nv>%eax</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>   <span class=err>|----0</span><span class=nf>x00005555555552e0</span> <span class=err>&lt;+</span><span class=mi>305</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>je</span>     <span class=mh>0x5555555552fd</span> <span class=p>&lt;</span><span class=no>main</span><span class=p>+</span><span class=mi>334</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552e2</span> <span class=err>&lt;+</span><span class=mi>307</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=mi>0xe43</span><span class=p>(</span><span class=nv>%rip</span><span class=p>),</span><span class=nv>%rax</span>        <span class=c1># 0x55555555612c
+</span></span></span><span class=line><span class=cl><span class=c1></span>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552e9</span> <span class=err>&lt;+</span><span class=mi>314</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552ec</span> <span class=err>&lt;+</span><span class=mi>317</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552f1</span> <span class=err>&lt;+</span><span class=mi>322</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555070</span> <span class=p>&lt;</span><span class=no>printf@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552f6</span> <span class=err>&lt;+</span><span class=mi>327</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0xffffffff</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=err>0</span><span class=nf>x00005555555552fb</span> <span class=err>&lt;+</span><span class=mi>332</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>jmp</span>    <span class=mh>0x555555555316</span> <span class=p>&lt;</span><span class=no>main</span><span class=p>+</span><span class=mi>359</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>   <span class=err>|</span>    <span class=c1># 这里就是正确的结果，所以我们只需要输入一个字符串和上面常量字符串从hex到字符串转换的结果即可
+</span></span></span><span class=line><span class=cl><span class=c1></span>   <span class=err>|---&gt;0</span><span class=nf>x00005555555552fd</span> <span class=err>&lt;+</span><span class=mi>334</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>lea</span>    <span class=mi>0xe3b</span><span class=p>(</span><span class=nv>%rip</span><span class=p>),</span><span class=nv>%rax</span>        <span class=c1># 0x55555555613f
+</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=err>0</span><span class=nf>x0000555555555304</span> <span class=err>&lt;+</span><span class=mi>341</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=nv>%rax</span><span class=p>,</span><span class=nv>%rdi</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555307</span> <span class=err>&lt;+</span><span class=mi>344</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555530c</span> <span class=err>&lt;+</span><span class=mi>349</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555070</span> <span class=p>&lt;</span><span class=no>printf@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555311</span> <span class=err>&lt;+</span><span class=mi>354</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=no>$0x0</span><span class=p>,</span><span class=nv>%eax</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555316</span> <span class=err>&lt;+</span><span class=mi>359</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>mov</span>    <span class=p>-</span><span class=mi>0x8</span><span class=p>(</span><span class=nv>%rbp</span><span class=p>),</span><span class=nv>%rdx</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555531a</span> <span class=err>&lt;+</span><span class=mi>363</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>sub</span>    <span class=nv>%fs</span><span class=p>:</span><span class=mi>0x28</span><span class=p>,</span><span class=nv>%rdx</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555323</span> <span class=err>&lt;+</span><span class=mi>372</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>je</span>     <span class=mh>0x55555555532a</span> <span class=p>&lt;</span><span class=no>main</span><span class=p>+</span><span class=mi>379</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x0000555555555325</span> <span class=err>&lt;+</span><span class=mi>374</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>callq</span>  <span class=mh>0x555555555060</span> <span class=p>&lt;</span><span class=no>__stack_chk_fail@plt</span><span class=p>&gt;</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555532a</span> <span class=err>&lt;+</span><span class=mi>379</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>leaveq</span>
+</span></span><span class=line><span class=cl>        <span class=err>0</span><span class=nf>x000055555555532b</span> <span class=err>&lt;+</span><span class=mi>380</span><span class=err>&gt;</span><span class=p>:</span>      <span class=no>retq</span>
+</span></span><span class=line><span class=cl>     <span class=nf>End</span> <span class=no>of</span> <span class=no>assembler</span> <span class=no>dump.</span>        
+</span></span></code></pre></div><h3 class="relative group">3 fr0zien 的crackme<div id=3-fr0zien-%E7%9A%84crackme class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-fr0zien-%E7%9A%84crackme aria-label=锚点>#</a></span></h3><pre tabindex=0><code class=language-assembly data-lang=assembly>   0x0000555555555165 &lt;+0&gt;:     push   %rbp
+   0x0000555555555166 &lt;+1&gt;:     mov    %rsp,%rbp
+   0x0000555555555169 &lt;+4&gt;:     sub    $0xa0,%rsp
+   # argc
+   0x0000555555555170 &lt;+11&gt;:    mov    %edi,-0x94(%rbp)
+   # argv, 可以通过argv找到具体的参数
+   0x0000555555555176 &lt;+17&gt;:    mov    %rsi,-0xa0(%rbp)
+   #stack gard
+   0x000055555555517d &lt;+24&gt;:    mov    %fs:0x28,%rax
+   0x0000555555555186 &lt;+33&gt;:    mov    %rax,-0x8(%rbp)
+   0x000055555555518a &lt;+37&gt;:    xor    %eax,%eax
+   # 检查参数是不是两个
+   0x000055555555518c &lt;+39&gt;:    cmpl   $0x1,-0x94(%rbp)
+   0x0000555555555193 &lt;+46&gt;:    jne    0x5555555551ab &lt;main+70&gt;
+   # 如果没有输入参数，那么直接输出提示的字符：Usage: ./crackme FLAG
+   0x0000555555555195 &lt;+48&gt;:    lea    0xe68(%rip),%rdi        # 0x555555556004
+   0x000055555555519c &lt;+55&gt;:    callq  0x555555555030 &lt;puts@plt&gt;
+   0x00005555555551a1 &lt;+60&gt;:    mov    $0x1,%eax
+   0x00005555555551a6 &lt;+65&gt;:    jmpq   0x555555555355 &lt;main+496&gt;
+   # 比较参数是不是0x15的长度, 下面的语句明显是先找到参数，调用strlen检查字符串的长度
+   0x00005555555551ab &lt;+70&gt;:    mov    -0xa0(%rbp),%rax
+   0x00005555555551b2 &lt;+77&gt;:    add    $0x8,%rax
+   0x00005555555551b6 &lt;+81&gt;:    mov    (%rax),%rax
+   0x00005555555551b9 &lt;+84&gt;:    mov    %rax,%rdi
+   0x00005555555551bc &lt;+87&gt;:    callq  0x555555555040 &lt;strlen@plt&gt;
+   # 比较参数是不是0x15的长度, 0x15才会往下走，否则报错
+   0x00005555555551c1 &lt;+92&gt;:    cmp    $0x15,%rax
+   0x00005555555551c5 &lt;+96&gt;:    je     0x5555555551dd &lt;main+120&gt;
+   0x00005555555551c7 &lt;+98&gt;:    lea    0xe4c(%rip),%rdi        # 0x55555555601a
+   0x00005555555551ce &lt;+105&gt;:   callq  0x555555555030 &lt;puts@plt&gt;
+   0x00005555555551d3 &lt;+110&gt;:   mov    $0x1,%eax
+   0x00005555555551d8 &lt;+115&gt;:   jmpq   0x555555555355 &lt;main+496&gt;
+   # 该字符串为sup3r_s3cr3t_k3y_1337
+   0x00005555555551dd &lt;+120&gt;:   lea    0xe41(%rip),%rax        # 0x555555556025
+   0x00005555555551e4 &lt;+127&gt;:   mov    %rax,-0x88(%rbp)
+   # 注意这个地址-0x90(%rbp)从0开始循环
+   0x00005555555551eb &lt;+134&gt;:   movl   $0x0,-0x90(%rbp)
+    |--0x00005555555551f5 &lt;+144&gt;:       jmp    0x555555555225 &lt;main+192&gt;
+----|-&gt;  0x00005555555551f7 &lt;+146&gt;:     mov    -0x90(%rbp),%eax &lt;------------
+|   |  0x00005555555551fd &lt;+152&gt;:       movslq %eax,%rdx
+|   |  0x0000555555555200 &lt;+155&gt;:       mov    -0x88(%rbp),%rax
+|   |  0x0000555555555207 &lt;+162&gt;:       add    %rdx,%rax
+|   |  0x000055555555520a &lt;+165&gt;:       movzbl (%rax),%eax
+|   |  # 刚才上面的字符串对应的ascii每个减去0x22，再存入代码中
+|   |  0x000055555555520d &lt;+168&gt;:       sub    $0x22,%eax
+|   |  0x0000555555555210 &lt;+171&gt;:       mov    %eax,%edx
+|   |  0x0000555555555212 &lt;+173&gt;:       mov    -0x90(%rbp),%eax
+|   |  0x0000555555555218 &lt;+179&gt;:       cltq
+|   |  0x000055555555521a &lt;+181&gt;:       mov    %dl,-0x20(%rbp,%rax,1)
+|   |  0x000055555555521e &lt;+185&gt;:       addl   $0x1,-0x90(%rbp)
+|   |  # 这里比较是不是到了0x14的长度，就是上面字符串的长度处理完了没
+|   |-&gt;0x0000555555555225 &lt;+192&gt;:       cmpl   $0x14,-0x90(%rbp)
+|----  0x000055555555522c &lt;+199&gt;:       jle    0x5555555551f7 &lt;main+146&gt; --
+   # 这里开始存储另一个ascii码，这里注意是movl，间隔为4,下面会看到具体的比较，记住这些常量，一会会用到
+   0x000055555555522e &lt;+201&gt;:   movl   $0x37,-0x80(%rbp)
+   0x0000555555555235 &lt;+208&gt;:   movl   $0x3f,-0x7c(%rbp)
+   0x000055555555523c &lt;+215&gt;:   movl   $0x2f,-0x78(%rbp)
+   0x0000555555555243 &lt;+222&gt;:   movl   $0x76,-0x74(%rbp)
+   0x000055555555524a &lt;+229&gt;:   movl   $0x2b,-0x70(%rbp)
+   0x0000555555555251 &lt;+236&gt;:   movl   $0x62,-0x6c(%rbp)
+   0x0000555555555258 &lt;+243&gt;:   movl   $0x28,-0x68(%rbp)
+   0x000055555555525f &lt;+250&gt;:   movl   $0x21,-0x64(%rbp)
+   0x0000555555555266 &lt;+257&gt;:   movl   $0x34,-0x60(%rbp)
+   0x000055555555526d &lt;+264&gt;:   movl   $0xf,-0x5c(%rbp)
+   0x0000555555555274 &lt;+271&gt;:   movl   $0x77,-0x58(%rbp)
+   0x000055555555527b &lt;+278&gt;:   movl   $0x62,-0x54(%rbp)
+   0x0000555555555282 &lt;+285&gt;:   movl   $0x48,-0x50(%rbp)
+   0x0000555555555289 &lt;+292&gt;:   movl   $0x27,-0x4c(%rbp)
+   0x0000555555555290 &lt;+299&gt;:   movl   $0x75,-0x48(%rbp)
+   0x0000555555555297 &lt;+306&gt;:   movl   $0x8,-0x44(%rbp)
+   0x000055555555529e &lt;+313&gt;:   movl   $0x56,-0x40(%rbp)
+   0x00005555555552a5 &lt;+320&gt;:   movl   $0x6a,-0x3c(%rbp)
+   0x00005555555552ac &lt;+327&gt;:   movl   $0x68,-0x38(%rbp)
+   0x00005555555552b3 &lt;+334&gt;:   movl   $0x4e,-0x34(%rbp)
+   0x00005555555552ba &lt;+341&gt;:   movl   $0x68,-0x30(%rbp)
+   # 这里在此保存了一个0，-0x8c(%rbp)，计数用
+   0x00005555555552c1 &lt;+348&gt;:   movl   $0x0,-0x8c(%rbp)
+   | --0x00005555555552cb &lt;+358&gt;:       jmp    0x555555555325 &lt;main+448&gt;
+   |   # 还是先找到输入的参数对应的字符串
+---|--&gt;0x00005555555552cd &lt;+360&gt;:       mov    -0xa0(%rbp),%rax
+|  |   0x00005555555552d4 &lt;+367&gt;:       add    $0x8,%rax
+|  |   0x00005555555552d8 &lt;+371&gt;:       mov    (%rax),%rdx
+|  |   # 我们是一个char一个char比较，所以得加上刚才的计数,存储到eax
+|  |   0x00005555555552db &lt;+374&gt;:       mov    -0x8c(%rbp),%eax
+|  |   0x00005555555552e1 &lt;+380&gt;:       cltq
+|  |   0x00005555555552e3 &lt;+382&gt;:       add    %rdx,%rax
+|  |   # 拿到具体对应的char，存储到edx里面
+|  |   0x00005555555552e6 &lt;+385&gt;:       movzbl (%rax),%edx
+|  |   0x00005555555552e9 &lt;+388&gt;:       mov    -0x8c(%rbp),%eax
+|  |   0x00005555555552ef &lt;+394&gt;:       cltq
+|  |   # 在拿到刚才上面算出来的常量字符串减去0x22后面存储的结果
+|  |   0x00005555555552f1 &lt;+396&gt;:       movzbl -0x20(%rbp,%rax,1),%eax
+|  |   # 两者求异或
+|  |   0x00005555555552f6 &lt;+401&gt;:       xor    %edx,%eax
+|  |   0x00005555555552f8 &lt;+403&gt;:       movsbl %al,%edx
+|  |   0x00005555555552fb &lt;+406&gt;:       mov    -0x8c(%rbp),%eax
+|  |   0x0000555555555301 &lt;+412&gt;:       cltq
+|  |    # 再拿到刚才四个四个存储的常量，进行比较，如果都一致就成功，否则失败
+|  |   0x0000555555555303 &lt;+414&gt;:       mov    -0x80(%rbp,%rax,4),%eax
+|  |   0x0000555555555307 &lt;+418&gt;:       cmp    %eax,%edx
+|  |   0x0000555555555309 &lt;+420&gt;:       je     0x55555555531e &lt;main+441&gt;
+|  |   0x000055555555530b &lt;+422&gt;:       lea    0xd08(%rip),%rdi        # 0x55555555601a
+|  |   0x0000555555555312 &lt;+429&gt;:       callq  0x555555555030 &lt;puts@plt&gt;
+|  |   0x0000555555555317 &lt;+434&gt;:       mov    $0x1,%eax
+|  |   0x000055555555531c &lt;+439&gt;:       jmp    0x555555555355 &lt;main+496&gt;
+|  |   0x000055555555531e &lt;+441&gt;:       addl   $0x1,-0x8c(%rbp)
+|  --&gt; 0x0000555555555325 &lt;+448&gt;:       cmpl   $0x14,-0x8c(%rbp)
+|------0x000055555555532c &lt;+455&gt;:       jle    0x5555555552cd &lt;main+360&gt;
+   0x000055555555532e &lt;+457&gt;:   mov    -0xa0(%rbp),%rax
+   0x0000555555555335 &lt;+464&gt;:   add    $0x8,%rax
+   0x0000555555555339 &lt;+468&gt;:   mov    (%rax),%rax
+   0x000055555555533c &lt;+471&gt;:   mov    %rax,%rsi
+   0x000055555555533f &lt;+474&gt;:   lea    0xcf5(%rip),%rdi        # 0x55555555603b
+   0x0000555555555346 &lt;+481&gt;:   mov    $0x0,%eax
+   0x000055555555534b &lt;+486&gt;:   callq  0x555555555060 &lt;printf@plt&gt;
+   0x0000555555555350 &lt;+491&gt;:   mov    $0x0,%eax
+   0x0000555555555355 &lt;+496&gt;:   mov    -0x8(%rbp),%rcx
+   0x0000555555555359 &lt;+500&gt;:   sub    %fs:0x28,%rcx
+   0x0000555555555362 &lt;+509&gt;:   je     0x555555555369 &lt;main+516&gt;
+   0x0000555555555364 &lt;+511&gt;:   callq  0x555555555050 &lt;__stack_chk_fail@plt&gt;
+   0x0000555555555369 &lt;+516&gt;:   leaveq
+   0x000055555555536a &lt;+517&gt;:   retq
+</code></pre><pre tabindex=0><code>rax            0x7fffffffe030
+0x5555555552b4 &lt;main+255&gt;       mov    %rax,-0x40(%rbp) # 上面的地址放到-0x40(%rbp)里面去
+
+0x5555555552bc &lt;main+263&gt;       movq   $0x1,(%rax) # 放一个64bit的数字，然后开始每个都放
+</code></pre><h3 class="relative group">3 <a href=https://crackmes.one/user/RainerZimmerman target=_blank>RainerZimmerman</a>&rsquo;s Keygen<div id=3-rainerzimmermanhttpscrackmesoneuserrainerzimmermans-keygen class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-rainerzimmermanhttpscrackmesoneuserrainerzimmermans-keygen aria-label=锚点>#</a></span></h3><p>这个题比较有意思的是它实际上是优化了除法的表示，不过总的来说还是比较简单，掌握了除法优化规则就大概能看明白了</p><pre tabindex=0><code class=language-assembly data-lang=assembly># main函数部分dump
+Dump of assembler code for function __libc_start_call_main:
+=&gt; 0x00007f3aed342d10 &lt;+0&gt;:	push   %rax
+   0x00007f3aed342d11 &lt;+1&gt;:	pop    %rax
+   0x00007f3aed342d12 &lt;+2&gt;:	sub    $0x98,%rsp
+   0x00007f3aed342d19 &lt;+9&gt;:	mov    %rdi,0x8(%rsp)
+   0x00007f3aed342d1e &lt;+14&gt;:	lea    0x20(%rsp),%rdi
+   0x00007f3aed342d23 &lt;+19&gt;:	mov    %esi,0x14(%rsp)
+   0x00007f3aed342d27 &lt;+23&gt;:	mov    %rdx,0x18(%rsp)
+   0x00007f3aed342d2c &lt;+28&gt;:	mov    %fs:0x28,%rax
+   0x00007f3aed342d35 &lt;+37&gt;:	mov    %rax,0x88(%rsp)
+   0x00007f3aed342d3d &lt;+45&gt;:	xor    %eax,%eax
+   0x00007f3aed342d3f &lt;+47&gt;:	call   0x7f3aed35b1e0 &lt;_setjmp&gt;
+   0x00007f3aed342d44 &lt;+52&gt;:	endbr64 
+   0x00007f3aed342d48 &lt;+56&gt;:	test   %eax,%eax
+   0x00007f3aed342d4a &lt;+58&gt;:	jne    0x7f3aed342d97 &lt;__libc_start_call_main+135&gt;
+   0x00007f3aed342d4c &lt;+60&gt;:	mov    %fs:0x300,%rax
+   0x00007f3aed342d55 &lt;+69&gt;:	mov    %rax,0x68(%rsp)
+   0x00007f3aed342d5a &lt;+74&gt;:	mov    %fs:0x2f8,%rax
+   0x00007f3aed342d63 &lt;+83&gt;:	mov    %rax,0x70(%rsp)
+   0x00007f3aed342d68 &lt;+88&gt;:	lea    0x20(%rsp),%rax
+   0x00007f3aed342d6d &lt;+93&gt;:	mov    %rax,%fs:0x300
+   0x00007f3aed342d76 &lt;+102&gt;:	mov    0x1ef23b(%rip),%rax        # 0x7f3aed531fb8
+   0x00007f3aed342d7d &lt;+109&gt;:	mov    0x14(%rsp),%edi
+   0x00007f3aed342d81 &lt;+113&gt;:	mov    0x18(%rsp),%rsi
+   0x00007f3aed342d86 &lt;+118&gt;:	mov    (%rax),%rdx
+   0x00007f3aed342d89 &lt;+121&gt;:	mov    0x8(%rsp),%rax
+   0x00007f3aed342d8e &lt;+126&gt;:	call   *%rax                         &lt;======这里就是真正计算key的部分
+   0x00007f3aed342d90 &lt;+128&gt;:	mov    %eax,%edi
+   0x00007f3aed342d92 &lt;+130&gt;:	call   0x7f3aed35e5f0 &lt;__GI_exit&gt;
+   0x00007f3aed342d97 &lt;+135&gt;:	call   0x7f3aed3aa670 &lt;__GI___nptl_deallocate_tsd&gt;
+   0x00007f3aed342d9c &lt;+140&gt;:	lock decl 0x1ef505(%rip)        # 0x7f3aed5322a8 &lt;__nptl_nthreads&gt;
+   0x00007f3aed342da3 &lt;+147&gt;:	sete   %al
+   0x00007f3aed342da6 &lt;+150&gt;:	test   %al,%al
+   0x00007f3aed342da8 &lt;+152&gt;:	jne    0x7f3aed342db8 &lt;__libc_start_call_main+168&gt;
+   0x00007f3aed342daa &lt;+154&gt;:	mov    $0x3c,%edx
+   0x00007f3aed342daf &lt;+159&gt;:	nop
+   0x00007f3aed342db0 &lt;+160&gt;:	xor    %edi,%edi
+   0x00007f3aed342db2 &lt;+162&gt;:	mov    %edx,%eax
+   0x00007f3aed342db4 &lt;+164&gt;:	syscall 
+   0x00007f3aed342db6 &lt;+166&gt;:	jmp    0x7f3aed342db0 &lt;__libc_start_call_main+160&gt;
+   0x00007f3aed342db8 &lt;+168&gt;:	xor    %edi,%edi
+   0x00007f3aed342dba &lt;+170&gt;:	jmp    0x7f3aed342d92 &lt;__libc_start_call_main+130&gt;
+   
+   # 从上面的0x00007f3aed342d8e &lt;+126&gt;:	call   *%rax 蹦过来到这里，这里实际上是输入keygen的部分
+   (gdb) disass $pc,$pc+100
+Dump of assembler code from 0x5571d8a48397 to 0x5571d8a483fb:
+=&gt; 0x00005571d8a48397:	mov    %edi,-0x34(%rbp)
+   0x00005571d8a4839a:	mov    %rsi,-0x40(%rbp)
+   0x00005571d8a4839e:	lea    0xc5f(%rip),%rax        # 0x5571d8a49004
+   0x00005571d8a483a5:	mov    %rax,%rsi
+   0x00005571d8a483a8:	lea    0x2cd1(%rip),%rax        # 0x5571d8a4b080 &lt;_ZSt4cout&gt;
+   0x00005571d8a483af:	mov    %rax,%rdi
+   0x00005571d8a483b2:	call   0x5571d8a48070 &lt;_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt&gt;
+   0x00005571d8a483b7:	lea    -0x30(%rbp),%rax
+   0x00005571d8a483bb:	mov    %rax,%rdi
+   0x00005571d8a483be:	call   0x5571d8a480a0 &lt;_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEC1Ev@plt&gt;
+   0x00005571d8a483c3:	lea    -0x30(%rbp),%rax
+   0x00005571d8a483c7:	mov    %rax,%rsi
+   0x00005571d8a483ca:	lea    0x2dcf(%rip),%rax        # 0x5571d8a4b1a0 &lt;_ZSt3cin&gt;
+   0x00005571d8a483d1:	mov    %rax,%rdi
+   0x00005571d8a483d4:	call   0x5571d8a48090 &lt;_ZStrsIcSt11char_traitsIcESaIcEERSt13basic_istreamIT_T0_ES7_RNSt7__cxx1112basic_stringIS4_S5_T1_EE@plt&gt;
+   0x00005571d8a483d9:	lea    -0x30(%rbp),%rax
+   0x00005571d8a483dd:	mov    %rax,%rdi
+   0x00005571d8a483e0:	call   0x5571d8a48030 &lt;_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv@plt&gt;
+   0x00005571d8a483e5:	mov    %rax,%rdi
+   0x00005571d8a483e8:	call   0x5571d8a48255            &lt;================在这里做真正的keygen的计算
+   0x00005571d8a483ed:	test   %al,%al
+   0x00005571d8a483ef:	je     0x5571d8a4841e
+   0x00005571d8a483f1:	lea    0xc18(%rip),%rax        # 0x5571d8a49010
+   0x00005571d8a483f8:	mov    %rax,%rsi
+End of assembler dump.
+(gdb) 
+
+   #从上面的0x00005571d8a483e8:	call   0x5571d8a48255 蹦过来
+   (gdb) disass $pc,$pc+400
+Dump of assembler code from 0x5571d8a48255 to 0x5571d8a483e5:
+=&gt; 0x00005571d8a48255:	push   %rbp
+   0x00005571d8a48256:	mov    %rsp,%rbp
+   0x00005571d8a48259:	sub    $0x30,%rsp
+   0x00005571d8a4825d:	mov    %rdi,-0x28(%rbp)    # -0x28(%rbp)地址保存的输入的原始字符串
+   0x00005571d8a48261:	mov    -0x28(%rbp),%rax
+   0x00005571d8a48265:	mov    %rax,%rdi
+   0x00005571d8a48268:	call   0x5571d8a48040 &lt;strlen@plt&gt;    # 判断长度是不是0xd，不是就直接返回失败拉
+   0x00005571d8a4826d:	mov    %eax,-0x8(%rbp)
+   0x00005571d8a48270:	cmpl   $0xd,-0x8(%rbp)
+   0x00005571d8a48274:	jne    0x5571d8a48285
+   0x00005571d8a48276:	mov    -0x28(%rbp),%rax
+   0x00005571d8a4827a:	add    $0x3,%rax
+   0x00005571d8a4827e:	movzbl (%rax),%eax
+   0x00005571d8a48281:	cmp    $0x2d,%al                     # 比较位置3，也就是第四个字符是不是分隔符“-”
+   0x00005571d8a48283:	je     0x5571d8a4828f
+   0x00005571d8a48285:	mov    $0x0,%eax
+   0x00005571d8a4828a:	jmp    0x5571d8a4838c
+   0x00005571d8a4828f:	mov    -0x28(%rbp),%rax
+   0x00005571d8a48293:	mov    $0x3,%edx
+   0x00005571d8a48298:	mov    $0x0,%esi
+   0x00005571d8a4829d:	mov    %rax,%rdi
+   0x00005571d8a482a0:	call   0x5571d8a481ee              #这个函数负责计算给定的字符串的数字的求和结果，这里edx是3，所以三位的求和
+   0x00005571d8a482a5:	mov    %eax,-0xc(%rbp)             #记住这个地址，这个地址是一直参与运算的
+   0x00005571d8a482a8:	cmpl   $0xffffffff,-0xc(%rbp)
+   0x00005571d8a482ac:	jne    0x5571d8a482b8
+   0x00005571d8a482ae:	mov    $0x0,%eax
+   0x00005571d8a482b3:	jmp    0x5571d8a4838c
+   0x00005571d8a482b8:	mov    -0xc(%rbp),%edx             # 下面的运算实际上是往-0xc(%rbp)存入 
+   0x00005571d8a482bb:	movslq %edx,%rax                   # sum(0,2) - 3*[sum(0,2)* 0x55555556&gt;&gt;32-sum(0,2)&gt;&gt;31]
+   0x00005571d8a482be:	imul   $0x55555556,%rax,%rax       # 这个实际上就是sum(0,2) % 3
+   0x00005571d8a482c5:	shr    $0x20,%rax
+   0x00005571d8a482c9:	mov    %rax,%rcx
+   0x00005571d8a482cc:	mov    %edx,%eax
+   0x00005571d8a482ce:	sar    $0x1f,%eax
+   0x00005571d8a482d1:	sub    %eax,%ecx
+   0x00005571d8a482d3:	mov    %ecx,%eax
+   0x00005571d8a482d5:	add    %eax,%eax
+   0x00005571d8a482d7:	add    %ecx,%eax
+   0x00005571d8a482d9:	sub    %eax,%edx
+   0x00005571d8a482db:	mov    %edx,-0xc(%rbp)
+   0x00005571d8a482de:	movl   $0x4,-0x4(%rbp)
+   0x00005571d8a482e5:	jmp    0x5571d8a4837d
+   0x00005571d8a482ea:	mov    -0x4(%rbp),%ecx
+   0x00005571d8a482ed:	mov    -0x28(%rbp),%rax
+   0x00005571d8a482f1:	mov    $0x3,%edx
+   0x00005571d8a482f6:	mov    %ecx,%esi
+   0x00005571d8a482f8:	mov    %rax,%rdi
+   0x00005571d8a482fb:	call   0x5571d8a481ee
+   0x00005571d8a48300:	mov    %eax,-0x10(%rbp)             # 后面三位数字的求和，每次根据conter加三位
+   0x00005571d8a48303:	cmpl   $0xffffffff,-0x10(%rbp)
+   0x00005571d8a48307:	jne    0x5571d8a48310
+   0x00005571d8a48309:	mov    $0x0,%eax
+   0x00005571d8a4830e:	jmp    0x5571d8a4838c
+   0x00005571d8a48310:	mov    -0x4(%rbp),%eax              # 这个就是counter
+   0x00005571d8a48313:	sub    $0x4,%eax
+   0x00005571d8a48316:	movslq %eax,%rdx
+   0x00005571d8a48319:	imul   $0x55555556,%rdx,%rdx        # 从conter拿到具体要计算数字的位置，可以看到这个就直接是
+   0x00005571d8a48320:	shr    $0x20,%rdx                   # [(counter-4)* 0x55555556&gt;&gt;32-(counter-4)&gt;&gt;31]，这个是除法，除以3
+   0x00005571d8a48324:	sar    $0x1f,%eax
+   0x00005571d8a48327:	sub    %eax,%edx
+   0x00005571d8a48329:	movslq %edx,%rdx
+   0x00005571d8a4832c:	mov    -0x28(%rbp),%rax
+   0x00005571d8a48330:	add    %rdx,%rax
+   0x00005571d8a48333:	movzbl (%rax),%eax
+   0x00005571d8a48336:	movsbl %al,%eax
+   0x00005571d8a48339:	mov    %eax,%edi
+   0x00005571d8a4833b:	call   0x5571d8a481c9               # 从计算出来的position，拿到对应数字的值
+   0x00005571d8a48340:	xor    -0xc(%rbp),%eax
+   0x00005571d8a48343:	mov    %eax,-0x14(%rbp)             # 这里注意，存储的是
+   0x00005571d8a48346:	mov    -0x10(%rbp),%ecx             # 拿到了刚才的求和
+   0x00005571d8a48349:	movslq %ecx,%rax                    # 这个地方计算的值是下面，x就是counter
+   0x00005571d8a4834c:	imul   $0x38e38e39,%rax,%rax        # sum(x,x+2) - 9*[sum(x,x+2)* 38e38e39&gt;&gt;33-sum(x,x+2)&gt;&gt;31]
+   0x00005571d8a48353:	shr    $0x20,%rax                   # 实际上是sum(x,x+2) % 9
+   0x00005571d8a48357:	mov    %eax,%edx
+   0x00005571d8a48359:	sar    %edx
+   0x00005571d8a4835b:	mov    %ecx,%eax
+   0x00005571d8a4835d:	sar    $0x1f,%eax
+   0x00005571d8a48360:	sub    %eax,%edx
+   0x00005571d8a48362:	mov    %edx,%eax
+   0x00005571d8a48364:	shl    $0x3,%eax
+   0x00005571d8a48367:	add    %edx,%eax
+   0x00005571d8a48369:	sub    %eax,%ecx
+   0x00005571d8a4836b:	mov    %ecx,%edx
+   0x00005571d8a4836d:	cmp    %edx,-0x14(%rbp)            # 这里基本就清楚了，要求-0xc(%rbp) XOR num[(counter-4)/3] = sum(x,x+2) % 9
+   0x00005571d8a48370:	je     0x5571d8a48379
+   0x00005571d8a48372:	mov    $0x0,%eax
+   0x00005571d8a48377:	jmp    0x5571d8a4838c
+   0x00005571d8a48379:	addl   $0x3,-0x4(%rbp)
+   0x00005571d8a4837d:	cmpl   $0xc,-0x4(%rbp)
+   0x00005571d8a48381:	jle    0x5571d8a482ea
+   0x00005571d8a48387:	mov    $0x1,%eax
+   0x00005571d8a4838c:	leave  
+   0x00005571d8a4838d:	ret    
+</code></pre><p>基本上走一趟就明白了，所以写个函数跑了下</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;iostream&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp>#include</span> <span class=cpf>&lt;vector&gt;</span><span class=cp>
+</span></span></span><span class=line><span class=cl><span class=cp></span>
+</span></span><span class=line><span class=cl><span class=k>using</span> <span class=k>namespace</span><span class=o>::</span><span class=n>std</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kt>int</span> <span class=nf>main</span><span class=p>()</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>tmp_value</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>  <span class=k>for</span> <span class=p>(</span><span class=kt>int</span> <span class=n>i</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>i</span> <span class=o>&lt;=</span> <span class=mi>9</span><span class=p>;</span> <span class=o>++</span><span class=n>i</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>     <span class=k>for</span> <span class=p>(</span> <span class=kt>int</span> <span class=n>j</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>j</span> <span class=o>&lt;=</span> <span class=mi>9</span><span class=p>;</span> <span class=o>++</span><span class=n>j</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>        <span class=k>for</span> <span class=p>(</span> <span class=kt>int</span> <span class=n>k</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span> <span class=n>k</span> <span class=o>&lt;=</span> <span class=mi>9</span><span class=p>;</span> <span class=o>++</span><span class=n>k</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                <span class=kt>bool</span> <span class=n>find_456</span> <span class=o>=</span> <span class=nb>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=kt>bool</span> <span class=n>find_789</span> <span class=o>=</span> <span class=nb>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=kt>bool</span> <span class=n>find_abc</span> <span class=o>=</span> <span class=nb>false</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>tmp_sum_456</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>tmp_sum_789</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=kt>int</span> <span class=n>tmp_sum_abc</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=n>tmp_value</span> <span class=o>=</span> <span class=p>(</span><span class=n>i</span><span class=o>+</span><span class=n>j</span> <span class=o>+</span><span class=n>k</span><span class=p>)</span><span class=o>%</span><span class=mi>3</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                <span class=c1>//tmp_value = (i+j+k)-(3*(i+j+k)*0x55555556&gt;&gt;32)+(3*(i+j+k)&gt;&gt;31);
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=c1>//std::cout &lt;&lt;&#34; iterate tmp_value is &#34; &lt;&lt; tmp_value &lt;&lt; std::endl;
+</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=k>for</span> <span class=p>(</span> <span class=kt>int</span> <span class=n>sum</span> <span class=o>=</span> <span class=mi>0</span> <span class=p>;</span> <span class=n>sum</span> <span class=o>&lt;=</span><span class=mi>27</span><span class=p>;</span> <span class=o>++</span><span class=n>sum</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                        <span class=kt>int</span> <span class=n>final_ans</span> <span class=o>=</span> <span class=n>sum</span> <span class=o>%</span> <span class=mi>9</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=kt>int</span> <span class=n>last_tmp</span> <span class=o>=</span> <span class=n>tmp_value</span> <span class=o>^</span> <span class=n>i</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>final_ans</span> <span class=o>==</span> <span class=n>last_tmp</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>find_456</span><span class=o>=</span><span class=nb>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=n>tmp_sum_456</span> <span class=o>=</span> <span class=n>sum</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=n>last_tmp</span> <span class=o>=</span> <span class=n>tmp_value</span> <span class=o>^</span> <span class=n>j</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>final_ans</span> <span class=o>==</span> <span class=n>last_tmp</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>find_789</span><span class=o>=</span><span class=nb>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=n>tmp_sum_789</span> <span class=o>=</span> <span class=n>sum</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=n>last_tmp</span> <span class=o>=</span> <span class=n>tmp_value</span> <span class=o>^</span> <span class=n>k</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>(</span><span class=n>final_ans</span> <span class=o>==</span> <span class=n>last_tmp</span><span class=p>)</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>find_abc</span><span class=o>=</span><span class=nb>true</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=n>tmp_sum_abc</span> <span class=o>=</span> <span class=n>sum</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>                        <span class=k>if</span> <span class=p>((</span><span class=n>find_abc</span> <span class=o>==</span> <span class=nb>true</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>find_456</span> <span class=o>==</span> <span class=nb>true</span><span class=p>)</span> <span class=o>&amp;&amp;</span> <span class=p>(</span><span class=n>find_789</span> <span class=o>==</span> <span class=nb>true</span><span class=p>))</span> <span class=p>{</span>
+</span></span><span class=line><span class=cl>                                <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span><span class=s>&#34;##########&#34;</span><span class=o>&lt;&lt;</span><span class=n>tmp_sum_456</span> <span class=o>&lt;&lt;</span><span class=s>&#34; &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>tmp_sum_789</span><span class=o>&lt;&lt;</span><span class=s>&#34; &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>tmp_sum_abc</span> <span class=o>&lt;&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                                <span class=n>std</span><span class=o>::</span><span class=n>cout</span> <span class=o>&lt;&lt;</span> <span class=s>&#34;!!!!!!!!!!!!!&#34;</span><span class=o>&lt;&lt;</span><span class=n>i</span> <span class=o>&lt;&lt;</span><span class=s>&#34; &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>j</span> <span class=o>&lt;&lt;</span><span class=s>&#34; &#34;</span> <span class=o>&lt;&lt;</span> <span class=n>k</span> <span class=o>&lt;&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>endl</span><span class=p>;</span>
+</span></span><span class=line><span class=cl>                        <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>                <span class=p>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=p>}</span>
+</span></span><span class=line><span class=cl>     <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=p>}</span>
+</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
+</span></span><span class=line><span class=cl><span class=p>}</span>
+</span></span></code></pre></div><p>最后随便输入一个000-000000000，过了。。。。</p><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2023-03-14-reverse4fun\\index.md",oid_likes="likes_posts\\2023-03-14-reverse4fun\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2023-02-15-%E5%AE%89%E5%85%A8cve%E7%9F%A5%E8%AF%86%E5%BA%93%E5%AD%A6%E4%B9%A0/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
+<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-02-15-安全CVE知识库学习</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-02-15T00:00:00+00:00>2023 年 2 月 15 日</time>
+</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-03-25-去tm的八股文</span>
+<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-03-25T00:00:00+00:00>2023 年 3 月 25 日</time>
+</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
+<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
+<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
