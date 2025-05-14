@@ -1,1 +1,23 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>C on 菜狗的blog</title><link>https://hxndg.github.io/tags/c/</link><description>Recent content in C on 菜狗的blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright><lastBuildDate>Tue, 15 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/c/index.xml" rel="self" type="application/rss+xml"/><item><title>C语言宏的展开</title><link>https://hxndg.github.io/posts/2020-09-15-c%E8%AF%AD%E8%A8%80%E7%9A%84%E5%AE%8F/</link><pubDate>Tue, 15 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-09-15-c%E8%AF%AD%E8%A8%80%E7%9A%84%E5%AE%8F/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>C on 菜狗的blog</title>
+    <link>https://hxndg.github.io/tags/c/</link>
+    <description>Recent content in C on 菜狗的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright>
+    <lastBuildDate>Tue, 15 Sep 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/c/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>C语言宏的展开</title>
+      <link>https://hxndg.github.io/posts/2020-09-15-c%E8%AF%AD%E8%A8%80%E7%9A%84%E5%AE%8F/</link>
+      <pubDate>Tue, 15 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-09-15-c%E8%AF%AD%E8%A8%80%E7%9A%84%E5%AE%8F/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

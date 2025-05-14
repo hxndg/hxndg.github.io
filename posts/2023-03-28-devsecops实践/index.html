@@ -1,109 +1,806 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2023-03-28-devsecops实践 &#183; 菜狗的blog</title>
-<meta name=title content="2023-03-28-devsecops实践 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="CI,Devops,security,"><link rel=canonical href=https://hxndg.github.io/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2023-03-28-devsecops实践"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-03-28T00:00:00+00:00"><meta property="article:modified_time" content="2023-03-28T00:00:00+00:00"><meta property="article:tag" content="Ci"><meta property="article:tag" content="Devops"><meta property="article:tag" content="Security"><meta name=twitter:card content="summary"><meta name=twitter:title content="2023-03-28-devsecops实践"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2023-03-28-devsecops实践","headline":"2023-03-28-devsecops实践","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2023","dateCreated":"2023-03-28T00:00:00\u002b00:00","datePublished":"2023-03-28T00:00:00\u002b00:00","dateModified":"2023-03-28T00:00:00\u002b00:00","keywords":["CI","Devops","security"],"mainEntityOfPage":"true","wordCount":"3001"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2023-03-28-devsecops实践</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2023-03-28T00:00:00+00:00>2023 年 3 月 28 日</time><span class="px-2 text-primary-500">&#183;</span><span>3001 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>6 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-sast实践>1 SAST实践</a><ul><li><ul><li><a href=#111-sast-parts>1.1.1 SAST PARTS</a></li><li><a href=#112-如何避免误报>1.1.2 如何避免误报</a></li></ul></li></ul></li><li><a href=#2-代码审计>2 代码审计</a><ul><li><a href=#21-sql部分>2.1 SQL部分</a></li><li><a href=#22-xss审计>2.2 XSS审计</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-sast实践>1 SAST实践</a><ul><li><ul><li><a href=#111-sast-parts>1.1.1 SAST PARTS</a></li><li><a href=#112-如何避免误报>1.1.2 如何避免误报</a></li></ul></li></ul></li><li><a href=#2-代码审计>2 代码审计</a><ul><li><a href=#21-sql部分>2.1 SQL部分</a></li><li><a href=#22-xss审计>2.2 XSS审计</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">devsecops实践<div id=devsecops%E5%AE%9E%E8%B7%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#devsecops%E5%AE%9E%E8%B7%B5 aria-label=锚点>#</a></span></h1><h2 class="relative group">1 SAST实践<div id=1-sast%E5%AE%9E%E8%B7%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-sast%E5%AE%9E%E8%B7%B5 aria-label=锚点>#</a></span></h2><h4 class="relative group">1.1.1 SAST PARTS<div id=111-sast-parts class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#111-sast-parts aria-label=锚点>#</a></span></h4><p>目前问题总结</p><ol><li>目前CI的Clang-Tidy Check开启的Checker不充足，需要扫描代码库检查存在哪些代码问题，从而判断开启哪些Checker。</li><li>Clang-Tidy Check只针对用户编辑的文件进行扫描，用户不编辑的文件无法发现问题。</li></ol><p>使用场景：</p><p>每天定时触发一次对onboard & offboard下以gpu模式编译的cc_library，cc_binary对象的SAST扫描，检查结果上传至coverage.qcraftai.com/sast下，经由TPM同学进行分诊，并创建Issue到具体协同者。</p><p>从用户角度来看，最终只会看到一个codecheck_report文件，包含各个代码文件（可能）存在的问题，报告末尾汇总各种Checker的错误报告数量，和对应文件的错误数量，参考</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Go data-lang=Go><span class=line><span class=cl><span class=nx>Found</span> <span class=nx>no</span> <span class=nx>defects</span> <span class=nx>in</span> <span class=nx>parse_pos_to_traj</span><span class=p>.</span><span class=nx>cc</span>
-</span></span><span class=line><span class=cl><span class=p>[</span><span class=nx>HIGH</span><span class=p>]</span> <span class=o>/</span><span class=nx>home</span><span class=o>/</span><span class=nx>qcrafter</span><span class=o>/</span><span class=p>.</span><span class=nx>cache</span><span class=o>/</span><span class=nx>bazel</span><span class=o>/</span><span class=nx>_bazel_qcrafter</span><span class=o>/</span><span class=mi>4207</span><span class=nx>c8486d34138987115c0107ecb5f8</span><span class=o>/</span><span class=nx>execroot</span><span class=o>/</span><span class=nx>com_qcraft</span><span class=o>/</span><span class=nx>onboard</span><span class=o>/</span><span class=nx>planner</span><span class=o>/</span><span class=nx>assist</span><span class=o>/</span><span class=nx>lcc_map_builder</span><span class=p>.</span><span class=nx>cc</span><span class=p>:</span><span class=mi>148</span><span class=p>:</span><span class=mi>7</span><span class=p>:</span> <span class=mi>2</span><span class=nx>nd</span> <span class=nx>function</span> <span class=nx>call</span> <span class=nx>argument</span> <span class=nx>is</span> <span class=nx>an</span> <span class=nx>uninitialized</span> <span class=nx>value</span> <span class=p>[</span><span class=nx>core</span><span class=p>.</span><span class=nx>CallAndMessage</span><span class=p>]</span>
-</span></span><span class=line><span class=cl>      <span class=nx>mapping</span><span class=p>::</span><span class=nf>LanePathData</span><span class=p>(</span><span class=nx>lane_path</span><span class=p>.</span><span class=nf>start_fraction</span><span class=p>(),</span> <span class=nx>end_fraction</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>      <span class=p>^</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nx>Found</span> <span class=mi>1</span> <span class=nf>defect</span><span class=p>(</span><span class=nx>s</span><span class=p>)</span> <span class=nx>in</span> <span class=nx>lcc_map_builder</span><span class=p>.</span><span class=nx>cc</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=o>----====</span> <span class=nx>Severity</span> <span class=nx>Statistics</span> <span class=o>====----</span>
-</span></span><span class=line><span class=cl><span class=o>----------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>Severity</span> <span class=p>|</span> <span class=nx>Number</span> <span class=nx>of</span> <span class=nx>reports</span>
-</span></span><span class=line><span class=cl><span class=o>----------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>HIGH</span>     <span class=p>|</span>               <span class=mi>882</span>
-</span></span><span class=line><span class=cl><span class=nx>MEDIUM</span>   <span class=p>|</span>             <span class=mi>13814</span>
-</span></span><span class=line><span class=cl><span class=nx>LOW</span>      <span class=p>|</span>              <span class=mi>1973</span>
-</span></span><span class=line><span class=cl><span class=nx>STYLE</span>    <span class=p>|</span>                <span class=mi>20</span>
-</span></span><span class=line><span class=cl><span class=o>----------------------------</span>
-</span></span><span class=line><span class=cl><span class=o>----================</span><span class=p>=</span><span class=o>----</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=o>----====</span> <span class=nx>Checker</span> <span class=nx>Statistics</span> <span class=o>====----</span>
-</span></span><span class=line><span class=cl><span class=o>---------------------------------------------------------------------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>Checker</span> <span class=nx>name</span>                                             <span class=p>|</span> <span class=nx>Severity</span> <span class=p>|</span> <span class=nx>Number</span> <span class=nx>of</span> <span class=nx>reports</span>
-</span></span><span class=line><span class=cl><span class=o>---------------------------------------------------------------------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>core</span><span class=p>.</span><span class=nx>CallAndMessage</span>                                      <span class=p>|</span> <span class=nx>HIGH</span>     <span class=p>|</span>               <span class=mi>136</span>
-</span></span><span class=line><span class=cl><span class=nx>security</span><span class=p>.</span><span class=nx>FloatLoopCounter</span>                                <span class=p>|</span> <span class=nx>MEDIUM</span>   <span class=p>|</span>               <span class=mi>214</span>
-</span></span><span class=line><span class=cl><span class=nx>cppcoreguidelines</span><span class=o>-</span><span class=nx>special</span><span class=o>-</span><span class=nx>member</span><span class=o>-</span><span class=nx>functions</span>               <span class=p>|</span> <span class=nx>LOW</span>      <span class=p>|</span>              <span class=mi>1264</span>
-</span></span><span class=line><span class=cl><span class=o>...</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=o>----====</span> <span class=nx>File</span> <span class=nx>Statistics</span> <span class=o>====----</span>
-</span></span><span class=line><span class=cl><span class=o>-------------------------------------------------------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>File</span> <span class=nx>name</span>                                             <span class=p>|</span> <span class=nx>Number</span> <span class=nx>of</span> <span class=nx>reports</span>
-</span></span><span class=line><span class=cl><span class=o>-------------------------------------------------------------------------</span>
-</span></span><span class=line><span class=cl><span class=nx>lcc_map_builder</span><span class=p>.</span><span class=nx>cc</span>                                    <span class=p>|</span>                 <span class=mi>2</span>
-</span></span><span class=line><span class=cl><span class=nx>ground_line</span><span class=p>.</span><span class=nx>cc</span>                                        <span class=p>|</span>                <span class=mi>12</span>
-</span></span></code></pre></div><p>目前开启的Checker包括</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Shell data-lang=Shell><span class=line><span class=cl>---------------------------------------------------------------------
-</span></span><span class=line><span class=cl>Checker name                                             <span class=p>|</span> Severity <span class=p>|</span>
-</span></span><span class=line><span class=cl>---------------------------------------------------------------------
-</span></span><span class=line><span class=cl>core.CallAndMessage                                      <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>security.FloatLoopCounter                                <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>cppcoreguidelines-special-member-functions               <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-sign-compare                            <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-unused-parameter                        <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-sizeof-container                                <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-undefined-memory-manipulation                   <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>optin.cplusplus.UninitializedObject                      <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>cert-dcl58-cpp                                           <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-deprecated-copy-with-user-provided-copy <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>performance-noexcept-move-constructor                    <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-deprecated-declarations                 <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>readability-suspicious-call-argument                     <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>performance-move-const-arg                               <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>misc-definitions-in-headers                              <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>optin.cplusplus.VirtualCall                              <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>deadcode.DeadStores                                      <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-forwarding-reference-overload                   <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.NullDereference                                     <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-use-after-move                                  <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>misc-unconventional-assign-operator                      <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-missing-field-initializers              <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>google-global-names-in-headers                           <span class=p>|</span> STYLE    <span class=p>|</span>
-</span></span><span class=line><span class=cl>performance-no-automatic-move                            <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>cert-dcl59-cpp                                           <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>google-build-namespaces                                  <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-integer-division                                <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.UndefinedBinaryOperatorResult                       <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-unused-return-value                             <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>misc-redundant-expression                                <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-unhandled-exception-at-new                      <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.uninitialized.Assign                                <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-misplaced-widening-cast                         <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-virtual-near-miss                               <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.NonNullParamChecker                                 <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-incorrect-roundings                             <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>misc-misplaced-const                                     <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>unix.Malloc                                              <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>cplusplus.NewDeleteLeaks                                 <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-suspicious-missing-comma                        <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-lambda-function-name                            <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.uninitialized.UndefReturn                           <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>optin.portability.UnixAPI                                <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-signed-char-misuse                              <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.DivideZero                                          <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>core.StackAddressEscape                                  <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-swapped-arguments                               <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-forward-declaration-namespace                   <span class=p>|</span> LOW      <span class=p>|</span>
-</span></span><span class=line><span class=cl>cert-err09-cpp                                           <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>unix.API                                                 <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-not-null-terminated-result                      <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>cplusplus.NewDelete                                      <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-fold-init-type                                  <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-sizeof-expression                               <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>cplusplus.Move                                           <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-inaccurate-erase                                <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-string-constructor                              <span class=p>|</span> HIGH     <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-unused-result                           <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>clang-diagnostic-#pragma-messages                        <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-signal-handler                                  <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>bugprone-too-small-loop-variable                         <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>misc-uniqueptr-reset-release                             <span class=p>|</span> MEDIUM   <span class=p>|</span>
-</span></span><span class=line><span class=cl>---------------------------------------------------------------------
-</span></span></code></pre></div><p>发现问题：</p><p>内存泄露，空指针调用，move后调用</p><p>附加SAST软件分析</p><p>SAST的软件有很多，比方说sonarqube，codechecker.针对C++我使用的是codechecker</p><ul><li>sonarqube</li><li>codechecker</li><li></li></ul><p>codechecker流程，如何安装？直接使用pip3 install codechecker即可，最终工程治理组将codechecker装进了docker里面，就不需要指定目录了，直接可以调用CodeChecker</p><ul><li><p><code>CodeChecker log</code> runs the given build command and records the executed compilation steps. These steps are written to an output file (Compilation Database) in a JSON format。这个实践起来并不是一个好的方法，因为本身在本地做编译就比较荒谬。实际上使用https://github.com/grailbio/bazel-compilation-database/可以方便的生成compile database，不需要再用codechecker本身的注入式log</p><pre tabindex=0><code>#这种做法不推荐
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>2023-03-28-devsecops实践 &middot; 菜狗的blog</title>
+  <meta name="title" content="2023-03-28-devsecops实践 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="CI, Devops, security, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="2023-03-28-devsecops实践">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-03-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-03-28T00:00:00+00:00">
+    <meta property="article:tag" content="Ci">
+    <meta property="article:tag" content="Devops">
+    <meta property="article:tag" content="Security">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2023-03-28-devsecops实践">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "2023-03-28-devsecops实践",
+    "headline": "2023-03-28-devsecops实践",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-03-28T00:00:00\u002b00:00",
+    "datePublished": "2023-03-28T00:00:00\u002b00:00",
+    
+    "dateModified": "2023-03-28T00:00:00\u002b00:00",
+    
+    "keywords": ["CI","Devops","security"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3001"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      2023-03-28-devsecops实践
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2023-03-28T00:00:00&#43;00:00">2023 年 3 月 28 日</time><span class="px-2 text-primary-500">&middot;</span><span>3001 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">6 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-sast实践">1 SAST实践</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#111-sast-parts">1.1.1 SAST PARTS</a></li>
+            <li><a href="#112-如何避免误报">1.1.2 如何避免误报</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-代码审计">2 代码审计</a>
+      <ul>
+        <li><a href="#21-sql部分">2.1 SQL部分</a></li>
+        <li><a href="#22-xss审计">2.2 XSS审计</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-sast实践">1 SAST实践</a>
+      <ul>
+        <li>
+          <ul>
+            <li><a href="#111-sast-parts">1.1.1 SAST PARTS</a></li>
+            <li><a href="#112-如何避免误报">1.1.2 如何避免误报</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-代码审计">2 代码审计</a>
+      <ul>
+        <li><a href="#21-sql部分">2.1 SQL部分</a></li>
+        <li><a href="#22-xss审计">2.2 XSS审计</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">devsecops实践 
+    <div id="devsecops%E5%AE%9E%E8%B7%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#devsecops%E5%AE%9E%E8%B7%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">1 SAST实践 
+    <div id="1-sast%E5%AE%9E%E8%B7%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-sast%E5%AE%9E%E8%B7%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h4 class="relative group">1.1.1 SAST PARTS 
+    <div id="111-sast-parts" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#111-sast-parts" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>目前问题总结</p>
+<ol>
+<li>目前CI的Clang-Tidy Check开启的Checker不充足，需要扫描代码库检查存在哪些代码问题，从而判断开启哪些Checker。</li>
+<li>Clang-Tidy Check只针对用户编辑的文件进行扫描，用户不编辑的文件无法发现问题。</li>
+</ol>
+<p>使用场景：</p>
+<p>每天定时触发一次对onboard &amp; offboard下以gpu模式编译的cc_library，cc_binary对象的SAST扫描，检查结果上传至coverage.qcraftai.com/sast下，经由TPM同学进行分诊，并创建Issue到具体协同者。</p>
+<p>从用户角度来看，最终只会看到一个codecheck_report文件，包含各个代码文件（可能）存在的问题，报告末尾汇总各种Checker的错误报告数量，和对应文件的错误数量，参考</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Go" data-lang="Go"><span class="line"><span class="cl"><span class="nx">Found</span> <span class="nx">no</span> <span class="nx">defects</span> <span class="nx">in</span> <span class="nx">parse_pos_to_traj</span><span class="p">.</span><span class="nx">cc</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="nx">HIGH</span><span class="p">]</span> <span class="o">/</span><span class="nx">home</span><span class="o">/</span><span class="nx">qcrafter</span><span class="o">/</span><span class="p">.</span><span class="nx">cache</span><span class="o">/</span><span class="nx">bazel</span><span class="o">/</span><span class="nx">_bazel_qcrafter</span><span class="o">/</span><span class="mi">4207</span><span class="nx">c8486d34138987115c0107ecb5f8</span><span class="o">/</span><span class="nx">execroot</span><span class="o">/</span><span class="nx">com_qcraft</span><span class="o">/</span><span class="nx">onboard</span><span class="o">/</span><span class="nx">planner</span><span class="o">/</span><span class="nx">assist</span><span class="o">/</span><span class="nx">lcc_map_builder</span><span class="p">.</span><span class="nx">cc</span><span class="p">:</span><span class="mi">148</span><span class="p">:</span><span class="mi">7</span><span class="p">:</span> <span class="mi">2</span><span class="nx">nd</span> <span class="nx">function</span> <span class="nx">call</span> <span class="nx">argument</span> <span class="nx">is</span> <span class="nx">an</span> <span class="nx">uninitialized</span> <span class="nx">value</span> <span class="p">[</span><span class="nx">core</span><span class="p">.</span><span class="nx">CallAndMessage</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">      <span class="nx">mapping</span><span class="p">::</span><span class="nf">LanePathData</span><span class="p">(</span><span class="nx">lane_path</span><span class="p">.</span><span class="nf">start_fraction</span><span class="p">(),</span> <span class="nx">end_fraction</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="p">^</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">Found</span> <span class="mi">1</span> <span class="nf">defect</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="nx">in</span> <span class="nx">lcc_map_builder</span><span class="p">.</span><span class="nx">cc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">----====</span> <span class="nx">Severity</span> <span class="nx">Statistics</span> <span class="o">====----</span>
+</span></span><span class="line"><span class="cl"><span class="o">----------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Severity</span> <span class="p">|</span> <span class="nx">Number</span> <span class="nx">of</span> <span class="nx">reports</span>
+</span></span><span class="line"><span class="cl"><span class="o">----------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">HIGH</span>     <span class="p">|</span>               <span class="mi">882</span>
+</span></span><span class="line"><span class="cl"><span class="nx">MEDIUM</span>   <span class="p">|</span>             <span class="mi">13814</span>
+</span></span><span class="line"><span class="cl"><span class="nx">LOW</span>      <span class="p">|</span>              <span class="mi">1973</span>
+</span></span><span class="line"><span class="cl"><span class="nx">STYLE</span>    <span class="p">|</span>                <span class="mi">20</span>
+</span></span><span class="line"><span class="cl"><span class="o">----------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="o">----================</span><span class="p">=</span><span class="o">----</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">----====</span> <span class="nx">Checker</span> <span class="nx">Statistics</span> <span class="o">====----</span>
+</span></span><span class="line"><span class="cl"><span class="o">---------------------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">Checker</span> <span class="nx">name</span>                                             <span class="p">|</span> <span class="nx">Severity</span> <span class="p">|</span> <span class="nx">Number</span> <span class="nx">of</span> <span class="nx">reports</span>
+</span></span><span class="line"><span class="cl"><span class="o">---------------------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">core</span><span class="p">.</span><span class="nx">CallAndMessage</span>                                      <span class="p">|</span> <span class="nx">HIGH</span>     <span class="p">|</span>               <span class="mi">136</span>
+</span></span><span class="line"><span class="cl"><span class="nx">security</span><span class="p">.</span><span class="nx">FloatLoopCounter</span>                                <span class="p">|</span> <span class="nx">MEDIUM</span>   <span class="p">|</span>               <span class="mi">214</span>
+</span></span><span class="line"><span class="cl"><span class="nx">cppcoreguidelines</span><span class="o">-</span><span class="nx">special</span><span class="o">-</span><span class="nx">member</span><span class="o">-</span><span class="nx">functions</span>               <span class="p">|</span> <span class="nx">LOW</span>      <span class="p">|</span>              <span class="mi">1264</span>
+</span></span><span class="line"><span class="cl"><span class="o">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">----====</span> <span class="nx">File</span> <span class="nx">Statistics</span> <span class="o">====----</span>
+</span></span><span class="line"><span class="cl"><span class="o">-------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">File</span> <span class="nx">name</span>                                             <span class="p">|</span> <span class="nx">Number</span> <span class="nx">of</span> <span class="nx">reports</span>
+</span></span><span class="line"><span class="cl"><span class="o">-------------------------------------------------------------------------</span>
+</span></span><span class="line"><span class="cl"><span class="nx">lcc_map_builder</span><span class="p">.</span><span class="nx">cc</span>                                    <span class="p">|</span>                 <span class="mi">2</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ground_line</span><span class="p">.</span><span class="nx">cc</span>                                        <span class="p">|</span>                <span class="mi">12</span>
+</span></span></code></pre></div><p>目前开启的Checker包括</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Shell" data-lang="Shell"><span class="line"><span class="cl">---------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">Checker name                                             <span class="p">|</span> Severity <span class="p">|</span>
+</span></span><span class="line"><span class="cl">---------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">core.CallAndMessage                                      <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">security.FloatLoopCounter                                <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cppcoreguidelines-special-member-functions               <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-sign-compare                            <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-unused-parameter                        <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-sizeof-container                                <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-undefined-memory-manipulation                   <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">optin.cplusplus.UninitializedObject                      <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cert-dcl58-cpp                                           <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-deprecated-copy-with-user-provided-copy <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">performance-noexcept-move-constructor                    <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-deprecated-declarations                 <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">readability-suspicious-call-argument                     <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">performance-move-const-arg                               <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">misc-definitions-in-headers                              <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">optin.cplusplus.VirtualCall                              <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">deadcode.DeadStores                                      <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-forwarding-reference-overload                   <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.NullDereference                                     <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-use-after-move                                  <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">misc-unconventional-assign-operator                      <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-missing-field-initializers              <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">google-global-names-in-headers                           <span class="p">|</span> STYLE    <span class="p">|</span>
+</span></span><span class="line"><span class="cl">performance-no-automatic-move                            <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cert-dcl59-cpp                                           <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">google-build-namespaces                                  <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-integer-division                                <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.UndefinedBinaryOperatorResult                       <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-unused-return-value                             <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">misc-redundant-expression                                <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-unhandled-exception-at-new                      <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.uninitialized.Assign                                <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-misplaced-widening-cast                         <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-virtual-near-miss                               <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.NonNullParamChecker                                 <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-incorrect-roundings                             <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">misc-misplaced-const                                     <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">unix.Malloc                                              <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cplusplus.NewDeleteLeaks                                 <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-suspicious-missing-comma                        <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-lambda-function-name                            <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.uninitialized.UndefReturn                           <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">optin.portability.UnixAPI                                <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-signed-char-misuse                              <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.DivideZero                                          <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">core.StackAddressEscape                                  <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-swapped-arguments                               <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-forward-declaration-namespace                   <span class="p">|</span> LOW      <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cert-err09-cpp                                           <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">unix.API                                                 <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-not-null-terminated-result                      <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cplusplus.NewDelete                                      <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-fold-init-type                                  <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-sizeof-expression                               <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">cplusplus.Move                                           <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-inaccurate-erase                                <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-string-constructor                              <span class="p">|</span> HIGH     <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-unused-result                           <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">clang-diagnostic-#pragma-messages                        <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-signal-handler                                  <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">bugprone-too-small-loop-variable                         <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">misc-uniqueptr-reset-release                             <span class="p">|</span> MEDIUM   <span class="p">|</span>
+</span></span><span class="line"><span class="cl">---------------------------------------------------------------------
+</span></span></code></pre></div><p>发现问题：</p>
+<p>内存泄露，空指针调用，move后调用</p>
+<p>附加SAST软件分析</p>
+<p>SAST的软件有很多，比方说sonarqube，codechecker.针对C++我使用的是codechecker</p>
+<ul>
+<li>sonarqube</li>
+<li>codechecker</li>
+<li></li>
+</ul>
+<p>codechecker流程，如何安装？直接使用pip3 install codechecker即可，最终工程治理组将codechecker装进了docker里面，就不需要指定目录了，直接可以调用CodeChecker</p>
+<ul>
+<li>
+<p><code>CodeChecker log</code> runs the given build command and records the executed compilation steps. These steps are written to an output file (Compilation Database) in a JSON format。这个实践起来并不是一个好的方法，因为本身在本地做编译就比较荒谬。实际上使用https://github.com/grailbio/bazel-compilation-database/可以方便的生成compile database，不需要再用codechecker本身的注入式log</p>
+<pre tabindex="0"><code>#这种做法不推荐
 /home/qcraft/.local/bin/CodeChecker log -o ./sim_server_compile_commands.json -b   &#34;bazel --batch \
    build \
      --spawn_strategy=local \
@@ -127,63 +824,394 @@
 
 # Only generate some folder
 ./bazel-compdb -q //offboard/simulation/simulator/...
-</code></pre></li><li><p><code>CodeChecker analyze</code> uses the previously created JSON Compilation Database to perform an analysis on the project, outputting analysis results in a machine-readable (plist) format。这里的skip file能帮忙过滤掉proto文件，只分析我们感兴趣的文件</p><ul><li><pre tabindex=0><code>#skip file
+</code></pre></li>
+<li>
+<p><code>CodeChecker analyze</code> uses the previously created JSON Compilation Database to perform an analysis on the project, outputting analysis results in a machine-readable (plist) format。这里的skip file能帮忙过滤掉proto文件，只分析我们感兴趣的文件</p>
+<ul>
+<li>
+<pre tabindex="0"><code>#skip file
 -*/proto/*
 +*/offboard/*
 +*/onboard/*
 -*
-</code></pre></li><li><pre tabindex=0><code>/home/qcraft/.local/bin/CodeChecker analyze ./sim_server_compile_commands.json -o codechecker_report
-</code></pre></li></ul></li></ul><h4 class="relative group">1.1.2 如何避免误报<div id=112-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E8%AF%AF%E6%8A%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#112-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E8%AF%AF%E6%8A%A5 aria-label=锚点>#</a></span></h4><p>以CodeChecker为例，说一下怎么避免误报</p><ol><li><p><strong>终极方法</strong>，忽略或者屏蔽，analyzor支持skip文件级别。即</p><ul><li>直接在文件层面skip掉这些报错的文件，这种粒度比较大，可能会有导致其它问题被隐蔽，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#skip</li><li>使用codechecker支持的注释或者comment内容来避免false positive误报，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#source-code-comments</li><li>在web interface能够配置，某些是false positive的。不过这个是网络层面，还没做</li></ul></li><li><p><strong>代码层面避免</strong>，语言层面的保障应该是高于逻辑层面的。也就是说如果用户说逻辑层面能保证这种行为，这个就不能算作是false positive</p><ul><li><p>使用const等手段，来避免编译器认为出现对应的问题</p></li><li><p>使用好理解的代码比方说，下面的情况保证了在宏<code>__clang_analyzer__</code>生效的情况下，static analysis会正确地找到对应的代码，从而不会出现错误的理解。这个宏的作用实际上并不止这些还</p><p>For example the following code:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>unsigned</span> <span class=nf>f</span><span class=p>(</span><span class=kt>unsigned</span> <span class=n>x</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span><span class=n>x</span> <span class=o>&gt;&gt;</span> <span class=mi>1</span><span class=p>)</span> <span class=o>&amp;</span> <span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></div><p>Could be rewritten as:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=cp>#ifndef __clang_analyzer__
-</span></span></span><span class=line><span class=cl><span class=cp></span><span class=kt>unsigned</span> <span class=nf>f</span><span class=p>(</span><span class=kt>unsigned</span> <span class=n>x</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span><span class=n>x</span> <span class=o>&gt;&gt;</span> <span class=mi>1</span><span class=p>)</span> <span class=o>&amp;</span> <span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=cp>#else
-</span></span></span><span class=line><span class=cl><span class=cp></span><span class=kt>unsigned</span> <span class=nf>f</span><span class=p>(</span><span class=kt>unsigned</span> <span class=n>x</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span><span class=n>x</span> <span class=o>/</span> <span class=mi>2</span><span class=p>)</span> <span class=o>%</span> <span class=mi>2</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl><span class=cp>#endif
-</span></span></span></code></pre></div></li></ul><ul><li><p>防御式编程，这个和语言就强相关了，简单的例子</p><p>Clang-Tidy has lots of useful syntax based checks. Some of these checks find bug-prone code snippets. When these snippets are intentional, usually there is a natural way to make the intent more explicit. Unfortunately, it is hard to give a general guideline, because the details are different for each check. The documentation of the check might contain hints how to express intention more clearly. Let us look at an example:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>double</span> <span class=nf>f</span><span class=p>(</span><span class=kt>int</span> <span class=n>i</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>32</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span> <span class=o>+</span> <span class=n>i</span><span class=p>);</span> <span class=c1>// Warning, integer division, loss of precision.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></div><p>It can be rewritten to as the following to suppress the warning:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>double</span> <span class=nf>f</span><span class=p>(</span><span class=kt>int</span> <span class=n>i</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>(</span><span class=kt>int</span><span class=p>)(</span><span class=mi>32</span> <span class=o>/</span> <span class=p>(</span><span class=mi>2</span> <span class=o>+</span> <span class=n>i</span><span class=p>));</span> <span class=c1>// No warning, the intention is explicit.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></div><p>The second version makes it clear even though the return value is a floating point value the loss of precision during integer division is intentional. Adding a comment why this is intentional would make this even clearer. Such edits makes the code easier to understand for fellow developers.</p></li></ul></li><li><p><strong>逻辑层面，确实不可执行到的路径</strong></p><ul><li><p>对函数/部分代码添加正确的annotations，比方说C++ 11 的noreturn，https://en.cppreference.com/w/cpp/language/attributes</p></li><li><p>analyzor支持assert检查，编译debug对象的时候这些assert能够有效的避免出现相应的flase positive报错，编译器会检查到assert必然满足了某些条件，从而不会出现对应的问题。参考https://clang-analyzer.llvm.org/annotations.html#custom_assertions</p></li><li><p>也是用assert代码来保证一定不会出错，认为走入了错误的path会导致报错</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>int</span> <span class=nf>f</span><span class=p>(</span><span class=n>MyEnum</span> <span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>switch</span> <span class=p>(</span><span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=nl>MyEnumA</span><span class=p>:</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=nl>MyEnumB</span><span class=p>:</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span> <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>5</span><span class=o>/</span><span class=n>x</span><span class=p>;</span> <span class=c1>// Division by zero when Val == MyEnumC.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></div><p>It can be rewritten to as the following to suppress the warning:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>int</span> <span class=nf>f</span><span class=p>(</span><span class=n>MyEnum</span> <span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>switch</span> <span class=p>(</span><span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=nl>MyEnumA</span><span class=p>:</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>1</span><span class=p>;</span> <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=nl>MyEnumB</span><span class=p>:</span> <span class=n>x</span> <span class=o>=</span> <span class=mi>5</span><span class=p>;</span> <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=k>default</span><span class=o>:</span> <span class=n>assert</span><span class=p>(</span><span class=nb>false</span><span class=p>);</span> <span class=k>break</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>5</span><span class=o>/</span><span class=n>x</span><span class=p>;</span> <span class=c1>// No warning.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></div><p>Other macros or builtins expressing unreachable code may be used. Note that the rewritten code is also safer, since debug builds now check for more precondition violations.</p><p>In case of C++11 or later, another option is to use Immediately-Invoked Function Expression (IIFE) to avoid assigning a meaningless value.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-cpp data-lang=cpp><span class=line><span class=cl><span class=kt>int</span> <span class=nf>f</span><span class=p>(</span><span class=n>MyEnum</span> <span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=kt>int</span> <span class=n>x</span> <span class=o>=</span> <span class=p>[</span><span class=o>&amp;</span><span class=p>]</span> <span class=p>{</span> <span class=c1>// Note the lambda.
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=k>switch</span> <span class=p>(</span><span class=n>Val</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=nl>MyEnumA</span><span class=p>:</span> <span class=k>return</span> <span class=mi>1</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>      <span class=k>case</span> <span class=nl>MyEnumB</span><span class=p>:</span> <span class=k>return</span> <span class=mi>5</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>      <span class=k>default</span><span class=o>:</span> <span class=n>assert</span><span class=p>(</span><span class=nb>false</span><span class=p>);</span> <span class=k>return</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span> <span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=mi>5</span><span class=o>/</span><span class=n>x</span><span class=p>;</span> <span class=c1>// No warning.
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>
-</span></span></code></pre></div></li></ul></li></ol><h2 class="relative group">2 代码审计<div id=2-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 SQL部分<div id=21-sql%E9%83%A8%E5%88%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-sql%E9%83%A8%E5%88%86 aria-label=锚点>#</a></span></h3><p>针对SQL的代码审计一般发生在有对数据库提交的部分，这里针对最常用的GORM做审计：GORM对结构体、map结构的value在框架底层都进行了预编译，所以使用此类方式进行CRUD操作时是十分安全的，初次之外存在如下问题</p><ul><li>GORM对map的value进行了预编译，但却没对key进行预编译，因此如果是key是可以用户指定的，那么就可能存在注入点。我们的代码没有这个问题</li><li>GORM对表结构的查询使用了预编译，最常见的例子是用？表示数据，比方说<code>db.Where("name = ?", name)</code>，但是如果没使用默认的预编译比方说如果是<code>db.Where("name = '" + name + "'")</code>这种，那么就会有注入风险。</li><li>raw sql执行，<code>db.Raw(sql)</code>，只要用户能控制sql的内容就存在注入。发现了这个问题</li><li>exec sql执行，和上面的raw sql执行一样，</li><li>db.order，采用预编译执行SQL语句传入的参数不能作为SQL语句的一部分，那么OrderBy所代表的的列名、或者是后面跟随的ASC/DESC也无法进行预编译处理。</li></ul><h3 class="relative group">2.2 XSS审计<div id=22-xss%E5%AE%A1%E8%AE%A1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-xss%E5%AE%A1%E8%AE%A1 aria-label=锚点>#</a></span></h3><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2023-03-28-devsecops实践\\index.md",oid_likes="likes_posts\\2023-03-28-devsecops实践\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2023-03-31-%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-03-31-架构之路</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-03-28T00:00:00+00:00>2023 年 3 月 28 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-06-11-程序员修养</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-06-11T00:00:00+00:00>2023 年 6 月 11 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+</code></pre></li>
+<li>
+<pre tabindex="0"><code>/home/qcraft/.local/bin/CodeChecker analyze ./sim_server_compile_commands.json -o codechecker_report
+</code></pre></li>
+</ul>
+</li>
+</ul>
+
+
+<h4 class="relative group">1.1.2 如何避免误报 
+    <div id="112-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E8%AF%AF%E6%8A%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#112-%E5%A6%82%E4%BD%95%E9%81%BF%E5%85%8D%E8%AF%AF%E6%8A%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>以CodeChecker为例，说一下怎么避免误报</p>
+<ol>
+<li>
+<p><strong>终极方法</strong>，忽略或者屏蔽，analyzor支持skip文件级别。即</p>
+<ul>
+<li>直接在文件层面skip掉这些报错的文件，这种粒度比较大，可能会有导致其它问题被隐蔽，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#skip</li>
+<li>使用codechecker支持的注释或者comment内容来避免false positive误报，参考https://codechecker.readthedocs.io/en/latest/analyzer/user_guide/#source-code-comments</li>
+<li>在web interface能够配置，某些是false positive的。不过这个是网络层面，还没做</li>
+</ul>
+</li>
+<li>
+<p><strong>代码层面避免</strong>，语言层面的保障应该是高于逻辑层面的。也就是说如果用户说逻辑层面能保证这种行为，这个就不能算作是false positive</p>
+<ul>
+<li>
+<p>使用const等手段，来避免编译器认为出现对应的问题</p>
+</li>
+<li>
+<p>使用好理解的代码比方说，下面的情况保证了在宏<code>__clang_analyzer__</code>生效的情况下，static analysis会正确地找到对应的代码，从而不会出现错误的理解。这个宏的作用实际上并不止这些还</p>
+<p>For example the following code:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="nf">f</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Could be rewritten as:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#ifndef __clang_analyzer__
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">unsigned</span> <span class="nf">f</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&gt;&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#else
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">unsigned</span> <span class="nf">f</span><span class="p">(</span><span class="kt">unsigned</span> <span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">%</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif
+</span></span></span></code></pre></div></li>
+</ul>
+<ul>
+<li>
+<p>防御式编程，这个和语言就强相关了，简单的例子</p>
+<p>Clang-Tidy has lots of useful syntax based checks. Some of these checks find bug-prone code snippets. When these snippets are intentional, usually there is a natural way to make the intent more explicit. Unfortunately, it is hard to give a general guideline, because the details are different for each check. The documentation of the check might contain hints how to express intention more clearly. Let us look at an example:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">32</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span><span class="p">);</span> <span class="c1">// Warning, integer division, loss of precision.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>It can be rewritten to as the following to suppress the warning:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">double</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">(</span><span class="kt">int</span><span class="p">)(</span><span class="mi">32</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">+</span> <span class="n">i</span><span class="p">));</span> <span class="c1">// No warning, the intention is explicit.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>The second version makes it clear even though the return value is a floating point value the loss of precision during integer division is intentional. Adding a comment why this is intentional would make this even clearer. Such edits makes the code easier to understand for fellow developers.</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>逻辑层面，确实不可执行到的路径</strong></p>
+<ul>
+<li>
+<p>对函数/部分代码添加正确的annotations，比方说C++ 11 的noreturn，https://en.cppreference.com/w/cpp/language/attributes</p>
+</li>
+<li>
+<p>analyzor支持assert检查，编译debug对象的时候这些assert能够有效的避免出现相应的flase positive报错，编译器会检查到assert必然满足了某些条件，从而不会出现对应的问题。参考https://clang-analyzer.llvm.org/annotations.html#custom_assertions</p>
+</li>
+<li>
+<p>也是用assert代码来保证一定不会出错，认为走入了错误的path会导致报错</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="n">MyEnum</span> <span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">switch</span> <span class="p">(</span><span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">MyEnumA</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">MyEnumB</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">5</span><span class="o">/</span><span class="n">x</span><span class="p">;</span> <span class="c1">// Division by zero when Val == MyEnumC.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>It can be rewritten to as the following to suppress the warning:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="n">MyEnum</span> <span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">switch</span> <span class="p">(</span><span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">MyEnumA</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">MyEnumB</span><span class="p">:</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">default</span><span class="o">:</span> <span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">5</span><span class="o">/</span><span class="n">x</span><span class="p">;</span> <span class="c1">// No warning.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div><p>Other macros or builtins expressing unreachable code may be used. Note that the rewritten code is also safer, since debug builds now check for more precondition violations.</p>
+<p>In case of C++11 or later, another option is to use Immediately-Invoked Function Expression (IIFE) to avoid assigning a meaningless value.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="n">MyEnum</span> <span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="p">[</span><span class="o">&amp;</span><span class="p">]</span> <span class="p">{</span> <span class="c1">// Note the lambda.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">switch</span> <span class="p">(</span><span class="n">Val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="nl">MyEnumA</span><span class="p">:</span> <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">case</span> <span class="nl">MyEnumB</span><span class="p">:</span> <span class="k">return</span> <span class="mi">5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">default</span><span class="o">:</span> <span class="n">assert</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">5</span><span class="o">/</span><span class="n">x</span><span class="p">;</span> <span class="c1">// No warning.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ol>
+
+
+<h2 class="relative group">2 代码审计 
+    <div id="2-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">2.1 SQL部分 
+    <div id="21-sql%E9%83%A8%E5%88%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-sql%E9%83%A8%E5%88%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>针对SQL的代码审计一般发生在有对数据库提交的部分，这里针对最常用的GORM做审计：GORM对结构体、map结构的value在框架底层都进行了预编译，所以使用此类方式进行CRUD操作时是十分安全的，初次之外存在如下问题</p>
+<ul>
+<li>GORM对map的value进行了预编译，但却没对key进行预编译，因此如果是key是可以用户指定的，那么就可能存在注入点。我们的代码没有这个问题</li>
+<li>GORM对表结构的查询使用了预编译，最常见的例子是用？表示数据，比方说<code>db.Where(&quot;name = ?&quot;, name)</code>，但是如果没使用默认的预编译比方说如果是<code>db.Where(&quot;name = '&quot; + name + &quot;'&quot;)</code>这种，那么就会有注入风险。</li>
+<li>raw sql执行，<code>db.Raw(sql)</code>，只要用户能控制sql的内容就存在注入。发现了这个问题</li>
+<li>exec sql执行，和上面的raw sql执行一样，</li>
+<li>db.order，采用预编译执行SQL语句传入的参数不能作为SQL语句的一部分，那么OrderBy所代表的的列名、或者是后面跟随的ASC/DESC也无法进行预编译处理。</li>
+</ul>
+
+
+<h3 class="relative group">2.2 XSS审计 
+    <div id="22-xss%E5%AE%A1%E8%AE%A1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-xss%E5%AE%A1%E8%AE%A1" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2023-03-28-devsecops实践\/index.md"
+        var oid_likes = "likes_posts\/2023-03-28-devsecops实践\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2023-03-31-%E6%9E%B6%E6%9E%84%E4%B9%8B%E8%B7%AF/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2023-03-31-架构之路</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-03-28T00:00:00&#43;00:00">2023 年 3 月 28 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2023-06-11-程序员修养</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-06-11T00:00:00&#43;00:00">2023 年 6 月 11 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

@@ -1,10 +1,711 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>HPKE笔记 &#183; 菜狗的blog</title>
-<meta name=title content="HPKE笔记 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="HPKE,TLS,"><link rel=canonical href=https://hxndg.github.io/posts/2021-06-01-hpke%E7%AC%94%E8%AE%B0/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-06-01-hpke%E7%AC%94%E8%AE%B0/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="HPKE笔记"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-06-01T00:00:00+00:00"><meta property="article:modified_time" content="2021-06-01T00:00:00+00:00"><meta property="article:tag" content="HPKE"><meta property="article:tag" content="TLS"><meta name=twitter:card content="summary"><meta name=twitter:title content="HPKE笔记"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"HPKE笔记","headline":"HPKE笔记","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-06-01-hpke%E7%AC%94%E8%AE%B0\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-06-01T00:00:00\u002b00:00","datePublished":"2021-06-01T00:00:00\u002b00:00","dateModified":"2021-06-01T00:00:00\u002b00:00","keywords":["HPKE","TLS"],"mainEntityOfPage":"true","wordCount":"8264"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">HPKE笔记</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-06-01T00:00:00+00:00>2021 年 6 月 1 日</time><span class="px-2 text-primary-500">&#183;</span><span>8264 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>17 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-hpke是什么白话版>0 HPKE是什么（白话版）</a></li><li><a href=#1-总览>1 总览</a></li><li><a href=#2-名词定义>2 名词定义</a><ul><li><a href=#21-基础名词>2.1 基础名词</a></li><li><a href=#22-hpke的加解密基础名词>2.2 HPKE的加解密基础名词</a></li></ul></li><li><a href=#3-hpke的内容>3 HPKE的内容</a><ul><li><a href=#31-创建加密上下文>3.1 创建加密上下文</a><ul><li><a href=#311-hpke_base-mode-加密公钥>3.1.1 HPKE_BASE Mode 加密公钥</a></li><li><a href=#312-使用psk认证>3.1.2 使用PSK认证</a></li><li><a href=#313-使用非对称秘钥认证>3.1.3 使用非对称秘钥认证</a></li><li><a href=#315-使用psk非对称秘钥认证>3.1.5 使用PSK+非对称秘钥认证</a></li></ul></li><li><a href=#32-加密与解密>3.2 加密与解密</a></li></ul></li><li><a href=#5-总结和faq>5 总结和FAQ</a></li><li><a href=#6-streaming-aead>6 Streaming AEAD</a><ul><li><a href=#61-grain-128aead>6.1 Grain-128AEAD</a></li><li><a href=#62-tink的具体实现>6.2 tink的具体实现</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-hpke是什么白话版>0 HPKE是什么（白话版）</a></li><li><a href=#1-总览>1 总览</a></li><li><a href=#2-名词定义>2 名词定义</a><ul><li><a href=#21-基础名词>2.1 基础名词</a></li><li><a href=#22-hpke的加解密基础名词>2.2 HPKE的加解密基础名词</a></li></ul></li><li><a href=#3-hpke的内容>3 HPKE的内容</a><ul><li><a href=#31-创建加密上下文>3.1 创建加密上下文</a><ul><li><a href=#311-hpke_base-mode-加密公钥>3.1.1 HPKE_BASE Mode 加密公钥</a></li><li><a href=#312-使用psk认证>3.1.2 使用PSK认证</a></li><li><a href=#313-使用非对称秘钥认证>3.1.3 使用非对称秘钥认证</a></li><li><a href=#315-使用psk非对称秘钥认证>3.1.5 使用PSK+非对称秘钥认证</a></li></ul></li><li><a href=#32-加密与解密>3.2 加密与解密</a></li></ul></li><li><a href=#5-总结和faq>5 总结和FAQ</a></li><li><a href=#6-streaming-aead>6 Streaming AEAD</a><ul><li><a href=#61-grain-128aead>6.1 Grain-128AEAD</a></li><li><a href=#62-tink的具体实现>6.2 tink的具体实现</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">HPKE笔记<div id=hpke%E7%AC%94%E8%AE%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#hpke%E7%AC%94%E8%AE%B0 aria-label=锚点>#</a></span></h1><p>这几天看ECH和HPKE的笔记，然后惊讶地发现国内没有人看这个的，就知乎上有个机器人一样的东西提到一句，所以就打算记录下这个东西并简单总结，所以有了这片博客。从某种程度来说，这片博客大部分内容是RFCHybrid Public Key Encryption draft-irtf-cfrg-hpke-09的翻译，当然里面会穿插一些具体的内容。</p><p>2024/07/04，这几天重新翻笔记发现一些错误。再重新看了下HPKE标准发现，已经正式发布，而且内容发生了一些变化，因此做一些更正。</p><p>注意，以“我：”开始的内容，都是我自己写的东西，不在官方内容里。纯粹是方便理解加的。</p><h2 class="relative group">0 HPKE是什么（白话版）<div id=0-hpke%E6%98%AF%E4%BB%80%E4%B9%88%E7%99%BD%E8%AF%9D%E7%89%88 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0-hpke%E6%98%AF%E4%BB%80%E4%B9%88%E7%99%BD%E8%AF%9D%E7%89%88 aria-label=锚点>#</a></span></h2><p>HPKE即<strong>hybrid public-key encryption(HPKE)</strong>，翻译成中文是复合公钥加密方案。HPKE提供的实际上是利用接收端公钥产生会话秘钥，并加密任意长度的明文信息的功能。说的好像很复杂， 举个例子就明白了，TLS协议就是一个关联了一定上下文信息拓展后的HPKE。</p><p>按照具体模块划分，HPKE可以视为秘钥衍生函数（key derivation function (KDF)），密钥封装机制（key encapsulation mechanism(KEM)）与加密并认证机制（authenticated encryption with additional data (AEAD)）三个组合起来一种实现。目前HPKE适用于任何基于非对称密钥封装机制（KEM）、密钥派生函数（KDF）和带有附加数据的认证加密（AEAD）加密函数的组合。</p><p>上面这段话说起来好像还是很难懂，我用最简单（可能会有部分术语需要阅读下面的内容）的话语解释下：</p><p>HPKE实际上是发送方利用接收端的公私钥对里面的公钥，和本地私有或者临时产生的公私钥对里面的私钥计算得出一个共享的密钥。这个共享的密钥是不会明文传递的，它只会把地私有或者临时产生的公私钥对里面的公钥传递给接收方。发送方和接收方除了传递公钥外，还有一些诸如附加信息，比方说认证信息，普通信息参与计算产生一个密钥派生上下文，里面会包含nonce等信息。使用这些上下文信息与共享密钥就可以对明文做加密运算了。</p><p>举个简单的例子，就可以明白了，这里以DH交换协议为例子，请注意这里需要读者知道DH交换的基本前提：</p><ul><li><code>DH(skX, pkY)</code>: 使用私钥skX和公钥pkY执行非交互式Diffie-Hellman交换（这里的非交互我理解是指没有真正的走网络协议啥的传递），以生成长度为Ndh的Diffie-Hellman共享密钥。这个过程说白了就是一个公式<code>DH(skE, pkR)=DH(skR, pkE)</code></li></ul><p>下面给出HPKE在DH上的核心流程，即计算得出KEM共享密钥：</p><ol><li><p>首先生成一个临时KEM公私密钥对（KEM Ephemeral Key Pair)，使用临时私钥和接受方公钥执行Diffie-Hellman交换计算得出一个共享的DH交换结果（这个结果是只有通信双方知道），DH交换结果参与运算得出KEM共享密钥。而临时公钥经过编码后会发送给接收方。如果关键的代码为</p><pre tabindex=0><code>def Encap(pkR):
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>HPKE笔记 &middot; 菜狗的blog</title>
+  <meta name="title" content="HPKE笔记 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="HPKE, TLS, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2021-06-01-hpke%E7%AC%94%E8%AE%B0/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2021-06-01-hpke%E7%AC%94%E8%AE%B0/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="HPKE笔记">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-06-01T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-06-01T00:00:00+00:00">
+    <meta property="article:tag" content="HPKE">
+    <meta property="article:tag" content="TLS">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="HPKE笔记">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "HPKE笔记",
+    "headline": "HPKE笔记",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2021-06-01-hpke%E7%AC%94%E8%AE%B0\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2021",
+    "dateCreated": "2021-06-01T00:00:00\u002b00:00",
+    "datePublished": "2021-06-01T00:00:00\u002b00:00",
+    
+    "dateModified": "2021-06-01T00:00:00\u002b00:00",
+    
+    "keywords": ["HPKE","TLS"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "8264"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      HPKE笔记
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2021-06-01T00:00:00&#43;00:00">2021 年 6 月 1 日</time><span class="px-2 text-primary-500">&middot;</span><span>8264 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">17 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-hpke是什么白话版">0 HPKE是什么（白话版）</a></li>
+    <li><a href="#1-总览">1 总览</a></li>
+    <li><a href="#2-名词定义">2 名词定义</a>
+      <ul>
+        <li><a href="#21-基础名词">2.1 基础名词</a></li>
+        <li><a href="#22-hpke的加解密基础名词">2.2 HPKE的加解密基础名词</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-hpke的内容">3 HPKE的内容</a>
+      <ul>
+        <li><a href="#31-创建加密上下文">3.1 创建加密上下文</a>
+          <ul>
+            <li><a href="#311-hpke_base-mode-加密公钥">3.1.1 HPKE_BASE Mode 加密公钥</a></li>
+            <li><a href="#312-使用psk认证">3.1.2 使用PSK认证</a></li>
+            <li><a href="#313-使用非对称秘钥认证">3.1.3 使用非对称秘钥认证</a></li>
+            <li><a href="#315-使用psk非对称秘钥认证">3.1.5 使用PSK+非对称秘钥认证</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-加密与解密">3.2 加密与解密</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-总结和faq">5 总结和FAQ</a></li>
+    <li><a href="#6-streaming-aead">6 Streaming AEAD</a>
+      <ul>
+        <li><a href="#61-grain-128aead">6.1 Grain-128AEAD</a></li>
+        <li><a href="#62-tink的具体实现">6.2 tink的具体实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-hpke是什么白话版">0 HPKE是什么（白话版）</a></li>
+    <li><a href="#1-总览">1 总览</a></li>
+    <li><a href="#2-名词定义">2 名词定义</a>
+      <ul>
+        <li><a href="#21-基础名词">2.1 基础名词</a></li>
+        <li><a href="#22-hpke的加解密基础名词">2.2 HPKE的加解密基础名词</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-hpke的内容">3 HPKE的内容</a>
+      <ul>
+        <li><a href="#31-创建加密上下文">3.1 创建加密上下文</a>
+          <ul>
+            <li><a href="#311-hpke_base-mode-加密公钥">3.1.1 HPKE_BASE Mode 加密公钥</a></li>
+            <li><a href="#312-使用psk认证">3.1.2 使用PSK认证</a></li>
+            <li><a href="#313-使用非对称秘钥认证">3.1.3 使用非对称秘钥认证</a></li>
+            <li><a href="#315-使用psk非对称秘钥认证">3.1.5 使用PSK+非对称秘钥认证</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-加密与解密">3.2 加密与解密</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-总结和faq">5 总结和FAQ</a></li>
+    <li><a href="#6-streaming-aead">6 Streaming AEAD</a>
+      <ul>
+        <li><a href="#61-grain-128aead">6.1 Grain-128AEAD</a></li>
+        <li><a href="#62-tink的具体实现">6.2 tink的具体实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">HPKE笔记 
+    <div id="hpke%E7%AC%94%E8%AE%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#hpke%E7%AC%94%E8%AE%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+<p>这几天看ECH和HPKE的笔记，然后惊讶地发现国内没有人看这个的，就知乎上有个机器人一样的东西提到一句，所以就打算记录下这个东西并简单总结，所以有了这片博客。从某种程度来说，这片博客大部分内容是RFCHybrid Public Key Encryption draft-irtf-cfrg-hpke-09的翻译，当然里面会穿插一些具体的内容。</p>
+<p>2024/07/04，这几天重新翻笔记发现一些错误。再重新看了下HPKE标准发现，已经正式发布，而且内容发生了一些变化，因此做一些更正。</p>
+<p>注意，以“我：”开始的内容，都是我自己写的东西，不在官方内容里。纯粹是方便理解加的。</p>
+
+
+<h2 class="relative group">0 HPKE是什么（白话版） 
+    <div id="0-hpke%E6%98%AF%E4%BB%80%E4%B9%88%E7%99%BD%E8%AF%9D%E7%89%88" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0-hpke%E6%98%AF%E4%BB%80%E4%B9%88%E7%99%BD%E8%AF%9D%E7%89%88" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>HPKE即<strong>hybrid public-key encryption(HPKE)</strong>，翻译成中文是复合公钥加密方案。HPKE提供的实际上是利用接收端公钥产生会话秘钥，并加密任意长度的明文信息的功能。说的好像很复杂， 举个例子就明白了，TLS协议就是一个关联了一定上下文信息拓展后的HPKE。</p>
+<p>按照具体模块划分，HPKE可以视为秘钥衍生函数（key derivation function (KDF)），密钥封装机制（key encapsulation mechanism(KEM)）与加密并认证机制（authenticated encryption with additional data (AEAD)）三个组合起来一种实现。目前HPKE适用于任何基于非对称密钥封装机制（KEM）、密钥派生函数（KDF）和带有附加数据的认证加密（AEAD）加密函数的组合。</p>
+<p>上面这段话说起来好像还是很难懂，我用最简单（可能会有部分术语需要阅读下面的内容）的话语解释下：</p>
+<p>HPKE实际上是发送方利用接收端的公私钥对里面的公钥，和本地私有或者临时产生的公私钥对里面的私钥计算得出一个共享的密钥。这个共享的密钥是不会明文传递的，它只会把地私有或者临时产生的公私钥对里面的公钥传递给接收方。发送方和接收方除了传递公钥外，还有一些诸如附加信息，比方说认证信息，普通信息参与计算产生一个密钥派生上下文，里面会包含nonce等信息。使用这些上下文信息与共享密钥就可以对明文做加密运算了。</p>
+<p>举个简单的例子，就可以明白了，这里以DH交换协议为例子，请注意这里需要读者知道DH交换的基本前提：</p>
+<ul>
+<li><code>DH(skX, pkY)</code>: 使用私钥skX和公钥pkY执行非交互式Diffie-Hellman交换（这里的非交互我理解是指没有真正的走网络协议啥的传递），以生成长度为Ndh的Diffie-Hellman共享密钥。这个过程说白了就是一个公式<code>DH(skE, pkR)=DH(skR, pkE)</code></li>
+</ul>
+<p>下面给出HPKE在DH上的核心流程，即计算得出KEM共享密钥：</p>
+<ol>
+<li>
+<p>首先生成一个临时KEM公私密钥对（KEM Ephemeral Key Pair)，使用临时私钥和接受方公钥执行Diffie-Hellman交换计算得出一个共享的DH交换结果（这个结果是只有通信双方知道），DH交换结果参与运算得出KEM共享密钥。而临时公钥经过编码后会发送给接收方。如果关键的代码为</p>
+<pre tabindex="0"><code>def Encap(pkR):
   skE, pkE = GenerateKeyPair()
   dh = DH(skE, pkR)
   enc = SerializePublicKey(pkE)
@@ -14,7 +715,10 @@
 
   shared_secret = ExtractAndExpand(dh, kem_context)
   return shared_secret, enc
-</code></pre></li><li><p>接收方收到编码过的发送方临时公钥，解码后和自己的接收方私钥做DH交换，利用DH交换结果得到得出KEM共享密钥</p><pre tabindex=0><code>def Decap(enc, skR):
+</code></pre></li>
+<li>
+<p>接收方收到编码过的发送方临时公钥，解码后和自己的接收方私钥做DH交换，利用DH交换结果得到得出KEM共享密钥</p>
+<pre tabindex="0"><code>def Decap(enc, skR):
   pkE = DeserializePublicKey(enc)
   dh = DH(skR, pkE)
 
@@ -23,21 +727,206 @@
 
   shared_secret = ExtractAndExpand(dh, kem_context)
   return shared_secret
-</code></pre></li><li><p>计算</p></li></ol><h2 class="relative group">1 总览<div id=1-%E6%80%BB%E8%A7%88 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E6%80%BB%E8%A7%88 aria-label=锚点>#</a></span></h2><p>自从公钥秘钥体制诞生就有很多尝试结合非对称加密和对称加密来提供机密性的例子，这种结合往往是在利用对称加密的性能优势同时，使用非对称机密的管理优势（我理解指可以方便的暴露公共密钥）。传统的实现方式是使用非对称秘钥加密对称秘钥。HPKE采用了一种不同的手法：使用公钥生迭代生成对称秘钥和封装后的密钥。具体来说，就是加密消息传达了一个用公钥密码体制（交换算法）封装的（对称）加密密钥，以及一个或多个使用该密钥加密的任意大小的密文。</p><h2 class="relative group">2 名词定义<div id=2-%E5%90%8D%E8%AF%8D%E5%AE%9A%E4%B9%89 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E5%90%8D%E8%AF%8D%E5%AE%9A%E4%B9%89 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 基础名词<div id=21-%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D aria-label=锚点>#</a></span></h3><p>以下术语用于描述 HPKE 的操作、角色和行为，这部分没有任何理解的成本，主要是区分开谁是谁：</p><ul><li><code>(skX, pkX)</code>：角色X使用的一对密钥封装机制（ Key Encapsulation Mechanism (KEM)）密钥对。X可以是 S（发送方）, R（接收方），或者是E（临时派生，不过一般这个最后会变成S用的密钥），&ldquo;skX&rdquo; 是秘钥 &ldquo;pkX&rdquo; 是公钥。我：这个东西可以视为HPKE最基本的东西了，没有密钥封装机制密钥对或者说公私密钥对就没有安全的派生共享密钥的方法，这里的KEM Key Pair可以理解为（EC）DHE密钥协商的起点。</li><li><code>pk(skX)</code>：和KEM私钥对应的KEM公钥，X代表角色是谁。对发送方而言，skX可能是临时生成的。</li><li><code>Sender (S)</code>：发送者。</li><li><code>Recipient (R)</code>：接受者</li><li><code>Ephemeral (E)</code>: 临时产生的随机值，一般是只用一次，大多数情况都是发送方会调用，参与一次“会话”计算共享密钥流程。</li><li><code>concat(x0, ..., xN)</code>：拼接字符串。比方说"concat(0x01, 0x0203, 0x040506) = 0x010203040506".</li><li>&ldquo;<code>random(n)</code>&rdquo;: 产生长度为"n" 字节长度的伪随机字符串</li><li>&ldquo;<code>I2OSP(n, w)</code>"：转换非负整数n为一个长度为w的使用网络字节序或者说大端的字符串。参考RFC8017</li><li>&ldquo;<code>OS2IP(x)</code>"：将字符串 <code>x</code> 转换为一个非负整数，如 [<a href=https://www.rfc-editor.org/rfc/rfc9180.html#RFC8017 target=_blank>RFC8017</a>] 中所述，这里假定字符串X为大端字节顺序。</li></ul><h3 class="relative group">2.2 HPKE的加解密基础名词<div id=22-hpke%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-hpke%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D aria-label=锚点>#</a></span></h3><p>具体到一套HPKE的内部，按照上面提到的三个模块划分，有很多基础的名词需要理解。</p><ol><li><p>KEM</p><ul><li><p><code>GenerateKeyPair()</code>：随机算法用于生成秘钥对 <code>(skX, pkX)</code>。我：很多时候通信发送方是“匿名”的，只能随机生成一个公私密钥对</p></li><li><p><code>DeriveKeyPair(ikm)"</code>：确定性的密钥延生算法，从ikm衍生出固定的秘钥对 &ldquo;<code>(skX, pkX)</code>&rdquo;.</p></li><li><p><code>SerializePublicKey(pkX)</code>：将公钥"pkX&rdquo;.编码为"Npk"长度 的字符串（说白了就是序列化）</p></li><li><p>&ldquo;<code>DeserializePublicKey(pkXm)</code>"：反序列化公钥</p></li><li><p>&ldquo;<code>Encap(pkR)</code>&ldquo;一整套流程，包括：1 使用随机算法生成一个临时，固定长度的对称密钥（被称为“KEM 共享密钥”）2 生成一个1里面KEM共享密钥的封装结果，这个结果只有pkR，即持有pkR的私钥接收方可以解密。</p></li><li><p>&ldquo;<code>Decap(enc, skR)</code>&ldquo;使用私钥skR从KEM共享密钥的封装结果<code>enc</code>中还原临时，固定长度的对称密钥也就是KEM共享秘钥</p></li><li><p>&ldquo;<code>AuthEncap(pkR, skS)</code>"：同Encap类似，但是附加一个验证：确保KEM共享秘钥由skS的拥有者，即发送方生成。</p></li><li><p>&ldquo;<code>AuthDecap(enc, skR, pkS)</code>"：同Decap类似，但是接收端可以验证KEM共享秘钥由skS的拥有者生成。</p></li></ul></li><li><p>KDF</p><ul><li><p>&ldquo;<code>Extract(salt, ikm)</code>"：结合可选参数salt，从输入密钥材料ikm里，提取固定长度为Nh字节的伪随机秘钥。</p></li><li><p>&ldquo;<code>Expand(prk, info, L)</code>"：利用刚才的伪随机秘钥，即prk，结合可选字符串info，拓展为长度为L的最终产生的秘钥材料。</p></li></ul></li><li><p>AEAD</p><ul><li><p>&ldquo;<code>Seal(key, nonce, aad, pt)</code>"。使用关联数据aad和对称秘钥key和nonce加密明文pt，产生秘文和tag，最终的结果为ct</p></li><li><p>&ldquo;<code>Open(key, nonce, aad, ct)</code>&rdquo; 使用关联数据aad和对称秘钥key和nonce解密秘文ct，产生明文pt。需要验证密文中tag是不是有效的。</p></li></ul></li></ol><p>一般说HPKE的时候，都会提具体的密码套件是啥，这里密码套件是一个（KEM、KDF、AEAD）组成的三元组，三元组里面每一项都是具体的算法。</p><p>还有一点要注意，有一个基本的秘钥操作：</p><pre tabindex=0><code>   def LabeledExtract(salt, label, ikm):
+</code></pre></li>
+<li>
+<p>计算</p>
+</li>
+</ol>
+
+
+<h2 class="relative group">1 总览 
+    <div id="1-%E6%80%BB%E8%A7%88" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-%E6%80%BB%E8%A7%88" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>自从公钥秘钥体制诞生就有很多尝试结合非对称加密和对称加密来提供机密性的例子，这种结合往往是在利用对称加密的性能优势同时，使用非对称机密的管理优势（我理解指可以方便的暴露公共密钥）。传统的实现方式是使用非对称秘钥加密对称秘钥。HPKE采用了一种不同的手法：使用公钥生迭代生成对称秘钥和封装后的密钥。具体来说，就是加密消息传达了一个用公钥密码体制（交换算法）封装的（对称）加密密钥，以及一个或多个使用该密钥加密的任意大小的密文。</p>
+
+
+<h2 class="relative group">2 名词定义 
+    <div id="2-%E5%90%8D%E8%AF%8D%E5%AE%9A%E4%B9%89" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E5%90%8D%E8%AF%8D%E5%AE%9A%E4%B9%89" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">2.1 基础名词 
+    <div id="21-%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>以下术语用于描述 HPKE 的操作、角色和行为，这部分没有任何理解的成本，主要是区分开谁是谁：</p>
+<ul>
+<li><code>(skX, pkX)</code>：角色X使用的一对密钥封装机制（ Key Encapsulation Mechanism (KEM)）密钥对。X可以是 S（发送方）, R（接收方），或者是E（临时派生，不过一般这个最后会变成S用的密钥），&ldquo;skX&rdquo; 是秘钥 &ldquo;pkX&rdquo; 是公钥。我：这个东西可以视为HPKE最基本的东西了，没有密钥封装机制密钥对或者说公私密钥对就没有安全的派生共享密钥的方法，这里的KEM Key Pair可以理解为（EC）DHE密钥协商的起点。</li>
+<li><code>pk(skX)</code>：和KEM私钥对应的KEM公钥，X代表角色是谁。对发送方而言，skX可能是临时生成的。</li>
+<li><code>Sender (S)</code>：发送者。</li>
+<li><code>Recipient (R)</code>：接受者</li>
+<li><code>Ephemeral (E)</code>: 临时产生的随机值，一般是只用一次，大多数情况都是发送方会调用，参与一次“会话”计算共享密钥流程。</li>
+<li><code>concat(x0, ..., xN)</code>：拼接字符串。比方说&quot;concat(0x01, 0x0203, 0x040506) = 0x010203040506&quot;.</li>
+<li>&ldquo;<code>random(n)</code>&rdquo;: 产生长度为&quot;n&quot; 字节长度的伪随机字符串</li>
+<li>&ldquo;<code>I2OSP(n, w)</code>&quot;：转换非负整数n为一个长度为w的使用网络字节序或者说大端的字符串。参考RFC8017</li>
+<li>&ldquo;<code>OS2IP(x)</code>&quot;：将字符串 <code>x</code> 转换为一个非负整数，如 [<a href="https://www.rfc-editor.org/rfc/rfc9180.html#RFC8017" target="_blank">RFC8017</a>] 中所述，这里假定字符串X为大端字节顺序。</li>
+</ul>
+
+
+<h3 class="relative group">2.2 HPKE的加解密基础名词 
+    <div id="22-hpke%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-hpke%E7%9A%84%E5%8A%A0%E8%A7%A3%E5%AF%86%E5%9F%BA%E7%A1%80%E5%90%8D%E8%AF%8D" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>具体到一套HPKE的内部，按照上面提到的三个模块划分，有很多基础的名词需要理解。</p>
+<ol>
+<li>
+<p>KEM</p>
+<ul>
+<li>
+<p><code>GenerateKeyPair()</code>：随机算法用于生成秘钥对 <code>(skX, pkX)</code>。我：很多时候通信发送方是“匿名”的，只能随机生成一个公私密钥对</p>
+</li>
+<li>
+<p><code>DeriveKeyPair(ikm)&quot;</code>：确定性的密钥延生算法，从ikm衍生出固定的秘钥对 &ldquo;<code>(skX, pkX)</code>&rdquo;.</p>
+</li>
+<li>
+<p><code>SerializePublicKey(pkX)</code>：将公钥&quot;pkX&rdquo;.编码为&quot;Npk&quot;长度 的字符串（说白了就是序列化）</p>
+</li>
+<li>
+<p>&ldquo;<code>DeserializePublicKey(pkXm)</code>&quot;：反序列化公钥</p>
+</li>
+<li>
+<p>&ldquo;<code>Encap(pkR)</code>&ldquo;一整套流程，包括：1 使用随机算法生成一个临时，固定长度的对称密钥（被称为“KEM 共享密钥”）2 生成一个1里面KEM共享密钥的封装结果，这个结果只有pkR，即持有pkR的私钥接收方可以解密。</p>
+</li>
+<li>
+<p>&ldquo;<code>Decap(enc, skR)</code>&ldquo;使用私钥skR从KEM共享密钥的封装结果<code>enc</code>中还原临时，固定长度的对称密钥也就是KEM共享秘钥</p>
+</li>
+<li>
+<p>&ldquo;<code>AuthEncap(pkR, skS)</code>&quot;：同Encap类似，但是附加一个验证：确保KEM共享秘钥由skS的拥有者，即发送方生成。</p>
+</li>
+<li>
+<p>&ldquo;<code>AuthDecap(enc, skR, pkS)</code>&quot;：同Decap类似，但是接收端可以验证KEM共享秘钥由skS的拥有者生成。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>KDF</p>
+<ul>
+<li>
+<p>&ldquo;<code>Extract(salt, ikm)</code>&quot;：结合可选参数salt，从输入密钥材料ikm里，提取固定长度为Nh字节的伪随机秘钥。</p>
+</li>
+<li>
+<p>&ldquo;<code>Expand(prk, info, L)</code>&quot;：利用刚才的伪随机秘钥，即prk，结合可选字符串info，拓展为长度为L的最终产生的秘钥材料。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>AEAD</p>
+<ul>
+<li>
+<p>&ldquo;<code>Seal(key, nonce, aad, pt)</code>&quot;。使用关联数据aad和对称秘钥key和nonce加密明文pt，产生秘文和tag，最终的结果为ct</p>
+</li>
+<li>
+<p>&ldquo;<code>Open(key, nonce, aad, ct)</code>&rdquo; 使用关联数据aad和对称秘钥key和nonce解密秘文ct，产生明文pt。需要验证密文中tag是不是有效的。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p>一般说HPKE的时候，都会提具体的密码套件是啥，这里密码套件是一个（KEM、KDF、AEAD）组成的三元组，三元组里面每一项都是具体的算法。</p>
+<p>还有一点要注意，有一个基本的秘钥操作：</p>
+<pre tabindex="0"><code>   def LabeledExtract(salt, label, ikm):
      labeled_ikm = concat(&#34;HPKE-v1&#34;, suite_id, label, ikm)
      return Extract(salt, labeled_ikm)
 
    def LabeledExpand(prk, label, info, L):
      labeled_info = concat(I2OSP(L, 2), &#34;HPKE-v1&#34;, suite_id, label, info)
      return Expand(prk, labeled_info, L)
-</code></pre><h2 class="relative group">3 HPKE的内容<div id=3-hpke%E7%9A%84%E5%86%85%E5%AE%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-hpke%E7%9A%84%E5%86%85%E5%AE%B9 aria-label=锚点>#</a></span></h2><p>这部分给出HPKE提供的关键函数和完整的流程定义，我把官方的解释做了一下润色，不过直接看英文版文档我理解就够了。</p><p>官方定义了几种 HPKE 变体（这个变体含义好像很难理解，可以这么理解：HPKE对应大类人，而人细分为很多变体，比方说黑人，白人黄种人blablabla）。所有变体都需要输入接收方公钥和明文<code>pt</code>，并生成封装后的密钥<code>enc</code>和一堆密文序列<code>ct</code>。HPKE的构建方式保证只有<code>skR</code>的持有者，即接收端能够从<code>enc</code>解封装密钥并解密密文。所有算法还接受一个<code>info</code>参数，可用于影响密钥的生成（比方说提供密钥身份信息）和一个<code>aad</code>参数，用于给AEAD 算法提供额外的认证数据。<a href=https://www.rfc-editor.org/rfc/rfc9180.html#section-5-1 target=_blank>¶</a>
-除了将公钥加密产生enc的基本情况外，官方还提供三种认证变体：</p><ul><li>一种认证通过PSK就是预共享密钥，即你有PSK，你是真用户。这种模式叫做mode_psk，用一字节表示，内容为0x01</li><li>一种认证通过持有KEM 私钥，就是你有私钥，你是真用户。这种模式叫做mode_auth，用一字节表示，内容为0x02</li><li>一种认证同时拥有预共享密钥和 KEM 私钥的情况，这个结合上面两种算法。这种模式叫做mode_auth_psk，用一字节表示，内容为0x03</li></ul><p>这三种认证变体都会为加密操作，即产生enc的过程，提供额外的密钥材料。</p><p>综上，可以将HPKE视为包含两步的完整流程：</p><ul><li>建立一个在发送方和接收方之间共享的加密上下文（之所以不是加解密上下文，注意HPKE只用于单向传输，发送方不能又用它加密，又解密，我觉得这是英文里面只提加密上下文的原因）。<a href=https://www.rfc-editor.org/rfc/rfc9180.html#section-5-5.1 target=_blank>¶</a>。这里加密上下文可以理解为包含AEAD 算法，密钥进行编码，nonce的结构。这里nonce不会参与多个明文加密行为。这个加密上下文还支持用于导出密钥（用于比方说复用等环境，可以对标TLS）</li><li>使用该上下文来加密或解密内容。</li></ul><p>接下来细说两个步骤。</p><h3 class="relative group">3.1 创建加密上下文<div id=31-%E5%88%9B%E5%BB%BA%E5%8A%A0%E5%AF%86%E4%B8%8A%E4%B8%8B%E6%96%87 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-%E5%88%9B%E5%BB%BA%E5%8A%A0%E5%AF%86%E4%B8%8A%E4%B8%8B%E6%96%87 aria-label=锚点>#</a></span></h3><p>无论哪种HPKE的变体需要输入一下内容来参与运算，从而得出加密上下文</p><ul><li><p>mode，一字节HPKE 模式，就上面提到的三种变体+基础模式</p></li><li><p>&ldquo;shared_secret&rdquo;，KEM共享秘钥，本次会话生成</p></li><li><p>&ldquo;info&rdquo;，应用程序提供的信息 (可选，初始值为空字符串，就是&rdquo;&rdquo;).</p></li><li><p>&ldquo;psk&rdquo;，发送方和接收方都持有的预共享密钥（PSK）（可选；默认值为空字符串）。</p></li><li><p>&ldquo;psk_id&rdquo;，PSK 的标识符（可选；默认值 &ldquo;"），因为可能有多个PSK</p></li></ul><p>在 Auth 和 AuthPSK 模式中，接收方可以确信发送方持有私有密钥<code>skS</code>。对于上面提到的DHKEM 变体，发送端的密钥是可能泄露了的，所以如果可选的话，最好使用PSK或者Auth模式。</p><p>好，现在我们开始看看针对发送方或者接收方如何产生加密上下文，首先需要指明HPKE的ciphersuite，HPKE 算法标识符，包含 KEM <code>kem_id</code>、KDF <code>kdf_id</code> 和 AEAD <code>aead_id</code> 的信息。诸如里面的xxx_id一般是预先定义好的。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-R data-lang=R><span class=line><span class=cl><span class=n>suite_id</span> <span class=o>=</span> <span class=nf>concat</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>     <span class=s>&#34;HPKE&#34;</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>     <span class=nf>I2OSP</span><span class=p>(</span><span class=n>kem_id</span><span class=p>,</span> <span class=m>2</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>     <span class=nf>I2OSP</span><span class=p>(</span><span class=n>kdf_id</span><span class=p>,</span> <span class=m>2</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>     <span class=nf>I2OSP</span><span class=p>(</span><span class=n>aead_id</span><span class=p>,</span> <span class=m>2</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>   <span class=p>)</span>
-</span></span></code></pre></div><p>具体的计算流程如下（请注意，这里不涉及如何传递Enc），ROLE为接收方或者发送方，简单来说就是：</p><ul><li>检查HPKE模式和传递的PSK信息是否充足，如果不匹配就报错</li><li>输入上面的输入内容，计算得出通信密钥</li></ul><pre tabindex=0><code>default_psk = &#34;&#34;
+</code></pre>
+
+<h2 class="relative group">3 HPKE的内容 
+    <div id="3-hpke%E7%9A%84%E5%86%85%E5%AE%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3-hpke%E7%9A%84%E5%86%85%E5%AE%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这部分给出HPKE提供的关键函数和完整的流程定义，我把官方的解释做了一下润色，不过直接看英文版文档我理解就够了。</p>
+<p>官方定义了几种 HPKE 变体（这个变体含义好像很难理解，可以这么理解：HPKE对应大类人，而人细分为很多变体，比方说黑人，白人黄种人blablabla）。所有变体都需要输入接收方公钥和明文<code>pt</code>，并生成封装后的密钥<code>enc</code>和一堆密文序列<code>ct</code>。HPKE的构建方式保证只有<code>skR</code>的持有者，即接收端能够从<code>enc</code>解封装密钥并解密密文。所有算法还接受一个<code>info</code>参数，可用于影响密钥的生成（比方说提供密钥身份信息）和一个<code>aad</code>参数，用于给AEAD 算法提供额外的认证数据。<a href="https://www.rfc-editor.org/rfc/rfc9180.html#section-5-1" target="_blank">¶</a>
+除了将公钥加密产生enc的基本情况外，官方还提供三种认证变体：</p>
+<ul>
+<li>一种认证通过PSK就是预共享密钥，即你有PSK，你是真用户。这种模式叫做mode_psk，用一字节表示，内容为0x01</li>
+<li>一种认证通过持有KEM 私钥，就是你有私钥，你是真用户。这种模式叫做mode_auth，用一字节表示，内容为0x02</li>
+<li>一种认证同时拥有预共享密钥和 KEM 私钥的情况，这个结合上面两种算法。这种模式叫做mode_auth_psk，用一字节表示，内容为0x03</li>
+</ul>
+<p>这三种认证变体都会为加密操作，即产生enc的过程，提供额外的密钥材料。</p>
+<p>综上，可以将HPKE视为包含两步的完整流程：</p>
+<ul>
+<li>建立一个在发送方和接收方之间共享的加密上下文（之所以不是加解密上下文，注意HPKE只用于单向传输，发送方不能又用它加密，又解密，我觉得这是英文里面只提加密上下文的原因）。<a href="https://www.rfc-editor.org/rfc/rfc9180.html#section-5-5.1" target="_blank">¶</a>。这里加密上下文可以理解为包含AEAD 算法，密钥进行编码，nonce的结构。这里nonce不会参与多个明文加密行为。这个加密上下文还支持用于导出密钥（用于比方说复用等环境，可以对标TLS）</li>
+<li>使用该上下文来加密或解密内容。</li>
+</ul>
+<p>接下来细说两个步骤。</p>
+
+
+<h3 class="relative group">3.1 创建加密上下文 
+    <div id="31-%E5%88%9B%E5%BB%BA%E5%8A%A0%E5%AF%86%E4%B8%8A%E4%B8%8B%E6%96%87" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-%E5%88%9B%E5%BB%BA%E5%8A%A0%E5%AF%86%E4%B8%8A%E4%B8%8B%E6%96%87" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>无论哪种HPKE的变体需要输入一下内容来参与运算，从而得出加密上下文</p>
+<ul>
+<li>
+<p>mode，一字节HPKE 模式，就上面提到的三种变体+基础模式</p>
+</li>
+<li>
+<p>&ldquo;shared_secret&rdquo;，KEM共享秘钥，本次会话生成</p>
+</li>
+<li>
+<p>&ldquo;info&rdquo;，应用程序提供的信息 (可选，初始值为空字符串，就是&rdquo;&rdquo;).</p>
+</li>
+<li>
+<p>&ldquo;psk&rdquo;，发送方和接收方都持有的预共享密钥（PSK）（可选；默认值为空字符串）。</p>
+</li>
+<li>
+<p>&ldquo;psk_id&rdquo;，PSK 的标识符（可选；默认值 &ldquo;&quot;），因为可能有多个PSK</p>
+</li>
+</ul>
+<p>在 Auth 和 AuthPSK 模式中，接收方可以确信发送方持有私有密钥<code>skS</code>。对于上面提到的DHKEM 变体，发送端的密钥是可能泄露了的，所以如果可选的话，最好使用PSK或者Auth模式。</p>
+<p>好，现在我们开始看看针对发送方或者接收方如何产生加密上下文，首先需要指明HPKE的ciphersuite，HPKE 算法标识符，包含 KEM <code>kem_id</code>、KDF <code>kdf_id</code> 和 AEAD <code>aead_id</code> 的信息。诸如里面的xxx_id一般是预先定义好的。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-R" data-lang="R"><span class="line"><span class="cl"><span class="n">suite_id</span> <span class="o">=</span> <span class="nf">concat</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">     <span class="s">&#34;HPKE&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">I2OSP</span><span class="p">(</span><span class="n">kem_id</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">I2OSP</span><span class="p">(</span><span class="n">kdf_id</span><span class="p">,</span> <span class="m">2</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">     <span class="nf">I2OSP</span><span class="p">(</span><span class="n">aead_id</span><span class="p">,</span> <span class="m">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">   <span class="p">)</span>
+</span></span></code></pre></div><p>具体的计算流程如下（请注意，这里不涉及如何传递Enc），ROLE为接收方或者发送方，简单来说就是：</p>
+<ul>
+<li>检查HPKE模式和传递的PSK信息是否充足，如果不匹配就报错</li>
+<li>输入上面的输入内容，计算得出通信密钥</li>
+</ul>
+<pre tabindex="0"><code>default_psk = &#34;&#34;
 default_psk_id = &#34;&#34;
 
 def VerifyPSKInputs(mode, psk, psk_id):
@@ -67,41 +956,127 @@ def KeySchedule&lt;ROLE&gt;(mode, shared_secret, info, psk, psk_id):
                                   key_schedule_context, Nh)
 
   return Context&lt;ROLE&gt;(key, base_nonce, 0, exporter_secret)
-</code></pre><h4 class="relative group">3.1.1 HPKE_BASE Mode 加密公钥<div id=311-hpke_base-mode-%E5%8A%A0%E5%AF%86%E5%85%AC%E9%92%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#311-hpke_base-mode-%E5%8A%A0%E5%AF%86%E5%85%AC%E9%92%A5 aria-label=锚点>#</a></span></h4><p>HPKE 方案的最基本功能是KEM私钥拥有者能够对进行加密操作。调用<code>SetupBaseS()</code>和 <code>SetupBaseR()</code>流程可以针对性地建立用于加密和解密的上下文。</p><p>这里KEM 共享密钥产生需要 KDF函数结合，描述密钥交换的信息以及调用者提供的显式 info 参数来计算得出。。</p><p>流程参数pkR是接受方公钥，enc 是一个封装后的的 KEM 共享密钥。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-r data-lang=r><span class=line><span class=cl><span class=n>def</span> <span class=nf>SetupBaseS</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>info</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=n>shared_secret</span><span class=p>,</span> <span class=n>enc</span> <span class=o>=</span> <span class=nf>Encap</span><span class=p>(</span><span class=n>pkR</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>  <span class=kr>return</span> <span class=n>enc</span><span class=p>,</span> <span class=nf>KeyScheduleS</span><span class=p>(</span><span class=n>mode_base</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                           <span class=n>default_psk</span><span class=p>,</span> <span class=n>default_psk_id</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=n>def</span> <span class=nf>SetupBaseR</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>info</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=n>shared_secret</span> <span class=o>=</span> <span class=nf>Decap</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>  <span class=kr>return</span> <span class=nf>KeyScheduleR</span><span class=p>(</span><span class=n>mode_base</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                      <span class=n>default_psk</span><span class=p>,</span> <span class=n>default_psk_id</span><span class=p>)</span>
-</span></span></code></pre></div><h4 class="relative group">3.1.2 使用PSK认证<div id=312-%E4%BD%BF%E7%94%A8psk%E8%AE%A4%E8%AF%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#312-%E4%BD%BF%E7%94%A8psk%E8%AE%A4%E8%AF%81 aria-label=锚点>#</a></span></h4><p>这种变体通过允许接收方通过验证发送方拥有给定的预共享密钥（PSK）来认证发送方。在[第 9.1 节][0]中有更详细描述，PSK 是如何在某些对手模型中提供了更高的保密。这里假设双方都都清楚该使用哪个PSK和具体psk_id是什么。</p><p>这种模式和HPKE_BASE模式的主要区别在于，<code>psk</code>和<code>psk_id</code>值被用作 KDF 的<code>ikm</code>输入（而不是使用空字符串）</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-r data-lang=r><span class=line><span class=cl>  <span class=n>def</span> <span class=nf>SetupPSKS</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>    <span class=n>shared_secret</span><span class=p>,</span> <span class=n>enc</span> <span class=o>=</span> <span class=nf>Encap</span><span class=p>(</span><span class=n>pkR</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=kr>return</span> <span class=n>enc</span><span class=p>,</span> <span class=nf>KeyScheduleS</span><span class=p>(</span><span class=n>mode_psk</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=n>def</span> <span class=nf>SetupPSKR</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>    <span class=n>shared_secret</span> <span class=o>=</span> <span class=nf>Decap</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=kr>return</span> <span class=nf>KeyScheduleR</span><span class=p>(</span><span class=n>mode_psk</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span>
-</span></span></code></pre></div><h4 class="relative group">3.1.3 使用非对称秘钥认证<div id=313-%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#313-%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81 aria-label=锚点>#</a></span></h4><p>这种变体通过允许接收方验证发送方拥有给定的 KEM 私钥。说白了就是因为 AuthDecap(enc, skR, pkS) 只有在封装KEM shared key的 enc 由 AuthEncap(pkR, skS) 生成时（其中 skS 是与 pkS 对应的私钥），才会产生正确的 KEM 共享密钥。换句话说，最多两个实体（在 DHKEM 的情况下恰好是两个）可以生成此密钥，因此如果接收方最多为一个，那么发送方极有可能是另一个。</p><p>与base mode的主要区别在于对 Encap() 和 Decap() 的调用被对 AuthEncap() 和 AuthDecap() 的调用所取代，它们将发送方的公钥添加到其内部上下文字符串中。函数参数 pkR 和 pkS 是公钥，而 enc 是封装的 KEM 共享密钥。¶</p><p>显然，这种变体只能与提供 AuthEncap() 和 AuthDecap() 过程的 KEM 一起使用。</p><p>此机制仅验证发送方的密钥对，而不是任何其他标识符。如果应用程序希望将 HPKE 密文或导出的秘密与发送方的其他标识（例如电子邮件地址或域名）绑定，则应将其他标识符包含在 info 参数中，以避免身份错误绑定问题</p><p>使用公钥认证的情况下构建加密环境。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-r data-lang=r><span class=line><span class=cl>   <span class=n>def</span> <span class=nf>SetupAuthS</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>skS</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>     <span class=n>shared_secret</span><span class=p>,</span> <span class=n>enc</span> <span class=o>=</span> <span class=nf>AuthEncap</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>skS</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>     <span class=kr>return</span> <span class=n>enc</span><span class=p>,</span> <span class=nf>KeyScheduleS</span><span class=p>(</span><span class=n>mode_auth</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                              <span class=n>default_psk</span><span class=p>,</span> <span class=n>default_psk_id</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>   <span class=n>def</span> <span class=nf>SetupAuthR</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>pkS</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>     <span class=n>shared_secret</span> <span class=o>=</span> <span class=nf>AuthDecap</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>pkS</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>     <span class=kr>return</span> <span class=nf>KeyScheduleR</span><span class=p>(</span><span class=n>mode_auth</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                         <span class=n>default_psk</span><span class=p>,</span> <span class=n>default_psk_id</span><span class=p>)</span>
-</span></span></code></pre></div><h4 class="relative group">3.1.5 使用PSK+非对称秘钥认证<div id=315-%E4%BD%BF%E7%94%A8psk%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#315-%E4%BD%BF%E7%94%A8psk%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81 aria-label=锚点>#</a></span></h4><p>使用公钥+PSK认证的情况下构建加密环境。这个我就不多赘述了。基本没变化</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-r data-lang=r><span class=line><span class=cl><span class=n>def</span> <span class=nf>SetupAuthPSKS</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>,</span> <span class=n>skS</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=n>shared_secret</span><span class=p>,</span> <span class=n>enc</span> <span class=o>=</span> <span class=nf>AuthEncap</span><span class=p>(</span><span class=n>pkR</span><span class=p>,</span> <span class=n>skS</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>  <span class=kr>return</span> <span class=n>enc</span><span class=p>,</span> <span class=nf>KeyScheduleS</span><span class=p>(</span><span class=n>mode_auth_psk</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                           <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=n>def</span> <span class=nf>SetupAuthPSKR</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span> <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>,</span> <span class=n>pkS</span><span class=p>)</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=n>shared_secret</span> <span class=o>=</span> <span class=nf>AuthDecap</span><span class=p>(</span><span class=n>enc</span><span class=p>,</span> <span class=n>skR</span><span class=p>,</span> <span class=n>pkS</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>  <span class=kr>return</span> <span class=nf>KeyScheduleR</span><span class=p>(</span><span class=n>mode_auth_psk</span><span class=p>,</span> <span class=n>shared_secret</span><span class=p>,</span> <span class=n>info</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                      <span class=n>psk</span><span class=p>,</span> <span class=n>psk_id</span><span class=p>)</span>
-</span></span></code></pre></div><h3 class="relative group">3.2 加密与解密<div id=32-%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#32-%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86 aria-label=锚点>#</a></span></h3><p>上面产生了具体的加密上下文，那么接下来就可以进行数据的加密和解密了。</p><p>HPKE 允许在一次会话中进行多次加密操作。由于设置中涉及的公钥操作通常比对称加密或解密更昂贵，这使得应用程序能够分摊公钥操作的成本，降低总体开销。</p><p>然而，为了避免随机数重用，这种加密必须是有状态的。上述每个设置过程都会生成一个特定于角色的上下文对象，该对象存储 AEAD 和秘密导出参数。AEAD 参数包括</p><ul><li>正在使用的 AEAD 算法<a href=https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.1 target=_blank>¶</a></li><li>回话密钥<code>key</code><a href=https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.2 target=_blank>¶</a></li><li>基本随机数<code>base_nonce</code><a href=https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.3 target=_blank>¶</a></li><li>序列号（从0开始）</li></ul><p>秘钥导出参数为：</p><ul><li>HPKE具体的ciphersuite，可以和上面的suite_id对上</li><li>exporter_secret导出秘钥</li></ul><p>这些参数除了seq number都是常量，每次加解密操作使用nonce都是base_nonce和当前seq number异或的结果。这里要注意加解密是需要我们上面写的AAD的参与的。具体加解密参数也一并附加上了。</p><pre tabindex=0><code>   def ContextS.Seal(aad, pt):
+</code></pre>
+
+<h4 class="relative group">3.1.1 HPKE_BASE Mode 加密公钥 
+    <div id="311-hpke_base-mode-%E5%8A%A0%E5%AF%86%E5%85%AC%E9%92%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#311-hpke_base-mode-%E5%8A%A0%E5%AF%86%E5%85%AC%E9%92%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>HPKE 方案的最基本功能是KEM私钥拥有者能够对进行加密操作。调用<code>SetupBaseS()</code>和 <code>SetupBaseR()</code>流程可以针对性地建立用于加密和解密的上下文。</p>
+<p>这里KEM 共享密钥产生需要 KDF函数结合，描述密钥交换的信息以及调用者提供的显式 info 参数来计算得出。。</p>
+<p>流程参数pkR是接受方公钥，enc 是一个封装后的的 KEM 共享密钥。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">SetupBaseS</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">shared_secret</span><span class="p">,</span> <span class="n">enc</span> <span class="o">=</span> <span class="nf">Encap</span><span class="p">(</span><span class="n">pkR</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">return</span> <span class="n">enc</span><span class="p">,</span> <span class="nf">KeyScheduleS</span><span class="p">(</span><span class="n">mode_base</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                           <span class="n">default_psk</span><span class="p">,</span> <span class="n">default_psk_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">SetupBaseR</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">shared_secret</span> <span class="o">=</span> <span class="nf">Decap</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">return</span> <span class="nf">KeyScheduleR</span><span class="p">(</span><span class="n">mode_base</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">default_psk</span><span class="p">,</span> <span class="n">default_psk_id</span><span class="p">)</span>
+</span></span></code></pre></div>
+
+<h4 class="relative group">3.1.2 使用PSK认证 
+    <div id="312-%E4%BD%BF%E7%94%A8psk%E8%AE%A4%E8%AF%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#312-%E4%BD%BF%E7%94%A8psk%E8%AE%A4%E8%AF%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>这种变体通过允许接收方通过验证发送方拥有给定的预共享密钥（PSK）来认证发送方。在[第 9.1 节][0]中有更详细描述，PSK 是如何在某些对手模型中提供了更高的保密。这里假设双方都都清楚该使用哪个PSK和具体psk_id是什么。</p>
+<p>这种模式和HPKE_BASE模式的主要区别在于，<code>psk</code>和<code>psk_id</code>值被用作 KDF 的<code>ikm</code>输入（而不是使用空字符串）</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl">  <span class="n">def</span> <span class="nf">SetupPSKS</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shared_secret</span><span class="p">,</span> <span class="n">enc</span> <span class="o">=</span> <span class="nf">Encap</span><span class="p">(</span><span class="n">pkR</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">return</span> <span class="n">enc</span><span class="p">,</span> <span class="nf">KeyScheduleS</span><span class="p">(</span><span class="n">mode_psk</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="n">def</span> <span class="nf">SetupPSKR</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">shared_secret</span> <span class="o">=</span> <span class="nf">Decap</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">return</span> <span class="nf">KeyScheduleR</span><span class="p">(</span><span class="n">mode_psk</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span>
+</span></span></code></pre></div>
+
+<h4 class="relative group">3.1.3 使用非对称秘钥认证 
+    <div id="313-%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#313-%E4%BD%BF%E7%94%A8%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>这种变体通过允许接收方验证发送方拥有给定的 KEM 私钥。说白了就是因为 AuthDecap(enc, skR, pkS) 只有在封装KEM shared key的 enc 由 AuthEncap(pkR, skS) 生成时（其中 skS 是与 pkS 对应的私钥），才会产生正确的 KEM 共享密钥。换句话说，最多两个实体（在 DHKEM 的情况下恰好是两个）可以生成此密钥，因此如果接收方最多为一个，那么发送方极有可能是另一个。</p>
+<p>与base mode的主要区别在于对 Encap() 和 Decap() 的调用被对 AuthEncap() 和 AuthDecap() 的调用所取代，它们将发送方的公钥添加到其内部上下文字符串中。函数参数 pkR 和 pkS 是公钥，而 enc 是封装的 KEM 共享密钥。¶</p>
+<p>显然，这种变体只能与提供 AuthEncap() 和 AuthDecap() 过程的 KEM 一起使用。</p>
+<p>此机制仅验证发送方的密钥对，而不是任何其他标识符。如果应用程序希望将 HPKE 密文或导出的秘密与发送方的其他标识（例如电子邮件地址或域名）绑定，则应将其他标识符包含在 info 参数中，以避免身份错误绑定问题</p>
+<p>使用公钥认证的情况下构建加密环境。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl">   <span class="n">def</span> <span class="nf">SetupAuthS</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">skS</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">     <span class="n">shared_secret</span><span class="p">,</span> <span class="n">enc</span> <span class="o">=</span> <span class="nf">AuthEncap</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">skS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">     <span class="kr">return</span> <span class="n">enc</span><span class="p">,</span> <span class="nf">KeyScheduleS</span><span class="p">(</span><span class="n">mode_auth</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                              <span class="n">default_psk</span><span class="p">,</span> <span class="n">default_psk_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="n">def</span> <span class="nf">SetupAuthR</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">pkS</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">     <span class="n">shared_secret</span> <span class="o">=</span> <span class="nf">AuthDecap</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">pkS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">     <span class="kr">return</span> <span class="nf">KeyScheduleR</span><span class="p">(</span><span class="n">mode_auth</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                         <span class="n">default_psk</span><span class="p">,</span> <span class="n">default_psk_id</span><span class="p">)</span>
+</span></span></code></pre></div>
+
+<h4 class="relative group">3.1.5 使用PSK+非对称秘钥认证 
+    <div id="315-%E4%BD%BF%E7%94%A8psk%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#315-%E4%BD%BF%E7%94%A8psk%E9%9D%9E%E5%AF%B9%E7%A7%B0%E7%A7%98%E9%92%A5%E8%AE%A4%E8%AF%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>使用公钥+PSK认证的情况下构建加密环境。这个我就不多赘述了。基本没变化</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-r" data-lang="r"><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">SetupAuthPSKS</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">,</span> <span class="n">skS</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">shared_secret</span><span class="p">,</span> <span class="n">enc</span> <span class="o">=</span> <span class="nf">AuthEncap</span><span class="p">(</span><span class="n">pkR</span><span class="p">,</span> <span class="n">skS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">return</span> <span class="n">enc</span><span class="p">,</span> <span class="nf">KeyScheduleS</span><span class="p">(</span><span class="n">mode_auth_psk</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                           <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">def</span> <span class="nf">SetupAuthPSKR</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span> <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">,</span> <span class="n">pkS</span><span class="p">)</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">shared_secret</span> <span class="o">=</span> <span class="nf">AuthDecap</span><span class="p">(</span><span class="n">enc</span><span class="p">,</span> <span class="n">skR</span><span class="p">,</span> <span class="n">pkS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">return</span> <span class="nf">KeyScheduleR</span><span class="p">(</span><span class="n">mode_auth_psk</span><span class="p">,</span> <span class="n">shared_secret</span><span class="p">,</span> <span class="n">info</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">psk</span><span class="p">,</span> <span class="n">psk_id</span><span class="p">)</span>
+</span></span></code></pre></div>
+
+<h3 class="relative group">3.2 加密与解密 
+    <div id="32-%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#32-%E5%8A%A0%E5%AF%86%E4%B8%8E%E8%A7%A3%E5%AF%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>上面产生了具体的加密上下文，那么接下来就可以进行数据的加密和解密了。</p>
+<p>HPKE 允许在一次会话中进行多次加密操作。由于设置中涉及的公钥操作通常比对称加密或解密更昂贵，这使得应用程序能够分摊公钥操作的成本，降低总体开销。</p>
+<p>然而，为了避免随机数重用，这种加密必须是有状态的。上述每个设置过程都会生成一个特定于角色的上下文对象，该对象存储 AEAD 和秘密导出参数。AEAD 参数包括</p>
+<ul>
+<li>正在使用的 AEAD 算法<a href="https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.1" target="_blank">¶</a></li>
+<li>回话密钥<code>key</code><a href="https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.2" target="_blank">¶</a></li>
+<li>基本随机数<code>base_nonce</code><a href="https://www.rfc-editor.org/rfc/rfc9180.html#section-5.2-3.3" target="_blank">¶</a></li>
+<li>序列号（从0开始）</li>
+</ul>
+<p>秘钥导出参数为：</p>
+<ul>
+<li>HPKE具体的ciphersuite，可以和上面的suite_id对上</li>
+<li>exporter_secret导出秘钥</li>
+</ul>
+<p>这些参数除了seq number都是常量，每次加解密操作使用nonce都是base_nonce和当前seq number异或的结果。这里要注意加解密是需要我们上面写的AAD的参与的。具体加解密参数也一并附加上了。</p>
+<pre tabindex="0"><code>   def ContextS.Seal(aad, pt):
      ct = Seal(self.key, self.ComputeNonce(self.seq), aad, pt)
      self.IncrementSeq()
      return ct
@@ -121,159 +1096,473 @@ def KeySchedule&lt;ROLE&gt;(mode, shared_secret, info, psk, psk_id):
      if self.seq &gt;= (1 &lt;&lt; (8*Nn)) - 1:
        raise MessageLimitReachedError
      self.seq += 1     
-</code></pre><h2 class="relative group">5 总结和FAQ<div id=5-%E6%80%BB%E7%BB%93%E5%92%8Cfaq class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%E6%80%BB%E7%BB%93%E5%92%8Cfaq aria-label=锚点>#</a></span></h2><p>总结以下几点：</p><ul><li>HPKE的优缺点是什么？</li><li>HPKE适用于哪些场景？</li></ul><p>一些具体的问题：</p><ul><li>HPKE和ECDH有什么区别？严格的来说HPKE和ECDH的原理是类似的，都是基于DH交换体系的基础知识产生共享秘钥，无法是多加了一个AEAD。但是两个的场景不一致，HPKE用于混合公钥加密，可以理解为一种加密套件。而ECDH是密钥交换算法，用于握手。</li><li>HPKE有哪些具体的应用场景呢？ECH混淆加密等等</li></ul><h2 class="relative group">6 Streaming AEAD<div id=6-streaming-aead class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-streaming-aead aria-label=锚点>#</a></span></h2><p>今天看到一个流AEAD的概念，原先讨论AEAD的时候第一反应都是块加密，AES-GCM，忽然提到流AEAD就没反应过来，看了下google的文档，说是提供：</p><ul><li>底层加密模式的选择使部分明文可以通过解密和认证部分密文快速获得，而不需要处理整个密文。</li><li>加密必须在一个会话中完成。修改现有的密文或对其进行追加是不可能的。</li></ul><p>tink的网页里面解释说是对OAE的具体实现，想了想没想明白咋回事，就直接去看了参考的文档Online Authenticated-Encryption and its Nonce-Reuse Misuse-Resistance论文，简单一些的理解就是使用已经算出来的数据和明文做异或作为IV参与到另外一块做运算，然后需要产生对应AAD一起作为输入参数进行运算。然后每次输出的结构都会拥有部分的tag，这个tag就和aes-gcm的tag是类似的，是这一部分数据认证的结果。当然，这个解释没说明白很多细节，比方说nonce如何产生，如何划分数据的segment？所以找了几篇论文和一些算法看下，如果前两篇没看懂，那么可以先看第三篇把里面的方案的都解释的差不多了再继续看：</p><ul><li>General Classification of the Authenticated Encryption Schemes for the CAESAR Competition</li><li>Online Authenticated-Encryption and its Nonce-Reuse Misuse-Resistance</li><li>基于双管道结构的在线加密方案</li></ul><p>简单来说OAE分为几个不同版本：</p><ul><li>OAE1：安全特性被多种质疑，mac在数据末尾。</li><li>OAE2：对nonce，iv的要求更严格些，mac要随一小段一点一点产生。当然这篇文章里面给出了oae2的一些实现方式，比方说chain/block啥的。</li></ul><p>下面我们看几种具体的streaming aead算法落地实践，一个是grain-128aead，另一个是tink提供的算法。</p><h3 class="relative group">6.1 Grain-128AEAD<div id=61-grain-128aead class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#61-grain-128aead aria-label=锚点>#</a></span></h3><p>基础组件为：</p><ul><li>key长度为128bit，nonce为96bit</li><li>具体包含两个building block，一个是预输出生成器，使用线性反馈移位寄存器+非线性反馈移位寄存器+预输出函数构成。第二个building block由认证生成器包含一个移位寄存器和累加器。设计和Grain-128a很相似，但是并不完全一致。</li><li>线性反馈移位寄存器和非线性反馈移位寄存器的具体方程可以直接看论文，我就不贴了挺明白的</li><li>认证器的寄存器部件保存最近的64个奇数位</li><li>key和nonce的生成，使用初始的key和nonce填充线性/非线性反馈移位寄存器</li></ul><p>使用方法为：</p><ul><li>使用第一个building block生成流密钥，密文的内容是流密钥和明文异或的结果</li><li>累加器需要累加最后的结果到末尾作为tag，但是这也太晚了，所以这个实际上是oae1</li></ul><p>总结：嗯，挺复杂，还麻烦。</p><h3 class="relative group">6.2 tink的具体实现<div id=62-tink%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#62-tink%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0 aria-label=锚点>#</a></span></h3><p>加密的包裹都是调用stream_segment_encrypter.h的头文件，stream_segment_encrypter会对每个segment做不同的参数派生，借此保证密文是不能调换的。其格式如同下面的注释</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=c1>//
-</span></span></span><span class=line><span class=cl><span class=c1>//   | other | header | 1st ciphertext segment |
-</span></span></span><span class=line><span class=cl><span class=c1>//   | ......    2nd ciphertext segment  ..... |
-</span></span></span><span class=line><span class=cl><span class=c1>//   | ......    3rd ciphertext segment  ..... |
-</span></span></span><span class=line><span class=cl><span class=c1>//   | ......    ...                     ..... |
-</span></span></span><span class=line><span class=cl><span class=c1>//   | ......    last ciphertext segment |
-</span></span></span><span class=line><span class=cl><span class=c1>//
-</span></span></span><span class=line><span class=cl><span class=c1>// where the following holds:
-</span></span></span><span class=line><span class=cl><span class=c1>//  * each line above, except for the last one,
-</span></span></span><span class=line><span class=cl><span class=c1>//    contains get_ciphertext_segment_size() bytes
-</span></span></span><span class=line><span class=cl><span class=c1>//  * each segment, except for the 1st and the last one,
-</span></span></span><span class=line><span class=cl><span class=c1>//    encrypts get_plaintext_segment_size() bytes of plaintext
-</span></span></span><span class=line><span class=cl><span class=c1>//  * if the ciphertext stream encrypts at least one byte of plaintext,
-</span></span></span><span class=line><span class=cl><span class=c1>//    then the last segment encrypts at least one byte of plaintext
-</span></span></span><span class=line><span class=cl><span class=c1>//  * &#39;other&#39; is get_ciphertext_offset() bytes long, and represents potential
-</span></span></span><span class=line><span class=cl><span class=c1>//    other bytes already written to the stream;  the purpose of ciphertext
-</span></span></span><span class=line><span class=cl><span class=c1>//    offset is to allow alignment of ciphertext segments with segments
-</span></span></span><span class=line><span class=cl><span class=c1>//    of the underlying storage or transmission stream.
-</span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=n>crypto</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=n>tink</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl><span class=k>namespace</span> <span class=n>subtle</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=k>class</span> <span class=nc>AesGcmHkdfStreaming</span> <span class=o>:</span> <span class=k>public</span> <span class=n>NonceBasedStreamingAead</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl> <span class=k>public</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=k>struct</span> <span class=nc>Params</span> <span class=p>{</span>               <span class=c1>//存储具体的参与运算的参数
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>util</span><span class=o>::</span><span class=n>SecretData</span> <span class=n>ikm</span><span class=p>;</span>       <span class=c1>//ikm初始密钥材料
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=n>HashType</span> <span class=n>hkdf_hash</span><span class=p>;</span>         <span class=c1>//派生密钥的hash方法
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>derived_key_size</span><span class=p>;</span>       <span class=c1>//派生密钥的大小
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>ciphertext_segment_size</span><span class=p>;</span><span class=c1>//这一个ciphertext的segment的大小
-</span></span></span><span class=line><span class=cl><span class=c1></span>    <span class=kt>int</span> <span class=n>ciphertext_offset</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=p>};</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=n>util</span><span class=o>::</span><span class=n>StatusOr</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>AesGcmHkdfStreaming</span><span class=o>&gt;&gt;</span> <span class=n>New</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>      <span class=n>Params</span> <span class=n>params</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=k>static</span> <span class=k>constexpr</span> <span class=n>crypto</span><span class=o>::</span><span class=n>tink</span><span class=o>::</span><span class=n>internal</span><span class=o>::</span><span class=n>FipsCompatibility</span> <span class=n>kFipsStatus</span> <span class=o>=</span>
-</span></span><span class=line><span class=cl>      <span class=n>crypto</span><span class=o>::</span><span class=n>tink</span><span class=o>::</span><span class=n>internal</span><span class=o>::</span><span class=n>FipsCompatibility</span><span class=o>::</span><span class=n>kNotFips</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl> <span class=k>protected</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=n>util</span><span class=o>::</span><span class=n>StatusOr</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>StreamSegmentEncrypter</span><span class=o>&gt;&gt;</span> <span class=n>NewSegmentEncrypter</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>      <span class=n>absl</span><span class=o>::</span><span class=n>string_view</span> <span class=n>associated_data</span><span class=p>)</span> <span class=k>const</span> <span class=k>override</span><span class=p>;</span>         <span class=c1>//具体加密
-</span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl>  <span class=n>util</span><span class=o>::</span><span class=n>StatusOr</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>StreamSegmentDecrypter</span><span class=o>&gt;&gt;</span> <span class=n>NewSegmentDecrypter</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>      <span class=n>absl</span><span class=o>::</span><span class=n>string_view</span> <span class=n>associated_data</span><span class=p>)</span> <span class=k>const</span> <span class=k>override</span><span class=p>;</span>         <span class=c1>//具体解密
-</span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl> <span class=k>private</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  <span class=k>explicit</span> <span class=n>AesGcmHkdfStreaming</span><span class=p>(</span><span class=n>Params</span> <span class=n>params</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>      <span class=o>:</span> <span class=n>ikm_</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>ikm</span><span class=p>)),</span>
-</span></span><span class=line><span class=cl>        <span class=n>hkdf_hash_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>hkdf_hash</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>        <span class=n>derived_key_size_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>derived_key_size</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>        <span class=n>ciphertext_segment_size_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>ciphertext_segment_size</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>        <span class=n>ciphertext_offset_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>ciphertext_offset</span><span class=p>)</span> <span class=p>{}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>util</span><span class=o>::</span><span class=n>SecretData</span> <span class=n>ikm_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=n>HashType</span> <span class=n>hkdf_hash_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=kt>int</span> <span class=n>derived_key_size_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=kt>int</span> <span class=n>ciphertext_segment_size_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>const</span> <span class=kt>int</span> <span class=n>ciphertext_offset_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl><span class=p>};</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=p>}</span>  <span class=c1>// namespace subtle
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>  <span class=c1>// namespace tink
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=p>}</span>  <span class=c1>// namespace crypto
-</span></span></span><span class=line><span class=cl><span class=c1></span>
-</span></span><span class=line><span class=cl><span class=cp>#endif  </span><span class=c1>// TINK_SUBTLE_AES_GCM_HKDF_STREAMING_H_
-</span></span></span></code></pre></div><p>具体的解密包括初始化流程如下，参考aes_gcm_hkdf_streaming.cc 文件，具体流程分为几步：</p><ul><li><p>使用传入的参数初始化加密解密参数，使用已经生成的相同的原始密钥材料ikm_，随机生成salt，使用相同的associated_data产生hkdf派生密钥，产生固定的nonce prefix。产生aead加解密context，这个aead ctx要参与对每次数据的加密。</p></li><li><p>对一段明文进行加密，都使用一开始产生的SegmentEncryptor，每次对一段明文进行加密都递增一个conunter，将counter拼接nonce prefix作为初始化向量IV进行加密。使用该iv和hkdf派生密钥参与到明文数据加密运算当中。</p></li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=cm>/* 参与运算的第一步，从ikm计算出来派生的具体的结果*/</span>
-</span></span><span class=line><span class=cl><span class=n>util</span><span class=o>::</span><span class=n>StatusOr</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>StreamSegmentEncrypter</span><span class=o>&gt;&gt;</span>
-</span></span><span class=line><span class=cl><span class=n>AesGcmHkdfStreaming</span><span class=o>::</span><span class=n>NewSegmentEncrypter</span><span class=p>(</span> <span class=n>absl</span><span class=o>::</span><span class=n>string_view</span> <span class=n>associated_data</span><span class=p>)</span> <span class=k>const</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=o>::</span><span class=n>Params</span> <span class=n>params</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=n>params</span><span class=p>.</span><span class=n>salt</span> <span class=o>=</span> <span class=n>Random</span><span class=o>::</span><span class=n>GetRandomBytes</span><span class=p>(</span><span class=n>derived_key_size_</span><span class=p>);</span>                <span class=c1>//随机生成salt
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=cm>/* 使用随机生成的salt，ikm_，aad派生出来派生密钥，这个派生密钥参与运算*/</span>
-</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>hkdf_result</span> <span class=o>=</span> <span class=n>Hkdf</span><span class=o>::</span><span class=n>ComputeHkdf</span><span class=p>(</span><span class=n>hkdf_hash_</span><span class=p>,</span> <span class=n>ikm_</span><span class=p>,</span> <span class=n>params</span><span class=p>.</span><span class=n>salt</span><span class=p>,</span> <span class=n>associated_data</span><span class=p>,</span> <span class=n>derived_key_size_</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>hkdf_result</span><span class=p>.</span><span class=n>ok</span><span class=p>())</span> <span class=k>return</span> <span class=n>hkdf_result</span><span class=p>.</span><span class=n>status</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=n>params</span><span class=p>.</span><span class=n>key</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>hkdf_result</span><span class=p>).</span><span class=n>ValueOrDie</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=n>params</span><span class=p>.</span><span class=n>ciphertext_offset</span> <span class=o>=</span> <span class=n>ciphertext_offset_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=n>params</span><span class=p>.</span><span class=n>ciphertext_segment_size</span> <span class=o>=</span> <span class=n>ciphertext_segment_size_</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=o>::</span><span class=n>New</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>params</span><span class=p>));</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=cm>/* 最后面上面的函数 */</span>
-</span></span><span class=line><span class=cl><span class=n>util</span><span class=o>::</span><span class=n>StatusOr</span><span class=o>&lt;</span><span class=n>std</span><span class=o>::</span><span class=n>unique_ptr</span><span class=o>&lt;</span><span class=n>StreamSegmentEncrypter</span><span class=o>&gt;&gt;</span>
-</span></span><span class=line><span class=cl><span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=o>::</span><span class=n>New</span><span class=p>(</span><span class=n>Params</span> <span class=n>params</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=cm>/* 验证参数的有效性 */</span>
-</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>status</span> <span class=o>=</span> <span class=n>Validate</span><span class=p>(</span><span class=n>params</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>status</span><span class=p>.</span><span class=n>ok</span><span class=p>())</span> <span class=k>return</span> <span class=n>status</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=cm>/* 根据密钥创建aead环境，这里的key是上面的派生密钥 */</span>
-</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>ctx_or</span> <span class=o>=</span> <span class=n>CreateAeadCtx</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>key</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>ctx_or</span><span class=p>.</span><span class=n>ok</span><span class=p>())</span> <span class=k>return</span> <span class=n>ctx_or</span><span class=p>.</span><span class=n>status</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=k>auto</span> <span class=n>ctx</span> <span class=o>=</span> <span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>ctx_or</span><span class=p>).</span><span class=n>ValueOrDie</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=p>{</span><span class=n>absl</span><span class=o>::</span><span class=n>WrapUnique</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>      <span class=k>new</span> <span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>ctx</span><span class=p>),</span> <span class=n>params</span><span class=p>))};</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=cm>/* 当前segment的加密流程 nonce_prefix_是随机产生的*/</span>
-</span></span><span class=line><span class=cl><span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=o>::</span><span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>    <span class=n>bssl</span><span class=o>::</span><span class=n>UniquePtr</span><span class=o>&lt;</span><span class=n>EVP_AEAD_CTX</span><span class=o>&gt;</span> <span class=n>ctx</span><span class=p>,</span> <span class=k>const</span> <span class=n>Params</span><span class=o>&amp;</span> <span class=n>params</span><span class=p>)</span>
-</span></span><span class=line><span class=cl>    <span class=o>:</span> <span class=n>ctx_</span><span class=p>(</span><span class=n>std</span><span class=o>::</span><span class=n>move</span><span class=p>(</span><span class=n>ctx</span><span class=p>)),</span>
-</span></span><span class=line><span class=cl>      <span class=n>nonce_prefix_</span><span class=p>(</span><span class=n>Random</span><span class=o>::</span><span class=n>GetRandomBytes</span><span class=p>(</span><span class=n>kNoncePrefixSizeInBytes</span><span class=p>)),</span>
-</span></span><span class=line><span class=cl>      <span class=n>header_</span><span class=p>(</span><span class=n>CreateHeader</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>salt</span><span class=p>,</span> <span class=n>nonce_prefix_</span><span class=p>)),</span>
-</span></span><span class=line><span class=cl>      <span class=n>ciphertext_segment_size_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>ciphertext_segment_size</span><span class=p>),</span>
-</span></span><span class=line><span class=cl>      <span class=n>ciphertext_offset_</span><span class=p>(</span><span class=n>params</span><span class=p>.</span><span class=n>ciphertext_offset</span><span class=p>)</span> <span class=p>{}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=cm>/* 具体的解密流程，每个segment实际上就是要加密的一段片段 */</span>
-</span></span><span class=line><span class=cl><span class=n>util</span><span class=o>::</span><span class=n>Status</span> <span class=n>AesGcmHkdfStreamSegmentEncrypter</span><span class=o>::</span><span class=n>EncryptSegment</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>    <span class=k>const</span> <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>uint8_t</span><span class=o>&gt;&amp;</span> <span class=n>plaintext</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>    <span class=kt>bool</span> <span class=n>is_last_segment</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>    <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>uint8_t</span><span class=o>&gt;*</span> <span class=n>ciphertext_buffer</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>plaintext</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>&gt;</span> <span class=n>get_plaintext_segment_size</span><span class=p>())</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>util</span><span class=o>::</span><span class=n>Status</span><span class=p>(</span><span class=n>util</span><span class=o>::</span><span class=n>error</span><span class=o>::</span><span class=n>INVALID_ARGUMENT</span><span class=p>,</span> <span class=s>&#34;plaintext too long&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>ciphertext_buffer</span> <span class=o>==</span> <span class=k>nullptr</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>util</span><span class=o>::</span><span class=n>Status</span><span class=p>(</span><span class=n>util</span><span class=o>::</span><span class=n>error</span><span class=o>::</span><span class=n>INVALID_ARGUMENT</span><span class=p>,</span> <span class=s>&#34;ciphertext_buffer must be non-null&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=n>get_segment_number</span><span class=p>()</span> <span class=o>&gt;</span> <span class=n>std</span><span class=o>::</span><span class=n>numeric_limits</span><span class=o>&lt;</span><span class=kt>uint32_t</span><span class=o>&gt;::</span><span class=n>max</span><span class=p>()</span> <span class=o>||</span>
-</span></span><span class=line><span class=cl>      <span class=p>(</span><span class=n>get_segment_number</span><span class=p>()</span> <span class=o>==</span> <span class=n>std</span><span class=o>::</span><span class=n>numeric_limits</span><span class=o>&lt;</span><span class=kt>uint32_t</span><span class=o>&gt;::</span><span class=n>max</span><span class=p>()</span> <span class=o>&amp;&amp;</span>
-</span></span><span class=line><span class=cl>       <span class=o>!</span><span class=n>is_last_segment</span><span class=p>))</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>util</span><span class=o>::</span><span class=n>Status</span><span class=p>(</span><span class=n>util</span><span class=o>::</span><span class=n>error</span><span class=o>::</span><span class=n>INVALID_ARGUMENT</span><span class=p>,</span> <span class=s>&#34;too many segments&#34;</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=cm>/* 进行加密会多出来一个kTagSizeInBytes的长度*/</span>
-</span></span><span class=line><span class=cl>  <span class=kt>int</span> <span class=n>ct_size</span> <span class=o>=</span> <span class=n>plaintext</span><span class=p>.</span><span class=n>size</span><span class=p>()</span> <span class=o>+</span> <span class=n>kTagSizeInBytes</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=n>ciphertext_buffer</span><span class=o>-&gt;</span><span class=n>resize</span><span class=p>(</span><span class=n>ct_size</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>  <span class=c1>// Construct IV. IV的构建需要是初始的nonce_prefix_的数据+当前segment的数据
-</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=n>std</span><span class=o>::</span><span class=n>vector</span><span class=o>&lt;</span><span class=kt>uint8_t</span><span class=o>&gt;</span> <span class=n>iv</span><span class=p>(</span><span class=n>kNonceSizeInBytes</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=n>memcpy</span><span class=p>(</span><span class=n>iv</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>nonce_prefix_</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>kNoncePrefixSizeInBytes</span><span class=p>);</span>
-</span></span><span class=line><span class=cl>  <span class=n>BigEndianStore32</span><span class=p>(</span><span class=n>iv</span><span class=p>.</span><span class=n>data</span><span class=p>()</span> <span class=o>+</span> <span class=n>kNoncePrefixSizeInBytes</span><span class=p>,</span> <span class=k>static_cast</span><span class=o>&lt;</span><span class=kt>uint32_t</span><span class=o>&gt;</span><span class=p>(</span><span class=n>get_segment_number</span><span class=p>()));</span>
-</span></span><span class=line><span class=cl>  <span class=n>iv</span><span class=p>.</span><span class=n>back</span><span class=p>()</span> <span class=o>=</span> <span class=n>is_last_segment</span> <span class=o>?</span> <span class=mi>1</span> <span class=o>:</span> <span class=mi>0</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  
-</span></span><span class=line><span class=cl>  <span class=cm>/* 执行加密，使用IV，已经初始化好了的aead ctx进行加密运算*/</span>
-</span></span><span class=line><span class=cl>  <span class=n>size_t</span> <span class=n>out_len</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=p>(</span><span class=o>!</span><span class=n>EVP_AEAD_CTX_seal</span><span class=p>(</span>
-</span></span><span class=line><span class=cl>          <span class=n>ctx_</span><span class=p>.</span><span class=n>get</span><span class=p>(),</span> <span class=n>ciphertext_buffer</span><span class=o>-&gt;</span><span class=n>data</span><span class=p>(),</span> <span class=o>&amp;</span><span class=n>out_len</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>          <span class=n>ciphertext_buffer</span><span class=o>-&gt;</span><span class=n>size</span><span class=p>(),</span>
-</span></span><span class=line><span class=cl>          <span class=n>iv</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>iv</span><span class=p>.</span><span class=n>size</span><span class=p>(),</span>
-</span></span><span class=line><span class=cl>          <span class=n>plaintext</span><span class=p>.</span><span class=n>data</span><span class=p>(),</span> <span class=n>plaintext</span><span class=p>.</span><span class=n>size</span><span class=p>(),</span>
-</span></span><span class=line><span class=cl>          <span class=cm>/* ad = */</span> <span class=k>nullptr</span><span class=p>,</span> <span class=cm>/* ad.length() = */</span> <span class=mi>0</span><span class=p>))</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>util</span><span class=o>::</span><span class=n>Status</span><span class=p>(</span><span class=n>util</span><span class=o>::</span><span class=n>error</span><span class=o>::</span><span class=n>INTERNAL</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                        <span class=n>absl</span><span class=o>::</span><span class=n>StrCat</span><span class=p>(</span><span class=s>&#34;Encryption failed: &#34;</span><span class=p>,</span>
-</span></span><span class=line><span class=cl>                                     <span class=n>SubtleUtilBoringSSL</span><span class=o>::</span><span class=n>GetErrors</span><span class=p>()));</span>
-</span></span><span class=line><span class=cl>  <span class=p>}</span>
-</span></span><span class=line><span class=cl>  <span class=cm>/* 将Segment号加一，下次需要使用这个进行运算*/</span>
-</span></span><span class=line><span class=cl>  <span class=n>IncSegmentNumber</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>  <span class=k>return</span> <span class=n>util</span><span class=o>::</span><span class=n>OkStatus</span><span class=p>();</span>
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></div><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-06-01-HPKE笔记\\index.md",oid_likes="likes_posts\\2021-06-01-HPKE笔记\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-05-26-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">复习编译原理笔记</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-05-26T00:00:00+00:00>2021 年 5 月 26 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-07-21-c++%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%BA%93/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">C++开发工具库</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-07-21T00:00:00+00:00>2021 年 7 月 21 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+</code></pre>
+
+<h2 class="relative group">5 总结和FAQ 
+    <div id="5-%E6%80%BB%E7%BB%93%E5%92%8Cfaq" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5-%E6%80%BB%E7%BB%93%E5%92%8Cfaq" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>总结以下几点：</p>
+<ul>
+<li>HPKE的优缺点是什么？</li>
+<li>HPKE适用于哪些场景？</li>
+</ul>
+<p>一些具体的问题：</p>
+<ul>
+<li>HPKE和ECDH有什么区别？严格的来说HPKE和ECDH的原理是类似的，都是基于DH交换体系的基础知识产生共享秘钥，无法是多加了一个AEAD。但是两个的场景不一致，HPKE用于混合公钥加密，可以理解为一种加密套件。而ECDH是密钥交换算法，用于握手。</li>
+<li>HPKE有哪些具体的应用场景呢？ECH混淆加密等等</li>
+</ul>
+
+
+<h2 class="relative group">6 Streaming AEAD 
+    <div id="6-streaming-aead" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#6-streaming-aead" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>今天看到一个流AEAD的概念，原先讨论AEAD的时候第一反应都是块加密，AES-GCM，忽然提到流AEAD就没反应过来，看了下google的文档，说是提供：</p>
+<ul>
+<li>底层加密模式的选择使部分明文可以通过解密和认证部分密文快速获得，而不需要处理整个密文。</li>
+<li>加密必须在一个会话中完成。修改现有的密文或对其进行追加是不可能的。</li>
+</ul>
+<p>tink的网页里面解释说是对OAE的具体实现，想了想没想明白咋回事，就直接去看了参考的文档Online Authenticated-Encryption and its Nonce-Reuse Misuse-Resistance论文，简单一些的理解就是使用已经算出来的数据和明文做异或作为IV参与到另外一块做运算，然后需要产生对应AAD一起作为输入参数进行运算。然后每次输出的结构都会拥有部分的tag，这个tag就和aes-gcm的tag是类似的，是这一部分数据认证的结果。当然，这个解释没说明白很多细节，比方说nonce如何产生，如何划分数据的segment？所以找了几篇论文和一些算法看下，如果前两篇没看懂，那么可以先看第三篇把里面的方案的都解释的差不多了再继续看：</p>
+<ul>
+<li>General Classification of the Authenticated Encryption Schemes for the CAESAR Competition</li>
+<li>Online Authenticated-Encryption and its Nonce-Reuse Misuse-Resistance</li>
+<li>基于双管道结构的在线加密方案</li>
+</ul>
+<p>简单来说OAE分为几个不同版本：</p>
+<ul>
+<li>OAE1：安全特性被多种质疑，mac在数据末尾。</li>
+<li>OAE2：对nonce，iv的要求更严格些，mac要随一小段一点一点产生。当然这篇文章里面给出了oae2的一些实现方式，比方说chain/block啥的。</li>
+</ul>
+<p>下面我们看几种具体的streaming aead算法落地实践，一个是grain-128aead，另一个是tink提供的算法。</p>
+
+
+<h3 class="relative group">6.1 Grain-128AEAD 
+    <div id="61-grain-128aead" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#61-grain-128aead" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>基础组件为：</p>
+<ul>
+<li>key长度为128bit，nonce为96bit</li>
+<li>具体包含两个building block，一个是预输出生成器，使用线性反馈移位寄存器+非线性反馈移位寄存器+预输出函数构成。第二个building block由认证生成器包含一个移位寄存器和累加器。设计和Grain-128a很相似，但是并不完全一致。</li>
+<li>线性反馈移位寄存器和非线性反馈移位寄存器的具体方程可以直接看论文，我就不贴了挺明白的</li>
+<li>认证器的寄存器部件保存最近的64个奇数位</li>
+<li>key和nonce的生成，使用初始的key和nonce填充线性/非线性反馈移位寄存器</li>
+</ul>
+<p>使用方法为：</p>
+<ul>
+<li>使用第一个building block生成流密钥，密文的内容是流密钥和明文异或的结果</li>
+<li>累加器需要累加最后的结果到末尾作为tag，但是这也太晚了，所以这个实际上是oae1</li>
+</ul>
+<p>总结：嗯，挺复杂，还麻烦。</p>
+
+
+<h3 class="relative group">6.2 tink的具体实现 
+    <div id="62-tink%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#62-tink%E7%9A%84%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>加密的包裹都是调用stream_segment_encrypter.h的头文件，stream_segment_encrypter会对每个segment做不同的参数派生，借此保证密文是不能调换的。其格式如同下面的注释</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | other | header | 1st ciphertext segment |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | ......    2nd ciphertext segment  ..... |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | ......    3rd ciphertext segment  ..... |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | ......    ...                     ..... |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//   | ......    last ciphertext segment |
+</span></span></span><span class="line"><span class="cl"><span class="c1">//
+</span></span></span><span class="line"><span class="cl"><span class="c1">// where the following holds:
+</span></span></span><span class="line"><span class="cl"><span class="c1">//  * each line above, except for the last one,
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    contains get_ciphertext_segment_size() bytes
+</span></span></span><span class="line"><span class="cl"><span class="c1">//  * each segment, except for the 1st and the last one,
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    encrypts get_plaintext_segment_size() bytes of plaintext
+</span></span></span><span class="line"><span class="cl"><span class="c1">//  * if the ciphertext stream encrypts at least one byte of plaintext,
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    then the last segment encrypts at least one byte of plaintext
+</span></span></span><span class="line"><span class="cl"><span class="c1">//  * &#39;other&#39; is get_ciphertext_offset() bytes long, and represents potential
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    other bytes already written to the stream;  the purpose of ciphertext
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    offset is to allow alignment of ciphertext segments with segments
+</span></span></span><span class="line"><span class="cl"><span class="c1">//    of the underlying storage or transmission stream.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">crypto</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">tink</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="k">namespace</span> <span class="n">subtle</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">AesGcmHkdfStreaming</span> <span class="o">:</span> <span class="k">public</span> <span class="n">NonceBasedStreamingAead</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"> <span class="k">public</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">struct</span> <span class="nc">Params</span> <span class="p">{</span>               <span class="c1">//存储具体的参与运算的参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">util</span><span class="o">::</span><span class="n">SecretData</span> <span class="n">ikm</span><span class="p">;</span>       <span class="c1">//ikm初始密钥材料
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">HashType</span> <span class="n">hkdf_hash</span><span class="p">;</span>         <span class="c1">//派生密钥的hash方法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">derived_key_size</span><span class="p">;</span>       <span class="c1">//派生密钥的大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">ciphertext_segment_size</span><span class="p">;</span><span class="c1">//这一个ciphertext的segment的大小
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="kt">int</span> <span class="n">ciphertext_offset</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="n">util</span><span class="o">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">AesGcmHkdfStreaming</span><span class="o">&gt;&gt;</span> <span class="n">New</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">Params</span> <span class="n">params</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="k">constexpr</span> <span class="n">crypto</span><span class="o">::</span><span class="n">tink</span><span class="o">::</span><span class="n">internal</span><span class="o">::</span><span class="n">FipsCompatibility</span> <span class="n">kFipsStatus</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">      <span class="n">crypto</span><span class="o">::</span><span class="n">tink</span><span class="o">::</span><span class="n">internal</span><span class="o">::</span><span class="n">FipsCompatibility</span><span class="o">::</span><span class="n">kNotFips</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">protected</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="n">util</span><span class="o">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">StreamSegmentEncrypter</span><span class="o">&gt;&gt;</span> <span class="n">NewSegmentEncrypter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">absl</span><span class="o">::</span><span class="n">string_view</span> <span class="n">associated_data</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span><span class="p">;</span>         <span class="c1">//具体加密
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="n">util</span><span class="o">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">StreamSegmentDecrypter</span><span class="o">&gt;&gt;</span> <span class="n">NewSegmentDecrypter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">absl</span><span class="o">::</span><span class="n">string_view</span> <span class="n">associated_data</span><span class="p">)</span> <span class="k">const</span> <span class="k">override</span><span class="p">;</span>         <span class="c1">//具体解密
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="k">explicit</span> <span class="n">AesGcmHkdfStreaming</span><span class="p">(</span><span class="n">Params</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">      <span class="o">:</span> <span class="n">ikm_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">ikm</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">hkdf_hash_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">hkdf_hash</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">derived_key_size_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">derived_key_size</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ciphertext_segment_size_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">ciphertext_segment_size</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ciphertext_offset_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">ciphertext_offset</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="n">util</span><span class="o">::</span><span class="n">SecretData</span> <span class="n">ikm_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="n">HashType</span> <span class="n">hkdf_hash_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">int</span> <span class="n">derived_key_size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">int</span> <span class="n">ciphertext_segment_size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="kt">int</span> <span class="n">ciphertext_offset_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>  <span class="c1">// namespace subtle
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>  <span class="c1">// namespace tink
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span>  <span class="c1">// namespace crypto
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#endif  </span><span class="c1">// TINK_SUBTLE_AES_GCM_HKDF_STREAMING_H_
+</span></span></span></code></pre></div><p>具体的解密包括初始化流程如下，参考aes_gcm_hkdf_streaming.cc 文件，具体流程分为几步：</p>
+<ul>
+<li>
+<p>使用传入的参数初始化加密解密参数，使用已经生成的相同的原始密钥材料ikm_，随机生成salt，使用相同的associated_data产生hkdf派生密钥，产生固定的nonce prefix。产生aead加解密context，这个aead ctx要参与对每次数据的加密。</p>
+</li>
+<li>
+<p>对一段明文进行加密，都使用一开始产生的SegmentEncryptor，每次对一段明文进行加密都递增一个conunter，将counter拼接nonce prefix作为初始化向量IV进行加密。使用该iv和hkdf派生密钥参与到明文数据加密运算当中。</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 参与运算的第一步，从ikm计算出来派生的具体的结果*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">util</span><span class="o">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">StreamSegmentEncrypter</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">AesGcmHkdfStreaming</span><span class="o">::</span><span class="n">NewSegmentEncrypter</span><span class="p">(</span> <span class="n">absl</span><span class="o">::</span><span class="n">string_view</span> <span class="n">associated_data</span><span class="p">)</span> <span class="k">const</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="o">::</span><span class="n">Params</span> <span class="n">params</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">params</span><span class="p">.</span><span class="n">salt</span> <span class="o">=</span> <span class="n">Random</span><span class="o">::</span><span class="n">GetRandomBytes</span><span class="p">(</span><span class="n">derived_key_size_</span><span class="p">);</span>                <span class="c1">//随机生成salt
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="cm">/* 使用随机生成的salt，ikm_，aad派生出来派生密钥，这个派生密钥参与运算*/</span>
+</span></span><span class="line"><span class="cl">  <span class="k">auto</span> <span class="n">hkdf_result</span> <span class="o">=</span> <span class="n">Hkdf</span><span class="o">::</span><span class="n">ComputeHkdf</span><span class="p">(</span><span class="n">hkdf_hash_</span><span class="p">,</span> <span class="n">ikm_</span><span class="p">,</span> <span class="n">params</span><span class="p">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">associated_data</span><span class="p">,</span> <span class="n">derived_key_size_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">hkdf_result</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span> <span class="k">return</span> <span class="n">hkdf_result</span><span class="p">.</span><span class="n">status</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">params</span><span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">hkdf_result</span><span class="p">).</span><span class="n">ValueOrDie</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="n">params</span><span class="p">.</span><span class="n">ciphertext_offset</span> <span class="o">=</span> <span class="n">ciphertext_offset_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">params</span><span class="p">.</span><span class="n">ciphertext_segment_size</span> <span class="o">=</span> <span class="n">ciphertext_segment_size_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">params</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 最后面上面的函数 */</span>
+</span></span><span class="line"><span class="cl"><span class="n">util</span><span class="o">::</span><span class="n">StatusOr</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">StreamSegmentEncrypter</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="o">::</span><span class="n">New</span><span class="p">(</span><span class="n">Params</span> <span class="n">params</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="cm">/* 验证参数的有效性 */</span>
+</span></span><span class="line"><span class="cl">  <span class="k">auto</span> <span class="n">status</span> <span class="o">=</span> <span class="n">Validate</span><span class="p">(</span><span class="n">params</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">status</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span> <span class="k">return</span> <span class="n">status</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="cm">/* 根据密钥创建aead环境，这里的key是上面的派生密钥 */</span>
+</span></span><span class="line"><span class="cl">  <span class="k">auto</span> <span class="n">ctx_or</span> <span class="o">=</span> <span class="n">CreateAeadCtx</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">ctx_or</span><span class="p">.</span><span class="n">ok</span><span class="p">())</span> <span class="k">return</span> <span class="n">ctx_or</span><span class="p">.</span><span class="n">status</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">auto</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ctx_or</span><span class="p">).</span><span class="n">ValueOrDie</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">{</span><span class="n">absl</span><span class="o">::</span><span class="n">WrapUnique</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">      <span class="k">new</span> <span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ctx</span><span class="p">),</span> <span class="n">params</span><span class="p">))};</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 当前segment的加密流程 nonce_prefix_是随机产生的*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="o">::</span><span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">bssl</span><span class="o">::</span><span class="n">UniquePtr</span><span class="o">&lt;</span><span class="n">EVP_AEAD_CTX</span><span class="o">&gt;</span> <span class="n">ctx</span><span class="p">,</span> <span class="k">const</span> <span class="n">Params</span><span class="o">&amp;</span> <span class="n">params</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">ctx_</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">ctx</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">nonce_prefix_</span><span class="p">(</span><span class="n">Random</span><span class="o">::</span><span class="n">GetRandomBytes</span><span class="p">(</span><span class="n">kNoncePrefixSizeInBytes</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">header_</span><span class="p">(</span><span class="n">CreateHeader</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">nonce_prefix_</span><span class="p">)),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ciphertext_segment_size_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">ciphertext_segment_size</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">      <span class="n">ciphertext_offset_</span><span class="p">(</span><span class="n">params</span><span class="p">.</span><span class="n">ciphertext_offset</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 具体的解密流程，每个segment实际上就是要加密的一段片段 */</span>
+</span></span><span class="line"><span class="cl"><span class="n">util</span><span class="o">::</span><span class="n">Status</span> <span class="n">AesGcmHkdfStreamSegmentEncrypter</span><span class="o">::</span><span class="n">EncryptSegment</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;&amp;</span> <span class="n">plaintext</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">is_last_segment</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;*</span> <span class="n">ciphertext_buffer</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">plaintext</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">get_plaintext_segment_size</span><span class="p">())</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">util</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">INVALID_ARGUMENT</span><span class="p">,</span> <span class="s">&#34;plaintext too long&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">ciphertext_buffer</span> <span class="o">==</span> <span class="k">nullptr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">util</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">INVALID_ARGUMENT</span><span class="p">,</span> <span class="s">&#34;ciphertext_buffer must be non-null&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">get_segment_number</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">()</span> <span class="o">||</span>
+</span></span><span class="line"><span class="cl">      <span class="p">(</span><span class="n">get_segment_number</span><span class="p">()</span> <span class="o">==</span> <span class="n">std</span><span class="o">::</span><span class="n">numeric_limits</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;::</span><span class="n">max</span><span class="p">()</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">       <span class="o">!</span><span class="n">is_last_segment</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">util</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">INVALID_ARGUMENT</span><span class="p">,</span> <span class="s">&#34;too many segments&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="cm">/* 进行加密会多出来一个kTagSizeInBytes的长度*/</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">ct_size</span> <span class="o">=</span> <span class="n">plaintext</span><span class="p">.</span><span class="n">size</span><span class="p">()</span> <span class="o">+</span> <span class="n">kTagSizeInBytes</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">ciphertext_buffer</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="n">ct_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="c1">// Construct IV. IV的构建需要是初始的nonce_prefix_的数据+当前segment的数据
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">std</span><span class="o">::</span><span class="n">vector</span><span class="o">&lt;</span><span class="kt">uint8_t</span><span class="o">&gt;</span> <span class="n">iv</span><span class="p">(</span><span class="n">kNonceSizeInBytes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">memcpy</span><span class="p">(</span><span class="n">iv</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">nonce_prefix_</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">kNoncePrefixSizeInBytes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">BigEndianStore32</span><span class="p">(</span><span class="n">iv</span><span class="p">.</span><span class="n">data</span><span class="p">()</span> <span class="o">+</span> <span class="n">kNoncePrefixSizeInBytes</span><span class="p">,</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="kt">uint32_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">get_segment_number</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">  <span class="n">iv</span><span class="p">.</span><span class="n">back</span><span class="p">()</span> <span class="o">=</span> <span class="n">is_last_segment</span> <span class="o">?</span> <span class="mi">1</span> <span class="o">:</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="cm">/* 执行加密，使用IV，已经初始化好了的aead ctx进行加密运算*/</span>
+</span></span><span class="line"><span class="cl">  <span class="n">size_t</span> <span class="n">out_len</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">EVP_AEAD_CTX_seal</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="n">ctx_</span><span class="p">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">ciphertext_buffer</span><span class="o">-&gt;</span><span class="n">data</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">out_len</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">ciphertext_buffer</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">          <span class="n">iv</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">iv</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">          <span class="n">plaintext</span><span class="p">.</span><span class="n">data</span><span class="p">(),</span> <span class="n">plaintext</span><span class="p">.</span><span class="n">size</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">          <span class="cm">/* ad = */</span> <span class="k">nullptr</span><span class="p">,</span> <span class="cm">/* ad.length() = */</span> <span class="mi">0</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">util</span><span class="o">::</span><span class="n">Status</span><span class="p">(</span><span class="n">util</span><span class="o">::</span><span class="n">error</span><span class="o">::</span><span class="n">INTERNAL</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                        <span class="n">absl</span><span class="o">::</span><span class="n">StrCat</span><span class="p">(</span><span class="s">&#34;Encryption failed: &#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                     <span class="n">SubtleUtilBoringSSL</span><span class="o">::</span><span class="n">GetErrors</span><span class="p">()));</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="cm">/* 将Segment号加一，下次需要使用这个进行运算*/</span>
+</span></span><span class="line"><span class="cl">  <span class="n">IncSegmentNumber</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">util</span><span class="o">::</span><span class="n">OkStatus</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2021-06-01-HPKE笔记\/index.md"
+        var oid_likes = "likes_posts\/2021-06-01-HPKE笔记\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2021-05-26-%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >复习编译原理笔记</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-05-26T00:00:00&#43;00:00">2021 年 5 月 26 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2021-07-21-c&#43;&#43;%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E5%BA%93/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >C++开发工具库</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-07-21T00:00:00&#43;00:00">2021 年 7 月 21 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

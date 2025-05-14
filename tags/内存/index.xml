@@ -1,1 +1,63 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>内存 on 菜狗的blog</title><link>https://hxndg.github.io/tags/%E5%86%85%E5%AD%98/</link><description>Recent content in 内存 on 菜狗的blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright><lastBuildDate>Wed, 09 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/%E5%86%85%E5%AD%98/index.xml" rel="self" type="application/rss+xml"/><item><title>阅读内核程序员的smp修养</title><link>https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/</link><pubDate>Wed, 09 Dec 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/</guid><description/></item><item><title>内存学习(3)--锁(们)</title><link>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</link><pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</guid><description/></item><item><title>TLS自动机实现时一些不错地方</title><link>https://hxndg.github.io/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/</link><pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/</guid><description/></item><item><title>内存学习(1)</title><link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</link><pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</guid><description/></item><item><title>内存学习(10)</title><link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</link><pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>内存 on 菜狗的blog</title>
+    <link>https://hxndg.github.io/tags/%E5%86%85%E5%AD%98/</link>
+    <description>Recent content in 内存 on 菜狗的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright>
+    <lastBuildDate>Wed, 09 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/%E5%86%85%E5%AD%98/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>阅读内核程序员的smp修养</title>
+      <link>https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/</link>
+      <pubDate>Wed, 09 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内存学习(3)--锁(们)</title>
+      <link>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>TLS自动机实现时一些不错地方</title>
+      <link>https://hxndg.github.io/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内存学习(1)</title>
+      <link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内存学习(10)</title>
+      <link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

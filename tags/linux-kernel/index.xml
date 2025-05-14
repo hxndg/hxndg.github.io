@@ -1,1 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Linux Kernel on 菜狗的blog</title><link>https://hxndg.github.io/tags/linux-kernel/</link><description>Recent content in Linux Kernel on 菜狗的blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright><lastBuildDate>Tue, 27 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/linux-kernel/index.xml" rel="self" type="application/rss+xml"/><item><title>内存学习(3)--锁(们)</title><link>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</link><pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</guid><description/></item><item><title>内存学习(1)</title><link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</link><pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</guid><description/></item><item><title>内存学习(10)</title><link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</link><pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Linux Kernel on 菜狗的blog</title>
+    <link>https://hxndg.github.io/tags/linux-kernel/</link>
+    <description>Recent content in Linux Kernel on 菜狗的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright>
+    <lastBuildDate>Tue, 27 Oct 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/linux-kernel/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>内存学习(3)--锁(们)</title>
+      <link>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</link>
+      <pubDate>Tue, 27 Oct 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-10-27-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A03--%E9%94%81%E4%BB%AC/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内存学习(1)</title>
+      <link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内存学习(10)</title>
+      <link>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</link>
+      <pubDate>Wed, 16 Sep 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A010/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

@@ -1,17 +1,1333 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2025-03-21-微软的Proxy学习 &#183; 菜狗的blog</title>
-<meta name=title content="2025-03-21-微软的Proxy学习 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="C++,"><link rel=canonical href=https://hxndg.github.io/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2025-03-21-微软的Proxy学习"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-01-24T00:00:00+00:00"><meta property="article:modified_time" content="2025-01-24T00:00:00+00:00"><meta property="article:tag" content="C++"><meta name=twitter:card content="summary"><meta name=twitter:title content="2025-03-21-微软的Proxy学习"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2025-03-21-微软的Proxy学习","headline":"2025-03-21-微软的Proxy学习","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2025","dateCreated":"2025-01-24T00:00:00\u002b00:00","datePublished":"2025-01-24T00:00:00\u002b00:00","dateModified":"2025-01-24T00:00:00\u002b00:00","keywords":["C++"],"mainEntityOfPage":"true","wordCount":"2605"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2025-03-21-微软的Proxy学习</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2025-01-24T00:00:00+00:00>2025 年 1 月 24 日</time><span class="px-2 text-primary-500">&#183;</span><span>2605 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>6 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">微软的Proxy学习<div id=%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%AD%A6%E4%B9%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%AD%A6%E4%B9%A0 aria-label=锚点>#</a></span></h1><p>这几天看下https://github.com/microsoft/proxy，学习下如何避免使用继承的情况下，高效方便地使用C++多态（ polymorphic programming）的方法。先对着README.md看看怎么阅读这个源代码（实际上就是翻译了一下README.md)。</p><p>怎么使用Proxy库？这里不展示整个的用法了，只把抽象那块的东西抽出来：</p><p>最关健的用法如下所示，简单来说就是需要组合一些行为（表达式expression）构建出来具体的外观模式</p><ul><li><div class=highlight><pre tabindex=0 class=chroma><code class=language-C++ data-lang=C++><span class=line><span class=cl><span class=c1>// 定义一个facade type: Formattable, 
-</span></span></span><span class=line><span class=cl><span class=c1></span><span class=k>struct</span> <span class=nc>Formattable</span> <span class=o>:</span> <span class=n>pro</span><span class=o>::</span><span class=n>facade_builder</span> <span class=p>...</span> <span class=o>::</span><span class=n>build</span> <span class=p>{}</span>
-</span></span></code></pre></div><p>具体的pro::facade_builder请参考https://microsoft.github.io/proxy/docs/ProFacade.html，是Proxy库提供的运行时抽象（这里稍微动一下脑子理解下，代码是compile time的时候制定了runtime满足什么行为）。</p><p>相应的解释请看</p><ul><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder.html target=_blank><code>pro::facade_builder</code></a>: 提供在编译时构建外观类型（模式）的能力。</li><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder/support_format.html target=_blank><code>support_format</code></a>: 相当于concept的概念，支持某种功能 (via <a href=https://en.cppreference.com/w/cpp/utility/format target=_blank>standard formatting functions</a>).</li><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder/build.html target=_blank><code>build</code></a>: 将上下文构建为具体的facade模式</li></ul></li><li><p>让我们再看另一个例子<code>struct Streamable : pro::facade_builder ... ::build {}</code>: 定义一个 <code>Streamable</code> 外观模式,相应的功能为</p><ul><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder.html target=_blank><code>pro::facade_builder</code></a>: 准备定义另一种外观模式.</li><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder/add_convention.html target=_blank><code>add_convention</code></a>: 添加调用约定，调用约定由dispatch和overload构成。这里说起来有一些拗口：什么是dispatch？什么是overload？overload好理解，可以理解为函数签名，就是具体函数的形式。dispatch呢？这里我个人认为就是功能，名字，用法之类的抽象。这里我觉得简单理解为concept就可以了</li><li><a href=https://microsoft.github.io/proxy/docs/operator_dispatch.html target=_blank><code>pro::operator_dispatch</code></a><code>&lt;"&lt;&lt;", true></code>: Specifies a dispatch for operator <code>&lt;&lt;</code> expressions where the primary operand (<code>proxy</code>) is on the right-hand side (specified by the second template parameter <code>true</code>). Note that polymorphism in the &ldquo;Proxy&rdquo; library is defined by expressions rather than member functions, which is different from C++ virtual functions or other OOP languages.</li><li><code>std::ostream&(std::ostream& out) const</code>: 调用约定里面的overload，函数签名部分，和<a href=https://en.cppreference.com/w/cpp/utility/functional/move_only_function target=_blank><code>std::move_only_function</code></a>. 一样的。<code>const</code> 指明这个函数是 <code>const</code>的，不会改动对象内部.</li><li><a href=https://microsoft.github.io/proxy/docs/basic_facade_builder/build.html target=_blank><code>build</code></a>: 将上下文构建为具体的facade模式.</li></ul></li><li><p>.</p></li></ul><p>如果不清楚到底什么是facade type，可以参考这个解释：</p><p>&ldquo;Facade&rdquo; 是一种软件设计模式，通常被称为 &ldquo;外观模式&rdquo;。这种设计模式提供了一个更高层次的接口，用于简化复杂系统的使用。Facade 模式的核心思想是为子系统中的一组接口提供一个统一的接口，从而让这个子系统更容易使用。</p><p>在软件开发中，Facade 模式的典型特征包括：</p><ol><li><strong>简化接口</strong>：通过提供一个简单的接口来隐藏系统的复杂性，从而减少使用者与系统之间的交互复杂度。</li><li><strong>分离代码</strong>：将客户端与复杂的类库或 API 分离，使客户端代码更简洁，减少对外部复杂系统的依赖。</li><li><strong>提高可维护性</strong>：通过引入 Facade，可以在不影响客户端的情况下更改子系统。</li><li><strong>降低耦合度</strong>：客户端与子系统的耦合度降低，因为它们通过 Facade 进行交互，而不是直接依赖子系统的具体实现。</li></ol><p>Facade 模式常用于提供简单的接口来处理与库、框架或一组复杂类的交互，是一种结构型设计模式，有助于提高系统的模块化和可维护性。</p><p>除了刚才提到的一些，还有一些其他有用的feature</p><ul><li>重载：<code>facade_builder::add_convention</code>比上面展示的两个例子功能更强大。它可以接受任意数量的重载类型（严格来说，任何满足ProOverloadhttps://microsoft.github.io/proxy/docs/ProOverload.html要求的类型），在调用proxy时执行对函数执行重载解析。</li><li>外观模式组合： facade_builder::add_facade允许不同抽象的灵活组合。</li><li>概念：为了便于使用“proxy”进行模板编程，从facade类型中导出了三个概念。即，proxiable、proxiable_target和inplace_proxiable_target。</li><li>分配器感知： 函数模板allocate_proxy具备从任何自定义分配器的值创建一个proxy对象的能力。在 C++11 中，std::function和std::packaged_task的构造函数接受指定自定义分配器的功能以进行性能调优，但在 C++17 中这些被移除，因为“语义不明确，并且在未存储类型信息的上下文中，后续复制赋值期间如何再次拿到类型信息的技术问题”。这些问题不适用于allocate_proxy</li><li>可配置的约束： facade_builder为约束配置提供全面支持，包括内存布局（通过restrict_layout）、可复制性（通过support_copy）、可重定位性（通过support_relocation）以及可析构性（通过support_destruction)&lt;/</li><li>反射：proxy支持基于类型的编译时反射，这个反射支持进行运行时查询。有关更多详细信息，请参考facade_builder::add_reflection和函数模板proxy_reflect。</li><li>非接管（管理）代理：尽管proxy可以像智能指针一样有效地管理对象的生命周期，但有时我们希望对其进行解引用传递再传递到非接管上下文。3.2.0 版本以来，将这种能力作为扩展实现。有关更多详细信息，请参考函数模板make_proxy_view</li><li>运行时类型信息（RTTI）：运行时类型信息（RTTI，run-time-type-information）自上世纪以来在 C++中提供了“较弱”的反射能力。虽然它不像其他一些语言中的反射那么强大（例如 C#中的 Object.GetType()或 Java 中的 Object.getClass()），但它在运行时为类型安全地强制类型转换提供了基本的基础设施。自 3.2 版本以来，“针对proxy的运行时类型信息”已作为扩展实现，并允许用户为每个外观模式定义决定是否实现rtti。有关更多详细信息，请参考facade_builder::support_rtti。</li><li>共享和弱所有权：虽然proxy可以从std::shared_ptr创建，但自 3.3.0 起的拓展支持用户可以更高效地创建具有共享和弱所有权的proxy对象。更多详细信息请参考函数模板make_proxy_shared、allocate_proxy_shared、别名模板weak_proxy</li><li>弱dispatch：当一个对象未实现调用约定，而我们不希望它构建的时候直接触发编译错误导致构建失败时，可以指定一个在调用时抛出异常的weak_dispatch。</li></ul><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2025-03-21-微软的Proxy库学习\\index.md",oid_likes="likes_posts\\2025-03-21-微软的Proxy库学习\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">TLS1.3 密钥衍生计算方法和功能</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2024-08-09T23:24:22+08:00>2024 年 8 月 9 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/asio/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2025-01-24-CPP Net Standard & The Asio asynchronous model</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2025-01-24T00:00:00+00:00>2025 年 1 月 24 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>2025-03-21-微软的Proxy学习 &middot; 菜狗的blog</title>
+  <meta name="title" content="2025-03-21-微软的Proxy学习 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="C&#43;&#43;, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="2025-03-21-微软的Proxy学习">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-01-24T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-01-24T00:00:00+00:00">
+    <meta property="article:tag" content="C&#43;&#43;">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="2025-03-21-微软的Proxy学习">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "2025-03-21-微软的Proxy学习",
+    "headline": "2025-03-21-微软的Proxy学习",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2025",
+    "dateCreated": "2025-01-24T00:00:00\u002b00:00",
+    "datePublished": "2025-01-24T00:00:00\u002b00:00",
+    
+    "dateModified": "2025-01-24T00:00:00\u002b00:00",
+    
+    "keywords": ["C++"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "9094"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      2025-03-21-微软的Proxy学习
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2025-01-24T00:00:00&#43;00:00">2025 年 1 月 24 日</time><span class="px-2 text-primary-500">&middot;</span><span>9094 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">19 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#用法展示">用法展示</a></li>
+    <li><a href="#看看源码">看看源码</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#用法展示">用法展示</a></li>
+    <li><a href="#看看源码">看看源码</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">微软的Proxy学习 
+    <div id="%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%AD%A6%E4%B9%A0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%AD%A6%E4%B9%A0" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+<p>这几天看下https://github.com/microsoft/proxy，学习下如何避免使用继承的情况下，高效方便地使用C++多态（ polymorphic programming）的方法。先对着README.md看看怎么阅读这个源代码（实际上就是翻译了一下README.md)。</p>
+
+
+<h2 class="relative group">用法展示 
+    <div id="%E7%94%A8%E6%B3%95%E5%B1%95%E7%A4%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%94%A8%E6%B3%95%E5%B1%95%E7%A4%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>怎么使用Proxy库？这里不展示整个的用法了，只把抽象那块的东西抽出来：</p>
+<p>最关健的用法如下所示，简单来说就是需要组合一些行为（表达式expression）构建出来具体的外观模式</p>
+<ul>
+<li>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// 定义一个facade type: Formattable, 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="nc">Formattable</span> <span class="o">:</span> <span class="n">pro</span><span class="o">::</span><span class="n">facade_builder</span> <span class="p">...</span> <span class="o">::</span><span class="n">build</span> <span class="p">{}</span>
+</span></span></code></pre></div><p>具体的pro::facade_builder请参考https://microsoft.github.io/proxy/docs/ProFacade.html，是Proxy库提供的运行时抽象（这里稍微动一下脑子理解下，代码是compile time的时候制定了runtime满足什么行为）。</p>
+<p>相应的解释请看</p>
+<ul>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder.html" target="_blank"><code>pro::facade_builder</code></a>: 提供在编译时构建外观类型（模式）的能力。</li>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder/support_format.html" target="_blank"><code>support_format</code></a>:  相当于concept的概念，支持某种功能 (via <a href="https://en.cppreference.com/w/cpp/utility/format" target="_blank">standard formatting functions</a>).</li>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder/build.html" target="_blank"><code>build</code></a>: 将上下文构建为具体的facade模式</li>
+</ul>
+</li>
+<li>
+<p>让我们再看另一个例子<code>struct Streamable : pro::facade_builder ... ::build {}</code>: 定义一个 <code>Streamable</code> 外观模式,相应的功能为</p>
+<ul>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder.html" target="_blank"><code>pro::facade_builder</code></a>:  准备定义另一种外观模式.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder/add_convention.html" target="_blank"><code>add_convention</code></a>: 添加调用约定，调用约定由dispatch和overload构成。这里说起来有一些拗口：什么是dispatch？什么是overload？overload好理解，可以理解为函数签名，就是具体函数的形式。dispatch呢？这里我个人认为就是功能，名字，用法之类的抽象。这里我觉得简单理解为concept就可以了</li>
+<li><a href="https://microsoft.github.io/proxy/docs/operator_dispatch.html" target="_blank"><code>pro::operator_dispatch</code></a><code>&lt;&quot;&lt;&lt;&quot;, true&gt;</code>: Specifies a dispatch for operator <code>&lt;&lt;</code> expressions where the primary operand (<code>proxy</code>) is on the right-hand side (specified by the second template parameter <code>true</code>). Note that polymorphism in the &ldquo;Proxy&rdquo; library is defined by expressions rather than member functions, which is different from C++ virtual functions or other OOP languages.</li>
+<li><code>std::ostream&amp;(std::ostream&amp; out) const</code>: 调用约定里面的overload，函数签名部分，和<a href="https://en.cppreference.com/w/cpp/utility/functional/move_only_function" target="_blank"><code>std::move_only_function</code></a>. 一样的。<code>const</code> 指明这个函数是 <code>const</code>的，不会改动对象内部.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/basic_facade_builder/build.html" target="_blank"><code>build</code></a>: 将上下文构建为具体的facade模式.</li>
+</ul>
+</li>
+<li>
+<p>.</p>
+</li>
+</ul>
+<p>如果不清楚到底什么是facade type，可以参考这个解释：</p>
+<p>&ldquo;Facade&rdquo; 是一种软件设计模式，通常被称为 &ldquo;外观模式&rdquo;。这种设计模式提供了一个更高层次的接口，用于简化复杂系统的使用。Facade 模式的核心思想是为子系统中的一组接口提供一个统一的接口，从而让这个子系统更容易使用。</p>
+<p>在软件开发中，Facade 模式的典型特征包括：</p>
+<ol>
+<li><strong>简化接口</strong>：通过提供一个简单的接口来隐藏系统的复杂性，从而减少使用者与系统之间的交互复杂度。</li>
+<li><strong>分离代码</strong>：将客户端与复杂的类库或 API 分离，使客户端代码更简洁，减少对外部复杂系统的依赖。</li>
+<li><strong>提高可维护性</strong>：通过引入 Facade，可以在不影响客户端的情况下更改子系统。</li>
+<li><strong>降低耦合度</strong>：客户端与子系统的耦合度降低，因为它们通过 Facade 进行交互，而不是直接依赖子系统的具体实现。</li>
+</ol>
+<p>Facade 模式常用于提供简单的接口来处理与库、框架或一组复杂类的交互，是一种结构型设计模式，有助于提高系统的模块化和可维护性。</p>
+<p>除了刚才提到的一些，还有一些其他有用的feature</p>
+<ul>
+<li>重载：<code>facade_builder::add_convention</code>比上面展示的两个例子功能更强大。它可以接受任意数量的重载类型（严格来说，任何满足ProOverloadhttps://microsoft.github.io/proxy/docs/ProOverload.html要求的类型），在调用proxy时执行对函数执行重载解析。</li>
+<li>外观模式组合： facade_builder::add_facade允许不同抽象的灵活组合。</li>
+<li>概念：为了便于使用“proxy”进行模板编程，从facade类型中导出了三个概念。即，proxiable、proxiable_target和inplace_proxiable_target。</li>
+<li>分配器感知： 函数模板allocate_proxy具备从任何自定义分配器的值创建一个proxy对象的能力。在 C++11 中，std::function和std::packaged_task的构造函数接受指定自定义分配器的功能以进行性能调优，但在 C++17 中这些被移除，因为“语义不明确，并且在未存储类型信息的上下文中，后续复制赋值期间如何再次拿到类型信息的技术问题”。这些问题不适用于allocate_proxy</li>
+<li>可配置的约束： facade_builder为约束配置提供全面支持，包括内存布局（通过restrict_layout）、可复制性（通过support_copy）、可重定位性（通过support_relocation）以及可析构性（通过support_destruction)&lt;/</li>
+<li>反射：proxy支持基于类型的编译时反射，这个反射支持进行运行时查询。有关更多详细信息，请参考facade_builder::add_reflection和函数模板proxy_reflect。</li>
+<li>非接管（管理）代理：尽管proxy可以像智能指针一样有效地管理对象的生命周期，但有时我们希望对其进行解引用传递再传递到非接管上下文。3.2.0 版本以来，将这种能力作为扩展实现。有关更多详细信息，请参考函数模板make_proxy_view</li>
+<li>运行时类型信息（RTTI）：运行时类型信息（RTTI，run-time-type-information）自上世纪以来在 C++中提供了“较弱”的反射能力。虽然它不像其他一些语言中的反射那么强大（例如 C#中的 Object.GetType()或 Java 中的 Object.getClass()），但它在运行时为类型安全地强制类型转换提供了基本的基础设施。自 3.2 版本以来，“针对proxy的运行时类型信息”已作为扩展实现，并允许用户为每个外观模式定义决定是否实现rtti。有关更多详细信息，请参考facade_builder::support_rtti。</li>
+<li>共享和弱所有权：虽然proxy可以从std::shared_ptr创建，但自 3.3.0 起的拓展支持用户可以更高效地创建具有共享和弱所有权的proxy对象。更多详细信息请参考函数模板make_proxy_shared、allocate_proxy_shared、别名模板weak_proxy</li>
+<li>弱dispatch：当一个对象未实现调用约定，而我们不希望它构建的时候直接触发编译错误导致构建失败时，可以指定一个在调用时抛出异常的weak_dispatch。</li>
+</ul>
+<p>一些proxy支持的定义的宏</p>
+<p>In addition to the operator expressions demonstrated in the previous examples, the library supports almost all forms of expressions in C++ and can make them polymorphic. Specifically,</p>
+<ul>
+<li><a href="https://microsoft.github.io/proxy/docs/PRO_DEF_MEM_DISPATCH.html" target="_blank">macro <code>PRO_DEF_MEM_DISPATCH</code></a>: Defines a dispatch type for member function call expressions, providing accessibility as member functions.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/PRO_DEF_FREE_DISPATCH.html" target="_blank">macro <code>PRO_DEF_FREE_DISPATCH</code></a>: Defines a dispatch type for free function call expressions, providing accessibility as free functions.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/PRO_DEF_FREE_AS_MEM_DISPATCH.html" target="_blank">macro <code>PRO_DEF_FREE_AS_MEM_DISPATCH</code></a>: Defines a dispatch type for free function call expressions, providing accessibility as member functions.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/operator_dispatch.html" target="_blank">class template <code>pro::operator_dispatch</code></a>: Dispatch type for operator expressions.</li>
+<li><a href="https://microsoft.github.io/proxy/docs/explicit_conversion_dispatch.html" target="_blank">class <code>explicit_conversion_dispatch</code> (aka. <code>conversion_dispatch</code>)</a> and <a href="https://microsoft.github.io/proxy/docs/implicit_conversion_dispatch.html" target="_blank">class <code>implicit_conversion_dispatch</code></a>: Dispatch type for conversion expressions.</li>
+</ul>
+
+
+<h2 class="relative group">看看源码 
+    <div id="%E7%9C%8B%E7%9C%8B%E6%BA%90%E7%A0%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%9C%8B%E7%9C%8B%E6%BA%90%E7%A0%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>看看这个https://zhuanlan.zhihu.com/p/22307747744，理解一些基础概念</p>
+<p>直接阅读https://deepwiki.com/microsoft/proxy，岂不是更妙？</p>
+<p>想解释怎么调用到的具体函数，就是dispatch怎么实现的？</p>
+<p>简答来说就是facade类型用来添加具体的关键用法（加met）a，proxy包裹facade，作为容器（pro::proxy&lt;Facade&gt;）</p>
+<p>三个关键的数据结构，注意这几个看完了，最后才能全体拼起来。拼起来之前先看几个helper的函数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">proxy_helper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// get meta 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">static</span> <span class="kr">inline</span> <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">get_meta</span><span class="p">(</span><span class="k">const</span> <span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">*</span><span class="n">p</span><span class="p">.</span><span class="n">meta_</span><span class="p">.</span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// reset meta
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">static</span> <span class="kr">inline</span> <span class="kt">void</span> <span class="nf">reset_meta</span><span class="p">(</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">p</span><span class="p">.</span><span class="n">meta_</span><span class="p">.</span><span class="n">reset</span><span class="p">();</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// get_ptr是做类型转换的关键，类型转换调用就是在这里实现的
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">P</span><span class="p">,</span> <span class="n">qualifier_type</span> <span class="n">Q</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span> <span class="n">get_ptr</span><span class="p">(</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">is_same_v</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">static_cast</span><span class="o">&lt;</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">          <span class="o">*</span><span class="n">std</span><span class="o">::</span><span class="n">launder</span><span class="p">(</span><span class="k">reinterpret_cast</span><span class="o">&lt;</span><span class="n">add_qualifier_ptr_t</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">ptr_</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>接下来看下三个关键的数据结构</p>
+<p>The invocation system uses:</p>
+<ol>
+<li><strong><code>composite_meta</code></strong>: Combines multiple invocation metadata into a single structure</li>
+<li><strong><code>invocation_meta</code></strong>: Contains dispatch information for specific method signatures</li>
+<li><strong><code>meta_ptr</code></strong>: A pointer to compile-time generated metadata about implementations。报在pro::proxy&lt;Facade&gt;里面，</li>
+</ol>
+<p>按照上面的顺序，来看看到底这三个是什么东西，先看composite_meta。这个需要先看这几个的定义</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// 可以理解为type_identity&lt;T&gt;就是类型T（就是别名），只不过编译器不会试图主动优先推导被std::type_identity_t&lt;T&gt;所遮蔽的类型，而优先推导T为何种类型，然后看看带入能不能合适（再推导std::type_identity_t&lt;T&gt;代表何种类型），从而避免了冲突
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">std</span><span class="o">::</span><span class="n">type_identity</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 类型定义的终点，实际上对应于迭代的终点，这里recursive_reduction::就是类型O
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">, </span><span class="nc">class</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span> <span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Is</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">recursive_reduction</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">O</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 从这里就可以理解了，R是template template，这里recursive_reduction会不断地将O和I类型传递到R里面，并且新生成的O是调用的结果。Is...里面再去掉刚才床底的I
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">, </span><span class="nc">class</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span> <span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span> <span class="nc">I</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Is</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">recursive_reduction</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">I</span><span class="p">,</span> <span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">recursive_reduction</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span> <span class="n">R</span><span class="o">&lt;</span><span class="n">O</span><span class="p">,</span> <span class="n">I</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 实际上是个简写，对应于上面的recursive_reduction最终的类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">, </span><span class="nc">class</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span> <span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Is</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">recursive_reduction_t</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">recursive_reduction</span><span class="o">&lt;</span><span class="n">R</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">Is</span><span class="p">...</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 可以理解为萃取，固定了template template R和参数包Args以后，只需要传递O &amp; I就能调用了，算个快捷写法
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">...</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">reduction_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span> <span class="nc">I</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">type</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">R</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...,</span> <span class="n">O</span><span class="p">,</span> <span class="n">I</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>依赖的东西搞完了，看看怎么组成的composite_meta</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="c1">// 原地构建，实际上
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">in_place_type_t</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Ms</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">composite_meta_impl</span> <span class="o">:</span> <span class="n">Ms</span><span class="p">...</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// composite_meta_impl的默认构造啥也没干
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">constexpr</span> <span class="nf">composite_meta_impl</span><span class="p">()</span> <span class="k">noexcept</span> <span class="o">=</span> <span class="k">default</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">// composite_meta_impl实际上是让继承的参数包（Ms...)的每个构造函数都对着P做原地构建
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">constexpr</span> <span class="k">explicit</span> <span class="n">composite_meta_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type_t</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">noexcept</span>
+</span></span><span class="line"><span class="cl">      <span class="o">:</span> <span class="n">Ms</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">)...</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// meta_reduction对于两个类型的情况，实际上是前一个类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span> <span class="nc">I</span><span class="o">&gt;</span> <span class="k">struct</span> <span class="nc">meta_reduction</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">O</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// meta_reduction如果第一个参数命中传递composite_meta_impl&lt;Ms...&gt;，且第二个参数不为空，实际上就是composite_meta_impl&lt;Ms..., I&gt;类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Ms</span><span class="p">,</span> <span class="k">class</span> <span class="nc">I</span><span class="o">&gt;</span> <span class="k">requires</span><span class="p">(</span><span class="o">!</span><span class="n">std</span><span class="o">::</span><span class="n">is_void_v</span><span class="o">&lt;</span><span class="n">I</span><span class="o">&gt;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_reduction</span><span class="o">&lt;</span><span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">Ms</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">I</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">Ms</span><span class="p">...,</span> <span class="n">I</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 两个都是composite_meta_impl，那么就合并为一个composite_meta_impl
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Ms1</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Ms2</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_reduction</span><span class="o">&lt;</span><span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">Ms1</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">Ms2</span><span class="p">...</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">Ms1</span><span class="p">...,</span> <span class="n">Ms2</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 这里我们就拿到了composite_meta的定义了简单解释下面的含义就是，对于传递的参数包... Ms，使用
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 1 先看reduction_traits&lt;meta_reduction&gt;::template type，对应于reduction_traits只传递了template template R，还缺两个类型。
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 2 recursive_reduction_t调用的三个参数，分别对应R, O, Is...。其中reduction_traits&lt;meta_reduction&gt;::template type对应于需要传递两个模板参数的template &lt;class, class&gt; class R，O就是composite_meta_impl&lt;&gt;，而Ms...就是Is...  。所以
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 3 这段composite_meta就是对Ms不断地调用meta_reduction，拼接为一个composite_meta_impl继承Ms...,而且把每个函数拍扁
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">... </span><span class="nc">Ms</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">composite_meta</span> <span class="o">=</span> <span class="n">recursive_reduction_t</span><span class="o">&lt;</span><span class="n">reduction_traits</span><span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">meta_reduction</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">type</span><span class="p">,</span> <span class="n">composite_meta_impl</span><span class="o">&lt;&gt;</span><span class="p">,</span> <span class="n">Ms</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span></code></pre></div><p>看上面的代码的时候，我实际上有个问题，干嘛非得绕着么一大圈，不直接让composite_meta_impl继承所有的Ms&hellip;完事呢？</p>
+<p>有几个点：</p>
+<ul>
+<li>
+<p>如果直接继承 <code>Ms...</code>，当 <code>Ms...</code> 中包含嵌套的 <code>composite_meta_impl</code> 时，会导致<strong>多层继承结构</strong>。例如：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">using</span> <span class="n">Inner</span> <span class="o">=</span> <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">Outer</span> <span class="o">=</span> <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">A</span><span class="p">,</span> <span class="n">Inner</span><span class="p">,</span> <span class="n">D</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span></code></pre></div><p>此时，<code>Outer</code> 的基类结构是 <code>A, Inner, D</code>，而 <code>Inner</code> 的基类又是 <code>B, C</code>。这会形成嵌套结构：</p>
+<pre tabindex="0"><code>Outer -&gt; A
+       -&gt; Inner -&gt; B
+                -&gt; C
+       -&gt; D
+</code></pre><p>但通过 <code>meta_reduction</code> 和递归折叠，代码会将 <code>Inner</code> 展开，最终生成：</p>
+<pre tabindex="0"><code>composite_meta_impl&lt;A, B, C, D&gt;
+</code></pre><p>基类直接继承所有类型，结构扁平化：</p>
+<pre tabindex="0"><code>Outer -&gt; A
+       -&gt; B
+       -&gt; C
+       -&gt; D
+</code></pre></li>
+<li>
+<p>因为拍平了，所以调用具体的元素起来就会方便不少。</p>
+</li>
+<li>
+<p>避免二义性，避免因为不同层级的元素具备有同名成员，可能引发的二义性错误。</p>
+</li>
+</ul>
+<p>总结，好处：</p>
+<ol>
+<li><strong>扁平化结构</strong>：无论输入类型是否嵌套，最终结果均为单层继承。（看到下面就明白了为啥必须得扁平化了，因为有继承自composite_meta_impl)</li>
+<li><strong>统一处理逻辑</strong>：无论是单个类型还是复合类型，均通过同一套规则合并。</li>
+<li><strong>可扩展性</strong>：若未来需要修改合并逻辑（例如过滤某些类型），只需调整 <code>meta_reduction</code> 的特化规则，无需改动外部代码。</li>
+</ol>
+<p>invocation_meta</p>
+<p>invocation_meta只有一个dispatcher_type，这个里面就会看到我们是需要传递一个P的类型的，剩下的几个模板参数，比方说F，IsDirect，D，O实际上都是invocation_meta构造时就确定了的。</p>
+<p>The <code>dispatcher</code> field is initialized with a function pointer returned by <code>overload_traits&lt;O&gt;::template get_dispatcher&lt;F, IsDirect, D, P&gt;()</code>. This function pointer is specific to:</p>
+<ul>
+<li>The facade type <code>F</code></li>
+<li>Whether the operation is direct or indirect (<code>IsDirect</code>)</li>
+<li>The dispatch type <code>D</code></li>
+<li>The actual type <code>P</code> stored in the proxy</li>
+</ul>
+<p>而使用不同的ptr初始化的时候，proxy_helper<F>::template get_ptr&lt;P, Q&gt;会根据P的类型来生成真正的cov_disapatcher。总之how does this shit work?</p>
+<p>这里还需要理解下，O是什么？output</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="p">,</span> <span class="k">class</span> <span class="nc">O</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">invocation_meta</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">constexpr</span> <span class="nf">invocation_meta</span><span class="p">()</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">dispatcher</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="c1">//通过 std::in_place_type_t&lt;P&gt; 构造时，从 overload_traits&lt;O&gt; 获取特定分发器。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">constexpr</span> <span class="k">explicit</span> <span class="n">invocation_meta</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type_t</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">noexcept</span>
+</span></span><span class="line"><span class="cl">      <span class="o">:</span> <span class="n">dispatcher</span><span class="p">(</span><span class="n">overload_traits</span><span class="o">&lt;</span><span class="n">O</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="o">::</span><span class="k">template</span> <span class="n">get_dispatcher</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">P</span><span class="o">&gt;</span><span class="p">())</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">typename</span> <span class="n">overload_traits</span><span class="o">&lt;</span><span class="n">O</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">dispatcher_type</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span> <span class="n">dispatcher</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">O</span><span class="o">&gt;</span> <span class="k">struct</span> <span class="nc">overload_traits</span> <span class="o">:</span> <span class="n">inapplicable_traits</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="n">qualifier_type</span> <span class="n">Q</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">NE</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">overload_traits_impl</span> <span class="o">:</span> <span class="n">applicable_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">return_type</span> <span class="o">=</span> <span class="n">R</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">dispatcher_type</span> <span class="o">=</span>
+</span></span><span class="line"><span class="cl">      <span class="n">R</span> <span class="p">(</span><span class="o">*</span><span class="p">)(</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Args</span><span class="p">...)</span> <span class="k">noexcept</span><span class="p">(</span><span class="n">NE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="p">,</span> <span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="k">consteval</span> <span class="kt">bool</span> <span class="n">is_applicable_ptr</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">invocable_dispatch_ptr</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">NE</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="nb">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="n">invocable_dispatch_ptr</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">NE</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="p">,</span> <span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="k">consteval</span> <span class="n">dispatcher_type</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span> <span class="n">get_dispatcher</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">invocable_dispatch_ptr</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">NE</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="o">&amp;</span><span class="n">conv_dispatcher</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="o">&amp;</span><span class="n">conv_dispatcher</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="k">constexpr</span> <span class="n">qualifier_type</span> <span class="n">qualifier</span> <span class="o">=</span> <span class="n">Q</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div><p>meta_ptr，这段就不再多解释了，简单来说就是:</p>
+<ul>
+<li>metadata比较大，meta_ptr实际上是<code>meta_ptr_indirect_impl</code> - Uses indirect storage with a pointer to static metadata</li>
+<li>metadata够小，meta_ptr实际上是<code>meta_ptr_direct_impl</code> - Embeds the metadata directly in the proxy</li>
+</ul>
+<p>所以实际上meta_ptr保存了metadata，要么用static对象，要么用原地存储</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">ptr_prototype</span> <span class="o">=</span> <span class="kt">void</span><span class="o">*</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 非原地元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_indirect_impl</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 默认构造
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">constexpr</span> <span class="nf">meta_ptr_indirect_impl</span><span class="p">()</span> <span class="k">noexcept</span> <span class="o">:</span> <span class="n">ptr_</span><span class="p">(</span><span class="k">nullptr</span><span class="p">)</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">constexpr</span> <span class="k">explicit</span> <span class="n">meta_ptr_indirect_impl</span><span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type_t</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">noexcept</span>
+</span></span><span class="line"><span class="cl">      <span class="o">:</span> <span class="n">ptr_</span><span class="p">(</span><span class="o">&amp;</span><span class="n">storage</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{}</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="nf">has_value</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ptr_</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="nf">reset</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="n">ptr_</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="n">M</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="n">ptr_</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"> <span class="k">private</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// 指向真正的元素
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">const</span> <span class="n">M</span><span class="o">*</span> <span class="n">ptr_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">P</span><span class="o">&gt;</span> <span class="k">static</span> <span class="k">constexpr</span> <span class="n">M</span> <span class="n">storage</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="p">,</span> <span class="k">class</span> <span class="nc">DM</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_direct_impl</span> <span class="o">:</span> <span class="k">private</span> <span class="n">M</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">M</span><span class="o">::</span><span class="n">M</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">bool</span> <span class="nf">has_value</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">DM</span><span class="o">::</span><span class="n">dispatcher</span> <span class="o">!=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">void</span> <span class="nf">reset</span><span class="p">()</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">this</span><span class="o">-&gt;</span><span class="n">DM</span><span class="o">::</span><span class="n">dispatcher</span> <span class="o">=</span> <span class="k">nullptr</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">const</span> <span class="n">M</span><span class="o">*</span> <span class="k">operator</span><span class="o">-&gt;</span><span class="p">()</span> <span class="k">const</span> <span class="k">noexcept</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">;</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_traits_impl</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">meta_ptr_indirect_impl</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="p">,</span> <span class="k">class</span> <span class="nc">O</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Ms</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_traits_impl</span><span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">invocation_meta</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">O</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Ms</span><span class="p">...</span><span class="o">&gt;&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">meta_ptr_direct_impl</span><span class="o">&lt;</span><span class="n">composite_meta_impl</span><span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">          <span class="n">invocation_meta</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">O</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Ms</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="n">invocation_meta</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">O</span><span class="o">&gt;&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_traits</span> <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">meta_ptr_indirect_impl</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">requires</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">ptr_prototype</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">alignof</span><span class="p">(</span><span class="n">M</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="k">alignof</span><span class="p">(</span><span class="n">ptr_prototype</span><span class="p">)</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">is_nothrow_default_constructible_v</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="o">&amp;&amp;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">is_trivially_copyable_v</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">meta_ptr_traits</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">meta_ptr_traits_impl</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">M</span><span class="o">&gt;</span> <span class="k">using</span> <span class="n">meta_ptr</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">meta_ptr_traits</span><span class="o">&lt;</span><span class="n">M</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</span></span></code></pre></div><p>然后在看一个基础类，这段的作用说白了是将某个模板类 <code>T</code> 的参数列表扩展为 <strong>用户提供的参数（<code>Args...</code>） + 从类型列表 <code>TL</code> 中提取的所有元素</strong>，从而生成最终的模板实例化类型。可以理解为实际上是个胶水。实际上又是经典的<strong>转发参数包</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// 一个只声明，未定义的具体类
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">...</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TL</span><span class="p">,</span> <span class="k">class</span> <span class="nc">Is</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">instantiated_traits</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">//基础知识tuple_element_t, refer to the type of Ith element of the tuple, where I is in [​0​, sizeof...(Types))
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 这个实际上是个非常有意思的东西，如果传递的参数是一堆std::index_sequence&lt;size_t数字一堆&gt;，也就是Is是一堆size_t的时候
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 用T包裹一些参数，这些参数将Args的每个类展开在前，然后分别对TL调用std::tuple_element_t来获取对应的元素的类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">...</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TL</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">size_t</span><span class="p">...</span> <span class="n">Is</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">instantiated_traits</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span> <span class="n">TL</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">index_sequence</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">...</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">std</span><span class="o">::</span><span class="n">type_identity</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&lt;</span><span class="n">Args</span><span class="p">...,</span> <span class="n">std</span><span class="o">::</span><span class="n">tuple_element_t</span><span class="o">&lt;</span><span class="n">Is</span><span class="p">,</span> <span class="n">TL</span><span class="o">&gt;</span><span class="p">...</span><span class="o">&gt;&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// 这里就可以发现实际上是将参数和一些特定类型的Tuple展开后拼接为一起，所以这是个C++的胶水
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span><span class="err">...</span><span class="o">&gt;</span> <span class="k">class</span> <span class="nc">T</span><span class="p">,</span> <span class="k">class</span> <span class="nc">TL</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="n">instantiated_t</span> <span class="o">=</span> <span class="k">typename</span> <span class="n">instantiated_traits</span><span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">T</span><span class="p">,</span> <span class="n">TL</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">make_index_sequence</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">tuple_size_v</span><span class="o">&lt;</span><span class="n">TL</span><span class="o">&gt;&gt;</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;::</span><span class="n">type</span><span class="p">;</span>
+</span></span></code></pre></div><p>最后我们可以看Proxy对象了，Proxy对象这里不全部展示，只看一点，它实际上是包含了模板参数为_Traits::meta的meta_ptr，而_Traits::meta实际上是facade_traits&lt;F&gt;的composite_meta，初始化的时候我们传递了类型P，所以P的类型信息被放到了meta里面</p>
+<p>这里的重点是：</p>
+<ul>
+<li>composite_meta包裹了facade_traits::conv_meta</li>
+<li>facade_traits::conv_meta，This means <code>conv_meta</code> is itself a composite of metadata from each convention (<code>Cs</code>) that&rsquo;s part of the facade.所以这里conv_meta实际上是存储了conv_traits类模板对每个类和范型类型生效的组合</li>
+<li>每种conv_meta实际上是conv_traits_impl拼接为一个大的类型，并且做参数包转发，而起内里就是invocation_meta，所以可以理解为conv_traits_impl就是invocation_meta。</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="c1">// meta存储了基本的类型信息  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">meta_</span> <span class="o">=</span> <span class="n">details</span><span class="o">::</span><span class="n">meta_ptr</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Traits</span><span class="o">::</span><span class="n">meta</span><span class="o">&gt;</span><span class="p">{</span><span class="n">std</span><span class="o">::</span><span class="n">in_place_type</span><span class="o">&lt;</span><span class="n">P</span><span class="o">&gt;</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">  <span class="n">details</span><span class="o">::</span><span class="n">meta_ptr</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">_Traits</span><span class="o">::</span><span class="n">meta</span><span class="o">&gt;</span> <span class="n">meta_</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">alignas</span><span class="p">(</span><span class="n">F</span><span class="o">::</span><span class="n">constraints</span><span class="p">.</span><span class="n">max_align</span><span class="p">)</span> <span class="n">std</span><span class="o">::</span><span class="n">byte</span> <span class="n">ptr_</span><span class="p">[</span><span class="n">F</span><span class="o">::</span><span class="n">constraints</span><span class="p">.</span><span class="n">max_size</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">facade_traits</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">facade_conv_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">F</span><span class="o">::</span><span class="n">convention_types</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">facade_refl_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">F</span><span class="o">::</span><span class="n">reflection_types</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">composite_meta</span><span class="o">&lt;</span>
+</span></span><span class="line"><span class="cl">      <span class="n">lifetime_meta_t</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">copy_dispatch</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="k">const</span> <span class="k">noexcept</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="kt">void</span><span class="p">(</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="k">const</span><span class="p">,</span> <span class="n">F</span><span class="o">::</span><span class="n">constraints</span><span class="p">.</span><span class="n">copyability</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">lifetime_meta_t</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">copy_dispatch</span><span class="p">,</span> <span class="kt">void</span><span class="p">(</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="k">noexcept</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="kt">void</span><span class="p">(</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span><span class="p">)</span> <span class="o">&amp;&amp;</span><span class="p">,</span> <span class="n">F</span><span class="o">::</span><span class="n">constraints</span><span class="p">.</span><span class="n">relocatability</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">lifetime_meta_t</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">destroy_dispatch</span><span class="p">,</span> <span class="kt">void</span><span class="p">()</span> <span class="k">noexcept</span><span class="p">,</span> <span class="kt">void</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">          <span class="n">F</span><span class="o">::</span><span class="n">constraints</span><span class="p">.</span><span class="n">destructibility</span><span class="o">&gt;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">      <span class="k">typename</span> <span class="n">facade_traits</span><span class="o">::</span><span class="n">conv_meta</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typename</span> <span class="n">facade_traits</span><span class="o">::</span><span class="n">refl_meta</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// conv_meta的定义
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">struct</span> <span class="nc">facade_conv_traits_impl</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">Cs</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">applicable_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">conv_meta</span> <span class="o">=</span> <span class="n">composite_meta</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">conv_traits</span><span class="o">&lt;</span><span class="n">Cs</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;::</span><span class="n">meta</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// conv_traits
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">C</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">conv_traits</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">conv_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">C</span><span class="o">::</span><span class="n">overload_types</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">conv_traits_impl</span><span class="o">&lt;</span><span class="n">C</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">Os</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">applicable_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">invocation_meta</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">C</span><span class="o">::</span><span class="n">is_direct</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typename</span> <span class="n">C</span><span class="o">::</span><span class="n">dispatch_type</span><span class="p">,</span> <span class="n">substituted_overload_t</span><span class="o">&lt;</span><span class="n">Os</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;&gt;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span></code></pre></div><p>好啦，到现在我let&rsquo;s put it together。问题是结构怎么存储的invocation_meta？</p>
+<ol>
+<li>
+<p>每个proxy&lt;F&gt;对象都有details::meta_ptr&lt;typename <em>Traits::meta&gt; meta</em>; 这个meta_ptr，实际上就是使用meta_ptr_indirect_impl或者meta_ptr_direct_impl包裹的_Traits::meta。</p>
+</li>
+<li>
+<p>_Traits::meta是啥？对应于facade_traits&lt;F&gt;，使用composite_meta（composite_meta_impl)包裹（继承）了facade_traits::conv_meta。这个东西间接藏着invocation_meta</p>
+</li>
+<li>
+<p>facade_traits::conv_meta是个什么东西？直接搜索conv_meta实际上会发现这到底是个啥？实际上是这句话，instantiated_t刚才我们看了实际上是拼接新的类型和tuple，所以这里就是说facade_traits&lt;F&gt;继承了facade_conv_traits_impl&lt;F，F::convention_types&gt;。因此facade_traits&lt;F&gt;的conv_meta就是facade_conv_traits_impl&lt;F，F::convention_types&gt;的conv_meta，就是composite_meta&lt;typename conv_traits&lt;Cs, F&gt;::meta&hellip;&gt;;，换言之，compositet_meta包裹了一堆conv_traits&lt;Cs, F&gt;::meta。也就是<strong>将F::convention_types中的每个类型和F当成模板参数传递给conv_traits的meta</strong>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">facade_traits</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">facade_conv_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">F</span><span class="o">::</span><span class="n">convention_types</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">facade_refl_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">F</span><span class="o">::</span><span class="n">reflection_types</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span> <span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">facade_conv_traits_impl</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">Cs</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">applicable_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">conv_meta</span> <span class="o">=</span> <span class="n">composite_meta</span><span class="o">&lt;</span><span class="k">typename</span> <span class="n">conv_traits</span><span class="o">&lt;</span><span class="n">Cs</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;::</span><span class="n">meta</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>conv_traits&lt;Cs, F&gt;::meta又是什么？这里一看就发现了，实际上是conv_traits_impl&lt;C, F, C::overload_types&gt;。所以实际上上facade_traits&lt;F&gt;的conv_meta是继承自传递的composite_meta_impl继承了一堆F::convention_types里面每个元素的conv_traits_impl&lt;C, F, C::overload_types&gt;。接着看conv_traits_impl类型</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">C</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">conv_traits</span>
+</span></span><span class="line"><span class="cl">    <span class="o">:</span> <span class="n">instantiated_t</span><span class="o">&lt;</span><span class="n">conv_traits_impl</span><span class="p">,</span> <span class="k">typename</span> <span class="n">C</span><span class="o">::</span><span class="n">overload_types</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;</span> <span class="p">{};</span>
+</span></span></code></pre></div></li>
+<li>
+<p>conv_traits_imple我们就看到了，实际上是composite_meta_impl继承了将Os里面每个元素当成模板参数传递到invocation_meta&lt;C::is_direct, typename C::dispatch_type, substituted_overload_t&lt;Os, F&raquo;里面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">C</span><span class="p">,</span> <span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="k">class</span><span class="err">... </span><span class="nc">Os</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">requires</span><span class="p">(</span><span class="n">overload_traits</span><span class="o">&lt;</span><span class="n">substituted_overload_t</span><span class="o">&lt;</span><span class="n">Os</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;&gt;::</span><span class="n">applicable</span> <span class="o">&amp;&amp;</span> <span class="p">...)</span>
+</span></span><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">conv_traits_impl</span><span class="o">&lt;</span><span class="n">C</span><span class="p">,</span> <span class="n">F</span><span class="p">,</span> <span class="n">Os</span><span class="p">...</span><span class="o">&gt;</span> <span class="o">:</span> <span class="n">applicable_traits</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">using</span> <span class="n">meta</span> <span class="o">=</span> <span class="n">composite_meta_impl</span><span class="o">&lt;</span><span class="n">invocation_meta</span><span class="o">&lt;</span><span class="n">C</span><span class="o">::</span><span class="n">is_direct</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="k">typename</span> <span class="n">C</span><span class="o">::</span><span class="n">dispatch_type</span><span class="p">,</span> <span class="n">substituted_overload_t</span><span class="o">&lt;</span><span class="n">Os</span><span class="p">,</span> <span class="n">F</span><span class="o">&gt;&gt;</span><span class="p">...</span><span class="o">&gt;</span><span class="p">;</span>
+</span></span></code></pre></div></li>
+<li>
+<p>绕了着么一大圈，让我们来总结下到底这个invocation_meta怎么存储的。怎么找到的对应的dispatcher？</p>
+<ol>
+<li>meta_ptr存储了一个meta类型，这里我们假设初始化的时候传递的是P类型</li>
+<li>这个meta类型是将F::convention_types中的每个类型和F当成模板参数传递给conv_traits，然后将每个这个类型的meta作为模板参数，让composite_meta_impl继承。</li>
+<li>conv_traits实际上是调用了conv_traits_impl&lt;F::convention_types中的某个类型，F，typename F::convention_types中的某个类型::overload_types&gt;。C实际上就是convention_types的简写</li>
+<li>总结就是composite_meta_impl，包裹了一堆invocation_meta带着&lt;C::is_direct,typename C::dispatch_type, substituted_overload_t&lt;Os, F&gt;初始化，其中C就是F::convention_types中的某个类型，而Os就是typename F::convention_types中的某个类型::overload_types。也就是说invocation_meta构造的基本类型都可以了，而真正的对象的P实际上是meta_ptr初始化的时候作为参数传递进来的。接下来只需要看看上面的invocation_meta是什么意思就行了。invocation_meta初始化的时候给了P，而P就会作为meta存储到proxy&lt;F&gt;的invocation_meta里面了。</li>
+</ol>
+<p>补充一个问题，invocation_meta作为被继承的类被composite_meta_impl包裹，它的内存布局里面实际上是个typename overload_traits&lt;O&gt;::template dispatcher_type&lt;F&gt; dispatcher。这个东西做了类型擦除，但是实际上存储的函数是带了P的类型的meta。意思是说Type Information is Encoded in the Dispatcher Function！即</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-C++" data-lang="C++"><span class="line"><span class="cl"><span class="k">template</span> <span class="o">&lt;</span><span class="k">class</span> <span class="nc">F</span><span class="p">,</span> <span class="kt">bool</span> <span class="n">IsDirect</span><span class="p">,</span> <span class="k">class</span> <span class="nc">D</span><span class="p">,</span> <span class="k">class</span> <span class="nc">P</span><span class="p">,</span> <span class="n">qualifier_type</span> <span class="n">Q</span><span class="p">,</span> <span class="k">class</span> <span class="nc">R</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="k">class</span><span class="err">... </span><span class="nc">Args</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="n">R</span> <span class="n">conv_dispatcher</span><span class="p">(</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span> <span class="n">self</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">noexcept</span><span class="p">(</span><span class="n">invocable_dispatch_ptr</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="nb">true</span><span class="p">,</span> <span class="n">R</span><span class="p">,</span> <span class="n">Args</span><span class="p">...</span><span class="o">&gt;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="nf">constexpr</span> <span class="p">(</span><span class="n">Q</span> <span class="o">==</span> <span class="n">qualifier_type</span><span class="o">::</span><span class="n">rv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">proxy_resetting_guard</span><span class="o">&lt;</span><span class="n">F</span><span class="p">,</span> <span class="n">P</span><span class="o">&gt;</span> <span class="n">guard</span><span class="p">{</span><span class="n">self</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">invoke_dispatch</span><span class="o">&lt;</span><span class="n">D</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 注意这里的get_ptr&lt;P, Q&gt;，对它而言模板参数是清楚的，所以可以在被调用之后再把P的类型给压缩回去
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">get_operand</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="o">&gt;</span><span class="p">(</span><span class="n">proxy_helper</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">get_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">move</span><span class="p">(</span><span class="n">self</span><span class="p">))),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">invoke_dispatch</span><span class="o">&lt;</span><span class="n">D</span><span class="p">,</span> <span class="n">R</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">get_operand</span><span class="o">&lt;</span><span class="n">IsDirect</span><span class="o">&gt;</span><span class="p">(</span><span class="n">proxy_helper</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;::</span><span class="k">template</span> <span class="n">get_ptr</span><span class="o">&lt;</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">add_qualifier_t</span><span class="o">&lt;</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">Q</span><span class="o">&gt;&gt;</span><span class="p">(</span><span class="n">self</span><span class="p">))),</span>
+</span></span><span class="line"><span class="cl">        <span class="n">std</span><span class="o">::</span><span class="n">forward</span><span class="o">&lt;</span><span class="n">Args</span><span class="o">&gt;</span><span class="p">(</span><span class="n">args</span><span class="p">)...);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div></li>
+</ol>
+<p>runtime怎么调用？</p>
+<p>Let&rsquo;s walk through a concrete example:</p>
+<ol>
+<li>
+<p>You define a facade with a <code>ToString</code> operation:</p>
+<pre tabindex="0"><code>struct StringableFacade : pro::facade_builder  
+    ::add_convention&lt;FreeToString, std::string() const&gt;  
+    ::build {};
+</code></pre></li>
+<li>
+<p>You create a proxy with an integer:</p>
+<pre tabindex="0"><code>pro::proxy&lt;StringableFacade&gt; p = 42;
+</code></pre></li>
+<li>
+<p>During creation, the <code>initialize</code> method sets up the metadata with <code>std::in_place_type&lt;int&gt;</code>.</p>
+</li>
+<li>
+<p>Each <code>invocation_meta</code> in the metadata is constructed with <code>std::in_place_type&lt;int&gt;</code>, which calls <code>get_dispatcher</code> to get the appropriate dispatcher function for integers.</p>
+</li>
+<li>
+<p>The <code>get_dispatcher</code> method returns a pointer to <code>conv_dispatcher&lt;StringableFacade, IsDirect, FreeToString, int, Q, std::string&gt;</code>.</p>
+</li>
+<li>
+<p>When you call <code>ToString(*p)</code>, the call is routed to <code>proxy_invoke</code>。这里实际上先调用了获取了真正的meta。然后拿了刚才初始化的时候有传递P的dispatcher函数。就是invocation_meta&lt;F, IsDirect, D, O&gt;::dispatcher</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">struct</span> <span class="nc">proxy_helper</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">static</span> <span class="kr">inline</span> <span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="n">get_meta</span><span class="p">(</span><span class="k">const</span> <span class="n">proxy</span><span class="o">&lt;</span><span class="n">F</span><span class="o">&gt;&amp;</span> <span class="n">p</span><span class="p">)</span> <span class="k">noexcept</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">assert</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">has_value</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="o">*</span><span class="n">p</span><span class="p">.</span><span class="n">meta_</span><span class="p">.</span><span class="k">operator</span><span class="o">-&gt;</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span></code></pre></div></li>
+<li>
+<p><code>proxy_invoke</code> retrieves the metadata and finds the <code>invocation_meta</code> for the <code>ToString</code> operation.</p>
+</li>
+<li>
+<p>It gets the dispatcher function pointer and calls it with the proxy and arguments.</p>
+</li>
+<li>
+<p>The dispatcher calls <code>std::to_string(42)</code> to get the result.</p>
+</li>
+</ol>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2025-03-21-微软的Proxy库学习\/index.md"
+        var oid_likes = "likes_posts\/2025-03-21-微软的Proxy库学习\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >TLS1.3 密钥衍生计算方法和功能</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-08-09T23:24:22&#43;08:00">2024 年 8 月 9 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/asio/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2025-01-24-CPP Net Standard & The Asio asynchronous model</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2025-01-24T00:00:00&#43;00:00">2025 年 1 月 24 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

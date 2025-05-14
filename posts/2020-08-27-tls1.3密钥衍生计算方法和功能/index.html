@@ -1,26 +1,1011 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>TLS1.3 密钥衍生计算方法和功能 &#183; 菜狗的blog</title>
-<meta name=title content="TLS1.3 密钥衍生计算方法和功能 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="TLS,TLS1.3,HKDF,KEY SCHEDULE,"><link rel=canonical href=https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="TLS1.3 密钥衍生计算方法和功能"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-08-09T23:24:22+08:00"><meta property="article:modified_time" content="2024-08-09T23:24:22+08:00"><meta property="article:tag" content="TLS"><meta property="article:tag" content="TLS1.3"><meta property="article:tag" content="HKDF"><meta property="article:tag" content="KEY SCHEDULE"><meta property="og:image" content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/featured.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/featured.png"><meta name=twitter:title content="TLS1.3 密钥衍生计算方法和功能"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"TLS1.3 密钥衍生计算方法和功能","headline":"TLS1.3 密钥衍生计算方法和功能","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2024","dateCreated":"2024-08-09T23:24:22\u002b08:00","datePublished":"2024-08-09T23:24:22\u002b08:00","dateModified":"2024-08-09T23:24:22\u002b08:00","keywords":["TLS","TLS1.3","HKDF","KEY SCHEDULE"],"mainEntityOfPage":"true","wordCount":"2652"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><div id=hero class="h-[150px] md:h-[200px]"></div><div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom" style=background-image:url(/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/background_hu4096541970449536301.png)><div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div><div class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div></div><div id=background-blur class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div><script>window.addEventListener("scroll",function(){var t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n=document.getElementById("background-blur");n.style.opacity=t/300})</script><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">TLS1.3 密钥衍生计算方法和功能</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2024-08-09T23:24:22+08:00>2024 年 8 月 9 日</time><span class="px-2 text-primary-500">&#183;</span><span>2652 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>6 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#密钥衍生流程>密钥衍生流程</a><ul><li><a href=#密钥衍生流程中一些计算方法>密钥衍生流程中一些计算方法</a></li><li><a href=#密钥衍生流程及每个密钥的作用>密钥衍生流程及每个密钥的作用</a></li><li><a href=#psk的计算过程>PSK的计算过程</a></li><li><a href=#密钥衍生中的一些细节>密钥衍生中的一些细节</a></li><li><a href=#结尾>结尾</a></li></ul></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#密钥衍生流程>密钥衍生流程</a><ul><li><a href=#密钥衍生流程中一些计算方法>密钥衍生流程中一些计算方法</a></li><li><a href=#密钥衍生流程及每个密钥的作用>密钥衍生流程及每个密钥的作用</a></li><li><a href=#psk的计算过程>PSK的计算过程</a></li><li><a href=#密钥衍生中的一些细节>密钥衍生中的一些细节</a></li><li><a href=#结尾>结尾</a></li></ul></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">TLS1.3 密钥衍生计算方法和功能<div id=tls13-%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#tls13-%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD aria-label=锚点>#</a></span></h1><h2 class="relative group">前言<div id=%E5%89%8D%E8%A8%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%89%8D%E8%A8%80 aria-label=锚点>#</a></span></h2><p>Tls1.3的RFC（RFC8446）中规定了各种密钥的算法和用途，虽然我打算在不久的将来翻译TLS1.3的RFC，出于方便的考虑，还是简单讲讲TLS1.3中的各种密钥计算方法。因为RFC的密钥衍生流程中没有画出PSK的计算过程，我也会在本文附加PSK的计算流程如果文章帮到了你/或者依然存在一些问题，欢迎给我一些反馈。</p><h2 class="relative group">密钥衍生流程<div id=%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B aria-label=锚点>#</a></span></h2><h3 class="relative group">密钥衍生流程中一些计算方法<div id=%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95 aria-label=锚点>#</a></span></h3><p>密钥衍生的流程依赖于RFC5869定义的HKDF-Extract和HKDF-Expand操作流程，这两个流程结合到一起才算是从密钥原始材料（key material)衍生出安全的符合长度需求的密钥。TLS1.3定义了一个HKDF-Expand-Label即带衍生标签的HKDF-Expand操作，这个操作的流程是：</p><blockquote><p>Derive-Secret(Secret, Label, Messages) =
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>TLS1.3 密钥衍生计算方法和功能 &middot; 菜狗的blog</title>
+  <meta name="title" content="TLS1.3 密钥衍生计算方法和功能 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="TLS, TLS1.3, HKDF, KEY SCHEDULE, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="TLS1.3 密钥衍生计算方法和功能">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-09T23:24:22+08:00">
+    <meta property="article:modified_time" content="2024-08-09T23:24:22+08:00">
+    <meta property="article:tag" content="TLS">
+    <meta property="article:tag" content="TLS1.3">
+    <meta property="article:tag" content="HKDF">
+    <meta property="article:tag" content="KEY SCHEDULE">
+    <meta property="og:image" content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/featured.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hxndg.github.io/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/featured.png">
+  <meta name="twitter:title" content="TLS1.3 密钥衍生计算方法和功能">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "TLS1.3 密钥衍生计算方法和功能",
+    "headline": "TLS1.3 密钥衍生计算方法和功能",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2024",
+    "dateCreated": "2024-08-09T23:24:22\u002b08:00",
+    "datePublished": "2024-08-09T23:24:22\u002b08:00",
+    
+    "dateModified": "2024-08-09T23:24:22\u002b08:00",
+    
+    "keywords": ["TLS","TLS1.3","HKDF","KEY SCHEDULE"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "2652"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+<div id="hero" class="h-[150px] md:h-[200px]"></div>
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/posts/2020-08-27-tls1.3%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD/background_hu_8f117cd5982dd3f3.png);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      TLS1.3 密钥衍生计算方法和功能
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2024-08-09T23:24:22&#43;08:00">2024 年 8 月 9 日</time><span class="px-2 text-primary-500">&middot;</span><span>2652 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">6 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#密钥衍生流程">密钥衍生流程</a>
+      <ul>
+        <li><a href="#密钥衍生流程中一些计算方法">密钥衍生流程中一些计算方法</a></li>
+        <li><a href="#密钥衍生流程及每个密钥的作用">密钥衍生流程及每个密钥的作用</a></li>
+        <li><a href="#psk的计算过程">PSK的计算过程</a></li>
+        <li><a href="#密钥衍生中的一些细节">密钥衍生中的一些细节</a></li>
+        <li><a href="#结尾">结尾</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#密钥衍生流程">密钥衍生流程</a>
+      <ul>
+        <li><a href="#密钥衍生流程中一些计算方法">密钥衍生流程中一些计算方法</a></li>
+        <li><a href="#密钥衍生流程及每个密钥的作用">密钥衍生流程及每个密钥的作用</a></li>
+        <li><a href="#psk的计算过程">PSK的计算过程</a></li>
+        <li><a href="#密钥衍生中的一些细节">密钥衍生中的一些细节</a></li>
+        <li><a href="#结尾">结尾</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">TLS1.3 密钥衍生计算方法和功能 
+    <div id="tls13-%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#tls13-%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95%E5%92%8C%E5%8A%9F%E8%83%BD" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">前言 
+    <div id="%E5%89%8D%E8%A8%80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%89%8D%E8%A8%80" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>Tls1.3的RFC（RFC8446）中规定了各种密钥的算法和用途，虽然我打算在不久的将来翻译TLS1.3的RFC，出于方便的考虑，还是简单讲讲TLS1.3中的各种密钥计算方法。因为RFC的密钥衍生流程中没有画出PSK的计算过程，我也会在本文附加PSK的计算流程如果文章帮到了你/或者依然存在一些问题，欢迎给我一些反馈。</p>
+
+
+<h2 class="relative group">密钥衍生流程 
+    <div id="%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">密钥衍生流程中一些计算方法 
+    <div id="%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E4%B8%AD%E4%B8%80%E4%BA%9B%E8%AE%A1%E7%AE%97%E6%96%B9%E6%B3%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>密钥衍生的流程依赖于RFC5869定义的HKDF-Extract和HKDF-Expand操作流程，这两个流程结合到一起才算是从密钥原始材料（key material)衍生出安全的符合长度需求的密钥。TLS1.3定义了一个HKDF-Expand-Label即带衍生标签的HKDF-Expand操作，这个操作的流程是：</p>
+<blockquote>
+<p>Derive-Secret(Secret, Label, Messages) =
 HKDF-Expand-Label(Secret, Label,Transcript-Hash(Messages), Hash.length) =
-HKDF-Expand(Secret, HkdfLabel, Hash.length)</p></blockquote><p>如果你知道HKDF-Expand的操作（我会不久翻译RFC5869并且讲解HKDF的两个操作），问题就变成了HkdfLabel是如何拼接的。按照RFC，HkdfLabel的拼接方式如下：</p><blockquote><p>struct {
+HKDF-Expand(Secret, HkdfLabel, Hash.length)</p></blockquote>
+<p>如果你知道HKDF-Expand的操作（我会不久翻译RFC5869并且讲解HKDF的两个操作），问题就变成了HkdfLabel是如何拼接的。按照RFC，HkdfLabel的拼接方式如下：</p>
+<blockquote>
+<p>struct {
 uint16 length = Length;
-opaque label&lt;7..255> = &ldquo;tls13 " + Label;
-opaque context&lt;0..255> = Context;
-} HkdfLabel;</p></blockquote><p>首先拼接一个uint16_t的“长度”，也就是两个字节，该“长度”的数值等于当前算法使用的hash算法的长度，比方说你使用ciphersuite是TLS_AES_256_GCM_SHA384，所以该“长度的数值”等于SHA384计算结果的长度，也就是384/8=48字节。之后先拼接上一个uint8_t的“字符串长度”，这个长度用来标识整个字符串的长度，包括"tls1.3&rdquo;+Label的长度，然后附加上字符串"tls13"（我这里附加的时候可不包括两个双引号啊），再拼接上Label，比方说你此时在计算复用主密钥(resumption_master_secret)，那么这时候的Label就是"res master"。最后拼接一个uint8_t的Context长度，再拼接Context。Context一般是对消息做hash计算得出的。</p><h3 class="relative group">密钥衍生流程及每个密钥的作用<div id=%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E5%8F%8A%E6%AF%8F%E4%B8%AA%E5%AF%86%E9%92%A5%E7%9A%84%E4%BD%9C%E7%94%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E5%8F%8A%E6%AF%8F%E4%B8%AA%E5%AF%86%E9%92%A5%E7%9A%84%E4%BD%9C%E7%94%A8 aria-label=锚点>#</a></span></h3><p>这部分我是直接粘贴的TLS1.3 RFC的内容，见下，由于翻译可能产生争议，这部分我用的是原图。<figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/2gds5TcY1wfL3hl.png alt="key schedule process.png"></figure>密钥衍生流程中有两个用于计算的基础密钥，分别是PSK和ECDHE secret。PSK通过上次连接由复用主密钥计算得出/带外数据传输建立，(EC)DHE密钥则是完整握手时协商产生。这两个密钥并不一定每次都存在，比方说完整握手的情况下，计算初期密钥（Early Secret）的时候可能不存在PSK，那么PSK就由一串长度等同于当前ciphersuite使用的hash算法结果的长度的0x00代替，比方说ciphersuite是TLS_AES_256_GCM_SHA384，那么PSK就用长度等于48的0x00内容替代。我在写TLS1.3 自动机的时候就直接写了个</p><blockquote><p>static const unsigned char default_zeros[EVP_MAX_MD_SIZE];</p></blockquote><p>来替代。</p><p>流程当中HKDF-Extract顶部的数据充当“盐”的角色，左侧是原始密钥材料（IKM），其输出结果为衍生出来的密钥。我们熟悉了HKDF-Extract和Derive-Secret之后，就会发现TLS1.3中是结合了HKDF-Extract和HKDF-Expand一起计算出来各种密钥的，这点比TLS1.2更符合RFC的要求，更安全。</p><p>还有一点值得注意，整个密钥衍生流程是不可以跳过任何一步的，每一步都必须进行（这里的必须进行只针对需要的数据，比方说你不开复用，那么就没必要计算PSK，复用主密钥之类的）。举个简单的例子，完整握手的情况下，仍然需要计算初期密钥，计算的方式就是HKDF-Extract(0, 0)。</p><p>最后一个需要注意的是，我们计算出来的密钥并不直接参与到会话/握手当中去，是要经过一论演算的。也就是说从secret到key是有一个过程的，举个例子说，客户端握手密钥（client_handshake_traffic_secret）计算到客户端会话key是有个过程的，如下：</p><blockquote><p>client_handshake_write_key = HKDF-Expand-Label(client_handshake_traffic_secret, &ldquo;key&rdquo;, &ldquo;&rdquo;, key_length)
-client_handshake_write_iv = HKDF-Expand-Label(client_handshake_traffic_secret, &ldquo;iv&rdquo;, &ldquo;&rdquo;, iv_length)</p></blockquote><p>我这里之所以写client_handshake_write_key的时候加了write是因为客户端发送握手消息使用的key和客户端接受握手消息（服务端发送握手消息）的key是不一样的。这一点在TLS1.2中也是如此。</p><h3 class="relative group">PSK的计算过程<div id=psk%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#psk%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B aria-label=锚点>#</a></span></h3><p>这次只简单写写PSK的计算过程，复用时如何计算binder value，恢复会话的操作以后单独写。
-PSK由复用主密钥（resumption_master_secret）计算得出，公式如下：</p><blockquote><p>PSK =
-HKDF-Expand-Label(resumption_master_secret,&ldquo;resumption&rdquo;, ticket_nonce, Hash.length)</p></blockquote><p>这里复用主密钥不需要多说，而ticket_nonce需要简单说说：ticket_nonce每个连接只有一个，其值应当每个都不一样。ticket_nonce需要明文发给客户端，让客户端计算出来PSK。包含ticket_nonce的报文就是new session ticket报文，简写为NST报文。</p><p>直接对照“密钥衍生流程中一些计算方法”就可以清晰的计算出来PSK，实际上从PSK到HMAC key，再到binder key的计算过程非常简单，完全可以一次算完。为了节省复用时的时间，可以直接计算存储binder key。但是由于涉及到操作都是hmac/hash，所以本质上时间减少的很少。这东西我第一个想出来以后被我司拿去申请了专利，还给了点奖金。</p><h3 class="relative group">密钥衍生中的一些细节<div id=%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82 aria-label=锚点>#</a></span></h3><p>这里写的东西是我当初踩到的一些坑，有的我注意到避开了，有的没注意到踩了进去。
-1 计算HKDF-Extract和HKDF-Extract时，需要注意，对于空消息的hash结果并不为空。其结果时有值的。因为忘了hash计算的流程，就容易踩这个坑。目前tls1.3的cipher只有两种hash长度一个是sha384的48,另一个时sha256的32。直接把当时写的结果贴上来了，各位也不用自己算了。</p><blockquote><p>uint8_t zero_sha384_hash[TLSV13_SHA384_HASH_LEN] = {0x38, 0xb0, 0x60, 0xa7,0x51, 0xac, 0x96, 0x38, 0x4c, 0xd9, 0x32, 0x7e,0xb1, 0xb1, 0xe3, 0x6a, 0x21, 0xfd, 0xb7, 0x11,0x14, 0xbe, 0x07, 0x43, 0x4c, 0x0c, 0xc7, 0xbf,0x63, 0xf6, 0xe1, 0xda, 0x27, 0x4e, 0xde, 0xbf,0xe7, 0x6f, 0x65, 0xfb, 0xd5, 0x1a, 0xd2, 0xf1,0x48, 0x98, 0xb9, 0x5b};
-uint8_t zero_sha256_hash[TLSV13_SHA256_HASH_LEN] = {0xe3, 0xb0, 0xc4, 0x42,0x98, 0xfc, 0x1c, 0x14, 0x9a, 0xfb, 0xf4, 0xc8,0x99, 0x6f, 0xb9, 0x24, 0x27, 0xae, 0x41, 0xe4,0x64, 0x9b, 0x93, 0x4c, 0xa4, 0x95, 0x99, 0x1b,0x78, 0x52, 0xb8, 0x55};</p></blockquote><p>2 对于每个TLS1.3的连接，需要自己保存ticket_nonce。踩这个坑是因为写的自动机时异步，计算PSK时候用的ticket_nonce和写NST报文的时候的ticket_nonce可能会变化。因此需要每个连接自己保存自己的ticket_nonce。</p><h3 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h3><p>写到这里差不多就可以结束了，TLS这块还有啥不明白的直接告诉我就成了<figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2020-08-27-TLS1.3密钥衍生计算方法和功能\\index.md",oid_likes="likes_posts\\2020-08-27-TLS1.3密钥衍生计算方法和功能\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2024-07-04-c++20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2024-07-04-C++20设计模式</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2024-07-04T00:00:00+00:00>2024 年 7 月 4 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2025-03-21-微软的Proxy学习</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2025-01-24T00:00:00+00:00>2025 年 1 月 24 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+opaque label&lt;7..255&gt; = &ldquo;tls13 &quot; + Label;
+opaque context&lt;0..255&gt; = Context;
+} HkdfLabel;</p></blockquote>
+<p>首先拼接一个uint16_t的“长度”，也就是两个字节，该“长度”的数值等于当前算法使用的hash算法的长度，比方说你使用ciphersuite是TLS_AES_256_GCM_SHA384，所以该“长度的数值”等于SHA384计算结果的长度，也就是384/8=48字节。之后先拼接上一个uint8_t的“字符串长度”，这个长度用来标识整个字符串的长度，包括&quot;tls1.3&rdquo;+Label的长度，然后附加上字符串&quot;tls13&quot;（我这里附加的时候可不包括两个双引号啊），再拼接上Label，比方说你此时在计算复用主密钥(resumption_master_secret)，那么这时候的Label就是&quot;res master&quot;。最后拼接一个uint8_t的Context长度，再拼接Context。Context一般是对消息做hash计算得出的。</p>
+
+
+<h3 class="relative group">密钥衍生流程及每个密钥的作用 
+    <div id="%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E5%8F%8A%E6%AF%8F%E4%B8%AA%E5%AF%86%E9%92%A5%E7%9A%84%E4%BD%9C%E7%94%A8" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E6%B5%81%E7%A8%8B%E5%8F%8A%E6%AF%8F%E4%B8%AA%E5%AF%86%E9%92%A5%E7%9A%84%E4%BD%9C%E7%94%A8" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这部分我是直接粘贴的TLS1.3 RFC的内容，见下，由于翻译可能产生争议，这部分我用的是原图。
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/2gds5TcY1wfL3hl.png" alt="key schedule process.png" />
+    
+  </figure>
+
+密钥衍生流程中有两个用于计算的基础密钥，分别是PSK和ECDHE secret。PSK通过上次连接由复用主密钥计算得出/带外数据传输建立，(EC)DHE密钥则是完整握手时协商产生。这两个密钥并不一定每次都存在，比方说完整握手的情况下，计算初期密钥（Early Secret）的时候可能不存在PSK，那么PSK就由一串长度等同于当前ciphersuite使用的hash算法结果的长度的0x00代替，比方说ciphersuite是TLS_AES_256_GCM_SHA384，那么PSK就用长度等于48的0x00内容替代。我在写TLS1.3 自动机的时候就直接写了个</p>
+<blockquote>
+<p>static const unsigned char default_zeros[EVP_MAX_MD_SIZE];</p></blockquote>
+<p>来替代。</p>
+<p>流程当中HKDF-Extract顶部的数据充当“盐”的角色，左侧是原始密钥材料（IKM），其输出结果为衍生出来的密钥。我们熟悉了HKDF-Extract和Derive-Secret之后，就会发现TLS1.3中是结合了HKDF-Extract和HKDF-Expand一起计算出来各种密钥的，这点比TLS1.2更符合RFC的要求，更安全。</p>
+<p>还有一点值得注意，整个密钥衍生流程是不可以跳过任何一步的，每一步都必须进行（这里的必须进行只针对需要的数据，比方说你不开复用，那么就没必要计算PSK，复用主密钥之类的）。举个简单的例子，完整握手的情况下，仍然需要计算初期密钥，计算的方式就是HKDF-Extract(0, 0)。</p>
+<p>最后一个需要注意的是，我们计算出来的密钥并不直接参与到会话/握手当中去，是要经过一论演算的。也就是说从secret到key是有一个过程的，举个例子说，客户端握手密钥（client_handshake_traffic_secret）计算到客户端会话key是有个过程的，如下：</p>
+<blockquote>
+<p>client_handshake_write_key = HKDF-Expand-Label(client_handshake_traffic_secret, &ldquo;key&rdquo;, &ldquo;&rdquo;, key_length)
+client_handshake_write_iv  = HKDF-Expand-Label(client_handshake_traffic_secret, &ldquo;iv&rdquo;, &ldquo;&rdquo;, iv_length)</p></blockquote>
+<p>我这里之所以写client_handshake_write_key的时候加了write是因为客户端发送握手消息使用的key和客户端接受握手消息（服务端发送握手消息）的key是不一样的。这一点在TLS1.2中也是如此。</p>
+
+
+<h3 class="relative group">PSK的计算过程 
+    <div id="psk%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#psk%E7%9A%84%E8%AE%A1%E7%AE%97%E8%BF%87%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这次只简单写写PSK的计算过程，复用时如何计算binder value，恢复会话的操作以后单独写。
+PSK由复用主密钥（resumption_master_secret）计算得出，公式如下：</p>
+<blockquote>
+<p>PSK =
+HKDF-Expand-Label(resumption_master_secret,&ldquo;resumption&rdquo;, ticket_nonce, Hash.length)</p></blockquote>
+<p>这里复用主密钥不需要多说，而ticket_nonce需要简单说说：ticket_nonce每个连接只有一个，其值应当每个都不一样。ticket_nonce需要明文发给客户端，让客户端计算出来PSK。包含ticket_nonce的报文就是new session ticket报文，简写为NST报文。</p>
+<p>直接对照“密钥衍生流程中一些计算方法”就可以清晰的计算出来PSK，实际上从PSK到HMAC key，再到binder key的计算过程非常简单，完全可以一次算完。为了节省复用时的时间，可以直接计算存储binder key。但是由于涉及到操作都是hmac/hash，所以本质上时间减少的很少。这东西我第一个想出来以后被我司拿去申请了专利，还给了点奖金。</p>
+
+
+<h3 class="relative group">密钥衍生中的一些细节 
+    <div id="%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%AF%86%E9%92%A5%E8%A1%8D%E7%94%9F%E4%B8%AD%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这里写的东西是我当初踩到的一些坑，有的我注意到避开了，有的没注意到踩了进去。
+1 计算HKDF-Extract和HKDF-Extract时，需要注意，对于空消息的hash结果并不为空。其结果时有值的。因为忘了hash计算的流程，就容易踩这个坑。目前tls1.3的cipher只有两种hash长度一个是sha384的48,另一个时sha256的32。直接把当时写的结果贴上来了，各位也不用自己算了。</p>
+<blockquote>
+<p>uint8_t zero_sha384_hash[TLSV13_SHA384_HASH_LEN] = {0x38, 0xb0, 0x60, 0xa7,0x51, 0xac, 0x96, 0x38, 0x4c, 0xd9, 0x32, 0x7e,0xb1, 0xb1, 0xe3, 0x6a, 0x21, 0xfd, 0xb7, 0x11,0x14, 0xbe, 0x07, 0x43, 0x4c, 0x0c, 0xc7, 0xbf,0x63, 0xf6, 0xe1, 0xda, 0x27, 0x4e, 0xde, 0xbf,0xe7, 0x6f, 0x65, 0xfb, 0xd5, 0x1a, 0xd2, 0xf1,0x48, 0x98, 0xb9, 0x5b};
+uint8_t zero_sha256_hash[TLSV13_SHA256_HASH_LEN] = {0xe3, 0xb0, 0xc4, 0x42,0x98, 0xfc, 0x1c, 0x14, 0x9a, 0xfb, 0xf4, 0xc8,0x99, 0x6f, 0xb9, 0x24, 0x27, 0xae, 0x41, 0xe4,0x64, 0x9b, 0x93, 0x4c, 0xa4, 0x95, 0x99, 0x1b,0x78, 0x52, 0xb8, 0x55};</p></blockquote>
+<p>2 对于每个TLS1.3的连接，需要自己保存ticket_nonce。踩这个坑是因为写的自动机时异步，计算PSK时候用的ticket_nonce和写NST报文的时候的ticket_nonce可能会变化。因此需要每个连接自己保存自己的ticket_nonce。</p>
+
+
+<h3 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>写到这里差不多就可以结束了，TLS这块还有啥不明白的直接告诉我就成了
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2020-08-27-TLS1.3密钥衍生计算方法和功能\/index.md"
+        var oid_likes = "likes_posts\/2020-08-27-TLS1.3密钥衍生计算方法和功能\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2024-07-04-c&#43;&#43;20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2024-07-04-C++20设计模式</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2024-07-04T00:00:00&#43;00:00">2024 年 7 月 4 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2025-03-21-%E5%BE%AE%E8%BD%AF%E7%9A%84proxy%E5%BA%93%E5%AD%A6%E4%B9%A0/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2025-03-21-微软的Proxy学习</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2025-01-24T00:00:00&#43;00:00">2025 年 1 月 24 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

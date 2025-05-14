@@ -1,15 +1,1056 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>阅读内核程序员的smp修养 &#183; 菜狗的blog</title>
-<meta name=title content="阅读内核程序员的smp修养 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="kernel,内存,"><link rel=canonical href=https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="阅读内核程序员的smp修养"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-12-09T00:00:00+00:00"><meta property="article:modified_time" content="2020-12-09T00:00:00+00:00"><meta property="article:tag" content="Kernel"><meta property="article:tag" content="内存"><meta name=twitter:card content="summary"><meta name=twitter:title content="阅读内核程序员的smp修养"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"阅读内核程序员的smp修养","headline":"阅读内核程序员的smp修养","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2020","dateCreated":"2020-12-09T00:00:00\u002b00:00","datePublished":"2020-12-09T00:00:00\u002b00:00","dateModified":"2020-12-09T00:00:00\u002b00:00","keywords":["kernel","内存"],"mainEntityOfPage":"true","wordCount":"2616"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">阅读内核程序员的smp修养</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2020-12-09T00:00:00+00:00>2020 年 12 月 9 日</time><span class="px-2 text-primary-500">&#183;</span><span>2616 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>6 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#第一部分--高速缓存系统>第一部分&ndash;高速缓存系统</a></li><li><a href=#第二部分--多处理器系统>第二部分&ndash;多处理器系统</a></li><li><a href=#第三部分--带有高速缓存的多处理器系统>第三部分&ndash;带有高速缓存的多处理器系统</a></li><li><a href=#结语>结语</a></li><li><a href=#多处理机系统概述的一些要点>多处理机系统概述的一些要点</a></li><li><a href=#主从处理机内核的一些要点>主从处理机内核的一些要点</a></li><li><a href=#采用自旋锁的内核的一些要点>采用自旋锁的内核的一些要点</a></li><li><a href=#采用信号量的内核的一些要点>采用信号量的内核的一些要点</a></li><li><a href=#内核的部分基础知识>内核的部分基础知识</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#第一部分--高速缓存系统>第一部分&ndash;高速缓存系统</a></li><li><a href=#第二部分--多处理器系统>第二部分&ndash;多处理器系统</a></li><li><a href=#第三部分--带有高速缓存的多处理器系统>第三部分&ndash;带有高速缓存的多处理器系统</a></li><li><a href=#结语>结语</a></li><li><a href=#多处理机系统概述的一些要点>多处理机系统概述的一些要点</a></li><li><a href=#主从处理机内核的一些要点>主从处理机内核的一些要点</a></li><li><a href=#采用自旋锁的内核的一些要点>采用自旋锁的内核的一些要点</a></li><li><a href=#采用信号量的内核的一些要点>采用信号量的内核的一些要点</a></li><li><a href=#内核的部分基础知识>内核的部分基础知识</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">阅读内核程序员的smp技术<div id=%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84smp%E6%8A%80%E6%9C%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84smp%E6%8A%80%E6%9C%AF aria-label=锚点>#</a></span></h1><h2 class="relative group">前言<div id=%E5%89%8D%E8%A8%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%89%8D%E8%A8%80 aria-label=锚点>#</a></span></h2><p>这本书实际上叫做《现代体系结构上的UNIX系统-内核程序员的对称多处理和缓存技术(修订版)》这本书我才刚刚看完，下面打算看电子版书籍《内存模型和缓存一致性》与《多处理器编程的艺术》。我第一次看的时候没注意第一三部分，主要注意了第二部分。</p><h2 class="relative group">第一部分&ndash;高速缓存系统<div id=%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86--%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86--%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F aria-label=锚点>#</a></span></h2><p>第一部分讲解了两种高速缓存系统和其写策略：直接映射高速缓存和N路组相连高速缓存系统，与常用的写策略：写直通，写回和写分配。接着通过介绍纯虚拟高速缓存，到键虚拟高速缓存再到物理高速缓存系统执行上下文切换/fork/exec等操作时候的困难和优势，介绍了为什么目前常见的硬件都是讲虚拟高速缓存和物理高速缓存相结合的策略-避免出现重名和歧义的问题，而且物理高速缓存有总线监视等搞笑手段。最后指出了三种提高高速缓存效率的方法：地址空间布局，延迟高速缓存无效和缓存对其的数据结构。最后一种方法是对应用程序最直接的方法，前两种实际上对应用程序是透明的。</p><p>映射相关的基础知识：</p><ul><li>直接映射高速缓存指的是：在保存高速缓存的地址中，以散列算法计算地址只能算出来每行仅拥有且仅有一个索引（换言之直接映射地址）。由于高速缓存有限，因此会出现多个地址命中的情况，因此还需要标记位+地址来表示是否命中</li><li>直接映射高速缓存的散列算法：最常用的散列算法就是取模，一般会将一个地址拆成三个部分：1 低地址为选择行中的字节，选择行的字节个数和高速缓存每行（块）的大小一致 2 高速缓存行号，连着选择行的地址为高速缓存行号，个数和高速缓存行的个数一致 3 剩下的高地址没什么直接用处</li><li>所谓高速缓存着色，指的是不同的地址映射到相同的高速缓存行上。如果高速缓存发生了缺失，那么就会触发突发模式（burst mode)读取一个高速缓存行。但是索引命中比较聚集，多个不同地址，被映射到同一个缓存行，触发频繁的读写就会导致高速缓存颠簸。</li></ul><p>写策略：</p><ul><li>写直通：是当<em>cache</em>写命中时，<em>cache</em>与主存同时发生写修改。</li><li>写回：当<em>CPU</em>对<em>cache</em>写命中时，只修改<em>cache</em>的内容不立即写入主存，只当此行被换出时才写回主存</li></ul><p>上面的简介都是单台机器上的缓存概念，那么到了多处理机，换言之SMP，问题就发生了改变。</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/figure_2_2_pipeline_coherence_interface.png alt=图2.2></figure></p><p>这种情况下就出现了一个问题，多处理机</p><h2 class="relative group">第二部分&ndash;多处理器系统<div id=%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86--%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86--%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F aria-label=锚点>#</a></span></h2><p>这一部分考虑了主从系统内核，支持自旋锁的内核，采用信号量的内核等面对争用的解决方式，我个人觉得这部分实际上已经可以不看了。因为很多只要看linux内核里面的锁，互斥量等东西就能理解到。</p><h2 class="relative group">第三部分&ndash;带有高速缓存的多处理器系统<div id=%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86--%E5%B8%A6%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%9A%84%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86--%E5%B8%A6%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%9A%84%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F aria-label=锚点>#</a></span></h2><p>第三部分讲述了在SMP体系下，面对缓存不一致问题的解决。并介绍了缓存一致性和顺序一致性协议，实际上这部分同样也不是很值得看，不如直接看《A Primer onMemory Consistencyand Cache Coherence》</p><h2 class="relative group">结语<div id=%E7%BB%93%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E8%AF%AD aria-label=锚点>#</a></span></h2><p>这本书作为一本入门书籍比较合适，其他方面可能比《C++并发实战》还是要差一些，对于内存的解释相比较而言还是并发实战更好一些。</p><h2 class="relative group">多处理机系统概述的一些要点<div id=%E5%A4%9A%E5%A4%84%E7%90%86%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%A4%9A%E5%A4%84%E7%90%86%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 aria-label=锚点>#</a></span></h2><ul><li>临界区，竞争条件的概念就不多说了。在书籍《linux内核设计与实现》上说过了。</li><li>单机系统下，也会出现竞争条件，比方说“短期互斥”，“中断互斥”，“长期互斥”。对于unix内核而言，因为不存在内核抢占，所以短期互斥很难出现，但是linux内核可以内核抢占，如果内核操作同一数据结构，就会出现短期互斥。中断互斥指的是中断跟新了非中断代码（基准代码），对于这种东西我们在内核里就该直接关中断，可以参照缺页中断的处理。长期互斥，一般是指文件操作，因为文件IO一般比较长，因此文件IO的时候，会让出CPU。即CPU会调用sleep和wakeup函数。这块让我想起来了虚拟内存了。</li><li>SMP系统可就没有UP系统(单机系统)那么简单了，短期互斥UP系统的同一时刻只有一个进程运行的条件自动被破坏了，中断互斥也被破坏</li><li>下面三章提出的方法都是非抢占式内核针对SMP系统的解决方式</li></ul><h2 class="relative group">主从处理机内核的一些要点<div id=%E4%B8%BB%E4%BB%8E%E5%A4%84%E7%90%86%E6%9C%BA%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E4%B8%BB%E4%BB%8E%E5%A4%84%E7%90%86%E6%9C%BA%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 aria-label=锚点>#</a></span></h2><p>主从处理机将关键代码放到主处理器执行，这些操作包括缺页中断，算数异常。</p><ul><li>两个或两个以上处理器彼此享有对方需要的资源，又彼此等待不可抢占就会触发死锁。比方说一个数据结构的两个元素在两个不同的自旋锁上，这就是AB-BA死锁。值得注意的是，对于非抢占式内核，在已经有一个cpu占有自旋锁的情况下，所有cpu再次竞争自旋锁也可能触发死锁。因为忙等不可释放</li><li>这种模式下，性能很容易出现瓶颈</li></ul><h2 class="relative group">采用自旋锁的内核的一些要点<div id=%E9%87%87%E7%94%A8%E8%87%AA%E6%97%8B%E9%94%81%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E9%87%87%E7%94%A8%E8%87%AA%E6%97%8B%E9%94%81%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 aria-label=锚点>#</a></span></h2><ul><li>锁的粒度是个值得争论的东西，一方面要考虑性能，另一方面要考虑语意的简洁名了。如果CPU的数量很少，那么一个巨大的自旋锁可能和多个自旋锁的情况一致。也得考虑系统是IO密集还是计算密集</li><li>在多处理机上因为使用sleep/wakeup导致的多进程对锁的争夺和颠簸，称为惊群效应，这种操作可以通过使用wakeup_one来解决。</li></ul><h2 class="relative group">采用信号量的内核的一些要点<div id=%E9%87%87%E7%94%A8%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E9%87%87%E7%94%A8%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9 aria-label=锚点>#</a></span></h2><ul><li>为什么信号量比sleep/wakeup更高级？因为信号量阻塞的决定和阻塞进程的操作都是原子操作，也支持一次仅唤醒一个进程的操作。</li><li>为什么中断不能使用信号量，因为中断处理程序没有进程现场，P操作是无法阻塞进程的</li><li>同一个信号量多次P，并不一定会死锁，因为V由其他进程执行。但是如果试图一次预留多份资源，会触发死锁。两个进程都想获取四分资源里面的三分，每个都获取两个，那么获取第三个时候就会死锁。一般都是通过每个进程释放它占用的那部分资源来避免死锁。银行家算法。</li></ul><h2 class="relative group">内核的部分基础知识<div id=%E5%86%85%E6%A0%B8%E7%9A%84%E9%83%A8%E5%88%86%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%86%85%E6%A0%B8%E7%9A%84%E9%83%A8%E5%88%86%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86 aria-label=锚点>#</a></span></h2><p>造成并发执行的原因，很多：</p><p>如何防止死锁？</p><p>内核同步方法，务必注意，锁保护的是数据而不是代码：</p><ul><li>自旋锁，持有自旋锁的时间最好小于信号量带来的问题即两次上下文切换的耗时。自旋锁可以用在中断处理程序里，中断处理程序在获取锁之前，务必禁止本地（也就是这个CPU上）中断，否则中断处理程序会打断持有锁的内核代码，而中断程序如果尝试抢占这个锁的话，那么中断程序就会自旋，从而导致死锁。如果中断发生在别的处理器上没问题。按照知乎的答案，两个上下文切换的时间消耗大概是7微妙，微妙是10的负六次方，而系统调用是200ns。注意！自旋锁是禁止抢占的！单处理器下同样需要自旋锁保护关键数据。</li><li>信号量，信号量的问题是带来两次明显的上下文切换，被阻塞的线程要执行换出和换入。因此信号量适合等待时间比较长的进程</li><li>互斥量，互斥量就是值为1的信号量。</li><li>BLK大内核锁：</li><li>顺序锁：</li><li>顺序/屏障</li></ul><p>中断</p><p>缺页中断流程</p><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2020-12-09-阅读内核程序员smp的修养\\index.md",oid_likes="likes_posts\\2020-12-09-阅读内核程序员smp的修养\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2020-12-08-ustack%E7%B3%BB%E7%BB%9F%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">USTACK系统是怎么做到高性能的</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-12-08T00:00:00+00:00>2020 年 12 月 8 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2020-12-15-%E5%BC%82%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%BC%96%E5%86%99%E6%97%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%95%99%E8%AE%AD/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">异步程序编写时候的一些小教训</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-12-15T00:00:00+00:00>2020 年 12 月 15 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>阅读内核程序员的smp修养 &middot; 菜狗的blog</title>
+  <meta name="title" content="阅读内核程序员的smp修养 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="kernel, 内存, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="阅读内核程序员的smp修养">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-12-09T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-12-09T00:00:00+00:00">
+    <meta property="article:tag" content="Kernel">
+    <meta property="article:tag" content="内存">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="阅读内核程序员的smp修养">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "阅读内核程序员的smp修养",
+    "headline": "阅读内核程序员的smp修养",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2020",
+    "dateCreated": "2020-12-09T00:00:00\u002b00:00",
+    "datePublished": "2020-12-09T00:00:00\u002b00:00",
+    
+    "dateModified": "2020-12-09T00:00:00\u002b00:00",
+    
+    "keywords": ["kernel","内存"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "2616"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      阅读内核程序员的smp修养
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2020-12-09T00:00:00&#43;00:00">2020 年 12 月 9 日</time><span class="px-2 text-primary-500">&middot;</span><span>2616 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">6 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#第一部分高速缓存系统">第一部分&ndash;高速缓存系统</a></li>
+    <li><a href="#第二部分多处理器系统">第二部分&ndash;多处理器系统</a></li>
+    <li><a href="#第三部分带有高速缓存的多处理器系统">第三部分&ndash;带有高速缓存的多处理器系统</a></li>
+    <li><a href="#结语">结语</a></li>
+    <li><a href="#多处理机系统概述的一些要点">多处理机系统概述的一些要点</a></li>
+    <li><a href="#主从处理机内核的一些要点">主从处理机内核的一些要点</a></li>
+    <li><a href="#采用自旋锁的内核的一些要点">采用自旋锁的内核的一些要点</a></li>
+    <li><a href="#采用信号量的内核的一些要点">采用信号量的内核的一些要点</a></li>
+    <li><a href="#内核的部分基础知识">内核的部分基础知识</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#前言">前言</a></li>
+    <li><a href="#第一部分高速缓存系统">第一部分&ndash;高速缓存系统</a></li>
+    <li><a href="#第二部分多处理器系统">第二部分&ndash;多处理器系统</a></li>
+    <li><a href="#第三部分带有高速缓存的多处理器系统">第三部分&ndash;带有高速缓存的多处理器系统</a></li>
+    <li><a href="#结语">结语</a></li>
+    <li><a href="#多处理机系统概述的一些要点">多处理机系统概述的一些要点</a></li>
+    <li><a href="#主从处理机内核的一些要点">主从处理机内核的一些要点</a></li>
+    <li><a href="#采用自旋锁的内核的一些要点">采用自旋锁的内核的一些要点</a></li>
+    <li><a href="#采用信号量的内核的一些要点">采用信号量的内核的一些要点</a></li>
+    <li><a href="#内核的部分基础知识">内核的部分基础知识</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">阅读内核程序员的smp技术 
+    <div id="%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84smp%E6%8A%80%E6%9C%AF" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98%E7%9A%84smp%E6%8A%80%E6%9C%AF" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">前言 
+    <div id="%E5%89%8D%E8%A8%80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%89%8D%E8%A8%80" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这本书实际上叫做《现代体系结构上的UNIX系统-内核程序员的对称多处理和缓存技术(修订版)》这本书我才刚刚看完，下面打算看电子版书籍《内存模型和缓存一致性》与《多处理器编程的艺术》。我第一次看的时候没注意第一三部分，主要注意了第二部分。</p>
+
+
+<h2 class="relative group">第一部分&ndash;高速缓存系统 
+    <div id="%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%B8%80%E9%83%A8%E5%88%86%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%B3%BB%E7%BB%9F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>第一部分讲解了两种高速缓存系统和其写策略：直接映射高速缓存和N路组相连高速缓存系统，与常用的写策略：写直通，写回和写分配。接着通过介绍纯虚拟高速缓存，到键虚拟高速缓存再到物理高速缓存系统执行上下文切换/fork/exec等操作时候的困难和优势，介绍了为什么目前常见的硬件都是讲虚拟高速缓存和物理高速缓存相结合的策略-避免出现重名和歧义的问题，而且物理高速缓存有总线监视等搞笑手段。最后指出了三种提高高速缓存效率的方法：地址空间布局，延迟高速缓存无效和缓存对其的数据结构。最后一种方法是对应用程序最直接的方法，前两种实际上对应用程序是透明的。</p>
+<p>映射相关的基础知识：</p>
+<ul>
+<li>直接映射高速缓存指的是：在保存高速缓存的地址中，以散列算法计算地址只能算出来每行仅拥有且仅有一个索引（换言之直接映射地址）。由于高速缓存有限，因此会出现多个地址命中的情况，因此还需要标记位+地址来表示是否命中</li>
+<li>直接映射高速缓存的散列算法：最常用的散列算法就是取模，一般会将一个地址拆成三个部分：1 低地址为选择行中的字节，选择行的字节个数和高速缓存每行（块）的大小一致 2 高速缓存行号，连着选择行的地址为高速缓存行号，个数和高速缓存行的个数一致 3 剩下的高地址没什么直接用处</li>
+<li>所谓高速缓存着色，指的是不同的地址映射到相同的高速缓存行上。如果高速缓存发生了缺失，那么就会触发突发模式（burst mode)读取一个高速缓存行。但是索引命中比较聚集，多个不同地址，被映射到同一个缓存行，触发频繁的读写就会导致高速缓存颠簸。</li>
+</ul>
+<p>写策略：</p>
+<ul>
+<li>写直通：是当<em>cache</em>写命中时，<em>cache</em>与主存同时发生写修改。</li>
+<li>写回：当<em>CPU</em>对<em>cache</em>写命中时，只修改<em>cache</em>的内容不立即写入主存，只当此行被换出时才写回主存</li>
+</ul>
+<p>上面的简介都是单台机器上的缓存概念，那么到了多处理机，换言之SMP，问题就发生了改变。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_ba95ff944d7c7a9a.png 330w,
+        /posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_ac70681f366dfe69.png 660w,
+        /posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_86f0538b49310f59.png 1024w,
+        /posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_dcac8f8dc0393291.png 2x"
+        data-zoom-src="/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_dcac8f8dc0393291.png"
+        src="/posts/2020-12-09-%E9%98%85%E8%AF%BB%E5%86%85%E6%A0%B8%E7%A8%8B%E5%BA%8F%E5%91%98smp%E7%9A%84%E4%BF%AE%E5%85%BB/imgs/figure_2_2_pipeline_coherence_interface_hu_ac70681f366dfe69.png"
+        alt="图2.2"
+      />
+      
+    </figure>
+</p>
+<p>这种情况下就出现了一个问题，多处理机</p>
+
+
+<h2 class="relative group">第二部分&ndash;多处理器系统 
+    <div id="%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%BA%8C%E9%83%A8%E5%88%86%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这一部分考虑了主从系统内核，支持自旋锁的内核，采用信号量的内核等面对争用的解决方式，我个人觉得这部分实际上已经可以不看了。因为很多只要看linux内核里面的锁，互斥量等东西就能理解到。</p>
+
+
+<h2 class="relative group">第三部分&ndash;带有高速缓存的多处理器系统 
+    <div id="%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E5%B8%A6%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%9A%84%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%B8%89%E9%83%A8%E5%88%86%E5%B8%A6%E6%9C%89%E9%AB%98%E9%80%9F%E7%BC%93%E5%AD%98%E7%9A%84%E5%A4%9A%E5%A4%84%E7%90%86%E5%99%A8%E7%B3%BB%E7%BB%9F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>第三部分讲述了在SMP体系下，面对缓存不一致问题的解决。并介绍了缓存一致性和顺序一致性协议，实际上这部分同样也不是很值得看，不如直接看《A Primer onMemory Consistencyand Cache Coherence》</p>
+
+
+<h2 class="relative group">结语 
+    <div id="%E7%BB%93%E8%AF%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E8%AF%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这本书作为一本入门书籍比较合适，其他方面可能比《C++并发实战》还是要差一些，对于内存的解释相比较而言还是并发实战更好一些。</p>
+
+
+<h2 class="relative group">多处理机系统概述的一些要点 
+    <div id="%E5%A4%9A%E5%A4%84%E7%90%86%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%A4%9A%E5%A4%84%E7%90%86%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%A6%82%E8%BF%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<ul>
+<li>临界区，竞争条件的概念就不多说了。在书籍《linux内核设计与实现》上说过了。</li>
+<li>单机系统下，也会出现竞争条件，比方说“短期互斥”，“中断互斥”，“长期互斥”。对于unix内核而言，因为不存在内核抢占，所以短期互斥很难出现，但是linux内核可以内核抢占，如果内核操作同一数据结构，就会出现短期互斥。中断互斥指的是中断跟新了非中断代码（基准代码），对于这种东西我们在内核里就该直接关中断，可以参照缺页中断的处理。长期互斥，一般是指文件操作，因为文件IO一般比较长，因此文件IO的时候，会让出CPU。即CPU会调用sleep和wakeup函数。这块让我想起来了虚拟内存了。</li>
+<li>SMP系统可就没有UP系统(单机系统)那么简单了，短期互斥UP系统的同一时刻只有一个进程运行的条件自动被破坏了，中断互斥也被破坏</li>
+<li>下面三章提出的方法都是非抢占式内核针对SMP系统的解决方式</li>
+</ul>
+
+
+<h2 class="relative group">主从处理机内核的一些要点 
+    <div id="%E4%B8%BB%E4%BB%8E%E5%A4%84%E7%90%86%E6%9C%BA%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E4%B8%BB%E4%BB%8E%E5%A4%84%E7%90%86%E6%9C%BA%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>主从处理机将关键代码放到主处理器执行，这些操作包括缺页中断，算数异常。</p>
+<ul>
+<li>两个或两个以上处理器彼此享有对方需要的资源，又彼此等待不可抢占就会触发死锁。比方说一个数据结构的两个元素在两个不同的自旋锁上，这就是AB-BA死锁。值得注意的是，对于非抢占式内核，在已经有一个cpu占有自旋锁的情况下，所有cpu再次竞争自旋锁也可能触发死锁。因为忙等不可释放</li>
+<li>这种模式下，性能很容易出现瓶颈</li>
+</ul>
+
+
+<h2 class="relative group">采用自旋锁的内核的一些要点 
+    <div id="%E9%87%87%E7%94%A8%E8%87%AA%E6%97%8B%E9%94%81%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E9%87%87%E7%94%A8%E8%87%AA%E6%97%8B%E9%94%81%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<ul>
+<li>锁的粒度是个值得争论的东西，一方面要考虑性能，另一方面要考虑语意的简洁名了。如果CPU的数量很少，那么一个巨大的自旋锁可能和多个自旋锁的情况一致。也得考虑系统是IO密集还是计算密集</li>
+<li>在多处理机上因为使用sleep/wakeup导致的多进程对锁的争夺和颠簸，称为惊群效应，这种操作可以通过使用wakeup_one来解决。</li>
+</ul>
+
+
+<h2 class="relative group">采用信号量的内核的一些要点 
+    <div id="%E9%87%87%E7%94%A8%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E9%87%87%E7%94%A8%E4%BF%A1%E5%8F%B7%E9%87%8F%E7%9A%84%E5%86%85%E6%A0%B8%E7%9A%84%E4%B8%80%E4%BA%9B%E8%A6%81%E7%82%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<ul>
+<li>为什么信号量比sleep/wakeup更高级？因为信号量阻塞的决定和阻塞进程的操作都是原子操作，也支持一次仅唤醒一个进程的操作。</li>
+<li>为什么中断不能使用信号量，因为中断处理程序没有进程现场，P操作是无法阻塞进程的</li>
+<li>同一个信号量多次P，并不一定会死锁，因为V由其他进程执行。但是如果试图一次预留多份资源，会触发死锁。两个进程都想获取四分资源里面的三分，每个都获取两个，那么获取第三个时候就会死锁。一般都是通过每个进程释放它占用的那部分资源来避免死锁。银行家算法。</li>
+</ul>
+
+
+<h2 class="relative group">内核的部分基础知识 
+    <div id="%E5%86%85%E6%A0%B8%E7%9A%84%E9%83%A8%E5%88%86%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%86%85%E6%A0%B8%E7%9A%84%E9%83%A8%E5%88%86%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>造成并发执行的原因，很多：</p>
+<p>如何防止死锁？</p>
+<p>内核同步方法，务必注意，锁保护的是数据而不是代码：</p>
+<ul>
+<li>自旋锁，持有自旋锁的时间最好小于信号量带来的问题即两次上下文切换的耗时。自旋锁可以用在中断处理程序里，中断处理程序在获取锁之前，务必禁止本地（也就是这个CPU上）中断，否则中断处理程序会打断持有锁的内核代码，而中断程序如果尝试抢占这个锁的话，那么中断程序就会自旋，从而导致死锁。如果中断发生在别的处理器上没问题。按照知乎的答案，两个上下文切换的时间消耗大概是7微妙，微妙是10的负六次方，而系统调用是200ns。注意！自旋锁是禁止抢占的！单处理器下同样需要自旋锁保护关键数据。</li>
+<li>信号量，信号量的问题是带来两次明显的上下文切换，被阻塞的线程要执行换出和换入。因此信号量适合等待时间比较长的进程</li>
+<li>互斥量，互斥量就是值为1的信号量。</li>
+<li>BLK大内核锁：</li>
+<li>顺序锁：</li>
+<li>顺序/屏障</li>
+</ul>
+<p>中断</p>
+<p>缺页中断流程</p>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2020-12-09-阅读内核程序员smp的修养\/index.md"
+        var oid_likes = "likes_posts\/2020-12-09-阅读内核程序员smp的修养\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2020-12-08-ustack%E7%B3%BB%E7%BB%9F%E6%98%AF%E6%80%8E%E4%B9%88%E5%81%9A%E5%88%B0%E9%AB%98%E6%80%A7%E8%83%BD%E7%9A%84/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >USTACK系统是怎么做到高性能的</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2020-12-08T00:00:00&#43;00:00">2020 年 12 月 8 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2020-12-15-%E5%BC%82%E6%AD%A5%E7%A8%8B%E5%BA%8F%E7%BC%96%E5%86%99%E6%97%B6%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E6%95%99%E8%AE%AD/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >异步程序编写时候的一些小教训</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2020-12-15T00:00:00&#43;00:00">2020 年 12 月 15 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

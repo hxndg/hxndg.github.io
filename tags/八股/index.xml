@@ -1,1 +1,123 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>八股 on 菜狗的blog</title><link>https://hxndg.github.io/tags/%E5%85%AB%E8%82%A1/</link><description>Recent content in 八股 on 菜狗的blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright><lastBuildDate>Thu, 04 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/%E5%85%AB%E8%82%A1/index.xml" rel="self" type="application/rss+xml"/><item><title>2024-07-04-C++20设计模式</title><link>https://hxndg.github.io/posts/2024-07-04-c++20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link><pubDate>Thu, 04 Jul 2024 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2024-07-04-c++20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid><description/></item><item><title>2023-03-25-去tm的八股文</title><link>https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/</link><pubDate>Sat, 25 Mar 2023 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/</guid><description/><media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/featured.png"/></item><item><title>2023-02-15-安全二进制学习</title><link>https://hxndg.github.io/posts/2023-02-15-%E5%AE%89%E5%85%A8%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/</link><pubDate>Wed, 15 Feb 2023 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2023-02-15-%E5%AE%89%E5%85%A8%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/</guid><description/></item><item><title>CPP奇技淫巧</title><link>https://hxndg.github.io/posts/2021-09-16-cpp%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</link><pubDate>Thu, 16 Sep 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-09-16-cpp%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</guid><description/></item><item><title>内核学习</title><link>https://hxndg.github.io/posts/2021-08-23-%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0/</link><pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-08-23-%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0/</guid><description/></item><item><title>重抓CPP&amp; 新抓GO</title><link>https://hxndg.github.io/posts/2021-05-11-%E9%87%8D%E6%8A%93cpp/</link><pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-05-11-%E9%87%8D%E6%8A%93cpp/</guid><description/></item><item><title>boringSSL研究笔记</title><link>https://hxndg.github.io/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/</link><pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/</guid><description/></item><item><title>TLS1.3 8446 RFC翻译</title><link>https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/</link><pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/</guid><description/><media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg"/></item><item><title>2021-02-23-基本的算法和数据结构(包含多线程)</title><link>https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link><pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid><description/><media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png"/></item><item><title>2023-02-12-安全零信任</title><link>https://hxndg.github.io/posts/2023-02-12-%E5%AE%89%E5%85%A8%E9%9B%B6%E4%BF%A1%E4%BB%BB/</link><pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2023-02-12-%E5%AE%89%E5%85%A8%E9%9B%B6%E4%BF%A1%E4%BB%BB/</guid><description/></item><item><title>阅读整理曾经做过的leetcode</title><link>https://hxndg.github.io/posts/2021-01-02-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86%E6%9B%BE%E7%BB%8F%E5%81%9A%E8%BF%87%E7%9A%84leetcode/</link><pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-01-02-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86%E6%9B%BE%E7%BB%8F%E5%81%9A%E8%BF%87%E7%9A%84leetcode/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>八股 on 菜狗的blog</title>
+    <link>https://hxndg.github.io/tags/%E5%85%AB%E8%82%A1/</link>
+    <description>Recent content in 八股 on 菜狗的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright>
+    <lastBuildDate>Thu, 04 Jul 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/%E5%85%AB%E8%82%A1/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>2024-07-04-C&#43;&#43;20设计模式</title>
+      <link>https://hxndg.github.io/posts/2024-07-04-c&#43;&#43;20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</link>
+      <pubDate>Thu, 04 Jul 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2024-07-04-c&#43;&#43;20%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>2023-03-25-去tm的八股文</title>
+      <link>https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/</link>
+      <pubDate>Sat, 25 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2023-03-25-%E5%8E%BBtm%E7%9A%84%E5%85%AB%E8%82%A1%E6%96%87/featured.png" />
+    </item>
+    
+    <item>
+      <title>2023-02-15-安全二进制学习</title>
+      <link>https://hxndg.github.io/posts/2023-02-15-%E5%AE%89%E5%85%A8%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Wed, 15 Feb 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2023-02-15-%E5%AE%89%E5%85%A8%E7%BD%91%E7%BB%9C%E5%AD%A6%E4%B9%A0/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>CPP奇技淫巧</title>
+      <link>https://hxndg.github.io/posts/2021-09-16-cpp%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</link>
+      <pubDate>Thu, 16 Sep 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-09-16-cpp%E5%A5%87%E6%8A%80%E6%B7%AB%E5%B7%A7/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>内核学习</title>
+      <link>https://hxndg.github.io/posts/2021-08-23-%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Mon, 23 Aug 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-08-23-%E5%86%85%E6%A0%B8%E5%AD%A6%E4%B9%A0/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>重抓CPP&amp; 新抓GO</title>
+      <link>https://hxndg.github.io/posts/2021-05-11-%E9%87%8D%E6%8A%93cpp/</link>
+      <pubDate>Tue, 11 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-05-11-%E9%87%8D%E6%8A%93cpp/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>boringSSL研究笔记</title>
+      <link>https://hxndg.github.io/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 12 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>TLS1.3 8446 RFC翻译</title>
+      <link>https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/</link>
+      <pubDate>Fri, 02 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg" />
+    </item>
+    
+    <item>
+      <title>2021-02-23-基本的算法和数据结构(包含多线程)</title>
+      <link>https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/</link>
+      <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png" />
+    </item>
+    
+    <item>
+      <title>2023-02-12-安全零信任</title>
+      <link>https://hxndg.github.io/posts/2023-02-12-%E5%AE%89%E5%85%A8%E9%9B%B6%E4%BF%A1%E4%BB%BB/</link>
+      <pubDate>Mon, 22 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2023-02-12-%E5%AE%89%E5%85%A8%E9%9B%B6%E4%BF%A1%E4%BB%BB/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>阅读整理曾经做过的leetcode</title>
+      <link>https://hxndg.github.io/posts/2021-01-02-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86%E6%9B%BE%E7%BB%8F%E5%81%9A%E8%BF%87%E7%9A%84leetcode/</link>
+      <pubDate>Sat, 02 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-01-02-%E9%98%85%E8%AF%BB%E6%95%B4%E7%90%86%E6%9B%BE%E7%BB%8F%E5%81%9A%E8%BF%87%E7%9A%84leetcode/</guid>
+      <description></description>
+      
+    </item>
+    
+  </channel>
+</rss>

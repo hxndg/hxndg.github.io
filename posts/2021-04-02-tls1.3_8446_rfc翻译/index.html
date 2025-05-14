@@ -1,10 +1,929 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>TLS1.3 8446 RFC翻译 &#183; 菜狗的blog</title>
-<meta name=title content="TLS1.3 8446 RFC翻译 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="八股,"><link rel=canonical href=https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="TLS1.3 8446 RFC翻译"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-04-02T00:00:00+00:00"><meta property="article:modified_time" content="2021-04-02T00:00:00+00:00"><meta property="article:tag" content="八股"><meta property="og:image" content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg"><meta name=twitter:title content="TLS1.3 8446 RFC翻译"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"TLS1.3 8446 RFC翻译","headline":"TLS1.3 8446 RFC翻译","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-04-02T00:00:00\u002b00:00","datePublished":"2021-04-02T00:00:00\u002b00:00","dateModified":"2021-04-02T00:00:00\u002b00:00","keywords":["八股"],"mainEntityOfPage":"true","wordCount":"27418"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><div id=hero class="h-[150px] md:h-[200px]"></div><div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom" style=background-image:url(/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured_hu16912483468128312720.jpg)><div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div><div class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div></div><div id=background-blur class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div><script>window.addEventListener("scroll",function(){var t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n=document.getElementById("background-blur");n.style.opacity=t/300})</script><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">TLS1.3 8446 RFC翻译</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-04-02T00:00:00+00:00>2021 年 4 月 2 日</time><span class="px-2 text-primary-500">&#183;</span><span>27418 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>55 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言和目录>0 前言和目录</a><ul><li><a href=#01-摘要>0.1 摘要</a></li><li><a href=#02-本备忘录的状况>0.2 本备忘录的状况</a></li><li><a href=#03-目录>0.3 目录</a></li></ul></li><li><a href=#1-引论>1 引论</a><ul><li><a href=#11-公约和术语>1.1 公约和术语</a></li><li><a href=#12-与tls12的差别>1.2 与TLS1.2的差别</a></li><li><a href=#13-影响tls-12的更新>1.3 影响TLS 1.2的更新</a></li></ul></li><li><a href=#2-协议总览>2 协议总览</a><ul><li><a href=#21-不正确的dhe交换流程>2.1 不正确的DHE交换流程</a><ul><li><a href=#22-复用和pre-shared-keypsk>2.2 复用和Pre-Shared Key(PSK)</a></li><li><a href=#23-0-rtt数据>2.3 0-RTT数据</a></li></ul></li></ul></li><li><a href=#3>3</a><ul><li><a href=#31-基本数据块大小>3.1 基本数据块大小</a></li><li><a href=#32-杂项>3.2 杂项</a></li><li><a href=#33-数字>3.3. 数字</a></li><li><a href=#34-向量>3.4. 向量</a></li></ul></li><li><a href=#4-握手协议>4 握手协议</a><ul><li><a href=#41-密钥交换消息>4.1 密钥交换消息</a><ul><li><a href=#411-密码协商>4.1.1. 密码协商</a></li><li><a href=#412-client-hello>4.1.2 Client Hello</a></li><li><a href=#413-server-hello>4.1.3 Server Hello</a></li></ul></li><li><a href=#42-拓展>4.2 拓展</a><ul><li><a href=#421-supported-versions-拓展>4.2.1 Supported Versions 拓展</a></li><li><a href=#422-cookie>4.2.2 Cookie</a></li><li><a href=#423-signature-algorithms>4.2.3 Signature Algorithms</a></li><li><a href=#424-certificate-authorities>4.2.4 Certificate Authorities</a></li><li><a href=#425-oid-filters>4.2.5 OID Filters</a></li><li><a href=#426-post-handshake-client-authentication>4.2.6 Post-Handshake Client Authentication</a></li><li><a href=#427-supported-groups>4.2.7 Supported Groups</a></li><li><a href=#428--key-share>4.2.8 Key Share</a></li><li><a href=#429-pre-shared-key-exchange-modes>4.2.9 Pre-Shared Key Exchange Modes</a></li><li><a href=#4211-pre-shared-key-extension>4.2.11 Pre-Shared Key Extension</a></li></ul></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言和目录>0 前言和目录</a><ul><li><a href=#01-摘要>0.1 摘要</a></li><li><a href=#02-本备忘录的状况>0.2 本备忘录的状况</a></li><li><a href=#03-目录>0.3 目录</a></li></ul></li><li><a href=#1-引论>1 引论</a><ul><li><a href=#11-公约和术语>1.1 公约和术语</a></li><li><a href=#12-与tls12的差别>1.2 与TLS1.2的差别</a></li><li><a href=#13-影响tls-12的更新>1.3 影响TLS 1.2的更新</a></li></ul></li><li><a href=#2-协议总览>2 协议总览</a><ul><li><a href=#21-不正确的dhe交换流程>2.1 不正确的DHE交换流程</a><ul><li><a href=#22-复用和pre-shared-keypsk>2.2 复用和Pre-Shared Key(PSK)</a></li><li><a href=#23-0-rtt数据>2.3 0-RTT数据</a></li></ul></li></ul></li><li><a href=#3>3</a><ul><li><a href=#31-基本数据块大小>3.1 基本数据块大小</a></li><li><a href=#32-杂项>3.2 杂项</a></li><li><a href=#33-数字>3.3. 数字</a></li><li><a href=#34-向量>3.4. 向量</a></li></ul></li><li><a href=#4-握手协议>4 握手协议</a><ul><li><a href=#41-密钥交换消息>4.1 密钥交换消息</a><ul><li><a href=#411-密码协商>4.1.1. 密码协商</a></li><li><a href=#412-client-hello>4.1.2 Client Hello</a></li><li><a href=#413-server-hello>4.1.3 Server Hello</a></li></ul></li><li><a href=#42-拓展>4.2 拓展</a><ul><li><a href=#421-supported-versions-拓展>4.2.1 Supported Versions 拓展</a></li><li><a href=#422-cookie>4.2.2 Cookie</a></li><li><a href=#423-signature-algorithms>4.2.3 Signature Algorithms</a></li><li><a href=#424-certificate-authorities>4.2.4 Certificate Authorities</a></li><li><a href=#425-oid-filters>4.2.5 OID Filters</a></li><li><a href=#426-post-handshake-client-authentication>4.2.6 Post-Handshake Client Authentication</a></li><li><a href=#427-supported-groups>4.2.7 Supported Groups</a></li><li><a href=#428--key-share>4.2.8 Key Share</a></li><li><a href=#429-pre-shared-key-exchange-modes>4.2.9 Pre-Shared Key Exchange Modes</a></li><li><a href=#4211-pre-shared-key-extension>4.2.11 Pre-Shared Key Extension</a></li></ul></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">TLS1.3 8446 RFC翻译<div id=tls13-8446-rfc%E7%BF%BB%E8%AF%91 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#tls13-8446-rfc%E7%BF%BB%E8%AF%91 aria-label=锚点>#</a></span></h1><p>先说点东西，RFC8446里面过于基础的东西，和术语等东西我是不会翻译的，没什么价值，安全从业者都懂。不翻译的东西我会留着原文，翻译的地方只会为中文。如果想看英文版本直接看这个网址：https://tools.ietf.org/html/rfc8446</p><h2 class="relative group">0 前言和目录<div id=0-%E5%89%8D%E8%A8%80%E5%92%8C%E7%9B%AE%E5%BD%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0-%E5%89%8D%E8%A8%80%E5%92%8C%E7%9B%AE%E5%BD%95 aria-label=锚点>#</a></span></h2><h3 class="relative group">0.1 摘要<div id=01-%E6%91%98%E8%A6%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#01-%E6%91%98%E8%A6%81 aria-label=锚点>#</a></span></h3><p>这篇文档定义了1.3版本的传输层安全协议 （以下简称为TLS协议）。TLS协议允许客户端和服务端在互联网上通信，并免受偷听，篡改和伪造消息的风险。</p><p>这篇文章更新了RFC5705与RFC6066，废除了RFC5077，RFC5246和RFC6961。这篇文档同样给TLS1.2的实现提了新要求。</p><h3 class="relative group">0.2 本备忘录的状况<div id=02-%E6%9C%AC%E5%A4%87%E5%BF%98%E5%BD%95%E7%9A%84%E7%8A%B6%E5%86%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#02-%E6%9C%AC%E5%A4%87%E5%BF%98%E5%BD%95%E7%9A%84%E7%8A%B6%E5%86%B5 aria-label=锚点>#</a></span></h3><p>这是一份互联网标准跟踪文件。</p><p>本文件是互联网工程任务组 (IETF)的产品。它代表了IETF界（IETF社区）的共识。该文档已收到公开审查意见，并已被互联网工程指导小组（IESG）批准发布。更多互联网标准的相关信息可在RFC 7841的第2节中找到。</p><p>关于本文档当前状态的信息，任何勘误以及如何提供反馈意见的信息，可通过以下途径获得：https://www.rfc-editor.org/info/rfc8446。</p><h3 class="relative group">0.3 目录<div id=03-%E7%9B%AE%E5%BD%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#03-%E7%9B%AE%E5%BD%95 aria-label=锚点>#</a></span></h3><h2 class="relative group">1 引论<div id=1-%E5%BC%95%E8%AE%BA class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E5%BC%95%E8%AE%BA aria-label=锚点>#</a></span></h2><p>TLS的主要目标是在两个通信段之间提供一个安全信道，对底层的唯一要求是下层协议提供可靠的、有序的数据流。 具体而言，该安全信道应该提供以下属性：</p><ul><li>可认证: 通讯讯道的服务端必须可认证，客户端可选择性的被认证。认证的方式可以使用非对称算法（即RSA/ECDSA/EdDSA/PSK方式）</li></ul><ul><li>保密性: 通讯讯道建立后，传输数据只能终端可见。TLS并不隐藏传输数据的长度，尽管中断可以添加padding来混淆数据长度并对抗讯道分析技术</li><li>一致性: 讯道建立后，传输的数据，不可以在不被察觉下篡改</li></ul><p>即使攻击者可以完整控制通讯网络，如同[RFC3552]，以上特性也必须被提供。附录Appendix E提供了更纤细的信息。</p><p>TLS主要由两部分组成。</p><ul><li>握手协议(第4节)，用于验证通讯对端的身份。协商密码模式和参数，建立共享的秘钥信息。 握手协议的设计应当能够抵御篡改；主动攻击者不能强迫对端协商其未选择的握手参数。</li><li>记录协议（第5节），使用握手协议中协商的参数，保护通信方之间的流量。记录协议将流量拆分为一系列记录，每个记录都使用traffic key独立地保护。</li></ul><p>TLS独立于应用协议，TLS协议透明地为高层协议提供服务 但是，TLS标准并没有规定协议如何用TLS增加安全性；如何启动TLS握手，如何实现证书交换流程，都是由运行在TLS之上的协议的设计者和实现者来判断。</p><p>本文档定义了TLS 1.3版本标准行为。 虽然TLS 1.3与以前的版本并不直接兼容，但所有版本的TLS都包含了版本（回退）机制，允许客户和服务器在双方共享某一支持版本的情况下下协商一个可用的TLS版本。</p><p>本文档取代并废除了之前的TLS版本，包括1.2版本[RFC5246]。 它还删除了[RFC5077]中定义的TLS票据机制，并用第2.2节中定义的机制代替。 由于 TLS 1.3 改变了密钥的推导方式，它更新了第 7.5 节中描述的 [RFC5705]，同时也改变了在线证书状态协议 [RFC5077] 中定义的机制。 它还改变了在线证书状态协议(OCSP)消息的传输方式，因此更新了[RFC6066]，取消了[RFC6961]，详见第4.4.2.1节。</p><h3 class="relative group">1.1 公约和术语<div id=11-%E5%85%AC%E7%BA%A6%E5%92%8C%E6%9C%AF%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-%E5%85%AC%E7%BA%A6%E5%92%8C%E6%9C%AF%E8%AF%AD aria-label=锚点>#</a></span></h3><h3 class="relative group">1.2 与TLS1.2的差别<div id=12-%E4%B8%8Etls12%E7%9A%84%E5%B7%AE%E5%88%AB class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-%E4%B8%8Etls12%E7%9A%84%E5%B7%AE%E5%88%AB aria-label=锚点>#</a></span></h3><p>下面是TLS1.2和TLS1.3主要的功能差异，尽管并没有巨大的变化，但是细节的变动很多。</p><ul><li>TLS1.3支持的对称加密算法列表中，移除了过去版本合法的加密算法。 剩下的都是带有关联数据的认证加密（AEAD）算法。 密码套件（ciphersuite）的概念已经改变，拆分认证，密钥交换机制与记录保护算法（包括秘钥长度）和哈希算法。哈希算法用于密钥派生功能和握手信息认证码（MAC）一起使用。</li><li>增加了零往返时间(0-RTT)模式，在握手阶段就发送应用数据，节省了一个往返时间，但代价是牺牲了一定的安全性能。</li><li>静态RSA和静态Diffie-Hellman密码套件已被删除；所有基于公钥的密钥交换机制现在都提供前向保密功能。（实际上就是使用随机产生的临时私钥）</li><li>TLS1.3中ServerHello之后的所有握手消息都是加密的。新引入的EncryptedExtensions消息允许曾经在ServerHello中以明文方式发送的各种扩展也被秘钥保护。</li><li>秘钥衍生算法重新设计。因为降低了新秘钥和旧秘钥内容和统计上面的关联， 新的设计使密码学家更容易分析密码强度。 基于HMAC的提取和扩展密钥衍生函数(HKDF)是该功能的基本单元（就是得用HKDF来做秘钥衍生）。</li><li>握手状态机进行了重大调整，使其设计原则更加一致，并删除了ChangeCipherSpec等多余的消息（除非网络上中间设备由于兼容性需要）。</li><li>椭圆曲线算法现在已经被列入基本规范，并且包含了新的签名算法，如EdDSA。 TLS 1.3 取消了基点协商功能，每条曲线采用固定的基点。</li><li>其他密码学方面的改进，包括将RSA填充改为使用RSA概率签名方案(RSASSA-PSS)，以及去除压缩、数字签名算法(DSA)和自定义的Ephemeral Diffie-Hellman(DHE)组。</li><li>TLS 1.2版本协商机制已经被废止，改为在扩展标记可使用版本得列表。 这增加了与现有服务器的兼容性，因为这些服务器的版本协商实现是不正确的。</li><li>基于服务器端状态的会话恢复，以及早期TLS版本中基于PSK的密码套件都由单独的PSK所取代。</li><li>参考文献跟随RFC同步更新，请酌情参考RFCs的更新版本（例如，RFC 5280而不是RFC 3280）。</li></ul><h3 class="relative group">1.3 影响TLS 1.2的更新<div id=13-%E5%BD%B1%E5%93%8Dtls-12%E7%9A%84%E6%9B%B4%E6%96%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#13-%E5%BD%B1%E5%93%8Dtls-12%E7%9A%84%E6%9B%B4%E6%96%B0 aria-label=锚点>#</a></span></h3><p>本文档定义了一些行为标准，这些标准影响TLS 1.2实现的变化，即使那些不支持TLS 1.3的机器也需要遵守这些行为。</p><ul><li>版本降级保护机制在4.1.3节中描述。</li><li>RSASSA-PSS签名方案在4.2.3节中定义。</li><li>ClientHello中的"supported_versions &ldquo;扩展用来协商使用的TLS的版本，在TLS1.2和之前的版本使用ClientHello的legacy_version字段。</li><li>&ldquo;signature_algorithms_cert &ldquo;扩展允许客户端指明它可以使用哪些签名算法验证服务端的X.509证书。</li></ul><p>此外，本文档还澄清了早期版本的TLS的一些合规性要求；见第9.3节。</p><h2 class="relative group">2 协议总览<div id=2-%E5%8D%8F%E8%AE%AE%E6%80%BB%E8%A7%88 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E5%8D%8F%E8%AE%AE%E6%80%BB%E8%A7%88 aria-label=锚点>#</a></span></h2><p>安全通道使用的加密参数是由TLS握手协议产生的，该TLS子协议在客户端和服务器第一次相互通信时使用的。 握手协议允许对通信端协商协议版本，选择加密算法，认证对方（可选），并建立共享的秘密密钥材料。 一旦握手完成，对等体使用已协商的密钥来保护应用层的流量。</p><p>握手失败或其他协议错误会触发连接的终止，可以在连接终止前发出警报消息（第6节）。</p><p>TLS支持三种基本的密钥交换模式：</p><ul><li>(EC)DHE(有限域或椭圆曲线上的Diffie-Hellman算法)</li><li>PSK-only（仅PSK）</li><li>PSK with (EC)DHE（PSK+(EC)DHE）</li></ul><p>图1展示了一个基础的完整TLS握手流程：</p><pre tabindex=0><code>Client                                           Server
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>TLS1.3 8446 RFC翻译 &middot; 菜狗的blog</title>
+  <meta name="title" content="TLS1.3 8446 RFC翻译 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="八股, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="TLS1.3 8446 RFC翻译">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-04-02T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-04-02T00:00:00+00:00">
+    <meta property="article:tag" content="八股">
+    <meta property="og:image" content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hxndg.github.io/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured.jpg">
+  <meta name="twitter:title" content="TLS1.3 8446 RFC翻译">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "TLS1.3 8446 RFC翻译",
+    "headline": "TLS1.3 8446 RFC翻译",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2021",
+    "dateCreated": "2021-04-02T00:00:00\u002b00:00",
+    "datePublished": "2021-04-02T00:00:00\u002b00:00",
+    
+    "dateModified": "2021-04-02T00:00:00\u002b00:00",
+    
+    "keywords": ["八股"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "27418"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+<div id="hero" class="h-[150px] md:h-[200px]"></div>
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/posts/2021-04-02-tls1.3_8446_rfc%E7%BF%BB%E8%AF%91/featured_hu_94d9dd2aab928db.jpg);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      TLS1.3 8446 RFC翻译
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2021-04-02T00:00:00&#43;00:00">2021 年 4 月 2 日</time><span class="px-2 text-primary-500">&middot;</span><span>27418 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">55 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-前言和目录">0 前言和目录</a>
+      <ul>
+        <li><a href="#01-摘要">0.1 摘要</a></li>
+        <li><a href="#02-本备忘录的状况">0.2 本备忘录的状况</a></li>
+        <li><a href="#03-目录">0.3 目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#1-引论">1 引论</a>
+      <ul>
+        <li><a href="#11-公约和术语">1.1 公约和术语</a></li>
+        <li><a href="#12-与tls12的差别">1.2 与TLS1.2的差别</a></li>
+        <li><a href="#13-影响tls-12的更新">1.3 影响TLS 1.2的更新</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-协议总览">2 协议总览</a>
+      <ul>
+        <li><a href="#21-不正确的dhe交换流程">2.1 不正确的DHE交换流程</a>
+          <ul>
+            <li><a href="#22-复用和pre-shared-keypsk">2.2 复用和Pre-Shared Key(PSK)</a></li>
+            <li><a href="#23-0-rtt数据">2.3 0-RTT数据</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3">3</a>
+      <ul>
+        <li><a href="#31-基本数据块大小">3.1 基本数据块大小</a></li>
+        <li><a href="#32-杂项">3.2 杂项</a></li>
+        <li><a href="#33-数字">3.3. 数字</a></li>
+        <li><a href="#34-向量">3.4. 向量</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-握手协议">4 握手协议</a>
+      <ul>
+        <li><a href="#41-密钥交换消息">4.1 密钥交换消息</a>
+          <ul>
+            <li><a href="#411-密码协商">4.1.1. 密码协商</a></li>
+            <li><a href="#412-client-hello">4.1.2 Client Hello</a></li>
+            <li><a href="#413-server-hello">4.1.3 Server Hello</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-拓展">4.2 拓展</a>
+          <ul>
+            <li><a href="#421-supported-versions-拓展">4.2.1 Supported Versions 拓展</a></li>
+            <li><a href="#422-cookie">4.2.2 Cookie</a></li>
+            <li><a href="#423-signature-algorithms">4.2.3 Signature Algorithms</a></li>
+            <li><a href="#424-certificate-authorities">4.2.4 Certificate Authorities</a></li>
+            <li><a href="#425-oid-filters">4.2.5 OID Filters</a></li>
+            <li><a href="#426-post-handshake-client-authentication">4.2.6 Post-Handshake Client Authentication</a></li>
+            <li><a href="#427-supported-groups">4.2.7 Supported Groups</a></li>
+            <li><a href="#428--key-share">4.2.8  Key Share</a></li>
+            <li><a href="#429-pre-shared-key-exchange-modes">4.2.9 Pre-Shared Key Exchange Modes</a></li>
+            <li><a href="#4211-pre-shared-key-extension">4.2.11 Pre-Shared Key Extension</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-前言和目录">0 前言和目录</a>
+      <ul>
+        <li><a href="#01-摘要">0.1 摘要</a></li>
+        <li><a href="#02-本备忘录的状况">0.2 本备忘录的状况</a></li>
+        <li><a href="#03-目录">0.3 目录</a></li>
+      </ul>
+    </li>
+    <li><a href="#1-引论">1 引论</a>
+      <ul>
+        <li><a href="#11-公约和术语">1.1 公约和术语</a></li>
+        <li><a href="#12-与tls12的差别">1.2 与TLS1.2的差别</a></li>
+        <li><a href="#13-影响tls-12的更新">1.3 影响TLS 1.2的更新</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-协议总览">2 协议总览</a>
+      <ul>
+        <li><a href="#21-不正确的dhe交换流程">2.1 不正确的DHE交换流程</a>
+          <ul>
+            <li><a href="#22-复用和pre-shared-keypsk">2.2 复用和Pre-Shared Key(PSK)</a></li>
+            <li><a href="#23-0-rtt数据">2.3 0-RTT数据</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3">3</a>
+      <ul>
+        <li><a href="#31-基本数据块大小">3.1 基本数据块大小</a></li>
+        <li><a href="#32-杂项">3.2 杂项</a></li>
+        <li><a href="#33-数字">3.3. 数字</a></li>
+        <li><a href="#34-向量">3.4. 向量</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-握手协议">4 握手协议</a>
+      <ul>
+        <li><a href="#41-密钥交换消息">4.1 密钥交换消息</a>
+          <ul>
+            <li><a href="#411-密码协商">4.1.1. 密码协商</a></li>
+            <li><a href="#412-client-hello">4.1.2 Client Hello</a></li>
+            <li><a href="#413-server-hello">4.1.3 Server Hello</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-拓展">4.2 拓展</a>
+          <ul>
+            <li><a href="#421-supported-versions-拓展">4.2.1 Supported Versions 拓展</a></li>
+            <li><a href="#422-cookie">4.2.2 Cookie</a></li>
+            <li><a href="#423-signature-algorithms">4.2.3 Signature Algorithms</a></li>
+            <li><a href="#424-certificate-authorities">4.2.4 Certificate Authorities</a></li>
+            <li><a href="#425-oid-filters">4.2.5 OID Filters</a></li>
+            <li><a href="#426-post-handshake-client-authentication">4.2.6 Post-Handshake Client Authentication</a></li>
+            <li><a href="#427-supported-groups">4.2.7 Supported Groups</a></li>
+            <li><a href="#428--key-share">4.2.8  Key Share</a></li>
+            <li><a href="#429-pre-shared-key-exchange-modes">4.2.9 Pre-Shared Key Exchange Modes</a></li>
+            <li><a href="#4211-pre-shared-key-extension">4.2.11 Pre-Shared Key Extension</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">TLS1.3 8446 RFC翻译 
+    <div id="tls13-8446-rfc%E7%BF%BB%E8%AF%91" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#tls13-8446-rfc%E7%BF%BB%E8%AF%91" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+<p>先说点东西，RFC8446里面过于基础的东西，和术语等东西我是不会翻译的，没什么价值，安全从业者都懂。不翻译的东西我会留着原文，翻译的地方只会为中文。如果想看英文版本直接看这个网址：https://tools.ietf.org/html/rfc8446</p>
+
+
+<h2 class="relative group">0 前言和目录 
+    <div id="0-%E5%89%8D%E8%A8%80%E5%92%8C%E7%9B%AE%E5%BD%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0-%E5%89%8D%E8%A8%80%E5%92%8C%E7%9B%AE%E5%BD%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">0.1 摘要 
+    <div id="01-%E6%91%98%E8%A6%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#01-%E6%91%98%E8%A6%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这篇文档定义了1.3版本的传输层安全协议   （以下简称为TLS协议）。TLS协议允许客户端和服务端在互联网上通信，并免受偷听，篡改和伪造消息的风险。</p>
+<p>这篇文章更新了RFC5705与RFC6066，废除了RFC5077，RFC5246和RFC6961。这篇文档同样给TLS1.2的实现提了新要求。</p>
+
+
+<h3 class="relative group">0.2 本备忘录的状况 
+    <div id="02-%E6%9C%AC%E5%A4%87%E5%BF%98%E5%BD%95%E7%9A%84%E7%8A%B6%E5%86%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#02-%E6%9C%AC%E5%A4%87%E5%BF%98%E5%BD%95%E7%9A%84%E7%8A%B6%E5%86%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这是一份互联网标准跟踪文件。</p>
+<p>本文件是互联网工程任务组 (IETF)的产品。它代表了IETF界（IETF社区）的共识。该文档已收到公开审查意见，并已被互联网工程指导小组（IESG）批准发布。更多互联网标准的相关信息可在RFC 7841的第2节中找到。</p>
+<p>关于本文档当前状态的信息，任何勘误以及如何提供反馈意见的信息，可通过以下途径获得：https://www.rfc-editor.org/info/rfc8446。</p>
+
+
+<h3 class="relative group">0.3 目录 
+    <div id="03-%E7%9B%AE%E5%BD%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#03-%E7%9B%AE%E5%BD%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h2 class="relative group">1 引论 
+    <div id="1-%E5%BC%95%E8%AE%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-%E5%BC%95%E8%AE%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>TLS的主要目标是在两个通信段之间提供一个安全信道，对底层的唯一要求是下层协议提供可靠的、有序的数据流。 具体而言，该安全信道应该提供以下属性：</p>
+<ul>
+<li>可认证: 通讯讯道的服务端必须可认证，客户端可选择性的被认证。认证的方式可以使用非对称算法（即RSA/ECDSA/EdDSA/PSK方式）</li>
+</ul>
+<ul>
+<li>保密性: 通讯讯道建立后，传输数据只能终端可见。TLS并不隐藏传输数据的长度，尽管中断可以添加padding来混淆数据长度并对抗讯道分析技术</li>
+<li>一致性: 讯道建立后，传输的数据，不可以在不被察觉下篡改</li>
+</ul>
+<p>即使攻击者可以完整控制通讯网络，如同[RFC3552]，以上特性也必须被提供。附录Appendix E提供了更纤细的信息。</p>
+<p>TLS主要由两部分组成。</p>
+<ul>
+<li>握手协议(第4节)，用于验证通讯对端的身份。协商密码模式和参数，建立共享的秘钥信息。 握手协议的设计应当能够抵御篡改；主动攻击者不能强迫对端协商其未选择的握手参数。</li>
+<li>记录协议（第5节），使用握手协议中协商的参数，保护通信方之间的流量。记录协议将流量拆分为一系列记录，每个记录都使用traffic key独立地保护。</li>
+</ul>
+<p>TLS独立于应用协议，TLS协议透明地为高层协议提供服务 但是，TLS标准并没有规定协议如何用TLS增加安全性；如何启动TLS握手，如何实现证书交换流程，都是由运行在TLS之上的协议的设计者和实现者来判断。</p>
+<p>本文档定义了TLS 1.3版本标准行为。 虽然TLS 1.3与以前的版本并不直接兼容，但所有版本的TLS都包含了版本（回退）机制，允许客户和服务器在双方共享某一支持版本的情况下下协商一个可用的TLS版本。</p>
+<p>本文档取代并废除了之前的TLS版本，包括1.2版本[RFC5246]。 它还删除了[RFC5077]中定义的TLS票据机制，并用第2.2节中定义的机制代替。 由于 TLS 1.3 改变了密钥的推导方式，它更新了第 7.5 节中描述的 [RFC5705]，同时也改变了在线证书状态协议 [RFC5077] 中定义的机制。 它还改变了在线证书状态协议(OCSP)消息的传输方式，因此更新了[RFC6066]，取消了[RFC6961]，详见第4.4.2.1节。</p>
+
+
+<h3 class="relative group">1.1 公约和术语 
+    <div id="11-%E5%85%AC%E7%BA%A6%E5%92%8C%E6%9C%AF%E8%AF%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#11-%E5%85%AC%E7%BA%A6%E5%92%8C%E6%9C%AF%E8%AF%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h3 class="relative group">1.2 与TLS1.2的差别 
+    <div id="12-%E4%B8%8Etls12%E7%9A%84%E5%B7%AE%E5%88%AB" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#12-%E4%B8%8Etls12%E7%9A%84%E5%B7%AE%E5%88%AB" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>下面是TLS1.2和TLS1.3主要的功能差异，尽管并没有巨大的变化，但是细节的变动很多。</p>
+<ul>
+<li>TLS1.3支持的对称加密算法列表中，移除了过去版本合法的加密算法。 剩下的都是带有关联数据的认证加密（AEAD）算法。 密码套件（ciphersuite）的概念已经改变，拆分认证，密钥交换机制与记录保护算法（包括秘钥长度）和哈希算法。哈希算法用于密钥派生功能和握手信息认证码（MAC）一起使用。</li>
+<li>增加了零往返时间(0-RTT)模式，在握手阶段就发送应用数据，节省了一个往返时间，但代价是牺牲了一定的安全性能。</li>
+<li>静态RSA和静态Diffie-Hellman密码套件已被删除；所有基于公钥的密钥交换机制现在都提供前向保密功能。（实际上就是使用随机产生的临时私钥）</li>
+<li>TLS1.3中ServerHello之后的所有握手消息都是加密的。新引入的EncryptedExtensions消息允许曾经在ServerHello中以明文方式发送的各种扩展也被秘钥保护。</li>
+<li>秘钥衍生算法重新设计。因为降低了新秘钥和旧秘钥内容和统计上面的关联， 新的设计使密码学家更容易分析密码强度。 基于HMAC的提取和扩展密钥衍生函数(HKDF)是该功能的基本单元（就是得用HKDF来做秘钥衍生）。</li>
+<li>握手状态机进行了重大调整，使其设计原则更加一致，并删除了ChangeCipherSpec等多余的消息（除非网络上中间设备由于兼容性需要）。</li>
+<li>椭圆曲线算法现在已经被列入基本规范，并且包含了新的签名算法，如EdDSA。 TLS 1.3 取消了基点协商功能，每条曲线采用固定的基点。</li>
+<li>其他密码学方面的改进，包括将RSA填充改为使用RSA概率签名方案(RSASSA-PSS)，以及去除压缩、数字签名算法(DSA)和自定义的Ephemeral Diffie-Hellman(DHE)组。</li>
+<li>TLS 1.2版本协商机制已经被废止，改为在扩展标记可使用版本得列表。 这增加了与现有服务器的兼容性，因为这些服务器的版本协商实现是不正确的。</li>
+<li>基于服务器端状态的会话恢复，以及早期TLS版本中基于PSK的密码套件都由单独的PSK所取代。</li>
+<li>参考文献跟随RFC同步更新，请酌情参考RFCs的更新版本（例如，RFC 5280而不是RFC 3280）。</li>
+</ul>
+
+
+<h3 class="relative group">1.3 影响TLS 1.2的更新 
+    <div id="13-%E5%BD%B1%E5%93%8Dtls-12%E7%9A%84%E6%9B%B4%E6%96%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#13-%E5%BD%B1%E5%93%8Dtls-12%E7%9A%84%E6%9B%B4%E6%96%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>本文档定义了一些行为标准，这些标准影响TLS 1.2实现的变化，即使那些不支持TLS 1.3的机器也需要遵守这些行为。</p>
+<ul>
+<li>版本降级保护机制在4.1.3节中描述。</li>
+<li>RSASSA-PSS签名方案在4.2.3节中定义。</li>
+<li>ClientHello中的&quot;supported_versions &ldquo;扩展用来协商使用的TLS的版本，在TLS1.2和之前的版本使用ClientHello的legacy_version字段。</li>
+<li>&ldquo;signature_algorithms_cert &ldquo;扩展允许客户端指明它可以使用哪些签名算法验证服务端的X.509证书。</li>
+</ul>
+<p>此外，本文档还澄清了早期版本的TLS的一些合规性要求；见第9.3节。</p>
+
+
+<h2 class="relative group">2 协议总览 
+    <div id="2-%E5%8D%8F%E8%AE%AE%E6%80%BB%E8%A7%88" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E5%8D%8F%E8%AE%AE%E6%80%BB%E8%A7%88" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>安全通道使用的加密参数是由TLS握手协议产生的，该TLS子协议在客户端和服务器第一次相互通信时使用的。 握手协议允许对通信端协商协议版本，选择加密算法，认证对方（可选），并建立共享的秘密密钥材料。 一旦握手完成，对等体使用已协商的密钥来保护应用层的流量。</p>
+<p>握手失败或其他协议错误会触发连接的终止，可以在连接终止前发出警报消息（第6节）。</p>
+<p>TLS支持三种基本的密钥交换模式：</p>
+<ul>
+<li>(EC)DHE(有限域或椭圆曲线上的Diffie-Hellman算法)</li>
+<li>PSK-only（仅PSK）</li>
+<li>PSK with (EC)DHE（PSK+(EC)DHE）</li>
+</ul>
+<p>图1展示了一个基础的完整TLS握手流程：</p>
+<pre tabindex="0"><code>Client                                           Server
 
 Key  ^ ClientHello
 Exch | + key_share*
@@ -35,7 +954,40 @@ Auth | {CertificateVerify*}
               [] 代表该消息（报文）由[sender]_application_traffic_secret_N衍生的秘钥保护
 
                Figure 1: Message Flow for Full TLS Handshake
-</code></pre><p>握手可以认为有三个阶段（如上图所示）。</p><ul><li>密钥交换阶段。建立共享的密钥材料，选择加密参数。 此阶段之后的一切消息都会被加密。</li><li>服务器参数。建立其他握手参数（根据客户端是否需要认证、应用层协议支持等情况变化）。</li><li>认证。验证服务器（以及客户端），并确认秘钥正确，并保证握手完整性。</li></ul><p>在密钥交换阶段，客户端发送ClientHello(4.1.2节)消息，其包含：一个随机数nonce(ClientHello.random)；支持的协议版本；对称密码/HKDF散列对的列表；一组Diffie-Hellman key_shares(在 &ldquo;key_share&rdquo;(4. 2.8节)扩展中)，一组psk标签(在 &ldquo;pre_shared_key&rdquo;(4.2.11节)扩展中)，或者两者兼而有之；以及一些可能出现的的附加扩展，处于中间设备的兼容性考虑，还可能存在额外的字段和/或信息。</p><p>然后，服务器会发送两条消息来建立服务器参数：</p><ul><li>EncryptedExtensions：该消息回复上面的ClientHello中和确定加密参数无关扩展的响应，但个别证书所特有的参数除外。[第4.3.1节]</li><li>CertificateRequest：如果需要使用证书认证客户端，则需要该证书的相关信息。 如果不需要客户端认证，则省略该消息。(第4.3.2节)</li></ul><p>最后，客户端和服务器交换认证消息。 TLS每次需要基于证书的认证时，都会使用同一组消息。 (基于PSK的认证是作为密钥交换的补充发生的)，这些消息，具体来说是下面几种：</p><ul><li>Certificate。 通讯终端的证书和证书相关扩展。 如果无需使用证书认证，那么，服务器会省略这条消息。如果服务端没法送CertificateRequest消息，客户端同样省略此消息。 请注意，如果原始公钥[RFC7250]或缓存信息扩展部分[RFC7924]也在生效，那么这个消息将不包含一个证书，而是其他一些对应于服务器的长期密钥。 [第4.4.2节]</li><li>CertificateVerify。 使用与证书信息中的公钥相对应的私钥对整个握手报文计算一个签名。 如果通信终端不使用证书进行认证，则省略该消息。 第 4.4.3 节）。</li><li>Finished。 对整个握手过程中计算MAC（消息认证码）。 该消息提供密钥确认，将终端的身份与交换的密钥绑定，在PSK模式下还对握手进行认证等功能。 [第4.4.4节]</li></ul><p>在收到服务器的消息后，客户端会响应其认证消息，即证书和CertificateVerify（如果需要的话），以及Finished。</p><p>此时，握手完成，客户端和服务器衍生出记录层所需的密钥材料，使用该衍生秘钥材料来加解密应用层数据。除第2.3节规定的情况外，在发送Finished消息之前，不得发送应用数据。 请注意，虽然服务器可以在收到客户端的认证消息之前发送应用数据，但在这一点上发送的任何数据当然都是发送给未经认证的对等体。</p><h3 class="relative group">2.1 不正确的DHE交换流程<div id=21-%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84dhe%E4%BA%A4%E6%8D%A2%E6%B5%81%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84dhe%E4%BA%A4%E6%8D%A2%E6%B5%81%E7%A8%8B aria-label=锚点>#</a></span></h3><p>如果客户端没有 在"key_share &ldquo;扩展中没有提供足够的秘钥信息（例如，它只包括服务器不能接受或不支持的DHE或ECDHE组），服务器用HelloRetryRequest纠正该秘钥的不匹配，客户端需要用适当的 &ldquo;key_share &ldquo;扩展重新开始握手，如图2所示。 如果不能协商出共同的加密参数，服务器必须发送正确的alert报文中止握手。</p><pre tabindex=0><code>		Client                                               Server
+</code></pre><p>握手可以认为有三个阶段（如上图所示）。</p>
+<ul>
+<li>密钥交换阶段。建立共享的密钥材料，选择加密参数。 此阶段之后的一切消息都会被加密。</li>
+<li>服务器参数。建立其他握手参数（根据客户端是否需要认证、应用层协议支持等情况变化）。</li>
+<li>认证。验证服务器（以及客户端），并确认秘钥正确，并保证握手完整性。</li>
+</ul>
+<p>在密钥交换阶段，客户端发送ClientHello(4.1.2节)消息，其包含：一个随机数nonce(ClientHello.random)；支持的协议版本；对称密码/HKDF散列对的列表；一组Diffie-Hellman key_shares(在 &ldquo;key_share&rdquo;(4. 2.8节)扩展中)，一组psk标签(在 &ldquo;pre_shared_key&rdquo;(4.2.11节)扩展中)，或者两者兼而有之；以及一些可能出现的的附加扩展，处于中间设备的兼容性考虑，还可能存在额外的字段和/或信息。</p>
+<p>然后，服务器会发送两条消息来建立服务器参数：</p>
+<ul>
+<li>EncryptedExtensions：该消息回复上面的ClientHello中和确定加密参数无关扩展的响应，但个别证书所特有的参数除外。[第4.3.1节]</li>
+<li>CertificateRequest：如果需要使用证书认证客户端，则需要该证书的相关信息。 如果不需要客户端认证，则省略该消息。(第4.3.2节)</li>
+</ul>
+<p>最后，客户端和服务器交换认证消息。 TLS每次需要基于证书的认证时，都会使用同一组消息。 (基于PSK的认证是作为密钥交换的补充发生的)，这些消息，具体来说是下面几种：</p>
+<ul>
+<li>Certificate。 通讯终端的证书和证书相关扩展。 如果无需使用证书认证，那么，服务器会省略这条消息。如果服务端没法送CertificateRequest消息，客户端同样省略此消息。  请注意，如果原始公钥[RFC7250]或缓存信息扩展部分[RFC7924]也在生效，那么这个消息将不包含一个证书，而是其他一些对应于服务器的长期密钥。 [第4.4.2节]</li>
+<li>CertificateVerify。 使用与证书信息中的公钥相对应的私钥对整个握手报文计算一个签名。 如果通信终端不使用证书进行认证，则省略该消息。 第 4.4.3 节）。</li>
+<li>Finished。 对整个握手过程中计算MAC（消息认证码）。 该消息提供密钥确认，将终端的身份与交换的密钥绑定，在PSK模式下还对握手进行认证等功能。 [第4.4.4节]</li>
+</ul>
+<p>在收到服务器的消息后，客户端会响应其认证消息，即证书和CertificateVerify（如果需要的话），以及Finished。</p>
+<p>此时，握手完成，客户端和服务器衍生出记录层所需的密钥材料，使用该衍生秘钥材料来加解密应用层数据。除第2.3节规定的情况外，在发送Finished消息之前，不得发送应用数据。 请注意，虽然服务器可以在收到客户端的认证消息之前发送应用数据，但在这一点上发送的任何数据当然都是发送给未经认证的对等体。</p>
+
+
+<h3 class="relative group">2.1 不正确的DHE交换流程 
+    <div id="21-%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84dhe%E4%BA%A4%E6%8D%A2%E6%B5%81%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E4%B8%8D%E6%AD%A3%E7%A1%AE%E7%9A%84dhe%E4%BA%A4%E6%8D%A2%E6%B5%81%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>如果客户端没有 在&quot;key_share &ldquo;扩展中没有提供足够的秘钥信息（例如，它只包括服务器不能接受或不支持的DHE或ECDHE组），服务器用HelloRetryRequest纠正该秘钥的不匹配，客户端需要用适当的 &ldquo;key_share &ldquo;扩展重新开始握手，如图2所示。 如果不能协商出共同的加密参数，服务器必须发送正确的alert报文中止握手。</p>
+<pre tabindex="0"><code>		Client                                               Server
 
         ClientHello
         + key_share             --------&gt;
@@ -58,7 +1010,24 @@ Auth | {CertificateVerify*}
 
              Figure 2: Message Flow for a Full Handshake with
                            Mismatched Parameters
-</code></pre><p>注意：握手抄本（transcript）包含了最初的ClientHello/HelloRetryRequest交换；它不会随着新的ClientHello而重置。</p><p>TLS也允许多种基本握手的优化方案，如下描述：</p><h4 class="relative group">2.2 复用和Pre-Shared Key(PSK)<div id=22-%E5%A4%8D%E7%94%A8%E5%92%8Cpre-shared-keypsk class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E5%A4%8D%E7%94%A8%E5%92%8Cpre-shared-keypsk aria-label=锚点>#</a></span></h4><p>尽管TLS PSK可以通过带外数据建立，但PSK也可以在先前的连接中建立，然后用来建立新的连接（&ldquo;会话恢复 &ldquo;或 &ldquo;使用PSK恢复&rdquo;）。 一旦握手完成，服务器可以向客户端发送一个PSK身份，该身份对应于从初始握手流程中导出的唯一密钥（见4.6.1节）。 然后，客户端可以在未来的握手中使用该PSK身份来协商相关PSK的使用。 如果服务器接受了PSK，那么新连接的安全上下文就会与原始连接进行加密绑定，并且从初始握手中得到的密钥会被用来加速加密的计算过程，从而免于完全握手。 在TLS 1.2及早期版本中，这个功能由 &ldquo;会话ID &ldquo;和 &ldquo;会话票据&rdquo;[RFC5077]提供。 在TLS 1.3中，这两种机制都被淘汰了。</p><p>PSK可以与(EC)DHE密钥交换一起使用，以便与shared keys拓展提供的共享秘钥相结合提供前向保密，也可以单独使用，但代价是失去应用数据的前向保密性。</p><p>图三展示了PSK的颁发和PSK的使用。</p><pre tabindex=0><code>	 Client                                               Server
+</code></pre><p>注意：握手抄本（transcript）包含了最初的ClientHello/HelloRetryRequest交换；它不会随着新的ClientHello而重置。</p>
+<p>TLS也允许多种基本握手的优化方案，如下描述：</p>
+
+
+<h4 class="relative group">2.2 复用和Pre-Shared Key(PSK) 
+    <div id="22-%E5%A4%8D%E7%94%A8%E5%92%8Cpre-shared-keypsk" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-%E5%A4%8D%E7%94%A8%E5%92%8Cpre-shared-keypsk" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>尽管TLS PSK可以通过带外数据建立，但PSK也可以在先前的连接中建立，然后用来建立新的连接（&ldquo;会话恢复 &ldquo;或 &ldquo;使用PSK恢复&rdquo;）。 一旦握手完成，服务器可以向客户端发送一个PSK身份，该身份对应于从初始握手流程中导出的唯一密钥（见4.6.1节）。 然后，客户端可以在未来的握手中使用该PSK身份来协商相关PSK的使用。 如果服务器接受了PSK，那么新连接的安全上下文就会与原始连接进行加密绑定，并且从初始握手中得到的密钥会被用来加速加密的计算过程，从而免于完全握手。 在TLS 1.2及早期版本中，这个功能由 &ldquo;会话ID &ldquo;和 &ldquo;会话票据&rdquo;[RFC5077]提供。 在TLS 1.3中，这两种机制都被淘汰了。</p>
+<p>PSK可以与(EC)DHE密钥交换一起使用，以便与shared keys拓展提供的共享秘钥相结合提供前向保密，也可以单独使用，但代价是失去应用数据的前向保密性。</p>
+<p>图三展示了PSK的颁发和PSK的使用。</p>
+<pre tabindex="0"><code>	 Client                                               Server
 
    Initial Handshake:
           ClientHello
@@ -92,7 +1061,24 @@ Auth | {CertificateVerify*}
           [Application Data]        &lt;-------&gt;      [Application Data]
 
                Figure 3: Message Flow for Resumption and PSK
-</code></pre><p>由于服务器是通过PSK进行认证的，所以它不会发送证书或证书验证消息。 当客户机通过PSK尝试复用连接时，它还应该向服务器提供一个 &ldquo;key_share &ldquo;扩展，以允许服务器拒绝复用，从而能够在需要时回退到完整握手。 服务器用回复"pre_shared_key &ldquo;扩展来协商使用PSK机制，并可以（如这上所示）用 &ldquo;key_share &ldquo;扩展来响应，从而结合（EC）DHE密钥协商，提供前向保密。</p><p>当使用带外数据分发PSK时，PSK的身份和秘钥衍生算法必须兼容。</p><p>注意：当使用带外提供的预共享秘密时，一个重要的考虑因素是在密钥生成过程中使用足够的熵，如[RFC4086]中所讨论的那样。 从密码或其他低熵来源导出共享秘密是不安全的。 低熵秘密或密码会受到基于PSK binder的字典攻击。 指定的PSK认证即使与Diffie-Hellman密钥建立一起使用，也不是一种基于密码的强认证密钥交换。 具体来说，它不能阻止能够观察到握手的攻击者对密码/预共享密钥进行蛮力攻击。</p><h4 class="relative group">2.3 0-RTT数据<div id=23-0-rtt%E6%95%B0%E6%8D%AE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-0-rtt%E6%95%B0%E6%8D%AE aria-label=锚点>#</a></span></h4><p>当客户端和服务器通过共享一个PSK（从外部获得或通过之前的握手）建立连接时，TLS 1.3允许客户端在第一次飞行时发送数据（&ldquo;early data&rdquo;）。 客户端使用PSK对服务器进行认证，并对early data进行加密。</p><p>如图4所示，0-RTT数据直接附加到第一趟发送的1-RTT握手中。 握手的其余部分与PSK复用的1-RTT握手相同的消息。</p><pre tabindex=0><code>		Client                                               Server
+</code></pre><p>由于服务器是通过PSK进行认证的，所以它不会发送证书或证书验证消息。 当客户机通过PSK尝试复用连接时，它还应该向服务器提供一个 &ldquo;key_share &ldquo;扩展，以允许服务器拒绝复用，从而能够在需要时回退到完整握手。 服务器用回复&quot;pre_shared_key &ldquo;扩展来协商使用PSK机制，并可以（如这上所示）用 &ldquo;key_share &ldquo;扩展来响应，从而结合（EC）DHE密钥协商，提供前向保密。</p>
+<p>当使用带外数据分发PSK时，PSK的身份和秘钥衍生算法必须兼容。</p>
+<p>注意：当使用带外提供的预共享秘密时，一个重要的考虑因素是在密钥生成过程中使用足够的熵，如[RFC4086]中所讨论的那样。 从密码或其他低熵来源导出共享秘密是不安全的。 低熵秘密或密码会受到基于PSK binder的字典攻击。 指定的PSK认证即使与Diffie-Hellman密钥建立一起使用，也不是一种基于密码的强认证密钥交换。 具体来说，它不能阻止能够观察到握手的攻击者对密码/预共享密钥进行蛮力攻击。</p>
+
+
+<h4 class="relative group">2.3 0-RTT数据 
+    <div id="23-0-rtt%E6%95%B0%E6%8D%AE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-0-rtt%E6%95%B0%E6%8D%AE" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>当客户端和服务器通过共享一个PSK（从外部获得或通过之前的握手）建立连接时，TLS 1.3允许客户端在第一次飞行时发送数据（&ldquo;early data&rdquo;）。 客户端使用PSK对服务器进行认证，并对early data进行加密。</p>
+<p>如图4所示，0-RTT数据直接附加到第一趟发送的1-RTT握手中。 握手的其余部分与PSK复用的1-RTT握手相同的消息。</p>
+<pre tabindex="0"><code>		Client                                               Server
 
          ClientHello
          + early_data
@@ -127,36 +1113,136 @@ Auth | {CertificateVerify*}
                   derived from [sender]_application_traffic_secret_N.
 
                Figure 4: Message Flow for a 0-RTT Handshake
-</code></pre><p>重要提示：0-RTT数据的安全属性比其他类型的TLS数据要弱。 具体来说，0-RTT数据的安全属性要弱于其他类型的TLS数据：</p><ul><li>这些数据不提供前向安全的保障，因为它只使用所提供的PSK衍生的秘钥进行加密。</li><li>0-RTT并不抗虫方。对于普通的TLS 1.3 1-RTT数据的重放保护是通过服务器发送的Random值提供的，但是0-RTT数据不依赖于ServerHello，因此无法抗重放。如果数据是和TLS客户端认证或在应用协议内部认证相关，这一点就变得至关重要。 同样的警告适用于任何使用early_exporter_master_secret的情况。</li></ul><p>0-RTT数据不能在一个连接内重放（即服务器不会对同一个连接处理两次相同的数据），攻击者也无法使0-RTT数据看起来是1-RTT数据（因为它受到不同密钥的保护）。 附录E.5包含了对潜在攻击的描述，第8节描述了服务器可以用来限制重放影响的机制。</p><h2 class="relative group">3<div id=3 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3 aria-label=锚点>#</a></span></h2><p>这部分我推荐不要看了，我没好好翻译，随便找了一个工具机器翻译的，没做校对，我把第四章翻译完了再回来改</p><p>该部分重点介绍如何组织（格式化）数据，组织数据的过程可以视为一些基本的关键名词，讲解协议的时候会使用这些基本的关键名词。（可以视为函数）</p><h3 class="relative group">3.1 基本数据块大小<div id=31-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%9D%97%E5%A4%A7%E5%B0%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%9D%97%E5%A4%A7%E5%B0%8F aria-label=锚点>#</a></span></h3><p>所有数据项的表示形式都是明确指定的。基本的数据块大小为一个字节（即8位）。多字节数据项是从左到右、从上到下的字节串联。从字节流中，多字节项（以下示例中的数字）通过以下方式形成（使用C语言表示法）：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c data-lang=c><span class=line><span class=cl><span class=n>value</span> <span class=o>=</span> <span class=p>(</span><span class=n>byte</span><span class=p>[</span><span class=mi>0</span><span class=p>]</span> <span class=o>&lt;&lt;</span> <span class=mi>8</span><span class=o>*</span><span class=p>(</span><span class=n>n</span><span class=o>-</span><span class=mi>1</span><span class=p>))</span> <span class=o>|</span> <span class=p>(</span><span class=n>byte</span><span class=p>[</span><span class=mi>1</span><span class=p>]</span> <span class=o>&lt;&lt;</span> <span class=mi>8</span><span class=o>*</span><span class=p>(</span><span class=n>n</span><span class=o>-</span><span class=mi>2</span><span class=p>))</span> <span class=o>|</span> <span class=p>...</span> <span class=o>|</span> <span class=n>byte</span><span class=p>[</span><span class=n>n</span><span class=o>-</span><span class=mi>1</span><span class=p>];</span>
-</span></span></code></pre></div><p>这种多字节值的字节顺序是通常的网络字节顺序或大端序列。</p><h3 class="relative group">3.2 杂项<div id=32-%E6%9D%82%E9%A1%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#32-%E6%9D%82%E9%A1%B9 aria-label=锚点>#</a></span></h3><p>这里给出一些相关的解释，</p><ul><li>注释以“/*”开始并以“*/”结束，这个和C语言是一样的。</li><li>可选组件用“[[ ]]”（双括号）括起来表示。</li><li>单字节实体的类型为opaque。</li></ul><h3 class="relative group">3.3. 数字<div id=33-%E6%95%B0%E5%AD%97 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#33-%E6%95%B0%E5%AD%97 aria-label=锚点>#</a></span></h3><p>最基本的数字数据类型是无符号字节（uint8）。</p><p>所有更大的数字数据类型都是无符号类型，且都由uint8拼接构成的，如3.1节所述。预定义以下数字类型：</p><pre tabindex=0><code>  uint8 uint16[2];
+</code></pre><p>重要提示：0-RTT数据的安全属性比其他类型的TLS数据要弱。 具体来说，0-RTT数据的安全属性要弱于其他类型的TLS数据：</p>
+<ul>
+<li>这些数据不提供前向安全的保障，因为它只使用所提供的PSK衍生的秘钥进行加密。</li>
+<li>0-RTT并不抗虫方。对于普通的TLS 1.3 1-RTT数据的重放保护是通过服务器发送的Random值提供的，但是0-RTT数据不依赖于ServerHello，因此无法抗重放。如果数据是和TLS客户端认证或在应用协议内部认证相关，这一点就变得至关重要。 同样的警告适用于任何使用early_exporter_master_secret的情况。</li>
+</ul>
+<p>0-RTT数据不能在一个连接内重放（即服务器不会对同一个连接处理两次相同的数据），攻击者也无法使0-RTT数据看起来是1-RTT数据（因为它受到不同密钥的保护）。 附录E.5包含了对潜在攻击的描述，第8节描述了服务器可以用来限制重放影响的机制。</p>
+
+
+<h2 class="relative group">3 
+    <div id="3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这部分我推荐不要看了，我没好好翻译，随便找了一个工具机器翻译的，没做校对，我把第四章翻译完了再回来改</p>
+<p>该部分重点介绍如何组织（格式化）数据，组织数据的过程可以视为一些基本的关键名词，讲解协议的时候会使用这些基本的关键名词。（可以视为函数）</p>
+
+
+<h3 class="relative group">3.1 基本数据块大小 
+    <div id="31-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%9D%97%E5%A4%A7%E5%B0%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E5%9D%97%E5%A4%A7%E5%B0%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>所有数据项的表示形式都是明确指定的。基本的数据块大小为一个字节（即8位）。多字节数据项是从左到右、从上到下的字节串联。从字节流中，多字节项（以下示例中的数字）通过以下方式形成（使用C语言表示法）：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">byte</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">|</span> <span class="p">(</span><span class="n">byte</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;&lt;</span> <span class="mi">8</span><span class="o">*</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">))</span> <span class="o">|</span> <span class="p">...</span> <span class="o">|</span> <span class="n">byte</span><span class="p">[</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+</span></span></code></pre></div><p>这种多字节值的字节顺序是通常的网络字节顺序或大端序列。</p>
+
+
+<h3 class="relative group">3.2 杂项 
+    <div id="32-%E6%9D%82%E9%A1%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#32-%E6%9D%82%E9%A1%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>这里给出一些相关的解释，</p>
+<ul>
+<li>注释以“/*”开始并以“*/”结束，这个和C语言是一样的。</li>
+<li>可选组件用“[[ ]]”（双括号）括起来表示。</li>
+<li>单字节实体的类型为opaque。</li>
+</ul>
+
+
+<h3 class="relative group">3.3. 数字 
+    <div id="33-%E6%95%B0%E5%AD%97" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#33-%E6%95%B0%E5%AD%97" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>最基本的数字数据类型是无符号字节（uint8）。</p>
+<p>所有更大的数字数据类型都是无符号类型，且都由uint8拼接构成的，如3.1节所述。预定义以下数字类型：</p>
+<pre tabindex="0"><code>  uint8 uint16[2];
   uint8 uint24[3];
   uint8 uint32[4];
   uint8 uint64[8];
-</code></pre><p>RFC里面所有的数字都以网络字节（大端）顺序传输；例如由十六进制字节01 02 03 04表示的uint32等于十进制值16909060。</p><h3 class="relative group">3.4. 向量<div id=34-%E5%90%91%E9%87%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#34-%E5%90%91%E9%87%8F aria-label=锚点>#</a></span></h3><p>向量（或者说单维数组）是一串同类数据元素。向量的大小可以在文档编写时指定，或在运行时才确定。请注意，无论哪种情况，生命的长度都是向量的长度，而不是向量里面存储的元素数。指定一个新的类型T&rsquo;作为固定长度的类型T的向量的语法是：</p><pre tabindex=0><code>  T T&#39;[n];
-</code></pre><p>这里，T&rsquo;在数据流中占用n个字节，其中n是T的大小的倍数。向量的长度不包括在编码流中。</p><p>在以下示例中，Datum被定义为协议不解释的三个连续字节，而Data是三个连续的Datum，总共消耗九个字节。</p><pre tabindex=0><code>  opaque Datum[3];      /* 三个未解释的字节 */
+</code></pre><p>RFC里面所有的数字都以网络字节（大端）顺序传输；例如由十六进制字节01 02 03 04表示的uint32等于十进制值16909060。</p>
+
+
+<h3 class="relative group">3.4. 向量 
+    <div id="34-%E5%90%91%E9%87%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#34-%E5%90%91%E9%87%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>向量（或者说单维数组）是一串同类数据元素。向量的大小可以在文档编写时指定，或在运行时才确定。请注意，无论哪种情况，生命的长度都是向量的长度，而不是向量里面存储的元素数。指定一个新的类型T&rsquo;作为固定长度的类型T的向量的语法是：</p>
+<pre tabindex="0"><code>  T T&#39;[n];
+</code></pre><p>这里，T&rsquo;在数据流中占用n个字节，其中n是T的大小的倍数。向量的长度不包括在编码流中。</p>
+<p>在以下示例中，Datum被定义为协议不解释的三个连续字节，而Data是三个连续的Datum，总共消耗九个字节。</p>
+<pre tabindex="0"><code>  opaque Datum[3];      /* 三个未解释的字节 */
   Datum Data[9];        /* 三个连续的3字节向量 */
-</code></pre><p>变长向量通过指定一个合法长度的子范围（包括两端），使用&lt;floor..ceiling>符号来定义。在编码时，实际长度位于向量内容之前。长度将采用一个数字形式，消耗所需的字节数，以容纳向量的指定最大（上限）长度。实际长度字段为零的变长向量称为空向量。</p><pre tabindex=0><code>  T T&#39;&lt;floor..ceiling&gt;;
-</code></pre><p>在以下示例中，“mandatory”是一个必须包含300到400字节的类型为opaque的向量。它永远不能为空。实际长度字段占用两个字节，即uint16，这足以表示400值（见3.3节）。同样，“longer”最多可以表示800字节的数据，或400个uint16元素，它可以为空。其编码将包括一个前置于向量的两个字节实际长度字段。编码的向量长度必须是单个元素长度的整数倍（例如，17字节的uint16向量是非法的）。</p><pre tabindex=0><code>  opaque mandatory&lt;300..400&gt;;
+</code></pre><p>变长向量通过指定一个合法长度的子范围（包括两端），使用&lt;floor..ceiling&gt;符号来定义。在编码时，实际长度位于向量内容之前。长度将采用一个数字形式，消耗所需的字节数，以容纳向量的指定最大（上限）长度。实际长度字段为零的变长向量称为空向量。</p>
+<pre tabindex="0"><code>  T T&#39;&lt;floor..ceiling&gt;;
+</code></pre><p>在以下示例中，“mandatory”是一个必须包含300到400字节的类型为opaque的向量。它永远不能为空。实际长度字段占用两个字节，即uint16，这足以表示400值（见3.3节）。同样，“longer”最多可以表示800字节的数据，或400个uint16元素，它可以为空。其编码将包括一个前置于向量的两个字节实际长度字段。编码的向量长度必须是单个元素长度的整数倍（例如，17字节的uint16向量是非法的）。</p>
+<pre tabindex="0"><code>  opaque mandatory&lt;300..400&gt;;
         /* 长度字段是两个字节，不能为空 */
   uint16 longer&lt;0..800&gt;;
         /* 零到400个16位无符号整数 */
-</code></pre><p>3.5. 枚举</p><p>一种额外的稀疏数据类型称为“枚举”或“enumerated”。每个定义都是一个不同的类型。只有相同类型的枚举才能分配或比较。枚举的每个元素必须赋予一个值，如以下示例所示。由于枚举的元素没有顺序，可以按任何顺序分配任何唯一值。</p><pre tabindex=0><code>  enum { e1(v1), e2(v2), ... , en(vn) [[, (n)]] } Te;
-</code></pre><p>协议的未来扩展或补充可以定义新的值。实现需要能够解析和忽略未知的值，除非字段的定义另有说明。</p><p>一个枚举在字节流中占据的空间与其最大定义的序数值相同。以下定义将导致使用一个字节来承载类型Color的字段。</p><pre tabindex=0><code>  enum { red(3), blue(5), white(7) } Color;
-</code></pre><p>可以选择指定一个没有关联标签的值，以在不定义多余元素的情况下强制宽度定义。</p><p>在以下示例中，Taste将在数据流中占用两个字节，但在当前版本的协议中只能取值1、2或4。</p><pre tabindex=0><code>  enum { sweet(1), sour(2), bitter(4), (32000) } Taste;
-</code></pre><p>枚举元素的名称在定义的类型内限定。在第一个示例中，对枚举第二个元素的完全限定引用将是Color.blue。如果赋值目标明确，则不需要这种限定。</p><pre tabindex=0><code>  Color color = Color.blue;     /* 过度指定，合法 */
+</code></pre><p>3.5. 枚举</p>
+<p>一种额外的稀疏数据类型称为“枚举”或“enumerated”。每个定义都是一个不同的类型。只有相同类型的枚举才能分配或比较。枚举的每个元素必须赋予一个值，如以下示例所示。由于枚举的元素没有顺序，可以按任何顺序分配任何唯一值。</p>
+<pre tabindex="0"><code>  enum { e1(v1), e2(v2), ... , en(vn) [[, (n)]] } Te;
+</code></pre><p>协议的未来扩展或补充可以定义新的值。实现需要能够解析和忽略未知的值，除非字段的定义另有说明。</p>
+<p>一个枚举在字节流中占据的空间与其最大定义的序数值相同。以下定义将导致使用一个字节来承载类型Color的字段。</p>
+<pre tabindex="0"><code>  enum { red(3), blue(5), white(7) } Color;
+</code></pre><p>可以选择指定一个没有关联标签的值，以在不定义多余元素的情况下强制宽度定义。</p>
+<p>在以下示例中，Taste将在数据流中占用两个字节，但在当前版本的协议中只能取值1、2或4。</p>
+<pre tabindex="0"><code>  enum { sweet(1), sour(2), bitter(4), (32000) } Taste;
+</code></pre><p>枚举元素的名称在定义的类型内限定。在第一个示例中，对枚举第二个元素的完全限定引用将是Color.blue。如果赋值目标明确，则不需要这种限定。</p>
+<pre tabindex="0"><code>  Color color = Color.blue;     /* 过度指定，合法 */
   Color color = blue;           /* 正确，类型隐式 */
-</code></pre><p>分配给枚举的名称不需要是唯一的。数值可以描述同一名称适用的范围。值包括该范围的最小和最大包含值，由两个句点字符分隔。这主要用于保留空间区域。</p><pre tabindex=0><code>  enum { sad(0), meh(1..254), happy(255) } Mood;
-</code></pre><p>3.6. 结构类型</p><p>结构类型可以从基本类型构造，以方便使用。每个规范声明一种新的、唯一的类型。定义所用的语法类似于C语言。</p><pre tabindex=0><code>  struct {
+</code></pre><p>分配给枚举的名称不需要是唯一的。数值可以描述同一名称适用的范围。值包括该范围的最小和最大包含值，由两个句点字符分隔。这主要用于保留空间区域。</p>
+<pre tabindex="0"><code>  enum { sad(0), meh(1..254), happy(255) } Mood;
+</code></pre><p>3.6. 结构类型</p>
+<p>结构类型可以从基本类型构造，以方便使用。每个规范声明一种新的、唯一的类型。定义所用的语法类似于C语言。</p>
+<pre tabindex="0"><code>  struct {
       T1 f1;
       T2 f2;
       ...
       Tn fn;
   } T;
-</code></pre><p>使用标准向量语法允许固定和变长向量字段。变体示例中（3.8节）的结构V1和V2示范了这一点。</p><p>结构中的字段可以使用类型名称限定，其语法类似于枚举。例如，T.f2指的是前述声明中的第二个字段。</p><p>3.7. 常量</p><p>字段和变量可以用“=”分配一个固定值，如：</p><pre tabindex=0><code>  struct {
+</code></pre><p>使用标准向量语法允许固定和变长向量字段。变体示例中（3.8节）的结构V1和V2示范了这一点。</p>
+<p>结构中的字段可以使用类型名称限定，其语法类似于枚举。例如，T.f2指的是前述声明中的第二个字段。</p>
+<p>3.7. 常量</p>
+<p>字段和变量可以用“=”分配一个固定值，如：</p>
+<pre tabindex="0"><code>  struct {
       T1 f1 = 8;  /* T.f1必须始终为8 */
       T2 f2;
   } T;
-</code></pre><p>3.8. 变体</p><p>定义的结构可以基于环境中可用的某些知识具有变体。选择器必须是一个枚举类型，定义结构所定义的可能变体。选择的每个分支（如下）指定该变体字段的类型和一个可选的字段标签。变体在运行时的选择机制不由表示语言规定。</p><pre tabindex=0><code>  struct {
+</code></pre><p>3.8. 变体</p>
+<p>定义的结构可以基于环境中可用的某些知识具有变体。选择器必须是一个枚举类型，定义结构所定义的可能变体。选择的每个分支（如下）指定该变体字段的类型和一个可选的字段标签。变体在运行时的选择机制不由表示语言规定。</p>
+<pre tabindex="0"><code>  struct {
       T1 f1;
       T2 f2;
       ....
@@ -168,7 +1254,8 @@ Auth | {CertificateVerify*}
           case en: Ten [[fen]];
       };
   } Tv;
-</code></pre><p>例如：</p><pre tabindex=0><code>  enum { apple(0), orange(1) } VariantTag;
+</code></pre><p>例如：</p>
+<pre tabindex="0"><code>  enum { apple(0), orange(1) } VariantTag;
 
   struct {
       uint16 number;
@@ -187,7 +1274,20 @@ Auth | {CertificateVerify*}
           case orange: V2;
       };
   } VariantRecord;
-</code></pre><h2 class="relative group">4 握手协议<div id=4-%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE aria-label=锚点>#</a></span></h2><p>握手协议用于协商连接的安全参数。握手消息基于TLS Recordlayer，Record Layer将握手协议封装为一个或多个TLS明文或TLS秘文报文（结构）。这些报文（结构）如何处理，传输需要根据当前握手协议的状态确定</p><pre tabindex=0><code> enum {
+</code></pre>
+
+<h2 class="relative group">4 握手协议 
+    <div id="4-%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4-%E6%8F%A1%E6%89%8B%E5%8D%8F%E8%AE%AE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>握手协议用于协商连接的安全参数。握手消息基于TLS Recordlayer，Record Layer将握手协议封装为一个或多个TLS明文或TLS秘文报文（结构）。这些报文（结构）如何处理，传输需要根据当前握手协议的状态确定</p>
+<pre tabindex="0"><code> enum {
           client_hello(1),
           server_hello(2),
           new_session_ticket(4),
@@ -218,7 +1318,74 @@ Auth | {CertificateVerify*}
               case key_update:            KeyUpdate;
           };
       } Handshake;
-</code></pre><p>协议消息必须按照特定顺序发送，可参考4.4.1节中定义的顺序发送或参考第2节中的图所示。如果接受到不符合顺序的握手消息，对端需要发送“unexpected_message”警报中止握手。</p><p>新的握手消息类型由IANA根据第11节中描述的分配。</p><h3 class="relative group">4.1 密钥交换消息<div id=41-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%B6%88%E6%81%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#41-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%B6%88%E6%81%AF aria-label=锚点>#</a></span></h3><p>密钥交换消息用于确定客户端和服务端的安全能力，从而建立共享的密钥信息，这里包括用于保护握手过程和数据通信的通信密钥。（除了这个密钥还有复用密钥啥的）</p><h4 class="relative group">4.1.1. 密码协商<div id=411-%E5%AF%86%E7%A0%81%E5%8D%8F%E5%95%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#411-%E5%AF%86%E7%A0%81%E5%8D%8F%E5%95%86 aria-label=锚点>#</a></span></h4><p>在TLS中，密码协商的过程需要客户端在其ClientHello消息中提供以下四组信息（选项）：</p><ul><li>一系列密码套件组成的列表，指示客户端支持的AEAD算法/HKDF密钥延生算法。</li><li>一个“supported_groups”（第4.2.7节）扩展，指示客户端支持的（EC）DHE组，以及一个“key_share”（第4.2.8节）扩展，包含这些组中一些或全部的计算得出的（EC）DHE共享密钥信息（对ECDHE可以理解为公钥乘以极点，就是大质数乘以基点）。</li><li>一个“signature_algorithms”（第4.2.3节）扩展，指示客户端可以接受的签名算法（用于certificate verify消息）。还可以添加一个“signature_algorithms_cert”扩展（第4.2.3节），指示特定支持的证书的签名算法。</li><li>一个“pre_shared_key”（第4.2.11节）扩展，包含客户端已知的对称密钥标识列表，以及一个“psk_key_exchange_modes”（第4.2.9节）扩展，指示可与PSK一起使用的密钥交换模式。</li></ul><p>如果服务器不选择PSK，那么这前三个选项是完全独立的：服务器独立地选择一个密码套件、一个（EC）DHE组和用于密钥协商的共享密钥（key share），以及一个签名算法/证书对用于向客户端验证其身份。如果接收到的“supported_groups”和服务器支持的组之间没有重叠，服务器必须用“handshake_failure”或“insufficient_security”警报中止握手。</p><p>如果服务器选择了PSK，则它还必须从客户端的“psk_key_exchange_modes”扩展中指示的集合中选择一个密钥建立模式（目前仅支持只使用PSK或将PSK与（EC）DHE一起使用）。请注意，如果PSK可以在没有（EC）DHE的情况下使用，那么服务端“supported_groups”参数中和客户端不重叠并不致命，这与前一段讨论的非PSK情况即（EC）DHE握手的情况不同。</p><p>如果服务器选择了一个（EC）DHE组，而客户端在初始的ClientHello中没有提供兼容的“key_share”扩展，服务器必须响应一个HelloRetryRequest（第4.1.4节）消息。如果服务器成功选择参数并且不需要HelloRetryRequest，它将在ServerHello中指示所选参数如下：</p><ul><li>如果使用了PSK，服务器将发送一个“pre_shared_key”扩展，指示所选的密钥。</li><li>当使用（EC）DHE时，服务器还将提供一个“key_share”扩展。如果未使用PSK，则（EC）DHE和基于证书的身份验证就会被采用。</li><li>在通过证书进行身份验证时，服务器将发送Certificate（第4.4.2节）和CertificateVerify（第4.4.3节）消息。在本文档定义的TLS 1.3中，要么使用PSK或证书来进行认证，但两者不同时使用。将来的文档可能会定义如何同时使用它们。</li></ul><p>如果服务器无法协商一组支持的参数（比方说，客户端和服务器参数之间没有重叠），它必须用“handshake_failure”或“insufficient_security”的致命警报中止握手（见第6节）。</p><h4 class="relative group">4.1.2 Client Hello<div id=412-client-hello class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#412-client-hello aria-label=锚点>#</a></span></h4><p>当客户端首次连接到服务器时，必须将 ClientHello 作为其第一条 TLS 消息发送。当服务器对其 ClientHello 响应为 HelloRetryRequest 时，客户端也会发送 ClientHello。在这种情况下，客户端必须发送相同的未修改的 ClientHello，除非出现如下情况：</p><ul><li>如果在 HelloRetryRequest 中提供了“key_share”扩展，则应使用指定组的单个 KeyShareEntry 来替换原本的共享列表。</li><li>如果存在“early_data”扩展（第 4.2.10 节），则将其删除。在收到HelloRetryRequest 之后不允许发送early data。</li><li>倘若HelloRetryRequest里存在cookie拓展</li><li>如果存在“pre_shared_key”扩展，则需要重新计算“obfuscated_ticket_age”和binder的值来更新它，并（可选）删除与服务器指示的密码套件不兼容的任何 PSK。</li><li>（可选）添加、删除或更改“padding”扩展的长度[<a href=https://www.rfc-editor.org/rfc/rfc7685 target=_blank>RFC7685</a>]。</li><li>在 HelloRetryRequest 中定义且存在的扩展可能允许的其他修改。</li></ul><p>因为 TLS 1.3 禁止重新协商，如果服务器已协商 TLS 1.3 并在任何其他时间收到 ClientHello，必须使用“意外消息”警报终止连接。</p><p>如果服务器使用之前版本的 TLS 建立了 TLS 连接，并在重新协商中收到 TLS 1.3 的 ClientHello，它必须保留之前的协议版本。千万，不能协商 TLS 1.3</p><p>该消息的结构如下：</p><pre tabindex=0><code>			uint16 ProtocolVersion;
+</code></pre><p>协议消息必须按照特定顺序发送，可参考4.4.1节中定义的顺序发送或参考第2节中的图所示。如果接受到不符合顺序的握手消息，对端需要发送“unexpected_message”警报中止握手。</p>
+<p>新的握手消息类型由IANA根据第11节中描述的分配。</p>
+
+
+<h3 class="relative group">4.1 密钥交换消息 
+    <div id="41-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%B6%88%E6%81%AF" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#41-%E5%AF%86%E9%92%A5%E4%BA%A4%E6%8D%A2%E6%B6%88%E6%81%AF" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>密钥交换消息用于确定客户端和服务端的安全能力，从而建立共享的密钥信息，这里包括用于保护握手过程和数据通信的通信密钥。（除了这个密钥还有复用密钥啥的）</p>
+
+
+<h4 class="relative group">4.1.1. 密码协商 
+    <div id="411-%E5%AF%86%E7%A0%81%E5%8D%8F%E5%95%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#411-%E5%AF%86%E7%A0%81%E5%8D%8F%E5%95%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>在TLS中，密码协商的过程需要客户端在其ClientHello消息中提供以下四组信息（选项）：</p>
+<ul>
+<li>一系列密码套件组成的列表，指示客户端支持的AEAD算法/HKDF密钥延生算法。</li>
+<li>一个“supported_groups”（第4.2.7节）扩展，指示客户端支持的（EC）DHE组，以及一个“key_share”（第4.2.8节）扩展，包含这些组中一些或全部的计算得出的（EC）DHE共享密钥信息（对ECDHE可以理解为公钥乘以极点，就是大质数乘以基点）。</li>
+<li>一个“signature_algorithms”（第4.2.3节）扩展，指示客户端可以接受的签名算法（用于certificate verify消息）。还可以添加一个“signature_algorithms_cert”扩展（第4.2.3节），指示特定支持的证书的签名算法。</li>
+<li>一个“pre_shared_key”（第4.2.11节）扩展，包含客户端已知的对称密钥标识列表，以及一个“psk_key_exchange_modes”（第4.2.9节）扩展，指示可与PSK一起使用的密钥交换模式。</li>
+</ul>
+<p>如果服务器不选择PSK，那么这前三个选项是完全独立的：服务器独立地选择一个密码套件、一个（EC）DHE组和用于密钥协商的共享密钥（key share），以及一个签名算法/证书对用于向客户端验证其身份。如果接收到的“supported_groups”和服务器支持的组之间没有重叠，服务器必须用“handshake_failure”或“insufficient_security”警报中止握手。</p>
+<p>如果服务器选择了PSK，则它还必须从客户端的“psk_key_exchange_modes”扩展中指示的集合中选择一个密钥建立模式（目前仅支持只使用PSK或将PSK与（EC）DHE一起使用）。请注意，如果PSK可以在没有（EC）DHE的情况下使用，那么服务端“supported_groups”参数中和客户端不重叠并不致命，这与前一段讨论的非PSK情况即（EC）DHE握手的情况不同。</p>
+<p>如果服务器选择了一个（EC）DHE组，而客户端在初始的ClientHello中没有提供兼容的“key_share”扩展，服务器必须响应一个HelloRetryRequest（第4.1.4节）消息。如果服务器成功选择参数并且不需要HelloRetryRequest，它将在ServerHello中指示所选参数如下：</p>
+<ul>
+<li>如果使用了PSK，服务器将发送一个“pre_shared_key”扩展，指示所选的密钥。</li>
+<li>当使用（EC）DHE时，服务器还将提供一个“key_share”扩展。如果未使用PSK，则（EC）DHE和基于证书的身份验证就会被采用。</li>
+<li>在通过证书进行身份验证时，服务器将发送Certificate（第4.4.2节）和CertificateVerify（第4.4.3节）消息。在本文档定义的TLS 1.3中，要么使用PSK或证书来进行认证，但两者不同时使用。将来的文档可能会定义如何同时使用它们。</li>
+</ul>
+<p>如果服务器无法协商一组支持的参数（比方说，客户端和服务器参数之间没有重叠），它必须用“handshake_failure”或“insufficient_security”的致命警报中止握手（见第6节）。</p>
+
+
+<h4 class="relative group">4.1.2 Client Hello 
+    <div id="412-client-hello" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#412-client-hello" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>当客户端首次连接到服务器时，必须将 ClientHello 作为其第一条 TLS 消息发送。当服务器对其 ClientHello 响应为 HelloRetryRequest 时，客户端也会发送 ClientHello。在这种情况下，客户端必须发送相同的未修改的 ClientHello，除非出现如下情况：</p>
+<ul>
+<li>如果在 HelloRetryRequest 中提供了“key_share”扩展，则应使用指定组的单个 KeyShareEntry 来替换原本的共享列表。</li>
+<li>如果存在“early_data”扩展（第 4.2.10 节），则将其删除。在收到HelloRetryRequest 之后不允许发送early data。</li>
+<li>倘若HelloRetryRequest里存在cookie拓展</li>
+<li>如果存在“pre_shared_key”扩展，则需要重新计算“obfuscated_ticket_age”和binder的值来更新它，并（可选）删除与服务器指示的密码套件不兼容的任何 PSK。</li>
+<li>（可选）添加、删除或更改“padding”扩展的长度[<a href="https://www.rfc-editor.org/rfc/rfc7685" target="_blank">RFC7685</a>]。</li>
+<li>在 HelloRetryRequest 中定义且存在的扩展可能允许的其他修改。</li>
+</ul>
+<p>因为 TLS 1.3 禁止重新协商，如果服务器已协商 TLS 1.3 并在任何其他时间收到 ClientHello，必须使用“意外消息”警报终止连接。</p>
+<p>如果服务器使用之前版本的 TLS 建立了 TLS 连接，并在重新协商中收到 TLS 1.3 的 ClientHello，它必须保留之前的协议版本。千万，不能协商 TLS 1.3</p>
+<p>该消息的结构如下：</p>
+<pre tabindex="0"><code>			uint16 ProtocolVersion;
       opaque Random[32];
 
       uint8 CipherSuite[2];    /* Cryptographic suite selector */
@@ -231,8 +1398,30 @@ Auth | {CertificateVerify*}
           opaque legacy_compression_methods&lt;1..2^8-1&gt;;
           Extension extensions&lt;8..2^16-1&gt;;
       } ClientHello;
-</code></pre><p>字段的含义：</p><p>遗留版本（legacy_version）：在之前的 TLS 版本中，此字段用于版本协商，并表示客户端支持的最高版本号。经验表明，许多服务器并不能正确实现版本协商，导致“版本零容忍”BUG，即服务器拒绝版本号比它高的 ClientHello。在 TLS 1.3 中，客户端在“supported_versions”扩展（第 4.2.1 节）中表明其版本偏好，并且遗留版本字段必须设置为 0x0303，这是 TLS 1.2 的版本号。TLS 1.3 的 ClientHellos 必须具有 0x0303 的遗留版本字段，且携带 supported_versions 扩展，拓展里指示的最高版本为 0x0304。（有关向后兼容性的详细信息，请参阅附录 D）</p><p>随机数：由安全随机数生成器生成的 32 字节。 有关其他信息，请参阅<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-C target=_blank>附录 C</a>。</p><p>遗留会话 ID：TLS 1.3 之前的版本支持“会话恢复”功能，此功能在该版本中已与预共享密钥机制（PSK）合并（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-2.2 target=_blank>第 2.2 节</a>）。由 TLS 1.3 之前的服务器设置了缓存会话 ID 的客户端应将此字段设置为该值。在兼容模式下（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D.4 target=_blank>附录 D.4</a>），此字段不能为空，因此不提供 TLS 1.3 之前会话的客户端必须生成一个新的 32 字节值。此值不必是随机的，但应是不可预测的，以避免实现固定在特定值上（也称为僵化）。否则，它必须设置为零长度向量（即，零值的单字节长度字段）。
-密码套件：客户端支持的对称密码选项列表，特别是record layer保护算法（包括密钥长度）和用于 HKDF 的哈希算法，按照客户端偏好降序排列。值在附录 B.4 中定义。如果列表包含服务器不识别、不支持或不想使用的密码套件，服务器必须忽略这些密码套件，并像往常一样处理其余的套件。如果客户端正在尝试 PSK 密钥建立，它应至少提供一个包含可以与 PSK 可以关联使用哈希算法的密码套件。</p><p>遗留压缩方法：TLS 1.3 之前的版本支持压缩，支持的压缩方法列表在此字段中发送。对于每个 TLS 1.3 的 ClientHello，此向量必须恰好包含一个设置为零的字节，对应于之前版本 TLS 中的“空”压缩方法，或者说不压缩。如果收到的 TLS 1.3 的 ClientHello 在此字段中有任何其他值，服务器必须使用“非法参数”警报中止握手。请注意，TLS 1.3 服务器可能会收到包含其他压缩方法的 TLS 1.2 或之前的 ClientHellos，并且（如果协商这样的先前版本）必须遵循相应的先前版本 TLS 的程序。</p><p>扩展：客户端通过在扩展字段中发送数据向服务器请求扩展功能。实际的“扩展”格式在第 4.2 节中定义。在 TLS 1.3 中，某些扩展的使用是强制性的，一些功能通过移至扩展来使得ClientHello可以与历史版本 TLS 兼容性（从而老版本的TLS服务器也可以正确协商出老版本TLS）。服务器必须忽略无法识别的扩展。</p><p>TLS 的所有版本都允许扩展字段可选地跟随压缩方法字段。TLS 1.3 的 ClientHello 消息始终包含扩展（起码包括“支持的版本supported_versions”，否则，它们将被解释为 TLS 1.2 的 ClientHello 消息）。然而，TLS 1.3 服务器可能会收到来自之前版本 TLS 的没有扩展字段的 ClientHello 消息。扩展的存在可以通过确定在 ClientHello 末尾的压缩方法字段之后检查是否还有字节来检测。请注意，这种检测可选数据的方法不同于具有可变长度字段的正常 TLS 方法，但它用于在定义扩展之前与 TLS 兼容。TLS 1.3 服务器首先需要执行此检查，并且只有在“supported_versions”扩展存在时才尝试协商 TLS 1.3。如果协商的是 TLS 1.3 之前的版本，服务器必须检查消息在legacy_compression_methods字段之后要么不包含数据，要么只包含一个有效的扩展块且之后没有数据。如果不是，则必须使用“解码错误”警报中止握手。</p><p>如果客户端使用扩展请求额外的功能，而服务器未提供此功能，客户端可以中止握手。</p><p>发送 ClientHello 消息后，客户端等待 ServerHello 或 HelloRetryRequest 消息。如果客户端选用early data功能，客户端在等待下一个握手消息时可以传输early data（第 2.3 节）。</p><h4 class="relative group">4.1.3 Server Hello<div id=413-server-hello class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#413-server-hello aria-label=锚点>#</a></span></h4><p>如果可以和客户端的ClientHello协商出一组可接受的握手参数，服务器将发送ServerHello消息以响应ClientHello，继续进行握手。该消息的结构如下</p><pre tabindex=0><code> struct {
+</code></pre><p>字段的含义：</p>
+<p>遗留版本（legacy_version）：在之前的 TLS 版本中，此字段用于版本协商，并表示客户端支持的最高版本号。经验表明，许多服务器并不能正确实现版本协商，导致“版本零容忍”BUG，即服务器拒绝版本号比它高的 ClientHello。在 TLS 1.3 中，客户端在“supported_versions”扩展（第 4.2.1 节）中表明其版本偏好，并且遗留版本字段必须设置为 0x0303，这是 TLS 1.2 的版本号。TLS 1.3 的 ClientHellos 必须具有 0x0303 的遗留版本字段，且携带 supported_versions 扩展，拓展里指示的最高版本为 0x0304。（有关向后兼容性的详细信息，请参阅附录 D）</p>
+<p>随机数：由安全随机数生成器生成的 32 字节。 有关其他信息，请参阅<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-C" target="_blank">附录 C</a>。</p>
+<p>遗留会话 ID：TLS 1.3 之前的版本支持“会话恢复”功能，此功能在该版本中已与预共享密钥机制（PSK）合并（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-2.2" target="_blank">第 2.2 节</a>）。由 TLS 1.3 之前的服务器设置了缓存会话 ID 的客户端应将此字段设置为该值。在兼容模式下（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D.4" target="_blank">附录 D.4</a>），此字段不能为空，因此不提供 TLS 1.3 之前会话的客户端必须生成一个新的 32 字节值。此值不必是随机的，但应是不可预测的，以避免实现固定在特定值上（也称为僵化）。否则，它必须设置为零长度向量（即，零值的单字节长度字段）。
+密码套件：客户端支持的对称密码选项列表，特别是record layer保护算法（包括密钥长度）和用于 HKDF 的哈希算法，按照客户端偏好降序排列。值在附录 B.4 中定义。如果列表包含服务器不识别、不支持或不想使用的密码套件，服务器必须忽略这些密码套件，并像往常一样处理其余的套件。如果客户端正在尝试 PSK 密钥建立，它应至少提供一个包含可以与 PSK 可以关联使用哈希算法的密码套件。</p>
+<p>遗留压缩方法：TLS 1.3 之前的版本支持压缩，支持的压缩方法列表在此字段中发送。对于每个 TLS 1.3 的 ClientHello，此向量必须恰好包含一个设置为零的字节，对应于之前版本 TLS 中的“空”压缩方法，或者说不压缩。如果收到的 TLS 1.3 的 ClientHello 在此字段中有任何其他值，服务器必须使用“非法参数”警报中止握手。请注意，TLS 1.3 服务器可能会收到包含其他压缩方法的 TLS 1.2 或之前的 ClientHellos，并且（如果协商这样的先前版本）必须遵循相应的先前版本 TLS 的程序。</p>
+<p>扩展：客户端通过在扩展字段中发送数据向服务器请求扩展功能。实际的“扩展”格式在第 4.2 节中定义。在 TLS 1.3 中，某些扩展的使用是强制性的，一些功能通过移至扩展来使得ClientHello可以与历史版本 TLS 兼容性（从而老版本的TLS服务器也可以正确协商出老版本TLS）。服务器必须忽略无法识别的扩展。</p>
+<p>TLS 的所有版本都允许扩展字段可选地跟随压缩方法字段。TLS 1.3 的 ClientHello 消息始终包含扩展（起码包括“支持的版本supported_versions”，否则，它们将被解释为 TLS 1.2 的 ClientHello 消息）。然而，TLS 1.3 服务器可能会收到来自之前版本 TLS 的没有扩展字段的 ClientHello 消息。扩展的存在可以通过确定在 ClientHello 末尾的压缩方法字段之后检查是否还有字节来检测。请注意，这种检测可选数据的方法不同于具有可变长度字段的正常 TLS 方法，但它用于在定义扩展之前与 TLS 兼容。TLS 1.3 服务器首先需要执行此检查，并且只有在“supported_versions”扩展存在时才尝试协商 TLS 1.3。如果协商的是 TLS 1.3 之前的版本，服务器必须检查消息在legacy_compression_methods字段之后要么不包含数据，要么只包含一个有效的扩展块且之后没有数据。如果不是，则必须使用“解码错误”警报中止握手。</p>
+<p>如果客户端使用扩展请求额外的功能，而服务器未提供此功能，客户端可以中止握手。</p>
+<p>发送 ClientHello 消息后，客户端等待 ServerHello 或 HelloRetryRequest 消息。如果客户端选用early data功能，客户端在等待下一个握手消息时可以传输early data（第 2.3 节）。</p>
+
+
+<h4 class="relative group">4.1.3 Server Hello 
+    <div id="413-server-hello" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#413-server-hello" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>如果可以和客户端的ClientHello协商出一组可接受的握手参数，服务器将发送ServerHello消息以响应ClientHello，继续进行握手。该消息的结构如下</p>
+<pre tabindex="0"><code> struct {
           ProtocolVersion legacy_version = 0x0303;    /* TLS v1.2 */
           Random random;
           opaque legacy_session_id_echo&lt;0..32&gt;;
@@ -240,7 +1429,46 @@ Auth | {CertificateVerify*}
           uint8 legacy_compression_method = 0;
           Extension extensions&lt;6..2^16-1&gt;;
       } ServerHello;
-</code></pre><p>遗留版本字段：在早期的 TLS 版本中，此字段用于版本协商：表示服务端接受客户端ClientHello之后所选的版本号。不幸的是，在TLS1.3之后，某些网络中间设备（路由器啦，交换机啦）并不支持新的Value值。在 TLS 1.3 中，TLS 服务器使用“supported_versions”扩展（<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.1 target=_blank>第 4.2.1 节</a>）指示其版本，遗留版本字段不在真正生效，但是必须设置为 0x0303，这是 TLS 1.2 的版本号。（有关向后兼容性的详细信息，请参阅<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D target=_blank>附录 D</a>）</p><p>随机数字段：由安全随机数生成器生成的 32 字节随机数。 请参阅<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-C target=_blank>附录 C</a>获取更多信息。 如果协商 TLS 1.2 或 TLS 1.1，最后 8 字节必须按下面所述的内容进行覆盖，但其余字节必须是随机的。 这部分数据由服务器生成，并且必须独立于 ClientHello.random 生成。</p><p>遗留session_id回显字段：兼容性角度出发，用于兼容客户端遗留session_id 字段。请注意，即使服务器选择不恢复的 TLS 1.3 之前的会话，客户端的值也应该被回显。如果客户端收到与在 ClientHello 中发送的不匹配的session_id，客户端必须使用“非法参数”警报中止握手。</p><p>密码套件：服务器从 ClientHello.cipher_suites 列表中选择的单个密码套件。收到未提供的密码套件的客户端必须使用“非法参数”警报中止握手。</p><p>遗留压缩方法字段：单个字节，内容为0x00</p><p>扩展：扩展列表。ServerHello必须仅包含建立加密上下文和协商协议版本所需的扩展。所有 TLS 1.3 服务器问候消息必须包含“supported_versions”（支持的版本）扩展。当前ServerHello消息可以另外包含“pre_shared_key”（预共享密钥）扩展或“key_share”（密钥共享）扩展，或者两者都有（当使用带有 (EC)DHE 密钥建立的 PSK 时）。其他扩展（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2 target=_blank>第 4.2 节</a>）在EncryptedExtensions消息中单独发送。</p><p>出于与网络中间设备的后向兼容性原因（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D.4 target=_blank>附录 D.4</a>），HelloRetryRequest 的结构和 ServerHello 一致，唯一不同点是必须将 Random 设置为“HelloRetryRequest”的 SHA-256 哈希值，就是：</p><p>CF 21 AD 74 E5 9A 61 11 BE 1D 8C 02 1E 65 B8 91</p><p>C2 A2 11 16 7A BB 8C 5E 07 9E 09 E2 C8 A8 33 9C</p><p>客户端收到类型为 server_hello 的消息后，必须先检查 Random 值，如果它与此值匹配，则按照<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.1.4 target=_blank>第 4.1.4 节</a>中的描述进行处理。</p><p>TLS 1.3 在服务器的随机值中嵌入了降级保护机制。TLS1.3服务器，如果和客户端协商 TLS 1.2 或更低版本的 TLS 1.3 服务器必须在其 ServerHello 中特别设置其 Random 值的最后 8 个字节为特定的内容：</p><p>如果协商 TLS 1.2，TLS 1.3 服务器必须将其 Random 值的最后 8 个字节设置为：</p><p>44 4F 57 4E 47 52 44 01</p><p>如果协商 TLS 1.1 或更低版本，TLS 1.3 服务器必须将其 ServerHello.Random 值的最后 8 个字节设置为：</p><p>44 4F 57 4E 47 52 44 00</p><p>TLS 1.3 客户端和TLS1.3服务器协商时，必须检查最后 8 个字节不等于这两个值中的任何一个。如果 ServerHello 指示 TLS 1.1 或更低版本，TLS 1.2 客户端也应该检查最后 8 个字节不等于第二个值。如果发现匹配，客户端必须使用“illegal_parameter”警报中止握手。</p><p>此机制提供了针对降级攻击的些许保护能力：因为在 TLS 1.2 及更低版本中存在的 ServerKeyExchange 消息包含对两个随机值的签名，只要使用临时密钥协商的技术（就是（EC）DHE每次交换不用固定密钥，用随机生成的），主动攻击者就不可能在未被检测到的情况下修改随机值。但在使用静态 RSA 时，它不提供降级保护。</p><p>注意：这与[RFC5246]并不完全一致，因此实际上许多 TLS 1.2 客户端和服务器不会按照上述规定行事。</p><p>使用 TLS 1.2 或更早版本进行重新协商的TLS 客户端，如果在重新协商期间收到 TLS 1.3 ServerHello，则必须使用“protocol_version”警报中止握手。这里之所以没提TLS1.3，是因为协商了 TLS 1.3 时，重新协商是不可能的。</p><p>4.1.4. Hello Retry Request</p><p>如果服务器在客户端的ClientHello能够找到双方共享的通信算法和密钥之类的数据，但 ClientHello 不包含足够的信息来继续握手，则服务器将响应 Hello Retry Request 消息发送此消息。如第 4.1.3 节所述，HelloRetryRequest 具有与 ServerHello 消息相同的格式，并且 legacy_version、legacy_session_id_echo、cipher_suite 和 legacy_compression_method 字段具有相同的含义。但是，为了方便起见，在本RFC中我们将“HelloRetryRequest”视为一个不同的消息进行讨论。</p><p>&mldr; （未完成，感觉不是特别重要，先省略）</p><h3 class="relative group">4.2 拓展<div id=42-%E6%8B%93%E5%B1%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42-%E6%8B%93%E5%B1%95 aria-label=锚点>#</a></span></h3><p>(这部分是个大头)一系列的TLS消息包含拓展，拓展的结构和类型如下。这里注意：</p><ul><li>“extension_type”（扩展类型）标识特定的扩展类型。</li><li>“extension_data”（扩展数据）包含特定于该特定扩展类型的信息。</li></ul><pre tabindex=0><code>struct {
+</code></pre><p>遗留版本字段：在早期的 TLS 版本中，此字段用于版本协商：表示服务端接受客户端ClientHello之后所选的版本号。不幸的是，在TLS1.3之后，某些网络中间设备（路由器啦，交换机啦）并不支持新的Value值。在 TLS 1.3 中，TLS 服务器使用“supported_versions”扩展（<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.1" target="_blank">第 4.2.1 节</a>）指示其版本，遗留版本字段不在真正生效，但是必须设置为 0x0303，这是 TLS 1.2 的版本号。（有关向后兼容性的详细信息，请参阅<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D" target="_blank">附录 D</a>）</p>
+<p>随机数字段：由安全随机数生成器生成的 32 字节随机数。 请参阅<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-C" target="_blank">附录 C</a>获取更多信息。 如果协商 TLS 1.2 或 TLS 1.1，最后 8 字节必须按下面所述的内容进行覆盖，但其余字节必须是随机的。 这部分数据由服务器生成，并且必须独立于 ClientHello.random 生成。</p>
+<p>遗留session_id回显字段：兼容性角度出发，用于兼容客户端遗留session_id 字段。请注意，即使服务器选择不恢复的 TLS 1.3 之前的会话，客户端的值也应该被回显。如果客户端收到与在 ClientHello 中发送的不匹配的session_id，客户端必须使用“非法参数”警报中止握手。</p>
+<p>密码套件：服务器从 ClientHello.cipher_suites 列表中选择的单个密码套件。收到未提供的密码套件的客户端必须使用“非法参数”警报中止握手。</p>
+<p>遗留压缩方法字段：单个字节，内容为0x00</p>
+<p>扩展：扩展列表。ServerHello必须仅包含建立加密上下文和协商协议版本所需的扩展。所有 TLS 1.3 服务器问候消息必须包含“supported_versions”（支持的版本）扩展。当前ServerHello消息可以另外包含“pre_shared_key”（预共享密钥）扩展或“key_share”（密钥共享）扩展，或者两者都有（当使用带有 (EC)DHE 密钥建立的 PSK 时）。其他扩展（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2" target="_blank">第 4.2 节</a>）在EncryptedExtensions消息中单独发送。</p>
+<p>出于与网络中间设备的后向兼容性原因（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-D.4" target="_blank">附录 D.4</a>），HelloRetryRequest 的结构和 ServerHello 一致，唯一不同点是必须将 Random 设置为“HelloRetryRequest”的 SHA-256 哈希值，就是：</p>
+<p>CF 21 AD 74 E5 9A 61 11 BE 1D 8C 02 1E 65 B8 91</p>
+<p>C2 A2 11 16 7A BB 8C 5E 07 9E 09 E2 C8 A8 33 9C</p>
+<p>客户端收到类型为 server_hello 的消息后，必须先检查 Random 值，如果它与此值匹配，则按照<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.1.4" target="_blank">第 4.1.4 节</a>中的描述进行处理。</p>
+<p>TLS 1.3 在服务器的随机值中嵌入了降级保护机制。TLS1.3服务器，如果和客户端协商 TLS 1.2 或更低版本的 TLS 1.3 服务器必须在其 ServerHello 中特别设置其 Random 值的最后 8 个字节为特定的内容：</p>
+<p>如果协商 TLS 1.2，TLS 1.3 服务器必须将其 Random 值的最后 8 个字节设置为：</p>
+<p>44 4F 57 4E 47 52 44 01</p>
+<p>如果协商 TLS 1.1 或更低版本，TLS 1.3 服务器必须将其 ServerHello.Random 值的最后 8 个字节设置为：</p>
+<p>44 4F 57 4E 47 52 44 00</p>
+<p>TLS 1.3 客户端和TLS1.3服务器协商时，必须检查最后 8 个字节不等于这两个值中的任何一个。如果 ServerHello 指示 TLS 1.1 或更低版本，TLS 1.2 客户端也应该检查最后 8 个字节不等于第二个值。如果发现匹配，客户端必须使用“illegal_parameter”警报中止握手。</p>
+<p>此机制提供了针对降级攻击的些许保护能力：因为在 TLS 1.2 及更低版本中存在的 ServerKeyExchange 消息包含对两个随机值的签名，只要使用临时密钥协商的技术（就是（EC）DHE每次交换不用固定密钥，用随机生成的），主动攻击者就不可能在未被检测到的情况下修改随机值。但在使用静态 RSA 时，它不提供降级保护。</p>
+<p>注意：这与[RFC5246]并不完全一致，因此实际上许多 TLS 1.2 客户端和服务器不会按照上述规定行事。</p>
+<p>使用 TLS 1.2 或更早版本进行重新协商的TLS 客户端，如果在重新协商期间收到 TLS 1.3 ServerHello，则必须使用“protocol_version”警报中止握手。这里之所以没提TLS1.3，是因为协商了 TLS 1.3 时，重新协商是不可能的。</p>
+<p>4.1.4. Hello Retry Request</p>
+<p>如果服务器在客户端的ClientHello能够找到双方共享的通信算法和密钥之类的数据，但 ClientHello 不包含足够的信息来继续握手，则服务器将响应 Hello Retry Request 消息发送此消息。如第 4.1.3 节所述，HelloRetryRequest 具有与 ServerHello 消息相同的格式，并且 legacy_version、legacy_session_id_echo、cipher_suite 和 legacy_compression_method 字段具有相同的含义。但是，为了方便起见，在本RFC中我们将“HelloRetryRequest”视为一个不同的消息进行讨论。</p>
+<p>&hellip; （未完成，感觉不是特别重要，先省略）</p>
+
+
+<h3 class="relative group">4.2 拓展 
+    <div id="42-%E6%8B%93%E5%B1%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#42-%E6%8B%93%E5%B1%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>(这部分是个大头)一系列的TLS消息包含拓展，拓展的结构和类型如下。这里注意：</p>
+<ul>
+<li>“extension_type”（扩展类型）标识特定的扩展类型。</li>
+<li>“extension_data”（扩展数据）包含特定于该特定扩展类型的信息。</li>
+</ul>
+<pre tabindex="0"><code>struct {
         ExtensionType extension_type;
         opaque extension_data&lt;0..2^16-1&gt;;
     } Extension;
@@ -270,7 +1498,10 @@ Auth | {CertificateVerify*}
         key_share(51),                              /* RFC 8446 */
         (65535)
     } ExtensionType;
-</code></pre><p>尽管有些扩展只是指示，并不需要相应的响应，扩展扔通常以请求/响应的方式构建。客户端在 ClientHello 消息中发送其扩展请求，服务器在ServerHello、EncryptedExtensions、HelloRetryRequest 和 Certificate消息中发送这些扩展的响应。服务器在CertificateRequest 消息中发送扩展请求，客户端可能会回复Certificate 消息。服务器也可能发送NewSessionTicket报文，报文里面的拓展是一个“无头”拓展，客户端也不会对此给出任何响应。</p><p>如果对端未发送相应扩展请求，本端绝不能发送扩展响应，HelloRetryRequest 中的“cookie”扩展除外。遇到这种情况时，必须以“unsupported_extension”警报中止握手。</p><p>下表使用以下符号指示给定扩展可能出现在消息：CH（ClientHello）、SH（ServerHello）、EE（EncryptedExtensions）、CT（Certificate）、CR（CertificateRequest）、NST（NewSessionTicket）和HRR（HelloRetryRequest）。如果实现收到其识别但未在其出现的消息中指定的扩展，则必须以“illegal_parameter”警报中止握手。</p><pre tabindex=0><code> +--------------------------------------------------+-------------+
+</code></pre><p>尽管有些扩展只是指示，并不需要相应的响应，扩展扔通常以请求/响应的方式构建。客户端在 ClientHello 消息中发送其扩展请求，服务器在ServerHello、EncryptedExtensions、HelloRetryRequest 和 Certificate消息中发送这些扩展的响应。服务器在CertificateRequest 消息中发送扩展请求，客户端可能会回复Certificate 消息。服务器也可能发送NewSessionTicket报文，报文里面的拓展是一个“无头”拓展，客户端也不会对此给出任何响应。</p>
+<p>如果对端未发送相应扩展请求，本端绝不能发送扩展响应，HelloRetryRequest 中的“cookie”扩展除外。遇到这种情况时，必须以“unsupported_extension”警报中止握手。</p>
+<p>下表使用以下符号指示给定扩展可能出现在消息：CH（ClientHello）、SH（ServerHello）、EE（EncryptedExtensions）、CT（Certificate）、CR（CertificateRequest）、NST（NewSessionTicket）和HRR（HelloRetryRequest）。如果实现收到其识别但未在其出现的消息中指定的扩展，则必须以“illegal_parameter”警报中止握手。</p>
+<pre tabindex="0"><code> +--------------------------------------------------+-------------+
    | Extension                                        |     TLS 1.3 |
    +--------------------------------------------------+-------------+
    | server_name [RFC6066]                            |      CH, EE |
@@ -317,7 +1548,27 @@ Auth | {CertificateVerify*}
    |                                                  |             |
    | signature_algorithms_cert (RFC 8446)             |      CH, CR |
    +--------------------------------------------------+-------------+
-</code></pre><p>当存在多种不同类型的扩展时，这些扩展可以以任意顺序排列，但“pre_shared_key”（<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.11 target=_blank>第 4.2.11 节</a>）除外，它必须是 ClientHello 中的最后一个扩展（但可以出现在 ServerHello 扩展块中的任何位置）。在给定的扩展块中，同一类型的扩展绝不能出现多次</p><p>和TLS 1.2 不同，在 TLS 1.3 中，即使在复用PSK 模式下，每次握手都会重新协商扩展。当然，0-RTT 参数是在上一次握手中协商的；如果发现本次握手的信息和上次0-RTT不匹配，服务端可能会拒绝 0-RTT（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.10 target=_blank>第 4.2.10 节</a>）。</p><p>在TLS1.3中，新特性和已有特性之间可能会发生微妙（当然影响可能是巨大的，也不是多么微妙）的相互作用，这可能会导致整体安全性显著降低。所以在设计新扩展时，应考虑以下设计原则：</p><ul><li>有时，服务器不同意某个扩展的某些情况（比方说导致握手无法继续）应当视为出现错误，另外一些时候，服务端应该只是简单地拒绝支持特定功能。一般来说，对于前者应使用错误警报终止连接，对于后者应使用服务器扩展响应中的字段。</li><li>扩展应尽可能设计为不能通过操纵握手消息来强制使用（或不使用）特定功能的任何攻击。无论该功能是否被认为会导致安全问题，新拓展的设计者都应遵循这一原则。通常，只要计算Finished 报文哈希的时候会将扩展字段包含在输入里就够了，但当扩展改变握手阶段发送的消息的含义时，需要格外小心。设计者和实现者应意识到，在握手经过严格的认证之前（这里可不只是身份认证），主动攻击者可以修改消息、插入、删除或替换扩展。</li></ul><p>（我理解最后这两个是针对协议实现者和设计者，避免出现中间件兼容性问题考虑的）</p><h4 class="relative group">4.2.1 Supported Versions 拓展<div id=421-supported-versions-%E6%8B%93%E5%B1%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#421-supported-versions-%E6%8B%93%E5%B1%95 aria-label=锚点>#</a></span></h4><pre tabindex=0><code>			struct {
+</code></pre><p>当存在多种不同类型的扩展时，这些扩展可以以任意顺序排列，但“pre_shared_key”（<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.11" target="_blank">第 4.2.11 节</a>）除外，它必须是 ClientHello 中的最后一个扩展（但可以出现在 ServerHello 扩展块中的任何位置）。在给定的扩展块中，同一类型的扩展绝不能出现多次</p>
+<p>和TLS 1.2 不同，在 TLS 1.3 中，即使在复用PSK 模式下，每次握手都会重新协商扩展。当然，0-RTT 参数是在上一次握手中协商的；如果发现本次握手的信息和上次0-RTT不匹配，服务端可能会拒绝 0-RTT（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.10" target="_blank">第 4.2.10 节</a>）。</p>
+<p>在TLS1.3中，新特性和已有特性之间可能会发生微妙（当然影响可能是巨大的，也不是多么微妙）的相互作用，这可能会导致整体安全性显著降低。所以在设计新扩展时，应考虑以下设计原则：</p>
+<ul>
+<li>有时，服务器不同意某个扩展的某些情况（比方说导致握手无法继续）应当视为出现错误，另外一些时候，服务端应该只是简单地拒绝支持特定功能。一般来说，对于前者应使用错误警报终止连接，对于后者应使用服务器扩展响应中的字段。</li>
+<li>扩展应尽可能设计为不能通过操纵握手消息来强制使用（或不使用）特定功能的任何攻击。无论该功能是否被认为会导致安全问题，新拓展的设计者都应遵循这一原则。通常，只要计算Finished 报文哈希的时候会将扩展字段包含在输入里就够了，但当扩展改变握手阶段发送的消息的含义时，需要格外小心。设计者和实现者应意识到，在握手经过严格的认证之前（这里可不只是身份认证），主动攻击者可以修改消息、插入、删除或替换扩展。</li>
+</ul>
+<p>（我理解最后这两个是针对协议实现者和设计者，避免出现中间件兼容性问题考虑的）</p>
+
+
+<h4 class="relative group">4.2.1 Supported Versions 拓展 
+    <div id="421-supported-versions-%E6%8B%93%E5%B1%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#421-supported-versions-%E6%8B%93%E5%B1%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<pre tabindex="0"><code>			struct {
           select (Handshake.msg_type) {
               case client_hello:
                    ProtocolVersion versions&lt;2..254&gt;;
@@ -326,10 +1577,48 @@ Auth | {CertificateVerify*}
                    ProtocolVersion selected_version;
           };
       } SupportedVersions;
-</code></pre><p>客户端发送“supported_versions”扩展用于指示其支持的 TLS 版本，服务器发送“supported_versions”扩展用于指示本次会话要使用的TLS版本。该扩展内容为按优先顺序排列的支持版本列表，最优先的版本排在首位。任何实现本RFC的TLS协议栈必须在“ClientHello”中发送包含它准备协商的所有 TLS 版本信息（这意味着至少提供版本号为0x0304，但如果客户端支持协商之前的 TLS 版本，它们也必须一并发送在该拓展的内容里）。</p><p>如果该拓展没发送，即使客户端的ClientHello在遗留历史字段里面指明它想协商TLS1.3（0x0304)，如果服务器支持TLS1.3标准同时支持TLS1.2协议，那么该服务器必须参考RFC5246协商版本为TLS1.2或者之前的版本。</p><p>如果 ClientHello 中携带supported_versions扩展，则服务器不得使用ClientHello.legacy_version（历史遗留版本字段）值用于版本协商，而必须仅参考“supported_versions”扩展来确定客户端对版本的偏好设置。服务器必须仅选择supported_versions”里包含的 TLS 版本，并且忽略任何服务器不认识的版本。请注意，此机制使得如果双方支持多版本的TLS的话，则有可能会协商 TLS 1.2或之前的版本，服务器必须准备好接收客户端的ClientHello包含supported_versions，但版本列表中不包括 0x0304。</p><p>如果服务器选择 TLS 1.3 之前的 TLS 版本握手，那么服务器必须设置其ServerHello.version，并且绝不能发送“supported_versions”扩展。服务器如果协商 TLS 1.3则必须通过发送包含所选版本值（0x0304）的“supported_versions”扩展来响应CLientHello，且必须将 ServerHello.legacy_version 字段设置为 0x0303（TLS 1.2）。客户端在处理 ServerHello 的其余部分之前必须检查此扩展（尽管他们将不得不解析 ServerHello 以读取扩展）。如果此扩展存在，客户端必须忽略 ServerHello.legacy_version 值，并且必须仅使用“supported_versions”扩展来确定所选版本。如果 ServerHello 中的“supported_versions”扩展包含客户端未提供的版本或包含 TLS 1.3 之前的版本，客户端必须使用“illegal_parameter”警报中止握手。</p><h4 class="relative group">4.2.2 Cookie<div id=422-cookie class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#422-cookie aria-label=锚点>#</a></span></h4><pre tabindex=0><code>			struct {
+</code></pre><p>客户端发送“supported_versions”扩展用于指示其支持的 TLS 版本，服务器发送“supported_versions”扩展用于指示本次会话要使用的TLS版本。该扩展内容为按优先顺序排列的支持版本列表，最优先的版本排在首位。任何实现本RFC的TLS协议栈必须在“ClientHello”中发送包含它准备协商的所有 TLS 版本信息（这意味着至少提供版本号为0x0304，但如果客户端支持协商之前的 TLS 版本，它们也必须一并发送在该拓展的内容里）。</p>
+<p>如果该拓展没发送，即使客户端的ClientHello在遗留历史字段里面指明它想协商TLS1.3（0x0304)，如果服务器支持TLS1.3标准同时支持TLS1.2协议，那么该服务器必须参考RFC5246协商版本为TLS1.2或者之前的版本。</p>
+<p>如果 ClientHello 中携带supported_versions扩展，则服务器不得使用ClientHello.legacy_version（历史遗留版本字段）值用于版本协商，而必须仅参考“supported_versions”扩展来确定客户端对版本的偏好设置。服务器必须仅选择supported_versions”里包含的 TLS 版本，并且忽略任何服务器不认识的版本。请注意，此机制使得如果双方支持多版本的TLS的话，则有可能会协商 TLS 1.2或之前的版本，服务器必须准备好接收客户端的ClientHello包含supported_versions，但版本列表中不包括 0x0304。</p>
+<p>如果服务器选择 TLS 1.3 之前的 TLS 版本握手，那么服务器必须设置其ServerHello.version，并且绝不能发送“supported_versions”扩展。服务器如果协商 TLS 1.3则必须通过发送包含所选版本值（0x0304）的“supported_versions”扩展来响应CLientHello，且必须将 ServerHello.legacy_version 字段设置为 0x0303（TLS 1.2）。客户端在处理 ServerHello 的其余部分之前必须检查此扩展（尽管他们将不得不解析 ServerHello 以读取扩展）。如果此扩展存在，客户端必须忽略 ServerHello.legacy_version 值，并且必须仅使用“supported_versions”扩展来确定所选版本。如果 ServerHello 中的“supported_versions”扩展包含客户端未提供的版本或包含 TLS 1.3 之前的版本，客户端必须使用“illegal_parameter”警报中止握手。</p>
+
+
+<h4 class="relative group">4.2.2 Cookie 
+    <div id="422-cookie" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#422-cookie" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<pre tabindex="0"><code>			struct {
           opaque cookie&lt;1..2^16-1&gt;;
       } Cookie;
-</code></pre><p>Cookie 有两个主要用途：</p><ul><li>允许服务器强制客户端在其明显的网络地址上证明可达性（从而提供一定程度的拒绝服务保护）。对于非面向连接的传输起作用（有关此示例，请参见[RFC6347]）。</li><li>允许服务器将状态卸载到客户端，从而允许其在不存储任何状态的情况下发送 HelloRetryRequest（这样子服务端完全可以啥都不存储了）。服务器可以通过在 HelloRetryRequest Cookie 中存储 ClientHello 的哈希值（使用某些完整性保护算法进行保护）来实现此目的。</li></ul><p>当发送 HelloRetryRequest 时，服务器可以向客户端提供“cookie”扩展（注意哈，通常是只有在 ClientHello 中出现的扩展才服务端回应时才可以发送，这是个例外，）。客户端发送新的 ClientHello 时，必须将在 HelloRetryRequest 中接收到的cookie扩展内容复制到新的 ClientHello 中的“cookie”扩展中。后面如果还有握手，客户端发送的新握手的 ClientHello 中不得包含 cookie。</p><p>当服务器以无状态方式运行时，它可能会在第一个和第二个 ClientHello 之间收到未受保护的 change_cipher_spec 类型的记录（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-5 target=_blank>第 5 节</a>）。由于服务器未存储任何状态，这将看起来像是收到的第一条消息。以无状态方式运行的服务器必须忽略这些记录。</p><h4 class="relative group">4.2.3 Signature Algorithms<div id=423-signature-algorithms class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#423-signature-algorithms aria-label=锚点>#</a></span></h4><p>TLS 1.3 提供了两个扩展来指示涉及到签名验签中可以使用的签名算法。“signature_algorithms_cert”扩展指明适用于证书中的签名算法，而最初出现在 TLS 1.2 中的“signature_algorithms”扩展适用于 CertificateVerify 消息中的签名算法。证书中的密钥还必须与它们所使用的签名算法的类型相匹配。对于 RSA 密钥和 PSS 签名，有个特殊事项要注意，下面会描述。如果不存在“signature_algorithms_cert”扩展，则“signature_algorithms”扩展里面的算法同时指代适用于证书中出现的签名算法。希望服务器通过证书进行身份验证的客户端必须发送“signature_algorithms”扩展。如果服务器通过证书进行身份验证而客户端未发送“signature_algorithms”扩展，则服务器必须使用“missing_extension”警报中止握手（见第 9.2 节）。</p><p>添加“signature_algorithms_cert”扩展是为了两个目的：1 TLS协议本身清晰地表明其能力 2 允许证书支持和signature_algorithms不同的算法集。TLS 1.2 实现也应该处理此扩展。两个拓展内容一致的话，可以省略“signature_algorithms_cert”发送</p><p>两种扩展的“extension_data”字段包含这些SignatureSchemeList 里面的值：</p><pre tabindex=0><code>   enum {
+</code></pre><p>Cookie 有两个主要用途：</p>
+<ul>
+<li>允许服务器强制客户端在其明显的网络地址上证明可达性（从而提供一定程度的拒绝服务保护）。对于非面向连接的传输起作用（有关此示例，请参见[RFC6347]）。</li>
+<li>允许服务器将状态卸载到客户端，从而允许其在不存储任何状态的情况下发送 HelloRetryRequest（这样子服务端完全可以啥都不存储了）。服务器可以通过在 HelloRetryRequest Cookie 中存储 ClientHello 的哈希值（使用某些完整性保护算法进行保护）来实现此目的。</li>
+</ul>
+<p>当发送 HelloRetryRequest 时，服务器可以向客户端提供“cookie”扩展（注意哈，通常是只有在 ClientHello 中出现的扩展才服务端回应时才可以发送，这是个例外，）。客户端发送新的 ClientHello 时，必须将在 HelloRetryRequest 中接收到的cookie扩展内容复制到新的 ClientHello 中的“cookie”扩展中。后面如果还有握手，客户端发送的新握手的 ClientHello 中不得包含 cookie。</p>
+<p>当服务器以无状态方式运行时，它可能会在第一个和第二个 ClientHello 之间收到未受保护的 change_cipher_spec 类型的记录（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-5" target="_blank">第 5 节</a>）。由于服务器未存储任何状态，这将看起来像是收到的第一条消息。以无状态方式运行的服务器必须忽略这些记录。</p>
+
+
+<h4 class="relative group">4.2.3 Signature Algorithms 
+    <div id="423-signature-algorithms" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#423-signature-algorithms" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>TLS 1.3 提供了两个扩展来指示涉及到签名验签中可以使用的签名算法。“signature_algorithms_cert”扩展指明适用于证书中的签名算法，而最初出现在 TLS 1.2 中的“signature_algorithms”扩展适用于 CertificateVerify 消息中的签名算法。证书中的密钥还必须与它们所使用的签名算法的类型相匹配。对于 RSA 密钥和 PSS 签名，有个特殊事项要注意，下面会描述。如果不存在“signature_algorithms_cert”扩展，则“signature_algorithms”扩展里面的算法同时指代适用于证书中出现的签名算法。希望服务器通过证书进行身份验证的客户端必须发送“signature_algorithms”扩展。如果服务器通过证书进行身份验证而客户端未发送“signature_algorithms”扩展，则服务器必须使用“missing_extension”警报中止握手（见第 9.2 节）。</p>
+<p>添加“signature_algorithms_cert”扩展是为了两个目的：1 TLS协议本身清晰地表明其能力 2 允许证书支持和signature_algorithms不同的算法集。TLS 1.2 实现也应该处理此扩展。两个拓展内容一致的话，可以省略“signature_algorithms_cert”发送</p>
+<p>两种扩展的“extension_data”字段包含这些SignatureSchemeList 里面的值：</p>
+<pre tabindex="0"><code>   enum {
           /* RSASSA-PKCS1-v1_5 algorithms */
           rsa_pkcs1_sha256(0x0401),
           rsa_pkcs1_sha384(0x0501),
@@ -366,13 +1655,86 @@ Auth | {CertificateVerify*}
       struct {
           SignatureScheme supported_signature_algorithms&lt;2..2^16-2&gt;;
       } SignatureSchemeList;
-</code></pre><p>注意：此枚举名为“SignatureScheme”，是因为在 TLS 1.2 中已经有一个“SignatureAlgorithm”类型，此类型会将其替换。在整个文本中术语“签名算法”，就是SignatureScheme</p><p>每个 SignatureScheme 值列出了客户端支持验证的单个签名算法。这些值按偏好降序排列。请注意，签名算法接收的输入是任意长度的消息，而不是摘要。传统上对摘要起作用的算法应在 TLS 先使用指定的哈希算法对输入进行哈希处理，然后再输入到对摘要做签名的算法里。具体的签名算法参考下面的内容：</p><p>RSASSA-PKCS1-v1_5 算法：表示使用 RSASSA-PKCS1-v1_5 [RFC8017] 的签名算法，其对应的哈希算法如 [SHS] 中所定义。仅适用于证书中的签名（见 4.4.2.2 节），无法用于签名的 TLS 握手消息，即使它们可能出于兼容 TLS 1.2 而出现在“signature_algorithms”和“signature_algorithms_cert”中。</p><p>ECDSA 算法：表示使用 ECDSA [ECDSA] 的签名算法，签名用到的曲线参考如 ANSI X9.62 [ECDSA] 和 FIPS 186-4 [DSS] 中所定义的相应曲线，哈希算法参考以及如 [SHS] 。签名编码为 DER 编码的 [X690] ECDSA-Sig-Value 结构。</p><p>RSASSA-PSS RSAE 算法：（省略，过于琐碎，后面再翻译）</p><p>遗留算法字段：具有已知弱点的算法（尤其是 RSASSA-PKCS1-v1_5 的 RSA算法或和ECDSA 一起使用的 SHA-1），所以被弃用。尽管它们可能出于 兼容TLS 1.2 的目的出现在“signature_algorithms”和“signature_algorithms_cert”中，但只能将这些算法用于证书里中的签名（见 4.4.2.2 节），而不能用来做TLS握手签名。简单来说就不要协商这些算法，客户端仅出于兼容性可以发送这些算法，但必须将它们列为最低优先级（在 SignatureSchemeList 中的所有其他算法之后列出）。除非不使用这些弱算法，就无法生成有效证书链，TLS 1.3 服务器绝不能提供 SHA-1 签名的证书（见 4.4.2.2 节）。</p><p>自签名证书或作为信任锚点的证书上的签名无法验证，因为它们自己是一个全新信任链（certification path）（见 [RFC5280]，3.2 节）。全新信任链的证书可以使用未在“signature_algorithms”扩展中公开定义的算法，作为验证的签名算法。</p><p>请注意，TLS 1.2 对该扩展的定义和TLS1.3不同。如果协商 TLS 1.2 的话，该过站实现必须按照 [RFC5246] 的要求行事。特别是：</p><ul><li>TLS 1.2 的 ClientHellos 可能省略此扩展</li><li>在 TLS 1.2 中，该扩展包含哈希/签名对。长度为两个字节编码，因此TLS1.3的SignatureScheme内容可以与 TLS 1.2 的编码一致（兼容）。一些遗留算法对不再保留，这些算法自 TLS 1.3 起被弃用。任何实现都不得提供或协商它们，尤其是MD5 [SLOTH]、SHA-224 和 DSA。</li><li>ECDSA 签名方案与 TLS 1.2 的 ECDSA 哈希/签名对对齐。然而，旧的语义并不包含签名曲线信息。如果协商 TLS 1.2，实现方必须接受使用“supported_groups”扩展涉及到的任何曲线的签名</li><li>宣称支持 RSASSA-PSS（这在 TLS 1.3 中是强制的）的实现方，必须可以接受协商的是 TLS 1.2版本。在 TLS 1.2 中，RSASSA-PSS 与 RSA 密码套件一起使用。</li></ul><h4 class="relative group">4.2.4 Certificate Authorities<div id=424-certificate-authorities class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#424-certificate-authorities aria-label=锚点>#</a></span></h4><p>“证书颁发机构”扩展用于指示端点支持的证书颁发机构（CAs），接收端应参考这些机构来证书选择。</p><p>“证书颁发机构”扩展的主体由 CertificateAuthoritiesExtension 结构组成。</p><pre tabindex=0><code>			opaque DistinguishedName&lt;1..2^16-1&gt;;
+</code></pre><p>注意：此枚举名为“SignatureScheme”，是因为在 TLS 1.2 中已经有一个“SignatureAlgorithm”类型，此类型会将其替换。在整个文本中术语“签名算法”，就是SignatureScheme</p>
+<p>每个 SignatureScheme 值列出了客户端支持验证的单个签名算法。这些值按偏好降序排列。请注意，签名算法接收的输入是任意长度的消息，而不是摘要。传统上对摘要起作用的算法应在 TLS 先使用指定的哈希算法对输入进行哈希处理，然后再输入到对摘要做签名的算法里。具体的签名算法参考下面的内容：</p>
+<p>RSASSA-PKCS1-v1_5 算法：表示使用 RSASSA-PKCS1-v1_5 [RFC8017] 的签名算法，其对应的哈希算法如 [SHS] 中所定义。仅适用于证书中的签名（见 4.4.2.2 节），无法用于签名的 TLS 握手消息，即使它们可能出于兼容 TLS 1.2 而出现在“signature_algorithms”和“signature_algorithms_cert”中。</p>
+<p>ECDSA 算法：表示使用 ECDSA [ECDSA] 的签名算法，签名用到的曲线参考如 ANSI X9.62 [ECDSA] 和 FIPS 186-4 [DSS] 中所定义的相应曲线，哈希算法参考以及如 [SHS] 。签名编码为 DER 编码的 [X690] ECDSA-Sig-Value 结构。</p>
+<p>RSASSA-PSS RSAE 算法：（省略，过于琐碎，后面再翻译）</p>
+<p>遗留算法字段：具有已知弱点的算法（尤其是 RSASSA-PKCS1-v1_5 的 RSA算法或和ECDSA 一起使用的 SHA-1），所以被弃用。尽管它们可能出于 兼容TLS 1.2 的目的出现在“signature_algorithms”和“signature_algorithms_cert”中，但只能将这些算法用于证书里中的签名（见 4.4.2.2 节），而不能用来做TLS握手签名。简单来说就不要协商这些算法，客户端仅出于兼容性可以发送这些算法，但必须将它们列为最低优先级（在 SignatureSchemeList 中的所有其他算法之后列出）。除非不使用这些弱算法，就无法生成有效证书链，TLS 1.3 服务器绝不能提供 SHA-1 签名的证书（见 4.4.2.2 节）。</p>
+<p>自签名证书或作为信任锚点的证书上的签名无法验证，因为它们自己是一个全新信任链（certification path）（见 [RFC5280]，3.2 节）。全新信任链的证书可以使用未在“signature_algorithms”扩展中公开定义的算法，作为验证的签名算法。</p>
+<p>请注意，TLS 1.2 对该扩展的定义和TLS1.3不同。如果协商 TLS 1.2 的话，该过站实现必须按照 [RFC5246] 的要求行事。特别是：</p>
+<ul>
+<li>TLS 1.2 的 ClientHellos 可能省略此扩展</li>
+<li>在 TLS 1.2 中，该扩展包含哈希/签名对。长度为两个字节编码，因此TLS1.3的SignatureScheme内容可以与 TLS 1.2 的编码一致（兼容）。一些遗留算法对不再保留，这些算法自 TLS 1.3 起被弃用。任何实现都不得提供或协商它们，尤其是MD5 [SLOTH]、SHA-224 和 DSA。</li>
+<li>ECDSA 签名方案与 TLS 1.2 的 ECDSA 哈希/签名对对齐。然而，旧的语义并不包含签名曲线信息。如果协商 TLS 1.2，实现方必须接受使用“supported_groups”扩展涉及到的任何曲线的签名</li>
+<li>宣称支持 RSASSA-PSS（这在 TLS 1.3 中是强制的）的实现方，必须可以接受协商的是 TLS 1.2版本。在 TLS 1.2 中，RSASSA-PSS 与 RSA 密码套件一起使用。</li>
+</ul>
+
+
+<h4 class="relative group">4.2.4 Certificate Authorities 
+    <div id="424-certificate-authorities" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#424-certificate-authorities" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>“证书颁发机构”扩展用于指示端点支持的证书颁发机构（CAs），接收端应参考这些机构来证书选择。</p>
+<p>“证书颁发机构”扩展的主体由 CertificateAuthoritiesExtension 结构组成。</p>
+<pre tabindex="0"><code>			opaque DistinguishedName&lt;1..2^16-1&gt;;
 
       struct {
           DistinguishedName authorities&lt;3..2^16-1&gt;;
       } CertificateAuthoritiesExtension;
-</code></pre><p>authorities：一堆可明确分辨（是谁的）CA名称[X501]，以 DER 编码[X690]格式表示。这些可分辨名称指定了信任锚或CA的具体名称；因此，此消息可用于描述已知的信任锚以及所需的授权空间。</p><p>客户端可以在 ClientHello 消息中发送“Certificate Authorities”扩展。服务器可以在 CertificateRequest 消息中发送它。</p><p>“可信 CA 密钥”（trusted_ca_keys）扩展[RFC6066]，有相同的目的但更复杂，在 TLS 1.3 中未使用（尽管它可能出现在提供TLS1.3之前版本的客户端ClientHello 消息中出现）。</p><h4 class="relative group">4.2.5 OID Filters<div id=425-oid-filters class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#425-oid-filters aria-label=锚点>#</a></span></h4><p>感觉意义不大，先跳</p><h4 class="relative group">4.2.6 Post-Handshake Client Authentication<div id=426-post-handshake-client-authentication class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#426-post-handshake-client-authentication aria-label=锚点>#</a></span></h4><p>“post_handshake_auth”扩展用于表明客户端愿意执行握手后认证（<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.6.2 target=_blank>第 4.6.2 节</a>）（举个简单例子单向认证变双向认证）。服务器不得向未提供此扩展的客户端发送握手后证书请求（post-handshake CertificateRequest）。服务器不得发送此扩展。该拓展结果为</p><pre tabindex=0><code>      struct {} PostHandshakeAuth;
-</code></pre><p>该扩展的“extension_data”字段长度为零，实际上这就是个没内容的标识</p><h4 class="relative group">4.2.7 Supported Groups<div id=427-supported-groups class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#427-supported-groups aria-label=锚点>#</a></span></h4><p>客户端发送“supported_groups”扩展时，该拓展表明客户端支持的key share拓展里面的密钥协商方法（实际上也可能包含椭圆曲线类型），按照从最优先到最不优先的顺序排列。</p><p>注意：在 TLS 1.3 之前的版本中，此扩展名为“elliptic_curves”，并且仅包含椭圆曲线组。 请参阅[RFC8422]和[RFC7919]。 此扩展过去还用于协商 ECDSA 曲线，但现在签名算法是独立协商的（请参阅 4.2.3 节）。</p><p>此扩展的“extension_data”字段包含一些“NamedGroupList”值:</p><pre tabindex=0><code>			enum {
+</code></pre><p>authorities：一堆可明确分辨（是谁的）CA名称[X501]，以 DER 编码[X690]格式表示。这些可分辨名称指定了信任锚或CA的具体名称；因此，此消息可用于描述已知的信任锚以及所需的授权空间。</p>
+<p>客户端可以在 ClientHello 消息中发送“Certificate Authorities”扩展。服务器可以在 CertificateRequest 消息中发送它。</p>
+<p>“可信 CA 密钥”（trusted_ca_keys）扩展[RFC6066]，有相同的目的但更复杂，在 TLS 1.3 中未使用（尽管它可能出现在提供TLS1.3之前版本的客户端ClientHello 消息中出现）。</p>
+
+
+<h4 class="relative group">4.2.5 OID Filters 
+    <div id="425-oid-filters" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#425-oid-filters" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>感觉意义不大，先跳</p>
+
+
+<h4 class="relative group">4.2.6 Post-Handshake Client Authentication 
+    <div id="426-post-handshake-client-authentication" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#426-post-handshake-client-authentication" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>“post_handshake_auth”扩展用于表明客户端愿意执行握手后认证（<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.6.2" target="_blank">第 4.6.2 节</a>）（举个简单例子单向认证变双向认证）。服务器不得向未提供此扩展的客户端发送握手后证书请求（post-handshake CertificateRequest）。服务器不得发送此扩展。该拓展结果为</p>
+<pre tabindex="0"><code>      struct {} PostHandshakeAuth;
+</code></pre><p>该扩展的“extension_data”字段长度为零，实际上这就是个没内容的标识</p>
+
+
+<h4 class="relative group">4.2.7 Supported Groups 
+    <div id="427-supported-groups" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#427-supported-groups" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>客户端发送“supported_groups”扩展时，该拓展表明客户端支持的key share拓展里面的密钥协商方法（实际上也可能包含椭圆曲线类型），按照从最优先到最不优先的顺序排列。</p>
+<p>注意：在 TLS 1.3 之前的版本中，此扩展名为“elliptic_curves”，并且仅包含椭圆曲线组。 请参阅[RFC8422]和[RFC7919]。 此扩展过去还用于协商 ECDSA 曲线，但现在签名算法是独立协商的（请参阅 4.2.3 节）。</p>
+<p>此扩展的“extension_data”字段包含一些“NamedGroupList”值:</p>
+<pre tabindex="0"><code>			enum {
 
           /* Elliptic Curve Groups (ECDHE) */
           secp256r1(0x0017), secp384r1(0x0018), secp521r1(0x0019),
@@ -391,31 +1753,124 @@ Auth | {CertificateVerify*}
       struct {
           NamedGroup named_group_list&lt;2..2^16-1&gt;;
       } NamedGroupList;
-</code></pre><p>椭圆曲线组（ECDHE）：表示支持相应命名曲线（命名曲线可以理解为基点确定，且明确名字的曲线），在 FIPS 186-4 [DSS] 或 [RFC7748]明确定义。曲线的值如果在0xFE00 至 0xFEFF之间则被保留为供个人使用 [RFC8126]。</p><p>有限域组（DHE）：表示支持相应有限域组，参考 [RFC7919] 。值 0x01FC 至 0x01FF 被保留供个人使用。</p><p>named_group_list中的项目按照发送方的偏好排序（最优先的选择在前）。</p><p>自 TLS 1.3 起，服务器被允许向客户端发送“supported_groups”扩展。客户端在成功完成握手之前，服务端“supported_groups”的内容不该对本次握手有任何影响，但客户端参考来更改其后续新连接中的“key_share”扩展中使用的组。如果服务器有一个比客户端“key_share”扩展中的组更偏好的组，但仍然愿意接受 ClientHello，就应该发送“supported_groups”以更新客户端对其偏好的看法；服务端发送的supported_groups扩展应包含服务器支持的所有组，不用考虑论客户端是否支持。</p><h4 class="relative group">4.2.8 Key Share<div id=428--key-share class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#428--key-share aria-label=锚点>#</a></span></h4><p>“key_share”扩展包含端点的加密参数。</p><p>客户端可以发送一个空的客户端共享向量，以便向服务器请求组选择，但会导致多个RTT（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.1.4 target=_blank>第 4.1.4 节</a>）。该拓展结构为</p><pre tabindex=0><code>			struct {
+</code></pre><p>椭圆曲线组（ECDHE）：表示支持相应命名曲线（命名曲线可以理解为基点确定，且明确名字的曲线），在 FIPS 186-4 [DSS] 或 [RFC7748]明确定义。曲线的值如果在0xFE00 至 0xFEFF之间则被保留为供个人使用 [RFC8126]。</p>
+<p>有限域组（DHE）：表示支持相应有限域组，参考 [RFC7919] 。值 0x01FC 至 0x01FF 被保留供个人使用。</p>
+<p>named_group_list中的项目按照发送方的偏好排序（最优先的选择在前）。</p>
+<p>自 TLS 1.3 起，服务器被允许向客户端发送“supported_groups”扩展。客户端在成功完成握手之前，服务端“supported_groups”的内容不该对本次握手有任何影响，但客户端参考来更改其后续新连接中的“key_share”扩展中使用的组。如果服务器有一个比客户端“key_share”扩展中的组更偏好的组，但仍然愿意接受 ClientHello，就应该发送“supported_groups”以更新客户端对其偏好的看法；服务端发送的supported_groups扩展应包含服务器支持的所有组，不用考虑论客户端是否支持。</p>
+
+
+<h4 class="relative group">4.2.8  Key Share 
+    <div id="428--key-share" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#428--key-share" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>“key_share”扩展包含端点的加密参数。</p>
+<p>客户端可以发送一个空的客户端共享向量，以便向服务器请求组选择，但会导致多个RTT（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.1.4" target="_blank">第 4.1.4 节</a>）。该拓展结构为</p>
+<pre tabindex="0"><code>			struct {
           NamedGroup group;
           opaque key_exchange&lt;1..2^16-1&gt;;
       } KeyShareEntry;
-</code></pre><p>group：密钥对应的命名组。</p><p>key_exchange：密钥交换信息。该字段的内容由命名组及计算方法确定。有限域Diffie-Hellman[<a href=https://www.rfc-editor.org/rfc/rfc8446.html#ref-DH76 target=_blank>DH76</a>]参数在<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8.1 target=_blank>第 4.2.8.1 节</a>中描述；椭圆曲线Diffie-Hellman参数在<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8.2 target=_blank>第 4.2.8.2 节</a>中描述。</p><p>在 ClientHello 消息中，此扩展的“extension_data”字段包含一个“KeyShareClientHello”值：</p><pre tabindex=0><code>			struct {
+</code></pre><p>group：密钥对应的命名组。</p>
+<p>key_exchange：密钥交换信息。该字段的内容由命名组及计算方法确定。有限域Diffie-Hellman[<a href="https://www.rfc-editor.org/rfc/rfc8446.html#ref-DH76" target="_blank">DH76</a>]参数在<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8.1" target="_blank">第 4.2.8.1 节</a>中描述；椭圆曲线Diffie-Hellman参数在<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8.2" target="_blank">第 4.2.8.2 节</a>中描述。</p>
+<p>在 ClientHello 消息中，此扩展的“extension_data”字段包含一个“KeyShareClientHello”值：</p>
+<pre tabindex="0"><code>			struct {
           KeyShareEntry client_shares&lt;0..2^16-1&gt;;
       } KeyShareClientHello;
-</code></pre><p>client_shares: 按客户端偏好降序排列的KeyShareEntry 值列表。</p><p>如果客户端期望收到HelloRetryRequest，则此拓展可能为空。每个 KeyShareEntry 值必须对应于“supported_groups”扩展中提供的一个gourp，并且必须保持相同的顺序。然而，这些值可以是“supported_groups”扩展里group们的非连续子集，并且可能省略最优先握手的组的key。这种情况一般出现在，客户端支持的最高优先group比较新，好多地方（中间设备）还不支持</p><p>客户端可以提供与supported groups数量相同的 KeyShareEntry 值，每个值代表一组单独的密钥交换参数。例如，客户端可能为多个椭圆曲线或多个有限域Diffie-Hellman组提供keyshare。每个 KeyShareEntry 的 key_exchange 值必须独立生成。客户端不得为同一组提供多个 KeyShareEntry 值。客户端不得为“supported_groups”扩展中未列出的组提供KeyShareEntry 值。服务器可以检查是否违反这些规则，如果违反，则使用“illegal_parameter”警报中止握手。</p><p>在 HelloRetryRequest 消息中，此扩展的“extension_data”字段包含一个 KeyShareHelloRetryRequest 值：</p><pre tabindex=0><code>			struct {
+</code></pre><p>client_shares:  按客户端偏好降序排列的KeyShareEntry 值列表。</p>
+<p>如果客户端期望收到HelloRetryRequest，则此拓展可能为空。每个 KeyShareEntry 值必须对应于“supported_groups”扩展中提供的一个gourp，并且必须保持相同的顺序。然而，这些值可以是“supported_groups”扩展里group们的非连续子集，并且可能省略最优先握手的组的key。这种情况一般出现在，客户端支持的最高优先group比较新，好多地方（中间设备）还不支持</p>
+<p>客户端可以提供与supported groups数量相同的 KeyShareEntry 值，每个值代表一组单独的密钥交换参数。例如，客户端可能为多个椭圆曲线或多个有限域Diffie-Hellman组提供keyshare。每个 KeyShareEntry 的 key_exchange 值必须独立生成。客户端不得为同一组提供多个 KeyShareEntry 值。客户端不得为“supported_groups”扩展中未列出的组提供KeyShareEntry 值。服务器可以检查是否违反这些规则，如果违反，则使用“illegal_parameter”警报中止握手。</p>
+<p>在 HelloRetryRequest 消息中，此扩展的“extension_data”字段包含一个 KeyShareHelloRetryRequest 值：</p>
+<pre tabindex="0"><code>			struct {
           NamedGroup selected_group;
       } KeyShareHelloRetryRequest;
-</code></pre><p>selected_group：服务器打算协商的selected_group。</p><p>收到 HelloRetryRequest 中的此扩展后，客户端必须验证（1）selected_group 字段对应于原始 ClientHello 中的“supported_groups”扩展中提供的一个组，并且（2）selected_group 字段不对应于原始 ClientHello 中的“key_share”扩展中提供的组（这个是确保是真的需要发送selected_group，而不是瞎发）。如果这两个检查中的任何一个失败，则客户端必须使用“illegal_parameter”警报中止握手。要是没出现刚才的错误，在发送新的 ClientHello 时，客户端必须用仅包含HelloRetryRequest 的 selected_group指示的group的新 KeyShareEntry 的扩展来替换原始的“key_share”扩展</p><p>在 ServerHello 消息中，此扩展的“extension_data”字段包含一个 KeyShareServerHello 值：</p><pre tabindex=0><code> 			struct {
+</code></pre><p>selected_group：服务器打算协商的selected_group。</p>
+<p>收到 HelloRetryRequest 中的此扩展后，客户端必须验证（1）selected_group 字段对应于原始 ClientHello 中的“supported_groups”扩展中提供的一个组，并且（2）selected_group 字段不对应于原始 ClientHello 中的“key_share”扩展中提供的组（这个是确保是真的需要发送selected_group，而不是瞎发）。如果这两个检查中的任何一个失败，则客户端必须使用“illegal_parameter”警报中止握手。要是没出现刚才的错误，在发送新的 ClientHello 时，客户端必须用仅包含HelloRetryRequest 的 selected_group指示的group的新 KeyShareEntry 的扩展来替换原始的“key_share”扩展</p>
+<p>在 ServerHello 消息中，此扩展的“extension_data”字段包含一个 KeyShareServerHello 值：</p>
+<pre tabindex="0"><code> 			struct {
           KeyShareEntry server_share;
       } KeyShareServerHello;
-</code></pre><p>server_share：服务端从客户端的key share里面挑选出来的单个 KeyShareEntry 值。</p><p>如果使用（EC）DHE 密钥建立，服务器在 ServerHello 中只选一个 KeyShareEntry。此值必须和客户端提供的 KeyShareEntry 值处于同一命名组（named group）。服务器不得用客户端的“supported_groups”扩展中未指示的任何组发送 KeyShareEntry，并且在使用“psk_ke” PskKeyExchangeMode 时不得发送 KeyShareEntry。如果使用（EC）DHE 密钥建立并且客户端收到包含“key_share”扩展的 HelloRetryRequest，则客户端必须验证 ServerHello 中选择的 NamedGroup 与 HelloRetryRequest 中的相同。如果此检查失败，客户端必须使用“illegal_parameter”警报中止握手。</p><h5 class="relative group">4.2.8.1 Diffie-Hellman Parameters<div id=4281-diffie-hellman-parameters class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4281-diffie-hellman-parameters aria-label=锚点>#</a></span></h5><p>客户端和服务器的Diffie-Hellman[<a href=https://www.rfc-editor.org/rfc/rfc8446.html#ref-DH76>DH76</a>]参数在KeyShare拓展的KeyShareEntry的key_exchange字段编码。内容为Diffie-Hellman group的公开传递的内容（Y = g^X mod p）（Diffie-Hellman group定义，请参见[<a href=https://www.rfc-editor.org/rfc/rfc7919>RFC7919</a>]）。将公开的整数编码为大端或者说网络字节序，左侧补零至 p （就是那个被mod的质数）的字节大小。</p><p>注意：对于给定的Diffie-Hellman group，填充导致所有公共密钥具有相同的长度。</p><p>接收端必须通过确保 1 &lt; Y &lt; p - 1。此检查确保远程对等方行为正常，别最后group是一个很容易碰撞的group。</p><h5 class="relative group">4.2.8.2 ECDHE Parameters<div id=4282-ecdhe-parameters class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4282-ecdhe-parameters aria-label=锚点>#</a></span></h5><p>客户端和服务器的 ECDHE 参数都在 KeyShare 结构中 KeyShareEntry 的不透明 key_exchange 字段中进行编码。</p><p>对于 secp256r1、secp384r1 和 secp521r1，其内容是以下结构体的序列化值：</p><pre tabindex=0><code>   		struct {
+</code></pre><p>server_share：服务端从客户端的key share里面挑选出来的单个 KeyShareEntry 值。</p>
+<p>如果使用（EC）DHE 密钥建立，服务器在 ServerHello 中只选一个 KeyShareEntry。此值必须和客户端提供的 KeyShareEntry 值处于同一命名组（named group）。服务器不得用客户端的“supported_groups”扩展中未指示的任何组发送 KeyShareEntry，并且在使用“psk_ke” PskKeyExchangeMode 时不得发送 KeyShareEntry。如果使用（EC）DHE 密钥建立并且客户端收到包含“key_share”扩展的 HelloRetryRequest，则客户端必须验证 ServerHello 中选择的 NamedGroup 与 HelloRetryRequest 中的相同。如果此检查失败，客户端必须使用“illegal_parameter”警报中止握手。</p>
+
+
+<h5 class="relative group">4.2.8.1 Diffie-Hellman Parameters 
+    <div id="4281-diffie-hellman-parameters" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4281-diffie-hellman-parameters" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>客户端和服务器的Diffie-Hellman[<a href="https://www.rfc-editor.org/rfc/rfc8446.html#ref-DH76">DH76</a>]参数在KeyShare拓展的KeyShareEntry的key_exchange字段编码。内容为Diffie-Hellman group的公开传递的内容（Y = g^X mod p）（Diffie-Hellman group定义，请参见[<a href="https://www.rfc-editor.org/rfc/rfc7919">RFC7919</a>]）。将公开的整数编码为大端或者说网络字节序，左侧补零至 p （就是那个被mod的质数）的字节大小。</p>
+<p>注意：对于给定的Diffie-Hellman group，填充导致所有公共密钥具有相同的长度。</p>
+<p>接收端必须通过确保 1 &lt; Y &lt; p - 1。此检查确保远程对等方行为正常，别最后group是一个很容易碰撞的group。</p>
+
+
+<h5 class="relative group">4.2.8.2 ECDHE Parameters 
+    <div id="4282-ecdhe-parameters" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4282-ecdhe-parameters" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>客户端和服务器的 ECDHE 参数都在 KeyShare 结构中 KeyShareEntry 的不透明 key_exchange 字段中进行编码。</p>
+<p>对于 secp256r1、secp384r1 和 secp521r1，其内容是以下结构体的序列化值：</p>
+<pre tabindex="0"><code>   		struct {
           uint8 legacy_form = 4;
           opaque X[coordinate_length];
           opaque Y[coordinate_length];
       } UncompressedPointRepresentation;
-</code></pre><p>X 和 Y 分别是网络字节序中 x 和 y 值的二进制表示（x,y是点的坐标）。由于没有长度标记，因此每个数字表示占用的字节数量由曲线参数决定。对于 P-256曲线，这意味着 X 和 Y 各自使用 32 个字节，必要时在左侧用零填充。对于 P-384，它们各自占用 48 个字节。对于 P-521，它们各自占用 66 个字节。</p><p>对于 secp256r1、secp384r1 和 secp521r1 曲线，对端必须验证公共密钥点Q再椭圆曲线上。验证程序在 [ECDSA RFC] 的 4.3.7 节和 [KEYAGREEMENT] 的 5.6.2.3 节中有定义。此过程包括三个步骤：（1）验证 Q 不是无穷远点（0），（2）验证对于 Q = (x, y)，整数 x 和 y 都在正确的区间内，（3）确保 (x, y) 是椭圆曲线方程的正确解。对于这些曲线，实现者不需要验证其在正确的子群中。</p><p>对于 X25519 和 X448曲线，公共密钥点Q的内容是在 [RFC7748] 中定义的字节串输入和输出：X25519 为 32 个字节，X448 为 56 个字节。
-注意：TLS 1.3 之前的版本允许协商椭圆曲线的基点；TLS 1.3 取消了此功能，改为每个曲线采用固定的基点。</p><h4 class="relative group">4.2.9 Pre-Shared Key Exchange Modes<div id=429-pre-shared-key-exchange-modes class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#429-pre-shared-key-exchange-modes aria-label=锚点>#</a></span></h4><p>为了使用预共享密钥（PSKs），客户端还必须发送一个“psk_key_exchange_modes”扩展。这个扩展的语义是客户端仅支持PSKs使用这些模式，这限制了在此 ClientHello 中提供的 PSKs 的如何使用，同时限制了服务器可能通过 NewSessionTicket 提供的 PSKs 如何使用。</p><p>如果客户端提供“预共享密钥(PSK)”扩展，则必须提供“PSK 密钥交换模式(Pre-Shared Key Exchange Modes)”扩展。如果客户端提供“预共享密钥”但没有“PSK 密钥交换模式”扩展，服务器必须中止握手。服务器不得选择客户端未列出的密钥交换模式。此扩展还限制了用于 PSK 会话复用的模式。服务器不应发送与所宣传的模式不兼容的 NewSessionTicket；但是，如果服务器这样做，倒也没啥事，其影响仅仅是客户端的恢复尝试失败。</p><pre tabindex=0><code>			enum { psk_ke(0), psk_dhe_ke(1), (255) } PskKeyExchangeMode;
+</code></pre><p>X 和 Y 分别是网络字节序中 x 和 y 值的二进制表示（x,y是点的坐标）。由于没有长度标记，因此每个数字表示占用的字节数量由曲线参数决定。对于 P-256曲线，这意味着 X 和 Y 各自使用 32 个字节，必要时在左侧用零填充。对于 P-384，它们各自占用 48 个字节。对于 P-521，它们各自占用 66 个字节。</p>
+<p>对于 secp256r1、secp384r1 和 secp521r1 曲线，对端必须验证公共密钥点Q再椭圆曲线上。验证程序在 [ECDSA RFC] 的 4.3.7 节和 [KEYAGREEMENT] 的 5.6.2.3 节中有定义。此过程包括三个步骤：（1）验证 Q 不是无穷远点（0），（2）验证对于 Q = (x, y)，整数 x 和 y 都在正确的区间内，（3）确保 (x, y) 是椭圆曲线方程的正确解。对于这些曲线，实现者不需要验证其在正确的子群中。</p>
+<p>对于 X25519 和 X448曲线，公共密钥点Q的内容是在 [RFC7748] 中定义的字节串输入和输出：X25519 为 32 个字节，X448 为 56 个字节。
+注意：TLS 1.3 之前的版本允许协商椭圆曲线的基点；TLS 1.3 取消了此功能，改为每个曲线采用固定的基点。</p>
+
+
+<h4 class="relative group">4.2.9 Pre-Shared Key Exchange Modes 
+    <div id="429-pre-shared-key-exchange-modes" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#429-pre-shared-key-exchange-modes" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>为了使用预共享密钥（PSKs），客户端还必须发送一个“psk_key_exchange_modes”扩展。这个扩展的语义是客户端仅支持PSKs使用这些模式，这限制了在此 ClientHello 中提供的 PSKs 的如何使用，同时限制了服务器可能通过 NewSessionTicket 提供的 PSKs 如何使用。</p>
+<p>如果客户端提供“预共享密钥(PSK)”扩展，则必须提供“PSK 密钥交换模式(Pre-Shared Key Exchange Modes)”扩展。如果客户端提供“预共享密钥”但没有“PSK 密钥交换模式”扩展，服务器必须中止握手。服务器不得选择客户端未列出的密钥交换模式。此扩展还限制了用于 PSK 会话复用的模式。服务器不应发送与所宣传的模式不兼容的 NewSessionTicket；但是，如果服务器这样做，倒也没啥事，其影响仅仅是客户端的恢复尝试失败。</p>
+<pre tabindex="0"><code>			enum { psk_ke(0), psk_dhe_ke(1), (255) } PskKeyExchangeMode;
 
       struct {
           PskKeyExchangeMode ke_modes&lt;1..255&gt;;
       } PskKeyExchangeModes;
-</code></pre><p>psk_ke：仅 PSK 密钥建立。在此模式下，服务器不得提供“key_share”值（因为key share涉及到了（EC）DHE的握手流程，客户端不支持）</p><p>psk_dhe_ke：带有（EC）DHE 的 PSK 密钥建立。在此模式下，客户端和服务器必须按照<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8 target=_blank>第 4.2.8 节</a>中的描述提供“key_share”值。</p><p>任何未来新添加的PSK模式都必须明确标识服务器选择的模式；目前，这通过 ServerHello 中“key_share”的存在来表明。</p><h5 class="relative group">4.2.10 Early Data Indication<div id=4210-early-data-indication class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4210-early-data-indication aria-label=锚点>#</a></span></h5><p>当使用预共享密钥（PSK）并且该 PSK 允许发送early data时，客户端可以在第一趟发送数据的时候中发送应用数据（这句话是指发送ClientHello了，就发送earlydata）。如果客户端选择这样做，则必须同时提供“pre_shared_key”和“early_data”扩展。</p><p>此扩展的“扩展数据（extension_data）”字段包含一个“EarlyDataIndication”值。</p><pre tabindex=0><code> 			struct {} Empty;
+</code></pre><p>psk_ke：仅 PSK 密钥建立。在此模式下，服务器不得提供“key_share”值（因为key share涉及到了（EC）DHE的握手流程，客户端不支持）</p>
+<p>psk_dhe_ke：带有（EC）DHE 的 PSK 密钥建立。在此模式下，客户端和服务器必须按照<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.8" target="_blank">第 4.2.8 节</a>中的描述提供“key_share”值。</p>
+<p>任何未来新添加的PSK模式都必须明确标识服务器选择的模式；目前，这通过 ServerHello 中“key_share”的存在来表明。</p>
+
+
+<h5 class="relative group">4.2.10 Early Data Indication 
+    <div id="4210-early-data-indication" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4210-early-data-indication" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>当使用预共享密钥（PSK）并且该 PSK 允许发送early data时，客户端可以在第一趟发送数据的时候中发送应用数据（这句话是指发送ClientHello了，就发送earlydata）。如果客户端选择这样做，则必须同时提供“pre_shared_key”和“early_data”扩展。</p>
+<p>此扩展的“扩展数据（extension_data）”字段包含一个“EarlyDataIndication”值。</p>
+<pre tabindex="0"><code> 			struct {} Empty;
 
       struct {
           select (Handshake.msg_type) {
@@ -424,7 +1879,42 @@ Auth | {CertificateVerify*}
               case encrypted_extensions: Empty;
           };
       } EarlyDataIndication;
-</code></pre><p>0-RTT 数据的参数（版本、对称密码套件、应用层协议协商 (ALPN) [RFC7301] 协议等）和PSK是相关的。对于外部提供的 PSK，这些参数与PSK一起提供。对于通过 NewSessionTicket 消息建立的 PSK，这些参数是在建立 PSK 的连接中协商得出的。用于加密eayly data的 PSK 必须是客户端“pre_shared_key”扩展中列出的第一个 PSK。</p><p>对于通过 NewSessionTicket 提供的 PSK，服务器必须验证所选 PSK 标识的ticket age（通过从 PskIdentity.obfuscated_ticket_age 减去 ticket_age_add 并对 2^32 取模计算）和ticket颁发的时间的只有小范围的差值（见第 8 节）。如果不在，服务器应该继续握手但拒绝 0-RTT报文，因为这可能意味着此 ClientHello 是一个历史重放报文。</p><p>在0-RTT 消息同其他握手消息，使用相同类型的加密算法，但使用不同的密钥保护。在收到服务器的 Finished 消息后，如果服务器接受early data，将发送 EndOfEarlyData 消息以指示密钥更改。这条消息将使用 0-RTT 流量密钥进行加密。</p><p>收到“early_data”扩展的服务器必须以以下三种方式之一行事：</p><ul><li>忽略该扩展并返回常规的 1-RTT 响应。然后，服务器通过尝试使用握手流量密钥对接收的记录进行解密来跳过early data，丢弃解密失败的记录（最多丢弃max_early_data_size的报文）。一旦记录成功解密，它将被视为客户端传达的第二个报文，服务器按照普通的 1-RTT 握手进行处理。</li><li>通过发送HelloRetryRequest 要求客户端发送新的ClientHello。客户端在后续的 ClientHello 中不得包含“early data”扩展。然后，服务器通过跳过所有外部内容类型为“application_data”（表示它们已加密，这个类型在record layer里面显示）的记录来忽略early data，最多达到配置的 max_early_data_size。</li><li>在 EncryptedExtensions 中返回其自身的“early_data”扩展，表示它打算处理early data。稍微注意，服务器需要接受early data全部数据消息的一部分。即使服务器发送接受early data的消息，实际的early data在服务器生成此回应时可能已经在网路上传递。</li></ul><p>为了接受early data，服务器必须接受 PSK 密码套件，并选择客户端“pre_shared_key”扩展中提供的第一个密钥。此外，它必须验证以下新与所选 PSK 相关的信息相同：</p><ul><li>TLS 版本号</li><li>所选的密码套件</li><li>所选的 ALPN [RFC7301] 协议（如果有的话）</li></ul><p>这些限制是使用相关 PSK 执行 1-RTT 握手所需要求的超集。对于外部建立的 PSK，这些信息与PSK一起提供。对于通过 NewSessionTicket 消息建立的 PSK，这些信息是在颁发ticket的连接中协商得出的。</p><p>未来的扩展必须定义它们与 0-RTT 如何交互。</p><p>如果这些检查中的任何一项失败，服务器不得使用该扩展进行响应，并且必须使用上述前两种机制之一丢弃所有第一次传来的数据（从而回退到 1-RTT 或 2-RTT）。如果客户端尝试进行 0-RTT 握手但服务器拒绝，服务器通常不会产生 0-RTT record layer加密密钥，而必须使用握手密钥（使用 1-RTT 握手密钥或在 HelloRetryRequest 的情况下查找明文 ClientHello）来查找第一个非 0-RTT 消息。</p><p>如果服务器选择接受“early data”扩展，那么在处理early data记录时，如果无法解密 0-RTT 记录，它必须按照第 5.2 节的规定以“bad_record_mac”警报终止连接。</p><p>如果服务器拒绝“early data”扩展，客户端应用程序可以选择在握手完成后重新传输之前在early data中发送的应用数据。请注意，自动重新传输early data可能导致关于连接协议自动机状态转换错误。例如，当协商的连接选择与early data使用的不同的 ALPN 协议时，应用程序可能需要构建不同的消息。同样，如果early data假设了任何关于连接状态的内容，握手完成后再次发送，状态就可能发生了变化。</p><p>TLS 实现不应自动重新发送early data；交给应用程序决定决定何时重新传输更为合适。TLS实现者绝不能自动重新发送early data，除非协商连接时依然选择相同的 ALPN 协议。</p><h4 class="relative group">4.2.11 Pre-Shared Key Extension<div id=4211-pre-shared-key-extension class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4211-pre-shared-key-extension aria-label=锚点>#</a></span></h4><p>“预共享密钥”扩展用于协商与PSK的身份标识。</p><p>此扩展的“extension_data”字段包含一些“PreSharedKeyExtension”值：</p><pre tabindex=0><code>   struct {
+</code></pre><p>0-RTT 数据的参数（版本、对称密码套件、应用层协议协商 (ALPN) [RFC7301] 协议等）和PSK是相关的。对于外部提供的 PSK，这些参数与PSK一起提供。对于通过 NewSessionTicket 消息建立的 PSK，这些参数是在建立 PSK 的连接中协商得出的。用于加密eayly data的 PSK 必须是客户端“pre_shared_key”扩展中列出的第一个 PSK。</p>
+<p>对于通过 NewSessionTicket 提供的 PSK，服务器必须验证所选 PSK 标识的ticket age（通过从 PskIdentity.obfuscated_ticket_age 减去 ticket_age_add 并对 2^32 取模计算）和ticket颁发的时间的只有小范围的差值（见第 8 节）。如果不在，服务器应该继续握手但拒绝 0-RTT报文，因为这可能意味着此 ClientHello 是一个历史重放报文。</p>
+<p>在0-RTT 消息同其他握手消息，使用相同类型的加密算法，但使用不同的密钥保护。在收到服务器的 Finished 消息后，如果服务器接受early data，将发送 EndOfEarlyData 消息以指示密钥更改。这条消息将使用 0-RTT 流量密钥进行加密。</p>
+<p>收到“early_data”扩展的服务器必须以以下三种方式之一行事：</p>
+<ul>
+<li>忽略该扩展并返回常规的 1-RTT 响应。然后，服务器通过尝试使用握手流量密钥对接收的记录进行解密来跳过early data，丢弃解密失败的记录（最多丢弃max_early_data_size的报文）。一旦记录成功解密，它将被视为客户端传达的第二个报文，服务器按照普通的 1-RTT 握手进行处理。</li>
+<li>通过发送HelloRetryRequest 要求客户端发送新的ClientHello。客户端在后续的 ClientHello 中不得包含“early data”扩展。然后，服务器通过跳过所有外部内容类型为“application_data”（表示它们已加密，这个类型在record layer里面显示）的记录来忽略early data，最多达到配置的 max_early_data_size。</li>
+<li>在 EncryptedExtensions 中返回其自身的“early_data”扩展，表示它打算处理early data。稍微注意，服务器需要接受early data全部数据消息的一部分。即使服务器发送接受early data的消息，实际的early data在服务器生成此回应时可能已经在网路上传递。</li>
+</ul>
+<p>为了接受early data，服务器必须接受 PSK 密码套件，并选择客户端“pre_shared_key”扩展中提供的第一个密钥。此外，它必须验证以下新与所选 PSK 相关的信息相同：</p>
+<ul>
+<li>TLS 版本号</li>
+<li>所选的密码套件</li>
+<li>所选的 ALPN [RFC7301] 协议（如果有的话）</li>
+</ul>
+<p>这些限制是使用相关 PSK 执行 1-RTT 握手所需要求的超集。对于外部建立的 PSK，这些信息与PSK一起提供。对于通过 NewSessionTicket 消息建立的 PSK，这些信息是在颁发ticket的连接中协商得出的。</p>
+<p>未来的扩展必须定义它们与 0-RTT 如何交互。</p>
+<p>如果这些检查中的任何一项失败，服务器不得使用该扩展进行响应，并且必须使用上述前两种机制之一丢弃所有第一次传来的数据（从而回退到 1-RTT 或 2-RTT）。如果客户端尝试进行 0-RTT 握手但服务器拒绝，服务器通常不会产生 0-RTT  record layer加密密钥，而必须使用握手密钥（使用 1-RTT 握手密钥或在 HelloRetryRequest 的情况下查找明文 ClientHello）来查找第一个非 0-RTT 消息。</p>
+<p>如果服务器选择接受“early data”扩展，那么在处理early data记录时，如果无法解密 0-RTT 记录，它必须按照第 5.2 节的规定以“bad_record_mac”警报终止连接。</p>
+<p>如果服务器拒绝“early data”扩展，客户端应用程序可以选择在握手完成后重新传输之前在early data中发送的应用数据。请注意，自动重新传输early data可能导致关于连接协议自动机状态转换错误。例如，当协商的连接选择与early data使用的不同的 ALPN 协议时，应用程序可能需要构建不同的消息。同样，如果early data假设了任何关于连接状态的内容，握手完成后再次发送，状态就可能发生了变化。</p>
+<p>TLS 实现不应自动重新发送early data；交给应用程序决定决定何时重新传输更为合适。TLS实现者绝不能自动重新发送early data，除非协商连接时依然选择相同的 ALPN 协议。</p>
+
+
+<h4 class="relative group">4.2.11 Pre-Shared Key Extension 
+    <div id="4211-pre-shared-key-extension" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4211-pre-shared-key-extension" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>“预共享密钥”扩展用于协商与PSK的身份标识。</p>
+<p>此扩展的“extension_data”字段包含一些“PreSharedKeyExtension”值：</p>
+<pre tabindex="0"><code>   struct {
           opaque identity&lt;1..2^16-1&gt;;
           uint32 obfuscated_ticket_age;
       } PskIdentity;
@@ -442,19 +1932,286 @@ Auth | {CertificateVerify*}
               case server_hello: uint16 selected_identity;
           };
       } PreSharedKeyExtension;
-</code></pre><p>identity：psk的标识。例如，tieckt（如在<a href=https://www.rfc-editor.org/rfc/rfc8446.html#appendix-B.3.4 target=_blank>附录 B.3.4</a>中所定义）或外部建立的PSK的标签。
-obfuscated_ticket_age：混淆后的ticket age。<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.11.1 target=_blank>第 4.2.11.1 节</a>描述了如何通过 NewSessionTicket 消息声称此值。对于外部提供的SPK，应使用 0 的混淆票龄，服务器必须忽略该值。
-identities：客户端愿意与服务器协商的SPK列表。如果与“early_data”扩展一起发送（见<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.10 target=_blank>第 4.2.10 节</a>），第一个PSK用于 0-RTT 传输。
+</code></pre><p>identity：psk的标识。例如，tieckt（如在<a href="https://www.rfc-editor.org/rfc/rfc8446.html#appendix-B.3.4" target="_blank">附录 B.3.4</a>中所定义）或外部建立的PSK的标签。
+obfuscated_ticket_age：混淆后的ticket age。<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.11.1" target="_blank">第 4.2.11.1 节</a>描述了如何通过 NewSessionTicket 消息声称此值。对于外部提供的SPK，应使用 0 的混淆票龄，服务器必须忽略该值。
+identities：客户端愿意与服务器协商的SPK列表。如果与“early_data”扩展一起发送（见<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.2.10" target="_blank">第 4.2.10 节</a>），第一个PSK用于 0-RTT 传输。
 binders：一系列 HMAC 值，与PSK列表中的每个PSK一一对应且顺序相同，计算方式下面会描述。
-selected_identity：服务器选择的身份，表示为客户端列表中PSK的（基于 0 的）索引（就是个数字）</p><p>每个预共享密钥（PSK）都和一个哈希算法相关联。对于通过NST报文建立的 PSK（<a href=https://www.rfc-editor.org/rfc/rfc8446.html#section-4.6.1 target=_blank>第 4.6.1 节</a>），算法就是颁发Ticket时候用的 KDF 哈希算法。对于外部建立的 PSK，哈希算法是颁发PSK的时候建立的</p><p>如果未提供HASH算法，则 PSK默认用SHA-256。服务器必须确保选择兼容的 PSK（如果有）和密码套件。</p><p>在 TLS 1.3 之前的版本中，服务器名称标识（SNI）值旨在与会话相关联（[RFC6066]的第 3 节），要求服务器检查SNI 值与复用会话Session中中指定的SNI值匹配。然而，实际实现的时候，对于提供的两个 SNI 值是否一致，到底用哪一个并不一致，导致一致性检查实际上由客户端自己。在 TLS 1.3 中，SNI 值始终在恢复握手的报文中明确指定，服务器无需将 SNI 值与PSK的内容强关联。但是，客户端应将 SNI 与 PSK 一起存储以满足第 4.6.1 节的要求。</p><p>协议实现方需注意：当恢复会话是 PSK 的主要目的时，最简单实现 PSK/密码套件匹配要求的方法是首先协商密码套件，然后排除任何不兼容的 PSK。任何未知的 PSK（例如，不在 PSK 数据库中或使用未知密钥加密的 PSK）应直接忽略。如果未找到可接受的 PSK，服务器应在可能的情况下执行非 PSK 握手（就是完整握手）。如果后向兼容性很重要，客户端提供的、外部建立的 PSK 应影响密码套件的选择。</p><p>在接受 PSK 密钥建立之前，服务器必须验证相应的binder 值（见下面的第 4.2.11.2 节）。如果此值不存在或未通过验证，服务器必须中止握手。服务器不应尝试验证多个绑定器；相反，它们应选择单个 PSK 并仅验证与该 PSK 对应的绑定器。有关此要求的安全原理，请参见第 8.2 节和附录 E.6。为了向客户端表示接受 PSK 密钥，服务器需要发送一个“pre_shared_key”扩展，指示所选的标识。</p><p>客户端必须验证服务器的所选标识在客户端提供的范围内，服务器选择的密码套件的HASH算法也与 PSK 的HASH算法匹配。此外，如果 ClientHello 的“psk_key_exchange_modes”扩展要求提供非仅PSK模式的握手，则服务器的“key_share”扩展也必须存在。如果这些值不一致，客户端必须使用“illegal_parameter”警报中止握手。</p><p>如果服务器提供“early_data”扩展，客户端必须验证服务器的所选标识为 0。如果返回任何其他值，客户端必须使用“illegal_parameter”警报中止握手。</p><p>“pre_shared_key”扩展必须是 ClientHello 中的最后一个扩展（这有助于如下所述的实现）。服务器必须检查它是否是最后一个扩展，否则使用“illegal_parameter”警报中止握手。</p><h5 class="relative group">4.2.11.1. Ticket 年龄<div id=42111-ticket-%E5%B9%B4%E9%BE%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42111-ticket-%E5%B9%B4%E9%BE%84 aria-label=锚点>#</a></span></h5><p>客户端的Ticket Age的看法是自收到 NewSessionTicket 消息以来的duration。客户端不得尝试使用ticket age大于随ticket提供的“ticket_lifetime”值的ticket。每个 Psk Identity 的“obfuscated_ticket_age”字段都是混淆后的版本，计算方法为，以毫秒为单位的ticket age加上ticket包含的“ticket_age_add”值（见第 4.6.1 节），取模 2^32 形成。除非在不同连接重复使用PSK，此加法可防止监听者将Ticket和连接关联。请注意，NewSessionTicket 消息中的“ticket_lifetime”字段以秒为单位，而“obfuscated_ticket_age”以毫秒为单位。由于票证的有效期限制为一周，即使以毫秒为单位，32 位也足以表示任何合理的年龄。</p><h5 class="relative group">4.2.11.2. PSK Binder<div id=42112-psk-binder class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42112-psk-binder aria-label=锚点>#</a></span></h5><p>PSK Binder将PSK 与当本次握手关联起来，当然也关联了颁发PSK的时候（就是上次握手）。binder列表中的每个entry都采用一种方法计算得出，对从头到包含PreSharedKeyExtension.identities 字段的部分 ClientHello 做transcript hash，再（见第 4.4.1 节）进行 HMAC 计算得出。所以会除了Binders部分，包括本次所有的ClientHello。消息的长度字段（包括总长度、扩展块的长度和“pre_shared_key”扩展的长度）都设置为好像存在binder。</p><p>PskBinderEntry 的计算方式与 Finished 消息（第 4.4.4 节）相同，只不过把BaseKey换为binder_key，binder_key从PSK 派生得出（见第 7.1 节）。</p><p>如果握手时发送了HelloRetryRequest，计算transcript hash是，第一个ClientHello 和 HelloRetryRequest 会与新的 ClientHello 一起包含在计算中。例如，如果客户端发送 ClientHello1，其绑定器将通过以下方式计算：</p><pre tabindex=0><code>Transcript-Hash(Truncate(ClientHello1))
+selected_identity：服务器选择的身份，表示为客户端列表中PSK的（基于 0 的）索引（就是个数字）</p>
+<p>每个预共享密钥（PSK）都和一个哈希算法相关联。对于通过NST报文建立的 PSK（<a href="https://www.rfc-editor.org/rfc/rfc8446.html#section-4.6.1" target="_blank">第 4.6.1 节</a>），算法就是颁发Ticket时候用的 KDF 哈希算法。对于外部建立的 PSK，哈希算法是颁发PSK的时候建立的</p>
+<p>如果未提供HASH算法，则 PSK默认用SHA-256。服务器必须确保选择兼容的 PSK（如果有）和密码套件。</p>
+<p>在 TLS 1.3 之前的版本中，服务器名称标识（SNI）值旨在与会话相关联（[RFC6066]的第 3 节），要求服务器检查SNI 值与复用会话Session中中指定的SNI值匹配。然而，实际实现的时候，对于提供的两个 SNI 值是否一致，到底用哪一个并不一致，导致一致性检查实际上由客户端自己。在 TLS 1.3 中，SNI 值始终在恢复握手的报文中明确指定，服务器无需将 SNI 值与PSK的内容强关联。但是，客户端应将 SNI 与 PSK 一起存储以满足第 4.6.1 节的要求。</p>
+<p>协议实现方需注意：当恢复会话是 PSK 的主要目的时，最简单实现 PSK/密码套件匹配要求的方法是首先协商密码套件，然后排除任何不兼容的 PSK。任何未知的 PSK（例如，不在 PSK 数据库中或使用未知密钥加密的 PSK）应直接忽略。如果未找到可接受的 PSK，服务器应在可能的情况下执行非 PSK 握手（就是完整握手）。如果后向兼容性很重要，客户端提供的、外部建立的 PSK 应影响密码套件的选择。</p>
+<p>在接受 PSK 密钥建立之前，服务器必须验证相应的binder 值（见下面的第 4.2.11.2 节）。如果此值不存在或未通过验证，服务器必须中止握手。服务器不应尝试验证多个绑定器；相反，它们应选择单个 PSK 并仅验证与该 PSK 对应的绑定器。有关此要求的安全原理，请参见第 8.2 节和附录 E.6。为了向客户端表示接受 PSK 密钥，服务器需要发送一个“pre_shared_key”扩展，指示所选的标识。</p>
+<p>客户端必须验证服务器的所选标识在客户端提供的范围内，服务器选择的密码套件的HASH算法也与 PSK 的HASH算法匹配。此外，如果 ClientHello 的“psk_key_exchange_modes”扩展要求提供非仅PSK模式的握手，则服务器的“key_share”扩展也必须存在。如果这些值不一致，客户端必须使用“illegal_parameter”警报中止握手。</p>
+<p>如果服务器提供“early_data”扩展，客户端必须验证服务器的所选标识为 0。如果返回任何其他值，客户端必须使用“illegal_parameter”警报中止握手。</p>
+<p>“pre_shared_key”扩展必须是 ClientHello 中的最后一个扩展（这有助于如下所述的实现）。服务器必须检查它是否是最后一个扩展，否则使用“illegal_parameter”警报中止握手。</p>
+
+
+<h5 class="relative group">4.2.11.1. Ticket 年龄 
+    <div id="42111-ticket-%E5%B9%B4%E9%BE%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#42111-ticket-%E5%B9%B4%E9%BE%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>客户端的Ticket  Age的看法是自收到 NewSessionTicket 消息以来的duration。客户端不得尝试使用ticket age大于随ticket提供的“ticket_lifetime”值的ticket。每个 Psk Identity 的“obfuscated_ticket_age”字段都是混淆后的版本，计算方法为，以毫秒为单位的ticket age加上ticket包含的“ticket_age_add”值（见第 4.6.1 节），取模 2^32 形成。除非在不同连接重复使用PSK，此加法可防止监听者将Ticket和连接关联。请注意，NewSessionTicket 消息中的“ticket_lifetime”字段以秒为单位，而“obfuscated_ticket_age”以毫秒为单位。由于票证的有效期限制为一周，即使以毫秒为单位，32 位也足以表示任何合理的年龄。</p>
+
+
+<h5 class="relative group">4.2.11.2. PSK Binder 
+    <div id="42112-psk-binder" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#42112-psk-binder" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>PSK Binder将PSK 与当本次握手关联起来，当然也关联了颁发PSK的时候（就是上次握手）。binder列表中的每个entry都采用一种方法计算得出，对从头到包含PreSharedKeyExtension.identities 字段的部分 ClientHello 做transcript hash，再（见第 4.4.1 节）进行 HMAC 计算得出。所以会除了Binders部分，包括本次所有的ClientHello。消息的长度字段（包括总长度、扩展块的长度和“pre_shared_key”扩展的长度）都设置为好像存在binder。</p>
+<p>PskBinderEntry 的计算方式与 Finished 消息（第 4.4.4 节）相同，只不过把BaseKey换为binder_key，binder_key从PSK 派生得出（见第 7.1 节）。</p>
+<p>如果握手时发送了HelloRetryRequest，计算transcript hash是，第一个ClientHello 和 HelloRetryRequest 会与新的 ClientHello 一起包含在计算中。例如，如果客户端发送 ClientHello1，其绑定器将通过以下方式计算：</p>
+<pre tabindex="0"><code>Transcript-Hash(Truncate(ClientHello1))
 </code></pre><p>其中，Truncate() 会从 ClientHello 中删除binders列表。
-如果服务器用 HelloRetryRequest 响应，然后客户端发送 ClientHello2，其binders将通过以下方式计算：</p><pre tabindex=0><code>Transcript-Hash(ClientHello1, HelloRetryRequest, Truncate(ClientHello2))
-</code></pre><p>完整的 ClientHello1/ClientHello2 包含在所有其他握手哈希计算中。请注意，在第一次传输中，Truncate(ClientHello1) 直接进行哈希处理，但在第二次传输中，ClientHello1 先进行哈希处理，然后作为“message_hash”消息重新注入，如[第 4.4.1 节][0]所述。</p><h5 class="relative group">4.2.11.3 Processing Order<div id=42113-processing-order class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42113-processing-order aria-label=锚点>#</a></span></h5><p>客户端在收到服务器的“Finished”之前可以一致“流式传输” 0-RTT 数据，然后在发送“EndOfEarlyData”消息，和其他握手报文。为了避免死锁，当接受“early_data”时，服务器必须尽快处理客户端的“ClientHello”，然后立即发送其消息序列，而不是在发送其“ServerHello”之前等待客户端的“EndOfEarlyData”消息。</p><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-04-02-TLS1.3_8446_RFC翻译\\index.md",oid_likes="likes_posts\\2021-04-02-TLS1.3_8446_RFC翻译\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-03-29-%E6%95%B0%E8%AE%BA%E7%AC%94%E8%AE%B0/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">数论笔记</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-03-29T00:00:00+00:00>2021 年 3 月 29 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">boringSSL研究笔记</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-04-12T00:00:00+00:00>2021 年 4 月 12 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+如果服务器用 HelloRetryRequest 响应，然后客户端发送 ClientHello2，其binders将通过以下方式计算：</p>
+<pre tabindex="0"><code>Transcript-Hash(ClientHello1, HelloRetryRequest, Truncate(ClientHello2))
+</code></pre><p>完整的 ClientHello1/ClientHello2 包含在所有其他握手哈希计算中。请注意，在第一次传输中，Truncate(ClientHello1) 直接进行哈希处理，但在第二次传输中，ClientHello1 先进行哈希处理，然后作为“message_hash”消息重新注入，如[第 4.4.1 节][0]所述。</p>
+
+
+<h5 class="relative group">4.2.11.3 Processing Order 
+    <div id="42113-processing-order" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#42113-processing-order" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>客户端在收到服务器的“Finished”之前可以一致“流式传输” 0-RTT 数据，然后在发送“EndOfEarlyData”消息，和其他握手报文。为了避免死锁，当接受“early_data”时，服务器必须尽快处理客户端的“ClientHello”，然后立即发送其消息序列，而不是在发送其“ServerHello”之前等待客户端的“EndOfEarlyData”消息。</p>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2021-04-02-TLS1.3_8446_RFC翻译\/index.md"
+        var oid_likes = "likes_posts\/2021-04-02-TLS1.3_8446_RFC翻译\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2021-03-29-%E6%95%B0%E8%AE%BA%E7%AC%94%E8%AE%B0/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >数论笔记</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-03-29T00:00:00&#43;00:00">2021 年 3 月 29 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2021-04-12-boringssl%E7%A0%94%E7%A9%B6%E7%AC%94%E8%AE%B0/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >boringSSL研究笔记</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-04-12T00:00:00&#43;00:00">2021 年 4 月 12 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

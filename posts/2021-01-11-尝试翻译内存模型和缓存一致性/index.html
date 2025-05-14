@@ -1,21 +1,2050 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>尝试翻译内存模型和缓存一致性 &#183; 菜狗的blog</title>
-<meta name=title content="尝试翻译内存模型和缓存一致性 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="fun,"><link rel=canonical href=https://hxndg.github.io/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="尝试翻译内存模型和缓存一致性"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-01-11T00:00:00+00:00"><meta property="article:modified_time" content="2021-01-11T00:00:00+00:00"><meta property="article:tag" content="Fun"><meta name=twitter:card content="summary"><meta name=twitter:title content="尝试翻译内存模型和缓存一致性"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"尝试翻译内存模型和缓存一致性","headline":"尝试翻译内存模型和缓存一致性","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-01-11T00:00:00\u002b00:00","datePublished":"2021-01-11T00:00:00\u002b00:00","dateModified":"2021-01-11T00:00:00\u002b00:00","keywords":["fun"],"mainEntityOfPage":"true","wordCount":"19358"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">尝试翻译内存模型和缓存一致性</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-01-11T00:00:00+00:00>2021 年 1 月 11 日</time><span class="px-2 text-primary-500">&#183;</span><span>19358 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>39 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#第一章内存一致性和缓存一致性引论>第一章:内存一致性和缓存一致性引论</a></li><li><a href=#第二章缓存一致性基础>第二章：缓存一致性基础</a><ul><li><a href=#21-基线系统模型baseline-system-model>2.1 基线系统模型(BASELINE SYSTEM MODEL)</a></li><li><a href=#22-关键问题缓存不一致到底是怎样发生的>2.2 关键问题：缓存不一致到底是怎样发生的？</a></li><li><a href=#23-缓存一致性协议接口>2.3 缓存一致性协议接口</a></li><li><a href=#24-缓存不变式>2.4 缓存不变式</a><ul><li><a href=#241-实现缓存不变式>2.4.1 实现缓存不变式</a></li><li><a href=#242-缓存的粒度>2.4.2 缓存的粒度</a></li><li><a href=#243-缓存一致性何时重要>2.4.3 缓存一致性何时重要</a></li></ul></li></ul></li><li><a href=#第三章-顺序一致性>第三章 顺序一致性</a><ul><li><a href=#31-共享物理内存时的行为问题>3.1 共享物理内存时的行为问题</a></li><li><a href=#32什么是内存一致性模型>3.2什么是内存一致性模型</a></li><li><a href=#33-内存一致性vs缓存一致性>3.3 内存一致性VS缓存一致性</a></li><li><a href=#34-内存一致性的基本想法>3.4 内存一致性的基本想法</a></li><li><a href=#35-强定序的简单定义>3.5 强定序的简单定义</a></li><li><a href=#36-简单的强定序实现>3.6 简单的强定序实现</a></li><li><a href=#37-一个兼容缓存一致性的简单sc实现>3.7 一个兼容缓存一致性的简单SC实现</a></li><li><a href=#38使用缓存一致性优化sc实现>3.8使用缓存一致性优化SC实现</a></li><li><a href=#39-sc模型的原子操作>3.9 SC模型的原子操作</a></li><li><a href=#310-真实的例子mips-r1000>3.10 真实的例子MIPS R1000</a></li><li><a href=#311-强定序的更多资料>3.11 强定序的更多资料</a></li></ul></li><li><a href=#第四章>第四章</a><ul><li><a href=#41-tsox86设计的缘由>4.1 TSO/X86设计的缘由</a><ul><li><a href=#441-实现原子指令>4.4.1 实现原子指令</a></li></ul></li></ul></li><li><a href=#第五章-弱内存序>第五章 弱内存序</a><ul><li><a href=#51-动机>5.1 动机</a><ul><li><a href=#512-利用重排序的机会>5.1.2 利用重排序的机会</a></li></ul></li><li><a href=#52-一个弱内存序例子>5.2 一个弱内存序例子</a><ul><li><a href=#521-xc模型的基本理念>5.2.1 XC模型的基本理念</a></li><li><a href=#522-在xc模型下使用栅栏的例子>5.2.2 在XC模型下使用栅栏的例子</a></li></ul></li><li><a href=#53-实现xc模型>5.3 实现XC模型</a><ul><li><a href=#531-在xc模型中实现原子指令>5.3.1 在XC模型中实现原子指令</a></li><li><a href=#532-在xc模型中实现屏障>5.3.2 在XC模型中实现屏障</a></li><li><a href=#533-警告>5.3.3 警告</a></li></ul></li><li><a href=#54-实现无竞争的一致性程序>5.4 实现无竞争的一致性程序</a></li><li><a href=#55-一些弱内存序的术语>5.5 一些弱内存序的术语</a><ul><li><a href=#551-释放一致性>5.5.1 释放一致性</a></li><li><a href=#552-可视性和写原子性>5.5.2 可视性和写原子性</a></li></ul></li></ul></li><li><a href=#第六章-缓存一致性协议>第六章 缓存一致性协议</a><ul><li><a href=#61-全局视角看缓存一致性>6.1 全局视角看缓存一致性</a></li><li><a href=#62-描述缓存一致性协议>6.2 描述缓存一致性协议</a></li><li><a href=#63-缓存一致性协议的例子>6.3 缓存一致性协议的例子</a></li><li><a href=#64-总览缓存一致性设计>6.4 总览缓存一致性设计</a><ul><li><a href=#641-状态>6.4.1 状态</a></li><li><a href=#642-事务>6.4.2 事务</a></li></ul></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#第一章内存一致性和缓存一致性引论>第一章:内存一致性和缓存一致性引论</a></li><li><a href=#第二章缓存一致性基础>第二章：缓存一致性基础</a><ul><li><a href=#21-基线系统模型baseline-system-model>2.1 基线系统模型(BASELINE SYSTEM MODEL)</a></li><li><a href=#22-关键问题缓存不一致到底是怎样发生的>2.2 关键问题：缓存不一致到底是怎样发生的？</a></li><li><a href=#23-缓存一致性协议接口>2.3 缓存一致性协议接口</a></li><li><a href=#24-缓存不变式>2.4 缓存不变式</a><ul><li><a href=#241-实现缓存不变式>2.4.1 实现缓存不变式</a></li><li><a href=#242-缓存的粒度>2.4.2 缓存的粒度</a></li><li><a href=#243-缓存一致性何时重要>2.4.3 缓存一致性何时重要</a></li></ul></li></ul></li><li><a href=#第三章-顺序一致性>第三章 顺序一致性</a><ul><li><a href=#31-共享物理内存时的行为问题>3.1 共享物理内存时的行为问题</a></li><li><a href=#32什么是内存一致性模型>3.2什么是内存一致性模型</a></li><li><a href=#33-内存一致性vs缓存一致性>3.3 内存一致性VS缓存一致性</a></li><li><a href=#34-内存一致性的基本想法>3.4 内存一致性的基本想法</a></li><li><a href=#35-强定序的简单定义>3.5 强定序的简单定义</a></li><li><a href=#36-简单的强定序实现>3.6 简单的强定序实现</a></li><li><a href=#37-一个兼容缓存一致性的简单sc实现>3.7 一个兼容缓存一致性的简单SC实现</a></li><li><a href=#38使用缓存一致性优化sc实现>3.8使用缓存一致性优化SC实现</a></li><li><a href=#39-sc模型的原子操作>3.9 SC模型的原子操作</a></li><li><a href=#310-真实的例子mips-r1000>3.10 真实的例子MIPS R1000</a></li><li><a href=#311-强定序的更多资料>3.11 强定序的更多资料</a></li></ul></li><li><a href=#第四章>第四章</a><ul><li><a href=#41-tsox86设计的缘由>4.1 TSO/X86设计的缘由</a><ul><li><a href=#441-实现原子指令>4.4.1 实现原子指令</a></li></ul></li></ul></li><li><a href=#第五章-弱内存序>第五章 弱内存序</a><ul><li><a href=#51-动机>5.1 动机</a><ul><li><a href=#512-利用重排序的机会>5.1.2 利用重排序的机会</a></li></ul></li><li><a href=#52-一个弱内存序例子>5.2 一个弱内存序例子</a><ul><li><a href=#521-xc模型的基本理念>5.2.1 XC模型的基本理念</a></li><li><a href=#522-在xc模型下使用栅栏的例子>5.2.2 在XC模型下使用栅栏的例子</a></li></ul></li><li><a href=#53-实现xc模型>5.3 实现XC模型</a><ul><li><a href=#531-在xc模型中实现原子指令>5.3.1 在XC模型中实现原子指令</a></li><li><a href=#532-在xc模型中实现屏障>5.3.2 在XC模型中实现屏障</a></li><li><a href=#533-警告>5.3.3 警告</a></li></ul></li><li><a href=#54-实现无竞争的一致性程序>5.4 实现无竞争的一致性程序</a></li><li><a href=#55-一些弱内存序的术语>5.5 一些弱内存序的术语</a><ul><li><a href=#551-释放一致性>5.5.1 释放一致性</a></li><li><a href=#552-可视性和写原子性>5.5.2 可视性和写原子性</a></li></ul></li></ul></li><li><a href=#第六章-缓存一致性协议>第六章 缓存一致性协议</a><ul><li><a href=#61-全局视角看缓存一致性>6.1 全局视角看缓存一致性</a></li><li><a href=#62-描述缓存一致性协议>6.2 描述缓存一致性协议</a></li><li><a href=#63-缓存一致性协议的例子>6.3 缓存一致性协议的例子</a></li><li><a href=#64-总览缓存一致性设计>6.4 总览缓存一致性设计</a><ul><li><a href=#641-状态>6.4.1 状态</a></li><li><a href=#642-事务>6.4.2 事务</a></li></ul></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">尝试翻译内存模型和缓存一致性<div id=%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 aria-label=锚点>#</a></span></h1><p>建议读者在阅读前搞明白缓存和计算机的一些基础知识，诸如缓存是怎么设计，缓存为何使用物理内存做标记，CPU的乱序指令，在指令队列和结果队列上是如何进行的。建议阅读《现代体系结构上的unix系统》和wiki百科。对内容有疑问建议直接stackoverflow或者看英文，对内容有异议可以直接回复我或者在github上发patch。</p><h2 class="relative group">第一章:内存一致性和缓存一致性引论<div id=%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%BC%95%E8%AE%BA class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%BC%95%E8%AE%BA aria-label=锚点>#</a></span></h2><p>许多操作系统和大部分多和芯片(多核处理器)支持共享物理内存。在一个共享物理内存的系统中，每个核都可能读写同一个地址。这种设计的目标是追求良好的功效：比方说高性能，低能耗，低消耗()</p><h2 class="relative group">第二章：缓存一致性基础<div id=%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%9F%BA%E7%A1%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%9F%BA%E7%A1%80 aria-label=锚点>#</a></span></h2><p>本章我们会充分介绍缓存一致性来帮助理解强定序模型（也可被译为一致性内存模型，SC）如何和缓存交互。从2.1节开始我们会展示本书一直涉及到的强定序模型。为了简化本章节和其他章节的理论复杂性，我们选择最简单的系统模型来展示需要关注的重要事项；到第九章我们才会涉及到更复杂的系统模型。2.2讲述有哪些必须解决的缓存一致性问题及为什么会有缓存不一致问题出现。2.3节给出了缓存一致性概念具体的定义。（这里多赘述一点，X86硬件实现缓存一致性，而ARM并非如此！需要软件实现）</p><h3 class="relative group">2.1 基线系统模型(BASELINE SYSTEM MODEL)<div id=21-%E5%9F%BA%E7%BA%BF%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8Bbaseline-system-model class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E5%9F%BA%E7%BA%BF%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8Bbaseline-system-model aria-label=锚点>#</a></span></h3><p>本书里，我们将系统视为一个拥有多个处理器，共享同一个物理内存，所有的处理器都可以对所有的物理地址进行载入和存储操作的模型。该基线系统包含一个单独的多核芯片和芯片外的物理内存，就如同图2.1展示的那样。多核芯片包含多个单线程的处理器，每个处理都有自己的私有数据缓存。每个核共享一个最低层级缓存（last-level cache (LLC) ）。当我们谈到“缓存”这个词，我们指的是每个核上的私有数据缓存而不是最低层级缓存。每个核的私有数据成员通过物理地址生成索引和标记，采取写回策略(注，不明白什么是写回策略的可以看《现代体系结构上的unix系统》)。处理器们和最低层级缓存使用交互网络（interconnection network）通信。尽管最低层级缓存也在处理器芯片上，但从逻辑角度来看，是个“内存部分缓存”(memory-side cache)，因此并不会导致任何缓存一致性问题。从逻辑层面来看，最低层级缓存直接和内存交互，提供降低内存访问延迟和增加内存访问带宽的功能。它同样充当（多处理器芯片的）片上内存控制器角色。</p><p>我们的基线系统模型忽略了很多和本书内容无关，但是很常见的设计。这些设计包括指令缓存，多级缓存，多处理器共享一级缓存，虚拟地址缓存，TLB，DMA。同时，我们忽略包含多个多核芯片的系统。这些会添加不必要复杂度的话题，以后再说。</p><ul><li><figure><img class="my-0 rounded-md" loading=lazy src=imgs/%E5%9B%BE2_1_Baseline_system_modle.png alt=图2.1></figure></li></ul><h3 class="relative group">2.2 关键问题：缓存不一致到底是怎样发生的？<div id=22-%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E7%BC%93%E5%AD%98%E4%B8%8D%E4%B8%80%E8%87%B4%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%8F%91%E7%94%9F%E7%9A%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E7%BC%93%E5%AD%98%E4%B8%8D%E4%B8%80%E8%87%B4%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%8F%91%E7%94%9F%E7%9A%84 aria-label=锚点>#</a></span></h3><p>缓存不一致之所以会出现是因为一个很基本的问题：多个角色可以并行地访问内存和缓存的入口。现代操作系统里，这些角色包括处理器，DMA控制器，和一些其他的可读写缓存和内存的外部设备。在本书里，我们将目光投射于处理器，但这并不意味可以无视处理器以外的角色。</p><p>表2.1展示了一个缓存不一致的例子，一开始内存地址A和两个处理器的本地缓存都存储值42。在时刻1，处理器1改变了其缓存和内存地址A储存的值，从42变到43。这使得处理器2缓存里的值过时。处理器2在执行一个while循环的载入，重复地从它自己的本地缓存中载入已经过时的A的值42。很明显，这个缓存不一致的例子，是由于处理器1对A的储存行为，对处理器2是不可见，而导致的。</p><p>为了避免这种缓存不一致问题，系统必须实现缓存一致性协议（cache coherence protocol ）才能保证处理器1的结果对处理器2是可见的。设计和实现缓存一致性协议是第六章-第九章的主要话题。</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/table_2_1_incoherence_rise.png alt=表2.1></figure></p><h3 class="relative group">2.3 缓存一致性协议接口<div id=23-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E6%8E%A5%E5%8F%A3 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E6%8E%A5%E5%8F%A3 aria-label=锚点>#</a></span></h3><p>通俗的说，缓存一致性协议必须保证写操作对所有的处理器可见。本节，我们会正式地从缓存一致性接口中抽象出缓存一致性协议。</p><p>处理器通过缓存一致性协议提供的两个接口来进行交互：(1)读请求(read-request)，该请求将内存地址作为参数，该请求的结果是向处理器返回一个值。(2)写请求(write-request)将内存地址作为参数1，将要写入的值作为参数2，该请求的结果是向处理器返回一个确认值。</p><p>无论是学术还是工业界，目前已经由许多缓存一致性协议出现，我们会根据这些缓存一致性协议提供的接口进行区分，具体来说就是通过缓存一致性是否和内存一致性密不可分来区分。</p><ul><li>一致性不可区分协议 这种协议，执行写请求时，即使没有返回确认，写入的结果立刻对其他核可见。因为写操作是同步传播的，第一种缓存一致性协议就如同工作在一个原子操作内存系统上(缓存仿佛不存在一样)。任何和这种缓存一致性协议交互的子系统-比方说处理器管线-可以认为它正在和一个没有缓存的原子操作内存系统交互。从追求实现代码顺序一致性的角度来看，这种协议免去了程序员对多核系统中变量值不同的担忧。这种缓存一致性协议将缓存透明化，仿佛移除了缓存的存在，只有原子操作内存系统。这种协议的实现，将问题丢给了处理器管线（硬件）解决。</li><li>一致性可区分协议 这种协议的写结果是异步传播的，因此写操作的确认可能在其他核可见之前就返回给当前核，从而可以在其他核上观测到过期的变量。然而，为了不违背内存一致性的要求，这种类型的缓存一致性协议必须保证写入的值所显示的顺序，和写入操作写入的顺序是一致的（我理解为，如果写入操作的顺序是a,b,c,d,e，那么其他核看到的顺序也得是a,b,c,d,e。不能出现a,d,c,b,e这种混乱的顺序）。图2.2中，处理器管线和缓存一致性协议一起努力实现内存一致性。第二种类型的缓存一致性多见于GPU。</li></ul><p>本书主要关注第一种缓存一致性协议，第二种类型的协议到第十章才会讨论。</p><p><figure><img class="my-0 rounded-md" loading=lazy src=imgs/figure_2_2_pipeline_coherence_interface.png alt=图2.2></figure></p><h3 class="relative group">2.4 缓存不变式<div id=24-%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#24-%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F aria-label=锚点>#</a></span></h3><p>究竟缓存一致性协议应当满足什么不变式，才能使得缓存透明化，将物理内存和缓存系统抽象成一个原子内存系统呢？目前无论是工业界还是学术界，已经有多种缓存一致性的定义，我们可不想把他们都列出来。作为替代，我们会给出一种体现缓存一致性本质的定义。在侧边栏里，我们会讨论其他定义，展示他们和我们的定义有什么关系。</p><p>我们将缓存一致性协议定义为满足单写多读不变式（SWMR(single-writer–multiple-reader )）的协议。任何一个时刻，对于特定的内存地址，在任何一个时刻，如果该地址的内容只被一个核修改，不存在其他核也在同时进行读或写操作，或者（这个或者对应于那个“如果该地址”）此时没有任何一个核进行写操作，多个核在对这块地址进行读操作。换另一种说法，对任何内存块而言，该块的生命周期被分为多个周期。每个周期里，该内存块只会处于两种状况：一种状况是只有一个核拥有读+写权限，另一种状况是有多个核(也可能一个都没有)拥有只读权限。图2.3展示了将内存块生命周期拆分开的例子。</p><p>除了SWMR不变式，缓存一致性协议同样要求操作内存块值的行为可以被正确的传播（）。设想图2.3中的例子，即使满足了SWMR不变式，如果第一个只读周期，核2和核5读到了不同的值，那么系统就不满足协议一致性了。相似地，如果核1没能成功读取核3在读+写周期写入的值，或者核1，核2，核3没能读取到核1存储的值，协议一致性再次被打破。</p><p>因此，必须满足SWMR不变式和数据值操作正确(Data-Value Invariant )不变式才能满足缓存一致性协议，数据值操作正确不变式保证了处理器在读周期，能正确读到该内存块处于读+写周期时最后写入的值。</p><p>其他的缓存一致性协议不变式的定义和我们的大同小异。（下面的翻译是我胡编的）虎符协议，只有拿到所有的虎符才能执行调兵操作（写操作），否则只能执行报数操作（读操作）。在任意时刻，只可能有一个调兵操作（写操作）或者多个报数操作（读操作）。</p><img src=imgs/figure_2_3_swmr_epoch.png alt=图2.1><h4 class="relative group">2.4.1 实现缓存不变式<div id=241-%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#241-%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F aria-label=锚点>#</a></span></h4><p>上一节提到的几个不变式暗示了缓存一致性协议如何工作。大部分缓存一致性协议，被称为“无效化协议”，就满足这些不变式。如果一个核想读取一块内存，就向其他核发送消息请求获取该内存块的值并确保不会有其他核已经缓存了这个内存块的值，且（其他核）处于读+写状态。该消息会终止任何当前活跃的读+写状态，并开始一个只读周期。如何该核相对某个内存块写，它会对其他核发送请求获取该内存块的值，并确定其它核没有缓存该内存块，无论他们是出于只读还是读+写状态。该请求会终止任何活跃的读+写或只读的周期，并开始一个新的读+写周期。后续的章节(6-9章)拓展了这种协议的抽象模型，但实现一致性基本的理念不变。</p><h4 class="relative group">2.4.2 缓存的粒度<div id=242-%E7%BC%93%E5%AD%98%E7%9A%84%E7%B2%92%E5%BA%A6 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#242-%E7%BC%93%E5%AD%98%E7%9A%84%E7%B2%92%E5%BA%A6 aria-label=锚点>#</a></span></h4><p>一个核可以以多种粒度执行载入和储存操作，粒度一般从1-64字节浮动。理论上来说，缓存一致性可以以任意粒度执行。然后现实环境里缓存一致性的粒度经常和缓存块大小保持一致&mdash;真实硬件以缓存块长度实现缓存一致性。对真实硬件而言，基本不可能出现一个核修改缓存块的第一个字节，其他核修改该缓存块的其他字节(对缓存的修改通常都是整行的，从实现角度和理论角度，效率更好实现简单)。尽管以缓存块长度为缓存一致性实行的粒度更为普遍，我们需要认识到缓存一致性协议可以以其他粒度实现。</p><h4 class="relative group">2.4.3 缓存一致性何时重要<div id=243-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BD%95%E6%97%B6%E9%87%8D%E8%A6%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#243-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BD%95%E6%97%B6%E9%87%8D%E8%A6%81 aria-label=锚点>#</a></span></h4><p>无论我们选择如何定义缓存一致性，缓存一致性只在特定情况下至关重要。架构设计者必须清楚缓存一致性是否生效。我们指出两条缓存一致性的准则(我理解为缓存一致性提供的保证)。</p><ul><li>缓存一致性对任何层级的缓存和共享物理内存都适用。这些结构包括L1数据缓存，L2级别缓存，共享的LLC，和主存。此外诸如L1指令缓存和TLB同样适用。(这句话需要注意，这些结构并不包含per core write buffer，也就是每个核的写缓存器。写缓冲器和L1/L2/LLC cache并不是一个东西，如果这个不清楚，看TSO和PSO的时候会产生很多疑问)</li><li>缓存一致性对程序员是透明的。处理器管线(pipeline)和一致性模型一同努力提供强定序的内存模型，程序员只能注意到强定序的内存模型。</li></ul><h2 class="relative group">第三章 顺序一致性<div id=%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7 aria-label=锚点>#</a></span></h2><p>本章研究内存顺序一致性模型，该模型给程序员和实现者定义了共享物理内存的系统在程序执行时，应当提供什么样子的时序：程序员知道系统可以提供什么样子的时序，实现者知道系统应当提供什么样子的时序。我们先在3.1节给出为什么要定义内存行为，3.2节给出内存一致性模型应该做些什么，3.3节对比内存一致性和缓存一致性。</p><p>我们之后研究最直观的一致性模型强定序，或者说顺序一致性模型。强定序之所以重要，一方面是因为该模型是很多程序员期待的共享物理内存提供的模型，另一方面是因为它是理解下两章弱内存序模型(宽松内存序模型)的基础。我们现在3.4节给出强定序的基本理念，然后给出形式化定义(3.5节)。3.6节讨论强定序的实现，3.7节讲解基于缓存一致性的强定序，3.8节讲解更激进的优化，3.9节讲解强定序下原子指令的实现。3.10和3.11节我们研究MIPS R10000的现实例子，并给出一些参考资料。</p><h3 class="relative group">3.1 共享物理内存时的行为问题<div id=31-%E5%85%B1%E4%BA%AB%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-%E5%85%B1%E4%BA%AB%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>为了理解为什么需要定义共享物理内存时，操作内存哪些表现是正常的，看表3.1中双核处理器的例子(这个例子，和本章所有其他例子一致，都认为变量的初始值为0)：大部分程序员会期待核C2的寄存器r2会获得值NEW。然而，一部分现代计算机系统上，r2的值可以为0。</p><img src=imgs/table3_1_3_2.png alt=图6.4><p>硬件如果重排核C1的两条存储指令S1和S2，就会导致r2获得0值。如果我们只看核C1的执行，不关心和其他线程的交互，那么重排S1和S2似乎没有什么问题，因为两者访问的是不同的地址。18页的侧边栏描述了硬件可能以怎样的方式重排指令，储存操作自然也在这些指令中。</p><p>伴随着S1和S2的重排，指令执行的顺序可能为S2，L1，L2，S1&ndash;如同表格3.2所示。</p><p>这种指令执行的顺序满足缓存一致性，它并没有违背SWMR不变式。换言之，违背缓存一致性并不是导致这个显而易见错误的原因。让我们考虑用于提供互斥(mutual exclusion，详情参加《多处理器编程的艺术》修订版)Dekker算法提供的例子，该例子如同表3.3所示。在指令执行之后，r1和r2中的值可能是多少？下意识地，读者可能认为会是下面三种值：</p><ul><li>(r1, r2) = (0, NEW) 执行顺序为 S1, L1, S2, then L2</li><li>(r1, r2) = (NEW, 0) 执行顺序为 S2, L2, S1, and L1</li><li>(r1, r2) = (NEW, NEW), 执行顺序为 S1, S2, L1, and L2</li></ul><p>令人惊讶的是在大部分机器上，比方说intel和AMD提供的X86系统上，由于FIFO写缓冲器的存在(这部分请看后面的章节，现在不明白无所谓)，(r1, r2) = (0, 0) 的情况同样可能出现。</p><img src=imgs/table_3_3.png alt=图6.4><p>一些读者难以对这个例子表示认同，他们认为如果这个例子是正确的，那么程序执行的结果岂不是不固定了？这对于编程者来说也不是一个明确的编程模型。然而，现代多处理器体系结构的执行流本身就是不确定的，所有我们知道的体系结构又允许指令并行执行（流水线执行）。执行结果是否确定是由线程之间明确的进行同步操作来保证的，因此当定义什么是共享物理内存的多处理器机器正确的内存模型时，我们必须认可执行结果可能有多种正确的答案。</p><p>更一般地来讲，内存表现出来的结果通常要适用于所有的应用程序执行的结果，即使这些程序执行的是错误的操作/复杂的操作（比方说非阻塞算法）。然而在第五章，我们会看到一些高层语言模型确实允许一些执行的结果出现未定义的行为，换言之面临data race。（实际上是弱内存序，看到第五章就明白咋回事了）</p><h3 class="relative group">3.2什么是内存一致性模型<div id=32%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#32%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B aria-label=锚点>#</a></span></h3><p>内存一致性模型，或者说内存模型是一种技术规范，该技术规范指明了多线程程序操作共享的物理内存时的合法行为。对多线程程序而言，它指明了该执行过存储操作的多线程程序，动态的载入会返回什么样的值。和单线程程序执行不同，有多种正确的行为。</p><p>通俗的说，内存一致性模型MC(memory consistency)将指令操作分为遵守MC和不遵守MC两种。这种划分从指令执行角度划分，相对应的也可以从实现角度划分。一个MC实现系统指的是该系统只允许遵守MC的指令，一个非MC实现系统值得是该系统有时允许非MC指令的执行。</p><p>从一开始，我们一直假设程序执行硬件指令集中的指令，此外我们假设内存通过物理内存进行访问(也就是说，我们不关系虚拟内存和地址翻译的影响)。第五章我们会讨论高层次语言(high-level languages (HLLs) )，我们将会发现编译器如果在编译分配变量的指令时，把寄存器指定为该变量，会导致该高层语言内存模型类似的行为类似硬件重拍内存访问顺序(翻译存疑)</p><h3 class="relative group">3.3 内存一致性VS缓存一致性<div id=33-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7vs%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#33-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7vs%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 aria-label=锚点>#</a></span></h3><p>第二章使用两个不变式给出了缓存一致性的定义，我们在此非正式地重复一下。SWMR不变式确保在任何时候，对于一个给定地址的内存位置，要么(a)一个核心可以写（和读）这个地址，要么(b)0个或更多的核心可以只读它。数据-值不变式（data-value invarient)确保对内存中数据的更新可以被正确传递，从而内存中对该数据的缓存副本总是包含最新版本的value。</p><p>缓存一致性似乎可以定义共享内存的正确行为？其实不然。从图3.1中我们可以看到，一致性协议只是为处理器核心管道提供了一个内存系统的抽象（换言之就是只是提供了几个核对内存当中行为操作的合法规定，并不能决定着写操作的顺序和具体表现）。它并不能单独决定共享内存最终表现出来的行为；指令流水线在决定最终表现出来的行为时也起了很大作用。比方说，如果流水线（pipeline，我理解是指令pipeline）重新排序，并采用和程序顺序相背的顺序提交内存操作&ndash;即使一致性协议正确地完成了它的工作&ndash;共享内存的所表现出来的结果，可能斌不会如同我们期待的一般。</p><p>总结来说：</p><ul><li>缓存一致性不等同于内存一致性</li><li>内存一致性可以将缓存一致性视为一个非常有用的黑盒（就是指关注结果，不关注实现）</li></ul><h3 class="relative group">3.4 内存一致性的基本想法<div id=34-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%83%B3%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#34-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%83%B3%E6%B3%95 aria-label=锚点>#</a></span></h3><p>最直观的内存一致性模型是强定序SC。它首先由Lam-port[12]正式提出。我们现在来给出内存一致性的基本定义，对单核而言，强定序（SC）为 “单纯看指令执行的结果，就好像指令按照程序执行的顺序（指令序）执行”，然后再定义了多核顺序一致性“指令执行的结果，看起来就好像多核按照某种时序执行，同时每个核指令执行的顺序同程序指定的顺序一致”。将所有指令真实的执行顺序被称为内存时序(memory order)。在内存一致性的强定序SC模型中，内存时序不违反任何一个核上执行的程序顺序，但其他一致性模型可能并不总会保证内存时序和程序顺序一致。</p><p>图3.2展示了表3.1中示例程序如何执行，中间的竖线代表真实的执行顺序就是内存序，每个核的竖线代表程序序，我们使用运算符&lt; m代表内存序先发生，所以op1 &lt;m op2代表o1 在内存序上先于op2发生。同样地，我们使用操作符&lt;p来代表每个核的程序顺序，所以op1 &lt;p op2意味着在该核的程序顺序中op1先于op2发生。在SC下，内存顺序符合（原本是respect）每个核的程序顺序。&ldquo;符合 &ldquo;指如果op1 &lt;p op2那么op1 &lt;m op2。注释中的值（/* &mldr; */）给出了加载或存储的值。这段程序执行结束时，r2的值为new的。更一般地说，表格 3.1中程序的所有执行结果都伴随着r2的值为new。唯一的非确定性&ndash;L1从flag中获得SET值之前取到0的次数&ndash;是不重要的。</p><p>这个例子说明了强定序的价值。在第3.1节中，如果你预期r2最终的结果为NEW的，那么你可能就已经隐约意识到了强定序，只不过没有Lamport那么精确而已。
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>尝试翻译内存模型和缓存一致性 &middot; 菜狗的blog</title>
+  <meta name="title" content="尝试翻译内存模型和缓存一致性 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="fun, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="尝试翻译内存模型和缓存一致性">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-01-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-01-11T00:00:00+00:00">
+    <meta property="article:tag" content="Fun">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="尝试翻译内存模型和缓存一致性">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "尝试翻译内存模型和缓存一致性",
+    "headline": "尝试翻译内存模型和缓存一致性",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2021",
+    "dateCreated": "2021-01-11T00:00:00\u002b00:00",
+    "datePublished": "2021-01-11T00:00:00\u002b00:00",
+    
+    "dateModified": "2021-01-11T00:00:00\u002b00:00",
+    
+    "keywords": ["fun"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "19358"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      尝试翻译内存模型和缓存一致性
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2021-01-11T00:00:00&#43;00:00">2021 年 1 月 11 日</time><span class="px-2 text-primary-500">&middot;</span><span>19358 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">39 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第一章内存一致性和缓存一致性引论">第一章:内存一致性和缓存一致性引论</a></li>
+    <li><a href="#第二章缓存一致性基础">第二章：缓存一致性基础</a>
+      <ul>
+        <li><a href="#21-基线系统模型baseline-system-model">2.1 基线系统模型(BASELINE SYSTEM MODEL)</a></li>
+        <li><a href="#22-关键问题缓存不一致到底是怎样发生的">2.2 关键问题：缓存不一致到底是怎样发生的？</a></li>
+        <li><a href="#23-缓存一致性协议接口">2.3 缓存一致性协议接口</a></li>
+        <li><a href="#24-缓存不变式">2.4 缓存不变式</a>
+          <ul>
+            <li><a href="#241-实现缓存不变式">2.4.1 实现缓存不变式</a></li>
+            <li><a href="#242-缓存的粒度">2.4.2 缓存的粒度</a></li>
+            <li><a href="#243-缓存一致性何时重要">2.4.3 缓存一致性何时重要</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第三章-顺序一致性">第三章 顺序一致性</a>
+      <ul>
+        <li><a href="#31-共享物理内存时的行为问题">3.1 共享物理内存时的行为问题</a></li>
+        <li><a href="#32什么是内存一致性模型">3.2什么是内存一致性模型</a></li>
+        <li><a href="#33-内存一致性vs缓存一致性">3.3 内存一致性VS缓存一致性</a></li>
+        <li><a href="#34-内存一致性的基本想法">3.4 内存一致性的基本想法</a></li>
+        <li><a href="#35-强定序的简单定义">3.5 强定序的简单定义</a></li>
+        <li><a href="#36-简单的强定序实现">3.6 简单的强定序实现</a></li>
+        <li><a href="#37-一个兼容缓存一致性的简单sc实现">3.7 一个兼容缓存一致性的简单SC实现</a></li>
+        <li><a href="#38使用缓存一致性优化sc实现">3.8使用缓存一致性优化SC实现</a></li>
+        <li><a href="#39-sc模型的原子操作">3.9 SC模型的原子操作</a></li>
+        <li><a href="#310-真实的例子mips-r1000">3.10 真实的例子MIPS R1000</a></li>
+        <li><a href="#311-强定序的更多资料">3.11 强定序的更多资料</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四章">第四章</a>
+      <ul>
+        <li><a href="#41-tsox86设计的缘由">4.1 TSO/X86设计的缘由</a>
+          <ul>
+            <li><a href="#441-实现原子指令">4.4.1 实现原子指令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第五章-弱内存序">第五章 弱内存序</a>
+      <ul>
+        <li><a href="#51-动机">5.1 动机</a>
+          <ul>
+            <li><a href="#512-利用重排序的机会">5.1.2 利用重排序的机会</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-一个弱内存序例子">5.2 一个弱内存序例子</a>
+          <ul>
+            <li><a href="#521-xc模型的基本理念">5.2.1 XC模型的基本理念</a></li>
+            <li><a href="#522-在xc模型下使用栅栏的例子">5.2.2 在XC模型下使用栅栏的例子</a></li>
+          </ul>
+        </li>
+        <li><a href="#53-实现xc模型">5.3 实现XC模型</a>
+          <ul>
+            <li><a href="#531-在xc模型中实现原子指令">5.3.1 在XC模型中实现原子指令</a></li>
+            <li><a href="#532-在xc模型中实现屏障">5.3.2 在XC模型中实现屏障</a></li>
+            <li><a href="#533-警告">5.3.3 警告</a></li>
+          </ul>
+        </li>
+        <li><a href="#54-实现无竞争的一致性程序">5.4 实现无竞争的一致性程序</a></li>
+        <li><a href="#55-一些弱内存序的术语">5.5 一些弱内存序的术语</a>
+          <ul>
+            <li><a href="#551-释放一致性">5.5.1 释放一致性</a></li>
+            <li><a href="#552-可视性和写原子性">5.5.2 可视性和写原子性</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第六章-缓存一致性协议">第六章 缓存一致性协议</a>
+      <ul>
+        <li><a href="#61-全局视角看缓存一致性">6.1 全局视角看缓存一致性</a></li>
+        <li><a href="#62-描述缓存一致性协议">6.2 描述缓存一致性协议</a></li>
+        <li><a href="#63-缓存一致性协议的例子">6.3 缓存一致性协议的例子</a></li>
+        <li><a href="#64-总览缓存一致性设计">6.4 总览缓存一致性设计</a>
+          <ul>
+            <li><a href="#641-状态">6.4.1 状态</a></li>
+            <li><a href="#642-事务">6.4.2 事务</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#第一章内存一致性和缓存一致性引论">第一章:内存一致性和缓存一致性引论</a></li>
+    <li><a href="#第二章缓存一致性基础">第二章：缓存一致性基础</a>
+      <ul>
+        <li><a href="#21-基线系统模型baseline-system-model">2.1 基线系统模型(BASELINE SYSTEM MODEL)</a></li>
+        <li><a href="#22-关键问题缓存不一致到底是怎样发生的">2.2 关键问题：缓存不一致到底是怎样发生的？</a></li>
+        <li><a href="#23-缓存一致性协议接口">2.3 缓存一致性协议接口</a></li>
+        <li><a href="#24-缓存不变式">2.4 缓存不变式</a>
+          <ul>
+            <li><a href="#241-实现缓存不变式">2.4.1 实现缓存不变式</a></li>
+            <li><a href="#242-缓存的粒度">2.4.2 缓存的粒度</a></li>
+            <li><a href="#243-缓存一致性何时重要">2.4.3 缓存一致性何时重要</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第三章-顺序一致性">第三章 顺序一致性</a>
+      <ul>
+        <li><a href="#31-共享物理内存时的行为问题">3.1 共享物理内存时的行为问题</a></li>
+        <li><a href="#32什么是内存一致性模型">3.2什么是内存一致性模型</a></li>
+        <li><a href="#33-内存一致性vs缓存一致性">3.3 内存一致性VS缓存一致性</a></li>
+        <li><a href="#34-内存一致性的基本想法">3.4 内存一致性的基本想法</a></li>
+        <li><a href="#35-强定序的简单定义">3.5 强定序的简单定义</a></li>
+        <li><a href="#36-简单的强定序实现">3.6 简单的强定序实现</a></li>
+        <li><a href="#37-一个兼容缓存一致性的简单sc实现">3.7 一个兼容缓存一致性的简单SC实现</a></li>
+        <li><a href="#38使用缓存一致性优化sc实现">3.8使用缓存一致性优化SC实现</a></li>
+        <li><a href="#39-sc模型的原子操作">3.9 SC模型的原子操作</a></li>
+        <li><a href="#310-真实的例子mips-r1000">3.10 真实的例子MIPS R1000</a></li>
+        <li><a href="#311-强定序的更多资料">3.11 强定序的更多资料</a></li>
+      </ul>
+    </li>
+    <li><a href="#第四章">第四章</a>
+      <ul>
+        <li><a href="#41-tsox86设计的缘由">4.1 TSO/X86设计的缘由</a>
+          <ul>
+            <li><a href="#441-实现原子指令">4.4.1 实现原子指令</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第五章-弱内存序">第五章 弱内存序</a>
+      <ul>
+        <li><a href="#51-动机">5.1 动机</a>
+          <ul>
+            <li><a href="#512-利用重排序的机会">5.1.2 利用重排序的机会</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-一个弱内存序例子">5.2 一个弱内存序例子</a>
+          <ul>
+            <li><a href="#521-xc模型的基本理念">5.2.1 XC模型的基本理念</a></li>
+            <li><a href="#522-在xc模型下使用栅栏的例子">5.2.2 在XC模型下使用栅栏的例子</a></li>
+          </ul>
+        </li>
+        <li><a href="#53-实现xc模型">5.3 实现XC模型</a>
+          <ul>
+            <li><a href="#531-在xc模型中实现原子指令">5.3.1 在XC模型中实现原子指令</a></li>
+            <li><a href="#532-在xc模型中实现屏障">5.3.2 在XC模型中实现屏障</a></li>
+            <li><a href="#533-警告">5.3.3 警告</a></li>
+          </ul>
+        </li>
+        <li><a href="#54-实现无竞争的一致性程序">5.4 实现无竞争的一致性程序</a></li>
+        <li><a href="#55-一些弱内存序的术语">5.5 一些弱内存序的术语</a>
+          <ul>
+            <li><a href="#551-释放一致性">5.5.1 释放一致性</a></li>
+            <li><a href="#552-可视性和写原子性">5.5.2 可视性和写原子性</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#第六章-缓存一致性协议">第六章 缓存一致性协议</a>
+      <ul>
+        <li><a href="#61-全局视角看缓存一致性">6.1 全局视角看缓存一致性</a></li>
+        <li><a href="#62-描述缓存一致性协议">6.2 描述缓存一致性协议</a></li>
+        <li><a href="#63-缓存一致性协议的例子">6.3 缓存一致性协议的例子</a></li>
+        <li><a href="#64-总览缓存一致性设计">6.4 总览缓存一致性设计</a>
+          <ul>
+            <li><a href="#641-状态">6.4.1 状态</a></li>
+            <li><a href="#642-事务">6.4.2 事务</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">尝试翻译内存模型和缓存一致性 
+    <div id="%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+<p>建议读者在阅读前搞明白缓存和计算机的一些基础知识，诸如缓存是怎么设计，缓存为何使用物理内存做标记，CPU的乱序指令，在指令队列和结果队列上是如何进行的。建议阅读《现代体系结构上的unix系统》和wiki百科。对内容有疑问建议直接stackoverflow或者看英文，对内容有异议可以直接回复我或者在github上发patch。</p>
+
+
+<h2 class="relative group">第一章:内存一致性和缓存一致性引论 
+    <div id="%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%BC%95%E8%AE%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%B8%80%E7%AB%A0%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%BC%95%E8%AE%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>许多操作系统和大部分多和芯片(多核处理器)支持共享物理内存。在一个共享物理内存的系统中，每个核都可能读写同一个地址。这种设计的目标是追求良好的功效：比方说高性能，低能耗，低消耗()</p>
+
+
+<h2 class="relative group">第二章：缓存一致性基础 
+    <div id="%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%9F%BA%E7%A1%80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%BA%8C%E7%AB%A0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%9F%BA%E7%A1%80" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>本章我们会充分介绍缓存一致性来帮助理解强定序模型（也可被译为一致性内存模型，SC）如何和缓存交互。从2.1节开始我们会展示本书一直涉及到的强定序模型。为了简化本章节和其他章节的理论复杂性，我们选择最简单的系统模型来展示需要关注的重要事项；到第九章我们才会涉及到更复杂的系统模型。2.2讲述有哪些必须解决的缓存一致性问题及为什么会有缓存不一致问题出现。2.3节给出了缓存一致性概念具体的定义。（这里多赘述一点，X86硬件实现缓存一致性，而ARM并非如此！需要软件实现）</p>
+
+
+<h3 class="relative group">2.1 基线系统模型(BASELINE SYSTEM MODEL) 
+    <div id="21-%E5%9F%BA%E7%BA%BF%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8Bbaseline-system-model" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E5%9F%BA%E7%BA%BF%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8Bbaseline-system-model" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>本书里，我们将系统视为一个拥有多个处理器，共享同一个物理内存，所有的处理器都可以对所有的物理地址进行载入和存储操作的模型。该基线系统包含一个单独的多核芯片和芯片外的物理内存，就如同图2.1展示的那样。多核芯片包含多个单线程的处理器，每个处理都有自己的私有数据缓存。每个核共享一个最低层级缓存（last-level cache (LLC)  ）。当我们谈到“缓存”这个词，我们指的是每个核上的私有数据缓存而不是最低层级缓存。每个核的私有数据成员通过物理地址生成索引和标记，采取写回策略(注，不明白什么是写回策略的可以看《现代体系结构上的unix系统》)。处理器们和最低层级缓存使用交互网络（interconnection network）通信。尽管最低层级缓存也在处理器芯片上，但从逻辑角度来看，是个“内存部分缓存”(memory-side cache)，因此并不会导致任何缓存一致性问题。从逻辑层面来看，最低层级缓存直接和内存交互，提供降低内存访问延迟和增加内存访问带宽的功能。它同样充当（多处理器芯片的）片上内存控制器角色。</p>
+<p>我们的基线系统模型忽略了很多和本书内容无关，但是很常见的设计。这些设计包括指令缓存，多级缓存，多处理器共享一级缓存，虚拟地址缓存，TLB，DMA。同时，我们忽略包含多个多核芯片的系统。这些会添加不必要复杂度的话题，以后再说。</p>
+<ul>
+<li>
+    <figure>
+      <img class="my-0 rounded-md" loading="lazy" src="imgs/%E5%9B%BE2_1_Baseline_system_modle.png" alt="图2.1" />
+      
+    </figure>
+</li>
+</ul>
+
+
+<h3 class="relative group">2.2 关键问题：缓存不一致到底是怎样发生的？ 
+    <div id="22-%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E7%BC%93%E5%AD%98%E4%B8%8D%E4%B8%80%E8%87%B4%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%8F%91%E7%94%9F%E7%9A%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-%E5%85%B3%E9%94%AE%E9%97%AE%E9%A2%98%E7%BC%93%E5%AD%98%E4%B8%8D%E4%B8%80%E8%87%B4%E5%88%B0%E5%BA%95%E6%98%AF%E6%80%8E%E6%A0%B7%E5%8F%91%E7%94%9F%E7%9A%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>缓存不一致之所以会出现是因为一个很基本的问题：多个角色可以并行地访问内存和缓存的入口。现代操作系统里，这些角色包括处理器，DMA控制器，和一些其他的可读写缓存和内存的外部设备。在本书里，我们将目光投射于处理器，但这并不意味可以无视处理器以外的角色。</p>
+<p>表2.1展示了一个缓存不一致的例子，一开始内存地址A和两个处理器的本地缓存都存储值42。在时刻1，处理器1改变了其缓存和内存地址A储存的值，从42变到43。这使得处理器2缓存里的值过时。处理器2在执行一个while循环的载入，重复地从它自己的本地缓存中载入已经过时的A的值42。很明显，这个缓存不一致的例子，是由于处理器1对A的储存行为，对处理器2是不可见，而导致的。</p>
+<p>为了避免这种缓存不一致问题，系统必须实现缓存一致性协议（cache coherence protocol ）才能保证处理器1的结果对处理器2是可见的。设计和实现缓存一致性协议是第六章-第九章的主要话题。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_3e1db39b89aff6f3.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_86a7ec9f2ec9625d.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_81017e7665702635.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_46a7c47499da310e.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_46a7c47499da310e.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_2_1_incoherence_rise_hu_86a7ec9f2ec9625d.png"
+        alt="表2.1"
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">2.3 缓存一致性协议接口 
+    <div id="23-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E6%8E%A5%E5%8F%A3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E6%8E%A5%E5%8F%A3" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>通俗的说，缓存一致性协议必须保证写操作对所有的处理器可见。本节，我们会正式地从缓存一致性接口中抽象出缓存一致性协议。</p>
+<p>处理器通过缓存一致性协议提供的两个接口来进行交互：(1)读请求(read-request)，该请求将内存地址作为参数，该请求的结果是向处理器返回一个值。(2)写请求(write-request)将内存地址作为参数1，将要写入的值作为参数2，该请求的结果是向处理器返回一个确认值。</p>
+<p>无论是学术还是工业界，目前已经由许多缓存一致性协议出现，我们会根据这些缓存一致性协议提供的接口进行区分，具体来说就是通过缓存一致性是否和内存一致性密不可分来区分。</p>
+<ul>
+<li>一致性不可区分协议  这种协议，执行写请求时，即使没有返回确认，写入的结果立刻对其他核可见。因为写操作是同步传播的，第一种缓存一致性协议就如同工作在一个原子操作内存系统上(缓存仿佛不存在一样)。任何和这种缓存一致性协议交互的子系统-比方说处理器管线-可以认为它正在和一个没有缓存的原子操作内存系统交互。从追求实现代码顺序一致性的角度来看，这种协议免去了程序员对多核系统中变量值不同的担忧。这种缓存一致性协议将缓存透明化，仿佛移除了缓存的存在，只有原子操作内存系统。这种协议的实现，将问题丢给了处理器管线（硬件）解决。</li>
+<li>一致性可区分协议 这种协议的写结果是异步传播的，因此写操作的确认可能在其他核可见之前就返回给当前核，从而可以在其他核上观测到过期的变量。然而，为了不违背内存一致性的要求，这种类型的缓存一致性协议必须保证写入的值所显示的顺序，和写入操作写入的顺序是一致的（我理解为，如果写入操作的顺序是a,b,c,d,e，那么其他核看到的顺序也得是a,b,c,d,e。不能出现a,d,c,b,e这种混乱的顺序）。图2.2中，处理器管线和缓存一致性协议一起努力实现内存一致性。第二种类型的缓存一致性多见于GPU。</li>
+</ul>
+<p>本书主要关注第一种缓存一致性协议，第二种类型的协议到第十章才会讨论。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_ba95ff944d7c7a9a.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_ac70681f366dfe69.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_86f0538b49310f59.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_dcac8f8dc0393291.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_dcac8f8dc0393291.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_2_pipeline_coherence_interface_hu_ac70681f366dfe69.png"
+        alt="图2.2"
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">2.4 缓存不变式 
+    <div id="24-%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#24-%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>究竟缓存一致性协议应当满足什么不变式，才能使得缓存透明化，将物理内存和缓存系统抽象成一个原子内存系统呢？目前无论是工业界还是学术界，已经有多种缓存一致性的定义，我们可不想把他们都列出来。作为替代，我们会给出一种体现缓存一致性本质的定义。在侧边栏里，我们会讨论其他定义，展示他们和我们的定义有什么关系。</p>
+<p>我们将缓存一致性协议定义为满足单写多读不变式（SWMR(single-writer–multiple-reader  )）的协议。任何一个时刻，对于特定的内存地址，在任何一个时刻，如果该地址的内容只被一个核修改，不存在其他核也在同时进行读或写操作，或者（这个或者对应于那个“如果该地址”）此时没有任何一个核进行写操作，多个核在对这块地址进行读操作。换另一种说法，对任何内存块而言，该块的生命周期被分为多个周期。每个周期里，该内存块只会处于两种状况：一种状况是只有一个核拥有读+写权限，另一种状况是有多个核(也可能一个都没有)拥有只读权限。图2.3展示了将内存块生命周期拆分开的例子。</p>
+<p>除了SWMR不变式，缓存一致性协议同样要求操作内存块值的行为可以被正确的传播（）。设想图2.3中的例子，即使满足了SWMR不变式，如果第一个只读周期，核2和核5读到了不同的值，那么系统就不满足协议一致性了。相似地，如果核1没能成功读取核3在读+写周期写入的值，或者核1，核2，核3没能读取到核1存储的值，协议一致性再次被打破。</p>
+<p>因此，必须满足SWMR不变式和数据值操作正确(Data-Value Invariant  )不变式才能满足缓存一致性协议，数据值操作正确不变式保证了处理器在读周期，能正确读到该内存块处于读+写周期时最后写入的值。</p>
+<p>其他的缓存一致性协议不变式的定义和我们的大同小异。（下面的翻译是我胡编的）虎符协议，只有拿到所有的虎符才能执行调兵操作（写操作），否则只能执行报数操作（读操作）。在任意时刻，只可能有一个调兵操作（写操作）或者多个报数操作（读操作）。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_e01f3352146c89b4.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_24e4a765ec1d11eb.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_5008c0e19aa9e74.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_e2a8defd0aba7b4b.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_e2a8defd0aba7b4b.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_2_3_swmr_epoch_hu_24e4a765ec1d11eb.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+
+
+<h4 class="relative group">2.4.1 实现缓存不变式 
+    <div id="241-%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#241-%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%8D%E5%8F%98%E5%BC%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>上一节提到的几个不变式暗示了缓存一致性协议如何工作。大部分缓存一致性协议，被称为“无效化协议”，就满足这些不变式。如果一个核想读取一块内存，就向其他核发送消息请求获取该内存块的值并确保不会有其他核已经缓存了这个内存块的值，且（其他核）处于读+写状态。该消息会终止任何当前活跃的读+写状态，并开始一个只读周期。如何该核相对某个内存块写，它会对其他核发送请求获取该内存块的值，并确定其它核没有缓存该内存块，无论他们是出于只读还是读+写状态。该请求会终止任何活跃的读+写或只读的周期，并开始一个新的读+写周期。后续的章节(6-9章)拓展了这种协议的抽象模型，但实现一致性基本的理念不变。</p>
+
+
+<h4 class="relative group">2.4.2 缓存的粒度 
+    <div id="242-%E7%BC%93%E5%AD%98%E7%9A%84%E7%B2%92%E5%BA%A6" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#242-%E7%BC%93%E5%AD%98%E7%9A%84%E7%B2%92%E5%BA%A6" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>一个核可以以多种粒度执行载入和储存操作，粒度一般从1-64字节浮动。理论上来说，缓存一致性可以以任意粒度执行。然后现实环境里缓存一致性的粒度经常和缓存块大小保持一致&mdash;真实硬件以缓存块长度实现缓存一致性。对真实硬件而言，基本不可能出现一个核修改缓存块的第一个字节，其他核修改该缓存块的其他字节(对缓存的修改通常都是整行的，从实现角度和理论角度，效率更好实现简单)。尽管以缓存块长度为缓存一致性实行的粒度更为普遍，我们需要认识到缓存一致性协议可以以其他粒度实现。</p>
+
+
+<h4 class="relative group">2.4.3 缓存一致性何时重要 
+    <div id="243-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BD%95%E6%97%B6%E9%87%8D%E8%A6%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#243-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BD%95%E6%97%B6%E9%87%8D%E8%A6%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>无论我们选择如何定义缓存一致性，缓存一致性只在特定情况下至关重要。架构设计者必须清楚缓存一致性是否生效。我们指出两条缓存一致性的准则(我理解为缓存一致性提供的保证)。</p>
+<ul>
+<li>缓存一致性对任何层级的缓存和共享物理内存都适用。这些结构包括L1数据缓存，L2级别缓存，共享的LLC，和主存。此外诸如L1指令缓存和TLB同样适用。(这句话需要注意，这些结构并不包含per core write buffer，也就是每个核的写缓存器。写缓冲器和L1/L2/LLC cache并不是一个东西，如果这个不清楚，看TSO和PSO的时候会产生很多疑问)</li>
+<li>缓存一致性对程序员是透明的。处理器管线(pipeline)和一致性模型一同努力提供强定序的内存模型，程序员只能注意到强定序的内存模型。</li>
+</ul>
+
+
+<h2 class="relative group">第三章 顺序一致性 
+    <div id="%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%B8%89%E7%AB%A0-%E9%A1%BA%E5%BA%8F%E4%B8%80%E8%87%B4%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>本章研究内存顺序一致性模型，该模型给程序员和实现者定义了共享物理内存的系统在程序执行时，应当提供什么样子的时序：程序员知道系统可以提供什么样子的时序，实现者知道系统应当提供什么样子的时序。我们先在3.1节给出为什么要定义内存行为，3.2节给出内存一致性模型应该做些什么，3.3节对比内存一致性和缓存一致性。</p>
+<p>我们之后研究最直观的一致性模型强定序，或者说顺序一致性模型。强定序之所以重要，一方面是因为该模型是很多程序员期待的共享物理内存提供的模型，另一方面是因为它是理解下两章弱内存序模型(宽松内存序模型)的基础。我们现在3.4节给出强定序的基本理念，然后给出形式化定义(3.5节)。3.6节讨论强定序的实现，3.7节讲解基于缓存一致性的强定序，3.8节讲解更激进的优化，3.9节讲解强定序下原子指令的实现。3.10和3.11节我们研究MIPS R10000的现实例子，并给出一些参考资料。</p>
+
+
+<h3 class="relative group">3.1 共享物理内存时的行为问题 
+    <div id="31-%E5%85%B1%E4%BA%AB%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA%E9%97%AE%E9%A2%98" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-%E5%85%B1%E4%BA%AB%E7%89%A9%E7%90%86%E5%86%85%E5%AD%98%E6%97%B6%E7%9A%84%E8%A1%8C%E4%B8%BA%E9%97%AE%E9%A2%98" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>为了理解为什么需要定义共享物理内存时，操作内存哪些表现是正常的，看表3.1中双核处理器的例子(这个例子，和本章所有其他例子一致，都认为变量的初始值为0)：大部分程序员会期待核C2的寄存器r2会获得值NEW。然而，一部分现代计算机系统上，r2的值可以为0。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_e84da1cb5d876f6.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_b410ddab9ebfc584.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_d48c1a59d40d3130.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_4587c74a8958aa8a.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_4587c74a8958aa8a.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table3_1_3_2_hu_b410ddab9ebfc584.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+<p>硬件如果重排核C1的两条存储指令S1和S2，就会导致r2获得0值。如果我们只看核C1的执行，不关心和其他线程的交互，那么重排S1和S2似乎没有什么问题，因为两者访问的是不同的地址。18页的侧边栏描述了硬件可能以怎样的方式重排指令，储存操作自然也在这些指令中。</p>
+<p>伴随着S1和S2的重排，指令执行的顺序可能为S2，L1，L2，S1&ndash;如同表格3.2所示。</p>
+<p>这种指令执行的顺序满足缓存一致性，它并没有违背SWMR不变式。换言之，违背缓存一致性并不是导致这个显而易见错误的原因。让我们考虑用于提供互斥(mutual exclusion，详情参加《多处理器编程的艺术》修订版)Dekker算法提供的例子，该例子如同表3.3所示。在指令执行之后，r1和r2中的值可能是多少？下意识地，读者可能认为会是下面三种值：</p>
+<ul>
+<li>(r1, r2) = (0, NEW) 执行顺序为 S1, L1, S2, then L2</li>
+<li>(r1, r2) = (NEW, 0) 执行顺序为 S2, L2, S1, and L1</li>
+<li>(r1, r2) = (NEW, NEW), 执行顺序为 S1, S2, L1, and L2</li>
+</ul>
+<p>令人惊讶的是在大部分机器上，比方说intel和AMD提供的X86系统上，由于FIFO写缓冲器的存在(这部分请看后面的章节，现在不明白无所谓)，(r1, r2) = (0, 0)  的情况同样可能出现。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_15af3f06a16afda1.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_8195c9c28e20cff7.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_d3e2b8a7d9aac841.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_439d975135116416.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_439d975135116416.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_3_hu_8195c9c28e20cff7.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+<p>一些读者难以对这个例子表示认同，他们认为如果这个例子是正确的，那么程序执行的结果岂不是不固定了？这对于编程者来说也不是一个明确的编程模型。然而，现代多处理器体系结构的执行流本身就是不确定的，所有我们知道的体系结构又允许指令并行执行（流水线执行）。执行结果是否确定是由线程之间明确的进行同步操作来保证的，因此当定义什么是共享物理内存的多处理器机器正确的内存模型时，我们必须认可执行结果可能有多种正确的答案。</p>
+<p>更一般地来讲，内存表现出来的结果通常要适用于所有的应用程序执行的结果，即使这些程序执行的是错误的操作/复杂的操作（比方说非阻塞算法）。然而在第五章，我们会看到一些高层语言模型确实允许一些执行的结果出现未定义的行为，换言之面临data race。（实际上是弱内存序，看到第五章就明白咋回事了）</p>
+
+
+<h3 class="relative group">3.2什么是内存一致性模型 
+    <div id="32%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#32%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>内存一致性模型，或者说内存模型是一种技术规范，该技术规范指明了多线程程序操作共享的物理内存时的合法行为。对多线程程序而言，它指明了该执行过存储操作的多线程程序，动态的载入会返回什么样的值。和单线程程序执行不同，有多种正确的行为。</p>
+<p>通俗的说，内存一致性模型MC(memory consistency)将指令操作分为遵守MC和不遵守MC两种。这种划分从指令执行角度划分，相对应的也可以从实现角度划分。一个MC实现系统指的是该系统只允许遵守MC的指令，一个非MC实现系统值得是该系统有时允许非MC指令的执行。</p>
+<p>从一开始，我们一直假设程序执行硬件指令集中的指令，此外我们假设内存通过物理内存进行访问(也就是说，我们不关系虚拟内存和地址翻译的影响)。第五章我们会讨论高层次语言(high-level languages (HLLs)  )，我们将会发现编译器如果在编译分配变量的指令时，把寄存器指定为该变量，会导致该高层语言内存模型类似的行为类似硬件重拍内存访问顺序(翻译存疑)</p>
+
+
+<h3 class="relative group">3.3 内存一致性VS缓存一致性 
+    <div id="33-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7vs%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#33-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7vs%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>第二章使用两个不变式给出了缓存一致性的定义，我们在此非正式地重复一下。SWMR不变式确保在任何时候，对于一个给定地址的内存位置，要么(a)一个核心可以写（和读）这个地址，要么(b)0个或更多的核心可以只读它。数据-值不变式（data-value invarient)确保对内存中数据的更新可以被正确传递，从而内存中对该数据的缓存副本总是包含最新版本的value。</p>
+<p>缓存一致性似乎可以定义共享内存的正确行为？其实不然。从图3.1中我们可以看到，一致性协议只是为处理器核心管道提供了一个内存系统的抽象（换言之就是只是提供了几个核对内存当中行为操作的合法规定，并不能决定着写操作的顺序和具体表现）。它并不能单独决定共享内存最终表现出来的行为；指令流水线在决定最终表现出来的行为时也起了很大作用。比方说，如果流水线（pipeline，我理解是指令pipeline）重新排序，并采用和程序顺序相背的顺序提交内存操作&ndash;即使一致性协议正确地完成了它的工作&ndash;共享内存的所表现出来的结果，可能斌不会如同我们期待的一般。</p>
+<p>总结来说：</p>
+<ul>
+<li>缓存一致性不等同于内存一致性</li>
+<li>内存一致性可以将缓存一致性视为一个非常有用的黑盒（就是指关注结果，不关注实现）</li>
+</ul>
+
+
+<h3 class="relative group">3.4 内存一致性的基本想法 
+    <div id="34-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%83%B3%E6%B3%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#34-%E5%86%85%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%83%B3%E6%B3%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>最直观的内存一致性模型是强定序SC。它首先由Lam-port[12]正式提出。我们现在来给出内存一致性的基本定义，对单核而言，强定序（SC）为 “单纯看指令执行的结果，就好像指令按照程序执行的顺序（指令序）执行”，然后再定义了多核顺序一致性“指令执行的结果，看起来就好像多核按照某种时序执行，同时每个核指令执行的顺序同程序指定的顺序一致”。将所有指令真实的执行顺序被称为内存时序(memory order)。在内存一致性的强定序SC模型中，内存时序不违反任何一个核上执行的程序顺序，但其他一致性模型可能并不总会保证内存时序和程序顺序一致。</p>
+<p>图3.2展示了表3.1中示例程序如何执行，中间的竖线代表真实的执行顺序就是内存序，每个核的竖线代表程序序，我们使用运算符&lt; m代表内存序先发生，所以op1 &lt;m op2代表o1 在内存序上先于op2发生。同样地，我们使用操作符&lt;p来代表每个核的程序顺序，所以op1 &lt;p op2意味着在该核的程序顺序中op1先于op2发生。在SC下，内存顺序符合（原本是respect）每个核的程序顺序。&ldquo;符合 &ldquo;指如果op1 &lt;p op2那么op1 &lt;m op2。注释中的值（/* &hellip; */）给出了加载或存储的值。这段程序执行结束时，r2的值为new的。更一般地说，表格 3.1中程序的所有执行结果都伴随着r2的值为new。唯一的非确定性&ndash;L1从flag中获得SET值之前取到0的次数&ndash;是不重要的。</p>
+<p>这个例子说明了强定序的价值。在第3.1节中，如果你预期r2最终的结果为NEW的，那么你可能就已经隐约意识到了强定序，只不过没有Lamport那么精确而已。
 图3.3进一步揭示了强定序的价值，它展示了表3.3中程序的四种执行流程。图3.3a-c描述了对应于三个直观输出的SC执行情况。(r1, r2) = (0, NEW), (NEW, 0), 或 (NEW, NEW)。请注意，图3.3c只描述了导致（r1, r2）=（NEW, NEW）的四种可能的强定序执行顺序中的一种；这里的执行顺序是{S1, S2, L1, L2}，其他的是{S1, S2, L2, L1}，{S2, S1, L1, L2}，以及{S2, S1, L2, L1}。因此，在图3.3a-c中，有种合法的强定序执行顺序。
-图3.3d显示了会导致（r1，r2）=（0，0）结果的一个非强定序执行流程。对于这个输出，没有办法创建一个符合程序顺序的内存序。程序序显示：</p><ul><li>S1 &lt;p L1</li><li>S2 &lt;p L2</li></ul><p>但内存序显示：</p><ul><li>L1 &lt;m S2(所以r1为0)</li><li>L2 &lt;m S1(所以r2为0)</li></ul><p>考虑到所有这些约束条件的结果会导致一个循环，与执行的顺序是相背的的。图3.3d中的额外弧线说明了这个循环在哪里。
-我们刚刚看到了六个强定序的执行流程和一个非强定序的执行流。这可以帮助我们理解强定序的实现：一个强定序的实现必须允许前六个执行中的一个或多个，但不能允许第七种执行流程。</p><img src=imgs/figure_3_2.png alt=图6.4>
-<img src=imgs/figure_3_3.png alt=图6.4><h3 class="relative group">3.5 强定序的简单定义<div id=35-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9A%E4%B9%89 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#35-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9A%E4%B9%89 aria-label=锚点>#</a></span></h3><p>在这一节中，我们将给出强定序的定义，从而方便我们能够将强定序与接下来两章中的较弱的内存一致性模型进行比较。我们采用Weaver和Germond使用的符号&ndash;这是一种指定一致性的公理方法，我们将在第11章中详细讨论：L(a)和S(a)分别代表对地址a的加载和存储。顺序&lt;p和&lt;m分别定义了程序序和全局内存序，具体些就是程序序&lt;p是每个核逻辑上（顺序上）执行内存操作的顺序。全局内存顺序&lt;m是对所有核上表现出来的内存操作的真实顺序。
-一个抢定序的执行需要以下条件。</p><p>（1）每个核其储存和载入操作的全局顺序，遵守该核上执行程序视角的顺序，无论他们是不是在操作同一地址</p><ul><li><p>If L(a) &lt;p L(b) ； L(a) &lt;m L(b) /* Load->Load */</p></li><li><p>If L(a) &lt;p S(b) ； L(a) &lt;m S(b) /* Load->Store */</p></li><li><p>If S(a) &lt;p S(b) ； S(a) &lt;m S(b) /* Store->Store */</p></li><li><p>If S(a) &lt;p L(b) ； S(a) &lt;m L(b) /* Store->Load */</p></li></ul><p>（2）每一个核上对某物理地址执行的载入操作，都会获得从多核的视角出发(多核内存时序global memory order)，该载入操作之前发生的对该物理地址最近的储存结果。</p><p>简单总结下，对于SC而言其指令的基本逻辑为：</p><p>原子读-改-写（RMW）指令，我们将在第3.9节深入讨论，它进一步限制了可表现出来的执行结果。例如，每个tas指令的执行都要求表现出来的加载和存储的存储在逻辑上的顺序和内存序一致中（也就是说，在它们之间没有其他相同或不同地址的内存操作干扰，实际上就是cas不会有中间态）。</p><p>我们在表3.4中总结了强定序的内存序表现出的行为。例如，如果一个给定的线程在程序序上表现出一个加载在一个存储之前（即加载在表中是 &ldquo;操作1&rdquo;，存储在表中是 &ldquo;操作2&rdquo;），那么这个交叉点的表项是一个 &ldquo;X&rdquo;，表示这些操作在内存序上表现的结果和程序序一致。对于强定序而言，所有的内存序都必须符合程序序；在其他的一致性模型下，我们在接下来的两章中研究，这些约束中的一些被放松了（也就是说，别的内存模型的内存序表中的一些条目不是 &ldquo;X"了）。</p><p>一个强定序的实现只允许强定序的指令执行。严格来说，这是强定序的安全保证（safety property不会造成恶劣的后果，我理解就是底线要求，最低级别的保证）。强定序的实现还应该提供一定的有效性保证（liveness proterty我理解就是高于底线的要求，就是附加的有利用价值的保证，这两个英文单词我原先搜索过大致理解意思，但是翻译得不好，建议读者自己google一下然后理解意思）。具体来说，一个store操作必须最终对反复尝试读该数据的load可见。这个属性被称为最终写传递，通常由一致性协议来保证。更一般地说，避免饿死和提供一定的公平性也是有价值的，但这些问题超出了我们对内存一致性的讨论。</p><img src=imgs/table_3_4.png alt=图6.4><h3 class="relative group">3.6 简单的强定序实现<div id=36-%E7%AE%80%E5%8D%95%E7%9A%84%E5%BC%BA%E5%AE%9A%E5%BA%8F%E5%AE%9E%E7%8E%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#36-%E7%AE%80%E5%8D%95%E7%9A%84%E5%BC%BA%E5%AE%9A%E5%BA%8F%E5%AE%9E%E7%8E%B0 aria-label=锚点>#</a></span></h3><p>有两种简单的强定序实现方便我们理解</p><blockquote><p>多任务并行单核处理器</p></blockquote><p>第一种实现方式：人们可以通过在单核（单处理器）上按照程序序执行所有线程来实现多线程用户级软件的强定序。线程T1的指令在核心C1上执行，直到上下文切换到线程T2，等等。在上下文切换时，在切换到新的线程之前，必须完成任何未决的内存操作。由于每个线程的指令在其执行流中作为一个原子块执行（并且由于处理器按照指令序执行），所有的强定序规则都不会被违背。</p><blockquote><p>The Switch</p></blockquote><p>另一种实现方式，我们可以用一系列处理器、一个开关和内存来实现强定序，如图3.4所示。假设每个核按其程序序挨个向开关提交内存操作。每个核可以使用任何不影响其向开关提交指令内存序的优化措施。例如，可以使用一个简单的带有分支预测的五级指令流水线。</p><p>这种实现，每次开关挑选一个核，允许其提交符合内存序的load/store操作，并且并且可以不断重复这个流程。开关可以以任何算法（例如随机）来挑选核，只要这些方法不会使得一些核被饿死即可。。</p><p>评估</p><p>这些实现的优点在于他们实现了一种能同时提供（1）指令级别强定序（2）实现强定序的一种标准模型。switch体系证明了强定序可以无需缓存或者缓存一致性而实现。</p><p>这些实现的缺点在于，这些实现的性能并不同增长的核数成正比：第一种实现中单核存在性能瓶颈，第二种实现中switch和内存存在性能瓶颈。这些瓶颈导致部分人错误地认为强定序不可能实现真正的指令并行。我们接下来会看到事实并非如此。</p><h3 class="relative group">3.7 一个兼容缓存一致性的简单SC实现<div id=37-%E4%B8%80%E4%B8%AA%E5%85%BC%E5%AE%B9%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E7%AE%80%E5%8D%95sc%E5%AE%9E%E7%8E%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#37-%E4%B8%80%E4%B8%AA%E5%85%BC%E5%AE%B9%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E7%AE%80%E5%8D%95sc%E5%AE%9E%E7%8E%B0 aria-label=锚点>#</a></span></h3><p>缓存一致性有利于强定序的实现，它可以帮助我们实现并行地执行不冲突的load和store&ndash;如果两个操作是指向同一个地址，并且其中至少有一个操作是存储的话，就会发生冲突。此外，从概念理解这样一个系统也很简单。</p><p>在这里，我们把缓存一致性视为一个实现了第二章的SWMR不变性的黑盒。我们通过略微揭示这个黑盒的实现来展示一点L1 cache相关的的内容。</p><ul><li>使用状态修改（M）来表示一个L1cache可以执行写入和读取。</li><li>使用状态共享（S）来表示一个或多个内核可以读取各自的L1 cache</li><li>让GetM和GetS分别表示每个核尝试使自己的l1 cache获取M/S状态的一致性请求。</li></ul><p>我们不需要深入了解缓存一致性是如何实现的，这一点在第6章及以后的章节中讨论。</p><p>图3.5a描述了图3.4的模型，开关和内存被一个缓存一致性黑盒取代。每个核按其程序序一次向高速缓存一致性内存系统提出内存操作请求。该内存系统需要在满足同一核的下一个请求之前，先满足了每个已经发出的请求。</p><p>图3.5b &ldquo;打开 &ldquo;了该内存系统的黑盒，显示出每个内核都连接到自己的L1高速缓存（我们将在后面讨论多线程）。如果内存系统对B块的加载或存储有适当的一致性权限（加载的状态为M或S，存储的状态为M），它就可以执行这个加载或存储。此外，只要相应的L1缓存有适当的权限，内存系统就可以并行地响应来自不同内核的请求。例如，图3.6a描述了四个内核各自寻求进行内存操作之前的缓存状态。这四个操作并不冲突，可以被各自的L1缓存满足，因此可以同时进行。如图3.6b所示，我们可以任意排列这些操作以获得合法的SC执行模型。更为普遍的是，只要L1缓存满足SWMR的操作总是可以并发进行，因为一致性的SWMR不变式确保了它们是不冲突的。</p><p>总结下，我们已经实现了满足下面几条的强定序：</p><ul><li>充分利用了缓存的低延迟和总线带宽的优势。</li><li>与其所使用的高速缓存一致性协议一样具有可扩展性（我理解就是可以伴随核数增长而性能增长）</li><li>降低了实现多核环境实现缓存一致性的难度</li></ul><h3 class="relative group">3.8使用缓存一致性优化SC实现<div id=38%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BC%98%E5%8C%96sc%E5%AE%9E%E7%8E%B0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#38%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BC%98%E5%8C%96sc%E5%AE%9E%E7%8E%B0 aria-label=锚点>#</a></span></h3><blockquote><p>不绑定预取</p></blockquote><blockquote><p>预测处理器</p><p>设想一个以指令序执行的处理器，该处理器同样进行指令预测，这些指令包含储存和载入执行，如果发生了指令错误预测这些指令也可能被无效化。这些无效的储存和载入看起来和预取比较类似，同样都对SC不会造成错误的影响。一个发生在分支预测之后的载入L1 CACHE，无论预测错误还是成功()都会向寄存器返回一个值。如果载入操作被无效化，处理器丢弃寄存器的更新，抹除任何载入引发的副作用，就好像没有执行载入操作一样。缓存则不需要撤销这次预取，一方面不必要，另一方面提前载入数据可以在再次请求这块地址时提高性能。执行储存时，处理器可能执行GetM请求，但在确定执行储存之前不会将缓存里的结果更新。</p></blockquote><p>提问：一个实现SC的系统，处理器发布缓存一致性的请求时，这些请求必然符合指令序吗？答案：错，CPU可以以任意顺序发布缓存请求。</p><blockquote><p>指令乱序处理器</p><p>说起来这个解释起来并不简单，建议直接看原版论文https://courses.engr.illinois.edu/cs533/sp2019/reading_list/gharachorloo91two.pdf</p><p>每个Load指令都是从memory到L1 cache</p><p>Gharachorloo et al提供了两种保障多核下SC的检查。1如果处理器先执行了L2，在它提交L2的请求，并真正使用L2载入的数据之前之前，检查L2的缓存是否依然存在。只要缓存还在，那么L2的值不可能在执行载入和提交之前发生改变(因为SWMR，但我没理解。既然是载入，那么怎么会有提交呢，唯一可能的即使就是提交到Cache)。为执行此检查，处理器跟踪L2的地址并检查该物理地址关联的内存块和缓存一致性请求。一个GetM请求暗示另一个核注意到L2失序，该请求说明预测失败，需要抹消该无效预测（如果没明白为什么一个GetM会导致请求失效，建议看看SC的第二个要求，即Load要返回它之前最近的Store操作。举个例子）。</p><p>另一种方法是通过重放，如果先执行L2，在L1执行完毕之后L2的值和缓存里的值保持一致，那就说明改变顺序是没有影响的，因为值是一样的。</p><p>这两种做法从本质来说就是提前执行某个load，只要结果是不干扰执行的</p></blockquote><blockquote><p>指令乱序处理器的预取</p></blockquote><blockquote><p>多线程</p></blockquote><h3 class="relative group">3.9 SC模型的原子操作<div id=39-sc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#39-sc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C aria-label=锚点>#</a></span></h3><p>编写多线程代码时，程序员应该能够同步多线程的读写(同步的意思是指使线程操作操作在时间上出现一致性和统一化的现象，对程序员而言，并不是指同时发生，而是有先后顺序的发生)，这些同步性常常需要进行一对操作。这种操作通过提供原子级别的读改写指令实现。读改写RMW(read-modify-write)对正确实现同步机制，自旋锁与其他同步优先级至关重要。</p><p>更激进的RMWs实现利用SC只需要将请求保持特定顺序(不是很通畅)，一个核将其缓存中特定的block置为状态M，即可执行读改写操作。直到任何其他一致性缓存消息对该block生成。</p><h3 class="relative group">3.10 真实的例子MIPS R1000<div id=310-%E7%9C%9F%E5%AE%9E%E7%9A%84%E4%BE%8B%E5%AD%90mips-r1000 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#310-%E7%9C%9F%E5%AE%9E%E7%9A%84%E4%BE%8B%E5%AD%90mips-r1000 aria-label=锚点>#</a></span></h3><h3 class="relative group">3.11 强定序的更多资料<div id=311-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E6%9B%B4%E5%A4%9A%E8%B5%84%E6%96%99 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#311-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E6%9B%B4%E5%A4%9A%E8%B5%84%E6%96%99 aria-label=锚点>#</a></span></h3><h2 class="relative group">第四章<div id=%E7%AC%AC%E5%9B%9B%E7%AB%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E5%9B%9B%E7%AB%A0 aria-label=锚点>#</a></span></h2><h3 class="relative group">4.1 TSO/X86设计的缘由<div id=41-tsox86%E8%AE%BE%E8%AE%A1%E7%9A%84%E7%BC%98%E7%94%B1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#41-tsox86%E8%AE%BE%E8%AE%A1%E7%9A%84%E7%BC%98%E7%94%B1 aria-label=锚点>#</a></span></h3><p>处理器很早就支持利用写缓冲器(write (store) buffers )去延时(hold)已经提交(commited/retired)，但还没进入缓存(cache)的储存操作。当提交储存操作时，载入操作进入写缓冲器。直到该内存块的内容以获得读+写的周期写入缓存时，才会将该储存操作从写缓冲器中取出。很显然，储存操作进入写缓冲器可以发生在获取对该内存块的读+写周期，写缓冲器因此降低了一次储存失败延迟。由于储存操作是如此常见，延迟写入看起来很有益，最妙的是，储存操作尝试跟新内存的操作不会干扰处理器状态，不会使得处理器停止继续执行指令。</p><h4 class="relative group">4.4.1 实现原子指令<div id=441-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#441-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4 aria-label=锚点>#</a></span></h4><p>在TSO体系中实现原子级别读改写指令和强定序体系中实现原子级别读改写指令的操作基本一致。关键的不同只在于TSO体系下允许载入操作从时间序看来比指令序在它之前的储存操作先执行。对读改写指令造成的影响就是储存操作可能被写到写缓存器中。</p><p>为了更好的理解TSO体系中的读改写指令，我们将读改写指令视为一对紧密结合的载入操作和储存操作。</p><p>读改写指令的读指令部分不能比指令序在它之前的读指令先执行，这没有什么难以理解。但读者可能在为深入思考的情况下，认为读改写指令里的读指令会比已存在于写缓存器里的写指令更早执行，真实情况并非如此。如果读改写的读指令部分时序上早于写缓存器里的指令，那么紧随读指令部分执行的写指令部分会比写缓冲器中的写指令更早执行，这违背了TSO体系上STORE-STORE指令的执行序。因此读改写指令的读部分不能早于一个指令序上早于它的储存指令。</p><p>这些时序的要求限制了读改写指令的实现，由于读改写的读指令部分必须晚于写缓冲器里的写指令，因此原子级别读改写指令会在执行读指令部分之前将写缓存器清空（使内部的写指令执行完）。为了能够是的写操作部分紧跟读指令部分，该读指令会尝试获取读+写的缓存权限，普通的读指令往往只需要读权限。最后为了保证读改写指令的原子性，缓存控制器可能不会</p><p>给出TSO的结果模型：</p><img src=imgs/table_4_4.png alt=图6.4><h2 class="relative group">第五章 弱内存序<div id=%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F aria-label=锚点>#</a></span></h2><p>上两章我们探索了强定序(SC)和完全存储定序(TSO)。</p><p>本章我们探寻一种时序限制更弱的内存一致性模型，这种模型只保留程序员“需求”的指令序。这样子的好处blablabla</p><p>完全探索这种模型超出本章的内容，本章只是一个提供一种基本的指引，帮助读者理解这种体系的限制。为此，我们以XC(5.2)为例，讨论XC的种种实现。这些实现包括原子指令。</p><h3 class="relative group">5.1 动机<div id=51-%E5%8A%A8%E6%9C%BA class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#51-%E5%8A%A8%E6%9C%BA aria-label=锚点>#</a></span></h3><p>理解弱一致性内存模型可比理解强定序和完全存储定序困难多了。既然有如此多的不便，干嘛折腾弱一致性内存模型？本节我们首先展示一些指令序并不是那么至关重要的例子，然后讨论下指令序不重要时一部分优化操作。</p><h4 class="relative group">5.1.2 利用重排序的机会<div id=512-%E5%88%A9%E7%94%A8%E9%87%8D%E6%8E%92%E5%BA%8F%E7%9A%84%E6%9C%BA%E4%BC%9A class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#512-%E5%88%A9%E7%94%A8%E9%87%8D%E6%8E%92%E5%BA%8F%E7%9A%84%E6%9C%BA%E4%BC%9A aria-label=锚点>#</a></span></h4><p>假设一个弱内存一致性模型可能重拍所有没有内存栅栏分割的指令，因此程序员必须清楚哪些指令必须被固定顺序。对程序员而言，这是个缺点，但对计算机而言这可能更便于优化。下面我们讨论一些普遍而且重要的优化，更深入的话题就不在本书中讨论了。</p><h5 class="relative group">5.1.2.1 非先进先出，合并式写缓冲器<div id=5121-%E9%9D%9E%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E5%90%88%E5%B9%B6%E5%BC%8F%E5%86%99%E7%BC%93%E5%86%B2%E5%99%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5121-%E9%9D%9E%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E5%90%88%E5%B9%B6%E5%BC%8F%E5%86%99%E7%BC%93%E5%86%B2%E5%99%A8 aria-label=锚点>#</a></span></h5><p>上一章中完全存储定序使用写缓冲器来降低写操作的延迟。相比于使用先进先出写缓冲器的完全存储定序，弱内存一致性模型采用了优化性更彻底的可合并非先进先出写缓冲器（即两个指令序不相邻的写操作可以合并到一起添加到到写缓冲器中）。这种可合并非先进先出的写缓冲器和完全存储定序体系中要求必须先进先出的存储相违背。我们提供的弱内存序体系中只要两条写指令不被栅栏分割，那就可以合并添加到可合并非先进先出写缓冲器里。</p><h5 class="relative group">5.1.2.2 简单的指令预测<div id=5122-%E7%AE%80%E5%8D%95%E7%9A%84%E6%8C%87%E4%BB%A4%E9%A2%84%E6%B5%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5122-%E7%AE%80%E5%8D%95%E7%9A%84%E6%8C%87%E4%BB%A4%E9%A2%84%E6%B5%8B aria-label=锚点>#</a></span></h5><p>强定序和完全存储定序模型里，处理器可以预测接下来要执行的指令，从而能够提前执行某些指令。从表现结果来看，类似乱序执行接下来的指令，当然执行这些指令的结果在确定这些指令应当执行之前并不会提交。这种预测和检测机制增加了硬件的性能消耗和复杂度。除了多消耗了计算资源，这种机制意味着指令级别的并行被某些有限状态资源所限制。弱内存序体系中，处理器可以无视指令序和缓存一致性请求（其他核发出来的）请求执行载入命令。在弱内存序里，这些载入操作是否执行是不可预测的(尽管它们可能通过分支预测) 这段话实际上有个问题，就是在问，弱内存序里，在某些指令不被确定是否执行前，载入操作的结果会不会提前commit?这里需要区分内存序指令序。建议阅读https://stackoverflow.com/questions/52215031/how-is-load-store-reordering-possible-with-in-order-commit和https://stackoverflow.com/questions/39670026/out-of-order-instruction-execution-is-commit-order-preserved。除此之外，典型的弱内存序ARM里面指令交互相关建议看这个网页https://azeria-labs.com/memory-instructions-load-and-store-part-4/。这里我建议想一想这一点，无论哪种内存序，只保证线程执行的结果和单线程执行的结果保持一致，这里单线程和结果是重点。</p><h3 class="relative group">5.2 一个弱内存序例子<div id=52-%E4%B8%80%E4%B8%AA%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E4%BE%8B%E5%AD%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#52-%E4%B8%80%E4%B8%AA%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E4%BE%8B%E5%AD%90 aria-label=锚点>#</a></span></h3><h4 class="relative group">5.2.1 XC模型的基本理念<div id=521-xc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#521-xc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h4><p>XC的内存序会保证一下指令序不会被重拍：</p><ul><li>载入 => 屏障</li><li>储存 => 屏障</li><li>屏障 => 屏障</li><li>屏障 => 载入</li><li>屏障 => 储存</li></ul><p>此外，XC对于两条相同指令的操作不会重排，这和完全存储定序保持了一致：</p><ul><li>载入 => 载入 (对相同地址)</li><li>载入 => 储存 (对相同地址)</li><li>储存 => 储存 (对相同地址)</li></ul><p>XC同样保证，同一线程里，对某地址内存块执行载入操作，会获取该线程载入操作之前的对相同地址的储存指令的结果。因此上面应该可以加上一条 储存 => 载入 （相同地址），但因为这种操作因为正式来说属于分流(bypass)，所以没写到上面。</p><h4 class="relative group">5.2.2 在XC模型下使用栅栏的例子<div id=522-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%8B%E4%BD%BF%E7%94%A8%E6%A0%85%E6%A0%8F%E7%9A%84%E4%BE%8B%E5%AD%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#522-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%8B%E4%BD%BF%E7%94%A8%E6%A0%85%E6%A0%8F%E7%9A%84%E4%BE%8B%E5%AD%90 aria-label=锚点>#</a></span></h4><p>屏障F1保证了指令的时序，看起来很有用。但一部分读者诧异于屏障F2的作用。</p><h3 class="relative group">5.3 实现XC模型<div id=53-%E5%AE%9E%E7%8E%B0xc%E6%A8%A1%E5%9E%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#53-%E5%AE%9E%E7%8E%B0xc%E6%A8%A1%E5%9E%8B aria-label=锚点>#</a></span></h3><p>本章节讨论实现XC。我们会沿用前两章实现强定序和完全存储定序的方法-将指令重拍和缓存一致性协议拆开，来设计实现XC模型。在完全存储定序中，每个核和缓存系统之间都添加了一个先入先出写缓冲器。对于XC模型而言，每个核和缓存系统之间都会添加一个重排单元，该重排单元会将储存和载入操作重排。</p><p>如同图5.3a描述的那样，XC运行符合：</p><ul><li>载入，储存，屏障按照程序指令序&lt;p离开每个核Ci，并进入每个核Ci的重排单元的尾部。</li><li>每个核的重排单元会处理并将操作从队尾挪到队头，处理操作的顺序要么按照程序指令序，或者根据下面的几条规定将指令重排。一个屏障在到达重排单元的头部被丢弃。</li><li>当switch选择执行核Ci的操作时，它会执行核C重排单元队头的操作。</li></ul><p>重排单元重排操作时，遵循三种规则：</p><ul><li>屏障&mdash;屏障可以通过多种方式实现，但是他们必须正确实现操作排序。尤其是在操作的目标地址不同时，重排单元不能执行重排操作，保证原本的顺序，这些顺序包括：载入 => 屏障，储存 => 屏障，屏障 => 屏障，屏障 => 载入，屏障 => 储存</li><li>对相同地址的操作：对相同的地址的操作不允许被重排，这些操作包括：载入 => 载入 (对相同地址)，载入 => 储存 (对相同地址)，储存 => 储存 (对相同地址)</li><li>分流：必须保证对相同地址的load能看到之前store的结果。</li></ul><p>上面的规定并不奇怪，它们只是5.2.3节的规则换了一种表述。</p><p>上两章，无论是强定序还是完全存储定序，我们都使用缓存一致性内存体系替代了switch和内存体系。正如图5.3b所示，这对于XC同样适用。缓存一致性协议实现了全局的内存序，但和原先不同的是，全局的内存序可能会由于重排单元的存在而和指令序大为不同。</p><p>那么从完全存储定序提升到XC模型，性能提高了多少呢？很不幸，这个答案和5.1.2节讨论的内容相关，诸如先进先出写缓冲器和可合并非先进先出写缓冲区性能比较？分支预测支持几何？</p><h4 class="relative group">5.3.1 在XC模型中实现原子指令<div id=531-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#531-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4 aria-label=锚点>#</a></span></h4><p>在支持XC模型的系统中实现原子级别读改写有很多方法。实现原子级别读改写的方法同样依赖于系统是如何实现XC模型的。本节中，我们假设XC系统包含多个指令乱序处理器，每个指令乱序处理器通过一个可合并非先入先出写缓冲器和内存相连。</p><p>另一种实现原子级别读改写并不在本书讨论的范围里，表格5.6中，我们展示了一种典型的临界区操作，自然也包括锁争用和锁释放。对完全存储定序，原子级别读写操作用来获取锁，储存操作用来释放锁。对XC模型，情况变的更为复杂，XC模型并不强制要求原子级别读改写晚于临界区代码执行，因此必须在获取锁的代码之后加个屏障，锁释放同样要在之前加一个屏障，避免锁释放的操作和临界区操作被重排。简而言之，锁的使用必须通过屏障保护。</p><h4 class="relative group">5.3.2 在XC模型中实现屏障<div id=532-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%B1%8F%E9%9A%9C class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#532-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%B1%8F%E9%9A%9C aria-label=锚点>#</a></span></h4><p>不同体系里屏障的实现方法有三种：</p><ul><li>对强定序而言，所有的屏障都可被视为空转(no-ops)。</li><li>另一种实现方式是将Xi所有的内存操作执行完毕后，认为屏障已经起作用了，然后再开始执行Yi的操作。这种方式，通俗形容起来和“将缓冲器排空，再写入操作”一样，是一种非常常见但耗费昂贵的实现方式。</li><li>另一种实现方式无需“将缓冲器排空”，只保证必须执行的一致性操作执行完毕。这种方式并不在本书设计的范围里。尽管这种方式设计实现起来比较困难，但比“将缓冲器排空”带来更好的性能。</li></ul><p>无论上面哪种情况，屏障必须能够清楚何时Xi执行完毕，对于一个常常分流缓存一致性的储存操作而言，知道何时执行完毕的方法可能十分巧妙。</p><h4 class="relative group">5.3.3 警告<div id=533-%E8%AD%A6%E5%91%8A class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#533-%E8%AD%A6%E5%91%8A aria-label=锚点>#</a></span></h4><p>一个XC模型的实现者可能会认为：我在实现一个弱内存序模型，所以最终的时序了无限制。事实并非如此，XC的很多规范必须被遵守，</p><h3 class="relative group">5.4 实现无竞争的一致性程序<div id=54-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%9E%E4%BA%89%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E7%A8%8B%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#54-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%9E%E4%BA%89%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E7%A8%8B%E5%BA%8F aria-label=锚点>#</a></span></h3><p>to have their cake and eat it too. 想要鱼和熊掌兼得。</p><p>You can&rsquo;t have your cake and eat it (too) 鱼和熊掌不可兼得</p><p>幸运的是，对数据无竞争(data-race-free（DRF）)程序而言，实现这两个目标是可能的。通俗的来说，当两个线程同时访问同一块内存地址，其中一个线程在写数据，两个线程没有任何同步关系就会导致同步问题的出现。强定序下，数据无竞争程序的开发者只需要正确的标识同步操作就可以开发此类程序，在XC模型下，数据无竞争程序的开发者需要使用原子级别读改写和屏障来实现同步标签的同步工作。这种方法是诸如JAVA和C++的高级语言同步原语的基石。</p><p>让我们来看看表5.6和表5.8提供</p><p>从这两个例子中可以看出，“顺序一致性的数据无竞争”(DRF)概念包含以下含义：</p><ul><li>存在数据竞争的指令执行揭示了XC模型下的储存载入重排序，或者</li></ul><p>如果想对“顺序一致性的数据无竞争(SC for DRF)”有一个更具体的理解，需要对以下概念有认识：</p><ul><li>一些内存操作被标记为“同步”（“同步操作”），其余默认被标记为“数据”（“数据操作”）。“同步”（同步操作）包含锁的获取和释放</li><li>两个不同核上对同一块内存的数据操作Di和Dj，只要其中有一个是储存，我们就称这两个操作“违背”。</li><li>两个不同核上对同一块内存（比方说锁）的同步操作Si和Sj，只要其中一个操作是写操作就称这两个操作“违背”（对于自旋锁的获取和释放都是违背，而两个对读写锁的读锁并不违背）</li><li>两个同步操作Si和Sj，只要两个操作直接“违背”或者Si和Sk“违背”，而Sk和Sj在同一个核上执行，且Sk的指令序早于Sj，我们就说这两个操作“及物违背”。</li><li>两个数据操作Di和Dj如果“违背”，且在全局的时序上没有一对及物违背的同步操作Si和Sj发生在两者之间，那么Di和Dj就发生了“竞争”。换句话说，一对违背的数据操作Di &lt;m Dj并不会发生数据竞争，只要有一对及物违背的同步操作Si和Sj，满足Di &lt;m Si &lt;m Sj &lt;m Dj。上面的两种说法，Di和Si在同一个核(线程)上，Dj和Sj在同一个核（线程）上。</li><li>一段满足顺序一致性的流程，只要不发生数据竞争，我们就称该流程满足“顺序一致性的数据无竞争”。</li><li>如果一个程序所有的流程都没发生争用，那么我们就称该程序是“顺序一致性的数据无竞争”的。</li></ul><p>对XC模型而言，程序员或底层开发者需要使用屏障来确保同步操作执行顺序是正确的。</p><h3 class="relative group">5.5 一些弱内存序的术语<div id=55-%E4%B8%80%E4%BA%9B%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E7%9A%84%E6%9C%AF%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#55-%E4%B8%80%E4%BA%9B%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E7%9A%84%E6%9C%AF%E8%AF%AD aria-label=锚点>#</a></span></h3><h4 class="relative group">5.5.1 释放一致性<div id=551-%E9%87%8A%E6%94%BE%E4%B8%80%E8%87%B4%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#551-%E9%87%8A%E6%94%BE%E4%B8%80%E8%87%B4%E6%80%A7 aria-label=锚点>#</a></span></h4><h4 class="relative group">5.5.2 可视性和写原子性<div id=552-%E5%8F%AF%E8%A7%86%E6%80%A7%E5%92%8C%E5%86%99%E5%8E%9F%E5%AD%90%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#552-%E5%8F%AF%E8%A7%86%E6%80%A7%E5%92%8C%E5%86%99%E5%8E%9F%E5%AD%90%E6%80%A7 aria-label=锚点>#</a></span></h4><p>可视性意味着“如果我看待某事发生，且告知了你，那么你也会看到”</p><p>写原子性（也被称为储存原子性，多拷贝原子性）意味着“如果一个核执行了储存操作，那么所有其他核都能立刻看到”。XC模型的缓存一致性内存模型保证了其是符合写原子性的。写入之前，没有任何一个核可以看到新储存的值，写入之后，其他核只能看到两种情况：要么这次存储的新值，要么这之后存贮的值里的一种，而不能看到被这次存储覆盖的过去的值(这里面有两个含义：1写入以后，其他核只能看到新值，或者更新的值2写入成功之前，只有执行写入的核看到这个值，其他核看到的值都早于这个写入的值)。写原子性使得处理器可以比其他核更早的看到他自己存储的值，因此，有人认为这个名字的xxx</p><ul><li>写原子性存在意味着必然存在可视性，举个例子表格5.9里，核C2注意到S1，执行一个屏障，然后执行S2。因为满足写原子性，因此C3必然能看到S1</li><li>可视性存在并不能说明写原子性存在，举个例子表格5.10里，假设核C1和C3共享一个写缓冲区，而C2和C4共享一个写缓冲区。当C1把S1放入C1和C3的写缓冲器里，很明显只有C1自己和C3的L1可以看到。相似的，当C2把S2放入C2和C4的写缓冲器里，很明显只有C2自己和C4的L3可以看到。只要C3的L2和C4的L4在写缓冲器把两个储存操作写入缓存一致性内存之前，那么写原子性必然得不到满足。</li></ul><p>总之，我们的XC模型提供了写原子性和可视性。由于写原子性暗示了可视性，所以我们以前只提及写原子性。建议继续阅读https://azeria-labs.com/memory-instructions-load-and-store-part-4/</p><h2 class="relative group">第六章 缓存一致性协议<div id=%E7%AC%AC%E5%85%AD%E7%AB%A0-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE aria-label=锚点>#</a></span></h2><h3 class="relative group">6.1 全局视角看缓存一致性<div id=61-%E5%85%A8%E5%B1%80%E8%A7%86%E8%A7%92%E7%9C%8B%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#61-%E5%85%A8%E5%B1%80%E8%A7%86%E8%A7%92%E7%9C%8B%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7 aria-label=锚点>#</a></span></h3><p>一致性协议的目的是通过满足2.3节的两个不变式来提供缓存一致性。</p><ul><li>SWMR不变式</li><li>数值正确不变式</li></ul><p>为实现这些不变式，我们将每个存储设备-每个缓存和LLC/物理内存-和一个有限状态自动机联系起来，并将结合了自动机的存储设备称为“一致性控制器(coherence controller )”。这些一致性控制器通过确保交换信息时满足SWMR和数据正确不变式的有效性，构建了一个分布式的系统。缓存协议规定了这些一致性控制器的互动通过制定。</p><p>不同的一致性控制器有不同的职责。缓存部分的一致性控制器，我们称之缓存控制器，如图6.1一样工作。缓存控制器提供服务时必须满足两个方面的资源：在“处理器角度”，缓存控制器提供接口实现储存和载入功能，并返回对应的值。一次缓存缺失会导致缓存控制器发起一致性事务，这里是发起一个一致性请求请求获得处理器需求的内存块。缓存一致性请求在交互网络上传递。一致性事务包含一致性请求和其他的交换信息(比方说从其他缓存控制器返回的数据回复信息)，其他信息往往是为了满足一致性请求而产生。一致性事务和消息的种类和具体一致性协议密不可分。</p><h3 class="relative group">6.2 描述缓存一致性协议<div id=62-%E6%8F%8F%E8%BF%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#62-%E6%8F%8F%E8%BF%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE aria-label=锚点>#</a></span></h3><h3 class="relative group">6.3 缓存一致性协议的例子<div id=63-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BE%8B%E5%AD%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#63-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BE%8B%E5%AD%90 aria-label=锚点>#</a></span></h3><h3 class="relative group">6.4 总览缓存一致性设计<div id=64-%E6%80%BB%E8%A7%88%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E8%AE%BE%E8%AE%A1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#64-%E6%80%BB%E8%A7%88%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E8%AE%BE%E8%AE%A1 aria-label=锚点>#</a></span></h3><h4 class="relative group">6.4.1 状态<div id=641-%E7%8A%B6%E6%80%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#641-%E7%8A%B6%E6%80%81 aria-label=锚点>#</a></span></h4><p>系统如果只有一个角色，每个缓存的状态可以用有效/无效区分。有效的内存块又可以被划分成“脏”块&ndash;该块的数据和其他的块拷贝相比，最后被处理器修改。举个例子，一个L1缓存采用写回策略的二级缓存，L1缓存中的数据可能是脏的，从而使得L2缓存的数据过时。</p><p>一个有多个角色的系统可以使用这几种简单的状态，但我们常常想讲有效状态区分开。我们希望能够从四个角度将内存块的状态区分开：有效性，脏性质，独占性，和拥有性。后两者是SMP系统所独有的：</p><ul><li>有效性，一个有效的数据块，其内容（数据）必然是最新的。该数据块可读，但如果想可写需要再获得独占性。</li><li>脏性质，如同单核处理器一样，如果缓存的数据是更新过的，而LLC/物理内存的数据是陈旧的，缓存控制器因此有必要将此数据最终写回到LLC/物理内存里。脏性质的反义词是“干净”</li><li>独占性，如果该缓存里的内存块，是系统上唯一被缓存的拷贝(这句话暗指的意思是LLC中可能有该数据块)</li><li>拥有性，如果某缓存控制器负责应答该对内存块的缓存请求，我们就将该缓存控制器称为该内存块的拥有者。大部分协议中，每个数据块在某段时间都是有其拥有者的。一个内存块不会在其控制权被拥有者转让出去之前，因为容量不足和缓存行冲突，就把数据从缓存写回到内存里。</li></ul><p>本节，我们先讨论常用的状态，</p><p>许多缓存一致性协议使用Sweazey and Smith 第一次引入的五种经典状态MOESI 里的子集作为其状态。三个基础状态为MSI，O和E不属于基础状态，但也很常用。每个状态的特性并不相同，感觉需要英文做精确表述。</p><ul><li>M(odified): The block is valid, exclusive, owned, and potentially dirty. The block may be read or written. The cache has the only valid copy of the block, the cache must respond to requests for the block, and the copy of the block at the LLC/memory is potentially stale. M代表着数据是有效，独占，被当前缓存控制器拥有，有可能已经被修改了。</li><li>S(hared): The block is valid but not exclusive, not dirty, and not owned. The cache has a read-only copy of the block. Other caches may have valid, read-only copies of the block. S代表数据不被独占，不被缓存控制器拥有，不脏。</li><li>I(nvalid): The block is invalid. The cache either does not contain the block or it contains a potentially stale copy that it may not read or write. In this primer, we do not distinguish between these two situations, although sometimes the former situation may be denoted as the “Not Present” state. I代表无效，这个很好理解，没有或者说数据老旧。</li><li>O(wned): The block is valid, owned, and potentially dirty, but not exclusive. The cache has a read-only copy of the block and must respond to requests for the block. Other caches may have a read-only copy of the block, but they are not owners. The copy of the block in the LLC/memory is potentially stale. O状态是有效，被当前缓存控制器拥有，可能是脏的，但不是独占的。当前缓存控制器有用一份内存块的只读拷贝(这个状态的目的是啥呢？我理解是延缓写入内存，但是同样保持有效性，这个是比X86_MESI（见下）能够更晚写回内存的，由于S共享只读，但是不脏，因此如果要释放M状态的值需要写回内存，而O共享只读，可能脏，能够不写会内存，是M的一个简单退化，减少了性能的差异？)</li><li>E(xclusive): The block is valid, exclusive, and clean. The cache has a read-only copy of the block. No other caches have a valid copy of the block, and the copy of the block in the LLC/memory is up-to-date. In this primer, we consider the block to be owned when it is in the Exclusive state, although there are protocols in which the Exclusive state is not treated as an ownership state. E状态是有效，独占，而且干净。当前缓存是只有内存块的只读拷贝，其他缓存块则没有改块的只读拷贝，LLC/物理内存的数据和缓存控制器里的块是一致的。</li></ul><p>使用文氏图来表达其关系，四个特性是其集合，但是其内容并不是十分严格，Modified属于Dirtiness的子集吗？并不，Modified是有不被修改的可能的</p><img src=imgs/figure_6_4MOESI_state.jpg alt=图6.4><p>这里需要协商平时经常说的MESI状态：</p><ul><li>Modified 当前cache的内容有效，数据已被修改而且与内存中的数据不一致，数据只在当前cache里存在</li><li>Exclusive 当前cache的内容有效，数据与内存中的数据一致，数据只在当前cache里存在</li><li>Shared 当前cache的内容有效，数据与内存中的数据一致，数据在多个cache里存在</li><li>Invalid 当前cache无效</li></ul><p>讲平时的MESI称为X86_MESI，将MOESI称为LIB_MOESI，会发现：</p><ul><li>X86_M是LIB_M的子集，因为X86M是必然脏，而LIB_M是可脏可不脏的。实际上LIB_M是一种大的权限，是SMWR里的可读可写。</li><li>X86_E是LIB_E的同义词，两者都保证缓存和LLC/物理内存的数据一样新</li><li>X86_S是LIB_S的同义词，</li><li>X86_I是LIB_I的同义词，</li><li>X86里没有O这个状态，因为LIB_O里，如果一个数据不被当前缓存控制器独占的，但是被占有，是脏的。必然有一个曾经的M状态导致它脏，简答来说就是M和S能够保证O不被使用。因此X86实际上实现的是个简单的MOESI</li></ul><p>让我来再细细的捋一下X86_MESI和LIB_MOESI的区别，这里使用一开始说的四个特点:</p><ul><li>X86_M=Dirtyness+Exclusivity</li><li>X86_S = Validity+Cleaness+N_exclusivity</li><li>X86_E = Validity +Exclusivity+Cleaness</li><li>X86_I = Nothing Happen</li></ul><h4 class="relative group">6.4.2 事务<div id=642-%E4%BA%8B%E5%8A%A1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#642-%E4%BA%8B%E5%8A%A1 aria-label=锚点>#</a></span></h4><p>理论研究者和实际工作者的实现往往是不同的，平时说到缓存协议一般就是MESI协议</p><img src=imgs/table_6_4_common_transactions.jpg alt=表6.4>
-<img src=imgs/table_6_5_common_core_request.jpg alt=表6.5><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-01-11-尝试翻译内存模型和缓存一致性\\index.md",oid_likes="likes_posts\\2021-01-11-尝试翻译内存模型和缓存一致性\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-01-08-%E5%B9%B3%E5%87%A1%E7%9A%84%E7%BC%96%E8%BE%91%E5%89%A7%E6%83%85%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">平凡的编辑剧情角色设计</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-01-08T00:00:00+00:00>2021 年 1 月 8 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-01-24-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A04-%E7%90%86%E8%A7%A3linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">内存学习(4)-理解linux虚拟内存管理</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-01-24T00:00:00+00:00>2021 年 1 月 24 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+图3.3d显示了会导致（r1，r2）=（0，0）结果的一个非强定序执行流程。对于这个输出，没有办法创建一个符合程序顺序的内存序。程序序显示：</p>
+<ul>
+<li>S1 &lt;p L1</li>
+<li>S2 &lt;p L2</li>
+</ul>
+<p>但内存序显示：</p>
+<ul>
+<li>L1 &lt;m S2(所以r1为0)</li>
+<li>L2 &lt;m S1(所以r2为0)</li>
+</ul>
+<p>考虑到所有这些约束条件的结果会导致一个循环，与执行的顺序是相背的的。图3.3d中的额外弧线说明了这个循环在哪里。
+我们刚刚看到了六个强定序的执行流程和一个非强定序的执行流。这可以帮助我们理解强定序的实现：一个强定序的实现必须允许前六个执行中的一个或多个，但不能允许第七种执行流程。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_b1b55cdded419c7c.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_fe5d910c54204223.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_ce365a1ee056b032.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_39614f3dcede4d84.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_39614f3dcede4d84.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_2_hu_fe5d910c54204223.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_d8109a260686486a.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_95dfdb62b69d89eb.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_2fbbee8fd68dc8e1.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_db5a12bb744333f6.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_db5a12bb744333f6.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_3_3_hu_95dfdb62b69d89eb.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">3.5 强定序的简单定义 
+    <div id="35-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9A%E4%B9%89" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#35-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E7%AE%80%E5%8D%95%E5%AE%9A%E4%B9%89" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>在这一节中，我们将给出强定序的定义，从而方便我们能够将强定序与接下来两章中的较弱的内存一致性模型进行比较。我们采用Weaver和Germond使用的符号&ndash;这是一种指定一致性的公理方法，我们将在第11章中详细讨论：L(a)和S(a)分别代表对地址a的加载和存储。顺序&lt;p和&lt;m分别定义了程序序和全局内存序，具体些就是程序序&lt;p是每个核逻辑上（顺序上）执行内存操作的顺序。全局内存顺序&lt;m是对所有核上表现出来的内存操作的真实顺序。
+一个抢定序的执行需要以下条件。</p>
+<p>（1）每个核其储存和载入操作的全局顺序，遵守该核上执行程序视角的顺序，无论他们是不是在操作同一地址</p>
+<ul>
+<li>
+<p>If L(a) &lt;p L(b) ； L(a) &lt;m L(b)   /* Load-&gt;Load */</p>
+</li>
+<li>
+<p>If L(a) &lt;p S(b) ； L(a) &lt;m S(b)   /* Load-&gt;Store */</p>
+</li>
+<li>
+<p>If S(a) &lt;p S(b) ； S(a) &lt;m S(b)   /* Store-&gt;Store */</p>
+</li>
+<li>
+<p>If S(a) &lt;p L(b) ； S(a) &lt;m L(b)   /* Store-&gt;Load */</p>
+</li>
+</ul>
+<p>（2）每一个核上对某物理地址执行的载入操作，都会获得从多核的视角出发(多核内存时序global memory order)，该载入操作之前发生的对该物理地址最近的储存结果。</p>
+<p>简单总结下，对于SC而言其指令的基本逻辑为：</p>
+<p>原子读-改-写（RMW）指令，我们将在第3.9节深入讨论，它进一步限制了可表现出来的执行结果。例如，每个tas指令的执行都要求表现出来的加载和存储的存储在逻辑上的顺序和内存序一致中（也就是说，在它们之间没有其他相同或不同地址的内存操作干扰，实际上就是cas不会有中间态）。</p>
+<p>我们在表3.4中总结了强定序的内存序表现出的行为。例如，如果一个给定的线程在程序序上表现出一个加载在一个存储之前（即加载在表中是 &ldquo;操作1&rdquo;，存储在表中是 &ldquo;操作2&rdquo;），那么这个交叉点的表项是一个 &ldquo;X&rdquo;，表示这些操作在内存序上表现的结果和程序序一致。对于强定序而言，所有的内存序都必须符合程序序；在其他的一致性模型下，我们在接下来的两章中研究，这些约束中的一些被放松了（也就是说，别的内存模型的内存序表中的一些条目不是 &ldquo;X&quot;了）。</p>
+<p>一个强定序的实现只允许强定序的指令执行。严格来说，这是强定序的安全保证（safety property不会造成恶劣的后果，我理解就是底线要求，最低级别的保证）。强定序的实现还应该提供一定的有效性保证（liveness proterty我理解就是高于底线的要求，就是附加的有利用价值的保证，这两个英文单词我原先搜索过大致理解意思，但是翻译得不好，建议读者自己google一下然后理解意思）。具体来说，一个store操作必须最终对反复尝试读该数据的load可见。这个属性被称为最终写传递，通常由一致性协议来保证。更一般地说，避免饿死和提供一定的公平性也是有价值的，但这些问题超出了我们对内存一致性的讨论。</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_3998357532572275.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_54ab6b10b69d7597.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_cf199cb1feff313b.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_e53eb918a225edeb.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_e53eb918a225edeb.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_3_4_hu_54ab6b10b69d7597.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+
+
+<h3 class="relative group">3.6 简单的强定序实现 
+    <div id="36-%E7%AE%80%E5%8D%95%E7%9A%84%E5%BC%BA%E5%AE%9A%E5%BA%8F%E5%AE%9E%E7%8E%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#36-%E7%AE%80%E5%8D%95%E7%9A%84%E5%BC%BA%E5%AE%9A%E5%BA%8F%E5%AE%9E%E7%8E%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>有两种简单的强定序实现方便我们理解</p>
+<blockquote>
+<p>多任务并行单核处理器</p></blockquote>
+<p>第一种实现方式：人们可以通过在单核（单处理器）上按照程序序执行所有线程来实现多线程用户级软件的强定序。线程T1的指令在核心C1上执行，直到上下文切换到线程T2，等等。在上下文切换时，在切换到新的线程之前，必须完成任何未决的内存操作。由于每个线程的指令在其执行流中作为一个原子块执行（并且由于处理器按照指令序执行），所有的强定序规则都不会被违背。</p>
+<blockquote>
+<p>The Switch</p></blockquote>
+<p>另一种实现方式，我们可以用一系列处理器、一个开关和内存来实现强定序，如图3.4所示。假设每个核按其程序序挨个向开关提交内存操作。每个核可以使用任何不影响其向开关提交指令内存序的优化措施。例如，可以使用一个简单的带有分支预测的五级指令流水线。</p>
+<p>这种实现，每次开关挑选一个核，允许其提交符合内存序的load/store操作，并且并且可以不断重复这个流程。开关可以以任何算法（例如随机）来挑选核，只要这些方法不会使得一些核被饿死即可。。</p>
+<p>评估</p>
+<p>这些实现的优点在于他们实现了一种能同时提供（1）指令级别强定序（2）实现强定序的一种标准模型。switch体系证明了强定序可以无需缓存或者缓存一致性而实现。</p>
+<p>这些实现的缺点在于，这些实现的性能并不同增长的核数成正比：第一种实现中单核存在性能瓶颈，第二种实现中switch和内存存在性能瓶颈。这些瓶颈导致部分人错误地认为强定序不可能实现真正的指令并行。我们接下来会看到事实并非如此。</p>
+
+
+<h3 class="relative group">3.7 一个兼容缓存一致性的简单SC实现 
+    <div id="37-%E4%B8%80%E4%B8%AA%E5%85%BC%E5%AE%B9%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E7%AE%80%E5%8D%95sc%E5%AE%9E%E7%8E%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#37-%E4%B8%80%E4%B8%AA%E5%85%BC%E5%AE%B9%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E7%9A%84%E7%AE%80%E5%8D%95sc%E5%AE%9E%E7%8E%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>缓存一致性有利于强定序的实现，它可以帮助我们实现并行地执行不冲突的load和store&ndash;如果两个操作是指向同一个地址，并且其中至少有一个操作是存储的话，就会发生冲突。此外，从概念理解这样一个系统也很简单。</p>
+<p>在这里，我们把缓存一致性视为一个实现了第二章的SWMR不变性的黑盒。我们通过略微揭示这个黑盒的实现来展示一点L1 cache相关的的内容。</p>
+<ul>
+<li>使用状态修改（M）来表示一个L1cache可以执行写入和读取。</li>
+<li>使用状态共享（S）来表示一个或多个内核可以读取各自的L1 cache</li>
+<li>让GetM和GetS分别表示每个核尝试使自己的l1 cache获取M/S状态的一致性请求。</li>
+</ul>
+<p>我们不需要深入了解缓存一致性是如何实现的，这一点在第6章及以后的章节中讨论。</p>
+<p>图3.5a描述了图3.4的模型，开关和内存被一个缓存一致性黑盒取代。每个核按其程序序一次向高速缓存一致性内存系统提出内存操作请求。该内存系统需要在满足同一核的下一个请求之前，先满足了每个已经发出的请求。</p>
+<p>图3.5b &ldquo;打开 &ldquo;了该内存系统的黑盒，显示出每个内核都连接到自己的L1高速缓存（我们将在后面讨论多线程）。如果内存系统对B块的加载或存储有适当的一致性权限（加载的状态为M或S，存储的状态为M），它就可以执行这个加载或存储。此外，只要相应的L1缓存有适当的权限，内存系统就可以并行地响应来自不同内核的请求。例如，图3.6a描述了四个内核各自寻求进行内存操作之前的缓存状态。这四个操作并不冲突，可以被各自的L1缓存满足，因此可以同时进行。如图3.6b所示，我们可以任意排列这些操作以获得合法的SC执行模型。更为普遍的是，只要L1缓存满足SWMR的操作总是可以并发进行，因为一致性的SWMR不变式确保了它们是不冲突的。</p>
+<p>总结下，我们已经实现了满足下面几条的强定序：</p>
+<ul>
+<li>充分利用了缓存的低延迟和总线带宽的优势。</li>
+<li>与其所使用的高速缓存一致性协议一样具有可扩展性（我理解就是可以伴随核数增长而性能增长）</li>
+<li>降低了实现多核环境实现缓存一致性的难度</li>
+</ul>
+
+
+<h3 class="relative group">3.8使用缓存一致性优化SC实现 
+    <div id="38%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BC%98%E5%8C%96sc%E5%AE%9E%E7%8E%B0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#38%E4%BD%BF%E7%94%A8%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E4%BC%98%E5%8C%96sc%E5%AE%9E%E7%8E%B0" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<blockquote>
+<p>不绑定预取</p></blockquote>
+<blockquote>
+<p>预测处理器</p>
+<p>设想一个以指令序执行的处理器，该处理器同样进行指令预测，这些指令包含储存和载入执行，如果发生了指令错误预测这些指令也可能被无效化。这些无效的储存和载入看起来和预取比较类似，同样都对SC不会造成错误的影响。一个发生在分支预测之后的载入L1 CACHE，无论预测错误还是成功()都会向寄存器返回一个值。如果载入操作被无效化，处理器丢弃寄存器的更新，抹除任何载入引发的副作用，就好像没有执行载入操作一样。缓存则不需要撤销这次预取，一方面不必要，另一方面提前载入数据可以在再次请求这块地址时提高性能。执行储存时，处理器可能执行GetM请求，但在确定执行储存之前不会将缓存里的结果更新。</p></blockquote>
+<p>提问：一个实现SC的系统，处理器发布缓存一致性的请求时，这些请求必然符合指令序吗？答案：错，CPU可以以任意顺序发布缓存请求。</p>
+<blockquote>
+<p>指令乱序处理器</p>
+<p>说起来这个解释起来并不简单，建议直接看原版论文https://courses.engr.illinois.edu/cs533/sp2019/reading_list/gharachorloo91two.pdf</p>
+<p>每个Load指令都是从memory到L1 cache</p>
+<p>Gharachorloo et al提供了两种保障多核下SC的检查。1如果处理器先执行了L2，在它提交L2的请求，并真正使用L2载入的数据之前之前，检查L2的缓存是否依然存在。只要缓存还在，那么L2的值不可能在执行载入和提交之前发生改变(因为SWMR，但我没理解。既然是载入，那么怎么会有提交呢，唯一可能的即使就是提交到Cache)。为执行此检查，处理器跟踪L2的地址并检查该物理地址关联的内存块和缓存一致性请求。一个GetM请求暗示另一个核注意到L2失序，该请求说明预测失败，需要抹消该无效预测（如果没明白为什么一个GetM会导致请求失效，建议看看SC的第二个要求，即Load要返回它之前最近的Store操作。举个例子）。</p>
+<p>另一种方法是通过重放，如果先执行L2，在L1执行完毕之后L2的值和缓存里的值保持一致，那就说明改变顺序是没有影响的，因为值是一样的。</p>
+<p>这两种做法从本质来说就是提前执行某个load，只要结果是不干扰执行的</p></blockquote>
+<blockquote>
+<p>指令乱序处理器的预取</p></blockquote>
+<blockquote>
+<p>多线程</p></blockquote>
+
+
+<h3 class="relative group">3.9 SC模型的原子操作 
+    <div id="39-sc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#39-sc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%8E%9F%E5%AD%90%E6%93%8D%E4%BD%9C" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>编写多线程代码时，程序员应该能够同步多线程的读写(同步的意思是指使线程操作操作在时间上出现一致性和统一化的现象，对程序员而言，并不是指同时发生，而是有先后顺序的发生)，这些同步性常常需要进行一对操作。这种操作通过提供原子级别的读改写指令实现。读改写RMW(read-modify-write)对正确实现同步机制，自旋锁与其他同步优先级至关重要。</p>
+<p>更激进的RMWs实现利用SC只需要将请求保持特定顺序(不是很通畅)，一个核将其缓存中特定的block置为状态M，即可执行读改写操作。直到任何其他一致性缓存消息对该block生成。</p>
+
+
+<h3 class="relative group">3.10 真实的例子MIPS R1000 
+    <div id="310-%E7%9C%9F%E5%AE%9E%E7%9A%84%E4%BE%8B%E5%AD%90mips-r1000" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#310-%E7%9C%9F%E5%AE%9E%E7%9A%84%E4%BE%8B%E5%AD%90mips-r1000" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h3 class="relative group">3.11 强定序的更多资料 
+    <div id="311-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E6%9B%B4%E5%A4%9A%E8%B5%84%E6%96%99" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#311-%E5%BC%BA%E5%AE%9A%E5%BA%8F%E7%9A%84%E6%9B%B4%E5%A4%9A%E8%B5%84%E6%96%99" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h2 class="relative group">第四章 
+    <div id="%E7%AC%AC%E5%9B%9B%E7%AB%A0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E5%9B%9B%E7%AB%A0" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">4.1 TSO/X86设计的缘由 
+    <div id="41-tsox86%E8%AE%BE%E8%AE%A1%E7%9A%84%E7%BC%98%E7%94%B1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#41-tsox86%E8%AE%BE%E8%AE%A1%E7%9A%84%E7%BC%98%E7%94%B1" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>处理器很早就支持利用写缓冲器(write (store) buffers  )去延时(hold)已经提交(commited/retired)，但还没进入缓存(cache)的储存操作。当提交储存操作时，载入操作进入写缓冲器。直到该内存块的内容以获得读+写的周期写入缓存时，才会将该储存操作从写缓冲器中取出。很显然，储存操作进入写缓冲器可以发生在获取对该内存块的读+写周期，写缓冲器因此降低了一次储存失败延迟。由于储存操作是如此常见，延迟写入看起来很有益，最妙的是，储存操作尝试跟新内存的操作不会干扰处理器状态，不会使得处理器停止继续执行指令。</p>
+
+
+<h4 class="relative group">4.4.1 实现原子指令 
+    <div id="441-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#441-%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>在TSO体系中实现原子级别读改写指令和强定序体系中实现原子级别读改写指令的操作基本一致。关键的不同只在于TSO体系下允许载入操作从时间序看来比指令序在它之前的储存操作先执行。对读改写指令造成的影响就是储存操作可能被写到写缓存器中。</p>
+<p>为了更好的理解TSO体系中的读改写指令，我们将读改写指令视为一对紧密结合的载入操作和储存操作。</p>
+<p>读改写指令的读指令部分不能比指令序在它之前的读指令先执行，这没有什么难以理解。但读者可能在为深入思考的情况下，认为读改写指令里的读指令会比已存在于写缓存器里的写指令更早执行，真实情况并非如此。如果读改写的读指令部分时序上早于写缓存器里的指令，那么紧随读指令部分执行的写指令部分会比写缓冲器中的写指令更早执行，这违背了TSO体系上STORE-STORE指令的执行序。因此读改写指令的读部分不能早于一个指令序上早于它的储存指令。</p>
+<p>这些时序的要求限制了读改写指令的实现，由于读改写的读指令部分必须晚于写缓冲器里的写指令，因此原子级别读改写指令会在执行读指令部分之前将写缓存器清空（使内部的写指令执行完）。为了能够是的写操作部分紧跟读指令部分，该读指令会尝试获取读+写的缓存权限，普通的读指令往往只需要读权限。最后为了保证读改写指令的原子性，缓存控制器可能不会</p>
+<p>给出TSO的结果模型：</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_83e868bf79ef5e5e.png 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_c6634d011fbcf150.png 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_1cd919c5eae9ce72.png 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_809b58d49e65bb04.png 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_809b58d49e65bb04.png"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_4_4_hu_c6634d011fbcf150.png"
+        alt=""
+      />
+      
+    </figure>
+</p>
+
+
+<h2 class="relative group">第五章 弱内存序 
+    <div id="%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E4%BA%94%E7%AB%A0-%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>上两章我们探索了强定序(SC)和完全存储定序(TSO)。</p>
+<p>本章我们探寻一种时序限制更弱的内存一致性模型，这种模型只保留程序员“需求”的指令序。这样子的好处blablabla</p>
+<p>完全探索这种模型超出本章的内容，本章只是一个提供一种基本的指引，帮助读者理解这种体系的限制。为此，我们以XC(5.2)为例，讨论XC的种种实现。这些实现包括原子指令。</p>
+
+
+<h3 class="relative group">5.1 动机 
+    <div id="51-%E5%8A%A8%E6%9C%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#51-%E5%8A%A8%E6%9C%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>理解弱一致性内存模型可比理解强定序和完全存储定序困难多了。既然有如此多的不便，干嘛折腾弱一致性内存模型？本节我们首先展示一些指令序并不是那么至关重要的例子，然后讨论下指令序不重要时一部分优化操作。</p>
+
+
+<h4 class="relative group">5.1.2 利用重排序的机会 
+    <div id="512-%E5%88%A9%E7%94%A8%E9%87%8D%E6%8E%92%E5%BA%8F%E7%9A%84%E6%9C%BA%E4%BC%9A" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#512-%E5%88%A9%E7%94%A8%E9%87%8D%E6%8E%92%E5%BA%8F%E7%9A%84%E6%9C%BA%E4%BC%9A" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>假设一个弱内存一致性模型可能重拍所有没有内存栅栏分割的指令，因此程序员必须清楚哪些指令必须被固定顺序。对程序员而言，这是个缺点，但对计算机而言这可能更便于优化。下面我们讨论一些普遍而且重要的优化，更深入的话题就不在本书中讨论了。</p>
+
+
+<h5 class="relative group">5.1.2.1 非先进先出，合并式写缓冲器 
+    <div id="5121-%E9%9D%9E%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E5%90%88%E5%B9%B6%E5%BC%8F%E5%86%99%E7%BC%93%E5%86%B2%E5%99%A8" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5121-%E9%9D%9E%E5%85%88%E8%BF%9B%E5%85%88%E5%87%BA%E5%90%88%E5%B9%B6%E5%BC%8F%E5%86%99%E7%BC%93%E5%86%B2%E5%99%A8" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>上一章中完全存储定序使用写缓冲器来降低写操作的延迟。相比于使用先进先出写缓冲器的完全存储定序，弱内存一致性模型采用了优化性更彻底的可合并非先进先出写缓冲器（即两个指令序不相邻的写操作可以合并到一起添加到到写缓冲器中）。这种可合并非先进先出的写缓冲器和完全存储定序体系中要求必须先进先出的存储相违背。我们提供的弱内存序体系中只要两条写指令不被栅栏分割，那就可以合并添加到可合并非先进先出写缓冲器里。</p>
+
+
+<h5 class="relative group">5.1.2.2 简单的指令预测 
+    <div id="5122-%E7%AE%80%E5%8D%95%E7%9A%84%E6%8C%87%E4%BB%A4%E9%A2%84%E6%B5%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5122-%E7%AE%80%E5%8D%95%E7%9A%84%E6%8C%87%E4%BB%A4%E9%A2%84%E6%B5%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>强定序和完全存储定序模型里，处理器可以预测接下来要执行的指令，从而能够提前执行某些指令。从表现结果来看，类似乱序执行接下来的指令，当然执行这些指令的结果在确定这些指令应当执行之前并不会提交。这种预测和检测机制增加了硬件的性能消耗和复杂度。除了多消耗了计算资源，这种机制意味着指令级别的并行被某些有限状态资源所限制。弱内存序体系中，处理器可以无视指令序和缓存一致性请求（其他核发出来的）请求执行载入命令。在弱内存序里，这些载入操作是否执行是不可预测的(尽管它们可能通过分支预测)   这段话实际上有个问题，就是在问，弱内存序里，在某些指令不被确定是否执行前，载入操作的结果会不会提前commit?这里需要区分内存序指令序。建议阅读https://stackoverflow.com/questions/52215031/how-is-load-store-reordering-possible-with-in-order-commit和https://stackoverflow.com/questions/39670026/out-of-order-instruction-execution-is-commit-order-preserved。除此之外，典型的弱内存序ARM里面指令交互相关建议看这个网页https://azeria-labs.com/memory-instructions-load-and-store-part-4/。这里我建议想一想这一点，无论哪种内存序，只保证线程执行的结果和单线程执行的结果保持一致，这里单线程和结果是重点。</p>
+
+
+<h3 class="relative group">5.2 一个弱内存序例子 
+    <div id="52-%E4%B8%80%E4%B8%AA%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E4%BE%8B%E5%AD%90" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#52-%E4%B8%80%E4%B8%AA%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E4%BE%8B%E5%AD%90" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h4 class="relative group">5.2.1 XC模型的基本理念 
+    <div id="521-xc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#521-xc%E6%A8%A1%E5%9E%8B%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>XC的内存序会保证一下指令序不会被重拍：</p>
+<ul>
+<li>载入 =&gt; 屏障</li>
+<li>储存 =&gt; 屏障</li>
+<li>屏障 =&gt; 屏障</li>
+<li>屏障 =&gt; 载入</li>
+<li>屏障 =&gt; 储存</li>
+</ul>
+<p>此外，XC对于两条相同指令的操作不会重排，这和完全存储定序保持了一致：</p>
+<ul>
+<li>载入 =&gt; 载入 (对相同地址)</li>
+<li>载入 =&gt; 储存 (对相同地址)</li>
+<li>储存 =&gt; 储存 (对相同地址)</li>
+</ul>
+<p>XC同样保证，同一线程里，对某地址内存块执行载入操作，会获取该线程载入操作之前的对相同地址的储存指令的结果。因此上面应该可以加上一条 储存 =&gt; 载入 （相同地址），但因为这种操作因为正式来说属于分流(bypass)，所以没写到上面。</p>
+
+
+<h4 class="relative group">5.2.2 在XC模型下使用栅栏的例子 
+    <div id="522-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%8B%E4%BD%BF%E7%94%A8%E6%A0%85%E6%A0%8F%E7%9A%84%E4%BE%8B%E5%AD%90" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#522-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%8B%E4%BD%BF%E7%94%A8%E6%A0%85%E6%A0%8F%E7%9A%84%E4%BE%8B%E5%AD%90" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>屏障F1保证了指令的时序，看起来很有用。但一部分读者诧异于屏障F2的作用。</p>
+
+
+<h3 class="relative group">5.3 实现XC模型 
+    <div id="53-%E5%AE%9E%E7%8E%B0xc%E6%A8%A1%E5%9E%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#53-%E5%AE%9E%E7%8E%B0xc%E6%A8%A1%E5%9E%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>本章节讨论实现XC。我们会沿用前两章实现强定序和完全存储定序的方法-将指令重拍和缓存一致性协议拆开，来设计实现XC模型。在完全存储定序中，每个核和缓存系统之间都添加了一个先入先出写缓冲器。对于XC模型而言，每个核和缓存系统之间都会添加一个重排单元，该重排单元会将储存和载入操作重排。</p>
+<p>如同图5.3a描述的那样，XC运行符合：</p>
+<ul>
+<li>载入，储存，屏障按照程序指令序&lt;p离开每个核Ci，并进入每个核Ci的重排单元的尾部。</li>
+<li>每个核的重排单元会处理并将操作从队尾挪到队头，处理操作的顺序要么按照程序指令序，或者根据下面的几条规定将指令重排。一个屏障在到达重排单元的头部被丢弃。</li>
+<li>当switch选择执行核Ci的操作时，它会执行核C重排单元队头的操作。</li>
+</ul>
+<p>重排单元重排操作时，遵循三种规则：</p>
+<ul>
+<li>屏障&mdash;屏障可以通过多种方式实现，但是他们必须正确实现操作排序。尤其是在操作的目标地址不同时，重排单元不能执行重排操作，保证原本的顺序，这些顺序包括：载入 =&gt; 屏障，储存 =&gt; 屏障，屏障 =&gt; 屏障，屏障 =&gt; 载入，屏障 =&gt; 储存</li>
+<li>对相同地址的操作：对相同的地址的操作不允许被重排，这些操作包括：载入 =&gt; 载入 (对相同地址)，载入 =&gt; 储存 (对相同地址)，储存 =&gt; 储存 (对相同地址)</li>
+<li>分流：必须保证对相同地址的load能看到之前store的结果。</li>
+</ul>
+<p>上面的规定并不奇怪，它们只是5.2.3节的规则换了一种表述。</p>
+<p>上两章，无论是强定序还是完全存储定序，我们都使用缓存一致性内存体系替代了switch和内存体系。正如图5.3b所示，这对于XC同样适用。缓存一致性协议实现了全局的内存序，但和原先不同的是，全局的内存序可能会由于重排单元的存在而和指令序大为不同。</p>
+<p>那么从完全存储定序提升到XC模型，性能提高了多少呢？很不幸，这个答案和5.1.2节讨论的内容相关，诸如先进先出写缓冲器和可合并非先进先出写缓冲区性能比较？分支预测支持几何？</p>
+
+
+<h4 class="relative group">5.3.1 在XC模型中实现原子指令 
+    <div id="531-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#531-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%8E%9F%E5%AD%90%E6%8C%87%E4%BB%A4" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>在支持XC模型的系统中实现原子级别读改写有很多方法。实现原子级别读改写的方法同样依赖于系统是如何实现XC模型的。本节中，我们假设XC系统包含多个指令乱序处理器，每个指令乱序处理器通过一个可合并非先入先出写缓冲器和内存相连。</p>
+<p>另一种实现原子级别读改写并不在本书讨论的范围里，表格5.6中，我们展示了一种典型的临界区操作，自然也包括锁争用和锁释放。对完全存储定序，原子级别读写操作用来获取锁，储存操作用来释放锁。对XC模型，情况变的更为复杂，XC模型并不强制要求原子级别读改写晚于临界区代码执行，因此必须在获取锁的代码之后加个屏障，锁释放同样要在之前加一个屏障，避免锁释放的操作和临界区操作被重排。简而言之，锁的使用必须通过屏障保护。</p>
+
+
+<h4 class="relative group">5.3.2 在XC模型中实现屏障 
+    <div id="532-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%B1%8F%E9%9A%9C" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#532-%E5%9C%A8xc%E6%A8%A1%E5%9E%8B%E4%B8%AD%E5%AE%9E%E7%8E%B0%E5%B1%8F%E9%9A%9C" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>不同体系里屏障的实现方法有三种：</p>
+<ul>
+<li>对强定序而言，所有的屏障都可被视为空转(no-ops)。</li>
+<li>另一种实现方式是将Xi所有的内存操作执行完毕后，认为屏障已经起作用了，然后再开始执行Yi的操作。这种方式，通俗形容起来和“将缓冲器排空，再写入操作”一样，是一种非常常见但耗费昂贵的实现方式。</li>
+<li>另一种实现方式无需“将缓冲器排空”，只保证必须执行的一致性操作执行完毕。这种方式并不在本书设计的范围里。尽管这种方式设计实现起来比较困难，但比“将缓冲器排空”带来更好的性能。</li>
+</ul>
+<p>无论上面哪种情况，屏障必须能够清楚何时Xi执行完毕，对于一个常常分流缓存一致性的储存操作而言，知道何时执行完毕的方法可能十分巧妙。</p>
+
+
+<h4 class="relative group">5.3.3 警告 
+    <div id="533-%E8%AD%A6%E5%91%8A" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#533-%E8%AD%A6%E5%91%8A" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>一个XC模型的实现者可能会认为：我在实现一个弱内存序模型，所以最终的时序了无限制。事实并非如此，XC的很多规范必须被遵守，</p>
+
+
+<h3 class="relative group">5.4 实现无竞争的一致性程序 
+    <div id="54-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%9E%E4%BA%89%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E7%A8%8B%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#54-%E5%AE%9E%E7%8E%B0%E6%97%A0%E7%AB%9E%E4%BA%89%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E7%A8%8B%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>to have their cake and eat it too.   想要鱼和熊掌兼得。</p>
+<p>You can&rsquo;t have your cake and eat it (too) 鱼和熊掌不可兼得</p>
+<p>幸运的是，对数据无竞争(data-race-free（DRF）)程序而言，实现这两个目标是可能的。通俗的来说，当两个线程同时访问同一块内存地址，其中一个线程在写数据，两个线程没有任何同步关系就会导致同步问题的出现。强定序下，数据无竞争程序的开发者只需要正确的标识同步操作就可以开发此类程序，在XC模型下，数据无竞争程序的开发者需要使用原子级别读改写和屏障来实现同步标签的同步工作。这种方法是诸如JAVA和C++的高级语言同步原语的基石。</p>
+<p>让我们来看看表5.6和表5.8提供</p>
+<p>从这两个例子中可以看出，“顺序一致性的数据无竞争”(DRF)概念包含以下含义：</p>
+<ul>
+<li>存在数据竞争的指令执行揭示了XC模型下的储存载入重排序，或者</li>
+</ul>
+<p>如果想对“顺序一致性的数据无竞争(SC for DRF)”有一个更具体的理解，需要对以下概念有认识：</p>
+<ul>
+<li>一些内存操作被标记为“同步”（“同步操作”），其余默认被标记为“数据”（“数据操作”）。“同步”（同步操作）包含锁的获取和释放</li>
+<li>两个不同核上对同一块内存的数据操作Di和Dj，只要其中有一个是储存，我们就称这两个操作“违背”。</li>
+<li>两个不同核上对同一块内存（比方说锁）的同步操作Si和Sj，只要其中一个操作是写操作就称这两个操作“违背”（对于自旋锁的获取和释放都是违背，而两个对读写锁的读锁并不违背）</li>
+<li>两个同步操作Si和Sj，只要两个操作直接“违背”或者Si和Sk“违背”，而Sk和Sj在同一个核上执行，且Sk的指令序早于Sj，我们就说这两个操作“及物违背”。</li>
+<li>两个数据操作Di和Dj如果“违背”，且在全局的时序上没有一对及物违背的同步操作Si和Sj发生在两者之间，那么Di和Dj就发生了“竞争”。换句话说，一对违背的数据操作Di &lt;m Dj并不会发生数据竞争，只要有一对及物违背的同步操作Si和Sj，满足Di &lt;m Si &lt;m Sj &lt;m Dj。上面的两种说法，Di和Si在同一个核(线程)上，Dj和Sj在同一个核（线程）上。</li>
+<li>一段满足顺序一致性的流程，只要不发生数据竞争，我们就称该流程满足“顺序一致性的数据无竞争”。</li>
+<li>如果一个程序所有的流程都没发生争用，那么我们就称该程序是“顺序一致性的数据无竞争”的。</li>
+</ul>
+<p>对XC模型而言，程序员或底层开发者需要使用屏障来确保同步操作执行顺序是正确的。</p>
+
+
+<h3 class="relative group">5.5 一些弱内存序的术语 
+    <div id="55-%E4%B8%80%E4%BA%9B%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E7%9A%84%E6%9C%AF%E8%AF%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#55-%E4%B8%80%E4%BA%9B%E5%BC%B1%E5%86%85%E5%AD%98%E5%BA%8F%E7%9A%84%E6%9C%AF%E8%AF%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h4 class="relative group">5.5.1 释放一致性 
+    <div id="551-%E9%87%8A%E6%94%BE%E4%B8%80%E8%87%B4%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#551-%E9%87%8A%E6%94%BE%E4%B8%80%E8%87%B4%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+
+
+<h4 class="relative group">5.5.2 可视性和写原子性 
+    <div id="552-%E5%8F%AF%E8%A7%86%E6%80%A7%E5%92%8C%E5%86%99%E5%8E%9F%E5%AD%90%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#552-%E5%8F%AF%E8%A7%86%E6%80%A7%E5%92%8C%E5%86%99%E5%8E%9F%E5%AD%90%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>可视性意味着“如果我看待某事发生，且告知了你，那么你也会看到”</p>
+<p>写原子性（也被称为储存原子性，多拷贝原子性）意味着“如果一个核执行了储存操作，那么所有其他核都能立刻看到”。XC模型的缓存一致性内存模型保证了其是符合写原子性的。写入之前，没有任何一个核可以看到新储存的值，写入之后，其他核只能看到两种情况：要么这次存储的新值，要么这之后存贮的值里的一种，而不能看到被这次存储覆盖的过去的值(这里面有两个含义：1写入以后，其他核只能看到新值，或者更新的值2写入成功之前，只有执行写入的核看到这个值，其他核看到的值都早于这个写入的值)。写原子性使得处理器可以比其他核更早的看到他自己存储的值，因此，有人认为这个名字的xxx</p>
+<ul>
+<li>写原子性存在意味着必然存在可视性，举个例子表格5.9里，核C2注意到S1，执行一个屏障，然后执行S2。因为满足写原子性，因此C3必然能看到S1</li>
+<li>可视性存在并不能说明写原子性存在，举个例子表格5.10里，假设核C1和C3共享一个写缓冲区，而C2和C4共享一个写缓冲区。当C1把S1放入C1和C3的写缓冲器里，很明显只有C1自己和C3的L1可以看到。相似的，当C2把S2放入C2和C4的写缓冲器里，很明显只有C2自己和C4的L3可以看到。只要C3的L2和C4的L4在写缓冲器把两个储存操作写入缓存一致性内存之前，那么写原子性必然得不到满足。</li>
+</ul>
+<p>总之，我们的XC模型提供了写原子性和可视性。由于写原子性暗示了可视性，所以我们以前只提及写原子性。建议继续阅读https://azeria-labs.com/memory-instructions-load-and-store-part-4/</p>
+
+
+<h2 class="relative group">第六章 缓存一致性协议 
+    <div id="%E7%AC%AC%E5%85%AD%E7%AB%A0-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%AC%AC%E5%85%AD%E7%AB%A0-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">6.1 全局视角看缓存一致性 
+    <div id="61-%E5%85%A8%E5%B1%80%E8%A7%86%E8%A7%92%E7%9C%8B%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#61-%E5%85%A8%E5%B1%80%E8%A7%86%E8%A7%92%E7%9C%8B%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>一致性协议的目的是通过满足2.3节的两个不变式来提供缓存一致性。</p>
+<ul>
+<li>SWMR不变式</li>
+<li>数值正确不变式</li>
+</ul>
+<p>为实现这些不变式，我们将每个存储设备-每个缓存和LLC/物理内存-和一个有限状态自动机联系起来，并将结合了自动机的存储设备称为“一致性控制器(coherence controller  )”。这些一致性控制器通过确保交换信息时满足SWMR和数据正确不变式的有效性，构建了一个分布式的系统。缓存协议规定了这些一致性控制器的互动通过制定。</p>
+<p>不同的一致性控制器有不同的职责。缓存部分的一致性控制器，我们称之缓存控制器，如图6.1一样工作。缓存控制器提供服务时必须满足两个方面的资源：在“处理器角度”，缓存控制器提供接口实现储存和载入功能，并返回对应的值。一次缓存缺失会导致缓存控制器发起一致性事务，这里是发起一个一致性请求请求获得处理器需求的内存块。缓存一致性请求在交互网络上传递。一致性事务包含一致性请求和其他的交换信息(比方说从其他缓存控制器返回的数据回复信息)，其他信息往往是为了满足一致性请求而产生。一致性事务和消息的种类和具体一致性协议密不可分。</p>
+
+
+<h3 class="relative group">6.2 描述缓存一致性协议 
+    <div id="62-%E6%8F%8F%E8%BF%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#62-%E6%8F%8F%E8%BF%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h3 class="relative group">6.3 缓存一致性协议的例子 
+    <div id="63-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BE%8B%E5%AD%90" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#63-%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E5%8D%8F%E8%AE%AE%E7%9A%84%E4%BE%8B%E5%AD%90" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h3 class="relative group">6.4 总览缓存一致性设计 
+    <div id="64-%E6%80%BB%E8%A7%88%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E8%AE%BE%E8%AE%A1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#64-%E6%80%BB%E8%A7%88%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7%E8%AE%BE%E8%AE%A1" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h4 class="relative group">6.4.1 状态 
+    <div id="641-%E7%8A%B6%E6%80%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#641-%E7%8A%B6%E6%80%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>系统如果只有一个角色，每个缓存的状态可以用有效/无效区分。有效的内存块又可以被划分成“脏”块&ndash;该块的数据和其他的块拷贝相比，最后被处理器修改。举个例子，一个L1缓存采用写回策略的二级缓存，L1缓存中的数据可能是脏的，从而使得L2缓存的数据过时。</p>
+<p>一个有多个角色的系统可以使用这几种简单的状态，但我们常常想讲有效状态区分开。我们希望能够从四个角度将内存块的状态区分开：有效性，脏性质，独占性，和拥有性。后两者是SMP系统所独有的：</p>
+<ul>
+<li>有效性，一个有效的数据块，其内容（数据）必然是最新的。该数据块可读，但如果想可写需要再获得独占性。</li>
+<li>脏性质，如同单核处理器一样，如果缓存的数据是更新过的，而LLC/物理内存的数据是陈旧的，缓存控制器因此有必要将此数据最终写回到LLC/物理内存里。脏性质的反义词是“干净”</li>
+<li>独占性，如果该缓存里的内存块，是系统上唯一被缓存的拷贝(这句话暗指的意思是LLC中可能有该数据块)</li>
+<li>拥有性，如果某缓存控制器负责应答该对内存块的缓存请求，我们就将该缓存控制器称为该内存块的拥有者。大部分协议中，每个数据块在某段时间都是有其拥有者的。一个内存块不会在其控制权被拥有者转让出去之前，因为容量不足和缓存行冲突，就把数据从缓存写回到内存里。</li>
+</ul>
+<p>本节，我们先讨论常用的状态，</p>
+<p>许多缓存一致性协议使用Sweazey and Smith  第一次引入的五种经典状态MOESI 里的子集作为其状态。三个基础状态为MSI，O和E不属于基础状态，但也很常用。每个状态的特性并不相同，感觉需要英文做精确表述。</p>
+<ul>
+<li>M(odified): The block is valid, exclusive, owned, and potentially dirty. The block may be read or written. The cache has the only valid copy of the block, the cache must respond to requests for the block, and the copy of the block at the LLC/memory is potentially stale.  M代表着数据是有效，独占，被当前缓存控制器拥有，有可能已经被修改了。</li>
+<li>S(hared): The block is valid but not exclusive, not dirty, and not owned. The cache has a read-only copy of the block. Other caches may have valid, read-only copies of the block.  S代表数据不被独占，不被缓存控制器拥有，不脏。</li>
+<li>I(nvalid): The block is invalid. The cache either does not contain the block or it contains a potentially stale copy that it may not read or write. In this primer, we do not distinguish between these two situations, although sometimes the former situation may be denoted as the “Not Present” state.  I代表无效，这个很好理解，没有或者说数据老旧。</li>
+<li>O(wned): The block is valid, owned, and potentially dirty, but not exclusive. The cache has a read-only copy of the block and must respond to requests for the block. Other caches may have a read-only copy of the block, but they are not owners. The copy of the block in the LLC/memory is potentially stale.  O状态是有效，被当前缓存控制器拥有，可能是脏的，但不是独占的。当前缓存控制器有用一份内存块的只读拷贝(这个状态的目的是啥呢？我理解是延缓写入内存，但是同样保持有效性，这个是比X86_MESI（见下）能够更晚写回内存的，由于S共享只读，但是不脏，因此如果要释放M状态的值需要写回内存，而O共享只读，可能脏，能够不写会内存，是M的一个简单退化，减少了性能的差异？)</li>
+<li>E(xclusive): The block is valid, exclusive, and clean. The cache has a read-only copy of the block. No other caches have a valid copy of the block, and the copy of the block in the LLC/memory is up-to-date. In this primer, we consider the block to be owned when it is in the Exclusive state, although there are protocols in which the Exclusive state is not treated as an ownership state. E状态是有效，独占，而且干净。当前缓存是只有内存块的只读拷贝，其他缓存块则没有改块的只读拷贝，LLC/物理内存的数据和缓存控制器里的块是一致的。</li>
+</ul>
+<p>使用文氏图来表达其关系，四个特性是其集合，但是其内容并不是十分严格，Modified属于Dirtiness的子集吗？并不，Modified是有不被修改的可能的</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_2bebe2ce3fa4cd7b.jpg 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_73e74bb4934ab9ae.jpg 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_e7476818103fe5fa.jpg 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_bcd8ae75b32d6554.jpg 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_bcd8ae75b32d6554.jpg"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/figure_6_4MOESI_state_hu_73e74bb4934ab9ae.jpg"
+        alt=""
+      />
+      
+    </figure>
+</p>
+<p>这里需要协商平时经常说的MESI状态：</p>
+<ul>
+<li>Modified 当前cache的内容有效，数据已被修改而且与内存中的数据不一致，数据只在当前cache里存在</li>
+<li>Exclusive 当前cache的内容有效，数据与内存中的数据一致，数据只在当前cache里存在</li>
+<li>Shared 当前cache的内容有效，数据与内存中的数据一致，数据在多个cache里存在</li>
+<li>Invalid 当前cache无效</li>
+</ul>
+<p>讲平时的MESI称为X86_MESI，将MOESI称为LIB_MOESI，会发现：</p>
+<ul>
+<li>X86_M是LIB_M的子集，因为X86M是必然脏，而LIB_M是可脏可不脏的。实际上LIB_M是一种大的权限，是SMWR里的可读可写。</li>
+<li>X86_E是LIB_E的同义词，两者都保证缓存和LLC/物理内存的数据一样新</li>
+<li>X86_S是LIB_S的同义词，</li>
+<li>X86_I是LIB_I的同义词，</li>
+<li>X86里没有O这个状态，因为LIB_O里，如果一个数据不被当前缓存控制器独占的，但是被占有，是脏的。必然有一个曾经的M状态导致它脏，简答来说就是M和S能够保证O不被使用。因此X86实际上实现的是个简单的MOESI</li>
+</ul>
+<p>让我来再细细的捋一下X86_MESI和LIB_MOESI的区别，这里使用一开始说的四个特点:</p>
+<ul>
+<li>X86_M=Dirtyness+Exclusivity</li>
+<li>X86_S = Validity+Cleaness+N_exclusivity</li>
+<li>X86_E = Validity +Exclusivity+Cleaness</li>
+<li>X86_I  = Nothing Happen</li>
+</ul>
+
+
+<h4 class="relative group">6.4.2 事务 
+    <div id="642-%E4%BA%8B%E5%8A%A1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#642-%E4%BA%8B%E5%8A%A1" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>理论研究者和实际工作者的实现往往是不同的，平时说到缓存协议一般就是MESI协议</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_a8ee108cf69f04ee.jpg 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_cb445c88c4fc8bf0.jpg 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_28d96c8e213cb09b.jpg 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_d7d59c14c4974091.jpg 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_d7d59c14c4974091.jpg"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_4_common_transactions_hu_cb445c88c4fc8bf0.jpg"
+        alt=""
+      />
+      
+    </figure>
+</p>
+<p>
+    <figure>
+      <img
+        class="my-0 rounded-md"
+        loading="lazy"
+        srcset="
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_3865ced6dd162e78.jpg 330w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_dc4dbcd28a1012ec.jpg 660w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_fdb843c70000f12.jpg 1024w,
+        /posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_dc90a15194253141.jpg 2x"
+        data-zoom-src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_dc90a15194253141.jpg"
+        src="/posts/2021-01-11-%E5%B0%9D%E8%AF%95%E7%BF%BB%E8%AF%91%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E5%92%8C%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/imgs/table_6_5_common_core_request_hu_dc4dbcd28a1012ec.jpg"
+        alt=""
+      />
+      
+    </figure>
+</p>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2021-01-11-尝试翻译内存模型和缓存一致性\/index.md"
+        var oid_likes = "likes_posts\/2021-01-11-尝试翻译内存模型和缓存一致性\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2021-01-08-%E5%B9%B3%E5%87%A1%E7%9A%84%E7%BC%96%E8%BE%91%E5%89%A7%E6%83%85%E8%A7%92%E8%89%B2%E8%AE%BE%E8%AE%A1/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >平凡的编辑剧情角色设计</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-01-08T00:00:00&#43;00:00">2021 年 1 月 8 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2021-01-24-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A04-%E7%90%86%E8%A7%A3linux%E8%99%9A%E6%8B%9F%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >内存学习(4)-理解linux虚拟内存管理</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-01-24T00:00:00&#43;00:00">2021 年 1 月 24 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

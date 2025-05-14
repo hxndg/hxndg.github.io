@@ -1,15 +1,1318 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>到底该怎么写自动机 &#183; 菜狗的blog</title>
-<meta name=title content="到底该怎么写自动机 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="TLS,FSM,"><link rel=canonical href=https://hxndg.github.io/posts/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="到底该怎么写自动机"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-09-16T00:00:00+00:00"><meta property="article:modified_time" content="2020-09-16T00:00:00+00:00"><meta property="article:tag" content="TLS"><meta property="article:tag" content="FSM"><meta name=twitter:card content="summary"><meta name=twitter:title content="到底该怎么写自动机"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"到底该怎么写自动机","headline":"到底该怎么写自动机","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2020","dateCreated":"2020-09-16T00:00:00\u002b00:00","datePublished":"2020-09-16T00:00:00\u002b00:00","dateModified":"2020-09-16T00:00:00\u002b00:00","keywords":["TLS","FSM"],"mainEntityOfPage":"true","wordCount":"7971"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">到底该怎么写自动机</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time><span class="px-2 text-primary-500">&#183;</span><span>7971 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>16 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言>0 前言</a></li><li><a href=#1-tls自动机设计理念>1 TLS自动机设计理念</a><ul><li><a href=#11-理念>1.1 理念</a><ul><li><a href=#111简单>1.1.1简单</a></li><li><a href=#112-分层>1.1.2 分层</a></li><li><a href=#113-安全>1.1.3 安全</a></li></ul></li></ul></li><li><a href=#2-tls自动机实现时候的困难和问题>2 TLS自动机实现时候的困难和问题</a><ul><li><a href=#21-简单理念>2.1 简单理念</a></li><li><a href=#22-分层理念>2.2 分层理念</a></li><li><a href=#23-安全理念>2.3 安全理念</a></li></ul></li><li><a href=#3-不遵守三种理念导致的问题>3 不遵守三种理念导致的问题</a></li><li><a href=#4-针对三种理念做的优化>4 针对三种理念做的优化</a></li><li><a href=#5-再谈安全开发>5 再谈安全开发</a><ul><li><a href=#51-安全开发流程初期>5.1 安全开发流程初期</a></li><li><a href=#52-安全开发流程中>5.2 安全开发流程中</a></li><li><a href=#53-安全开发流程后期>5.3 安全开发流程后期</a></li><li><a href=#54-遇到的安全开发中的问题>5.4 遇到的安全开发中的问题</a></li></ul></li><li><a href=#6-再提安全运营>6 再提安全运营</a><ul><li><a href=#61-对客户>6.1 对客户</a></li><li><a href=#62-对内>6.2 对内</a></li><li><a href=#63-se的自我修养>6.3 SE的自我修养</a></li><li><a href=#7-自动机的闲言碎语>7 自动机的闲言碎语</a></li></ul></li><li><a href=#结尾的闲言碎语>结尾的闲言碎语</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#0-前言>0 前言</a></li><li><a href=#1-tls自动机设计理念>1 TLS自动机设计理念</a><ul><li><a href=#11-理念>1.1 理念</a><ul><li><a href=#111简单>1.1.1简单</a></li><li><a href=#112-分层>1.1.2 分层</a></li><li><a href=#113-安全>1.1.3 安全</a></li></ul></li></ul></li><li><a href=#2-tls自动机实现时候的困难和问题>2 TLS自动机实现时候的困难和问题</a><ul><li><a href=#21-简单理念>2.1 简单理念</a></li><li><a href=#22-分层理念>2.2 分层理念</a></li><li><a href=#23-安全理念>2.3 安全理念</a></li></ul></li><li><a href=#3-不遵守三种理念导致的问题>3 不遵守三种理念导致的问题</a></li><li><a href=#4-针对三种理念做的优化>4 针对三种理念做的优化</a></li><li><a href=#5-再谈安全开发>5 再谈安全开发</a><ul><li><a href=#51-安全开发流程初期>5.1 安全开发流程初期</a></li><li><a href=#52-安全开发流程中>5.2 安全开发流程中</a></li><li><a href=#53-安全开发流程后期>5.3 安全开发流程后期</a></li><li><a href=#54-遇到的安全开发中的问题>5.4 遇到的安全开发中的问题</a></li></ul></li><li><a href=#6-再提安全运营>6 再提安全运营</a><ul><li><a href=#61-对客户>6.1 对客户</a></li><li><a href=#62-对内>6.2 对内</a></li><li><a href=#63-se的自我修养>6.3 SE的自我修养</a></li><li><a href=#7-自动机的闲言碎语>7 自动机的闲言碎语</a></li></ul></li><li><a href=#结尾的闲言碎语>结尾的闲言碎语</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">如何写TLS自动机？<div id=%E5%A6%82%E4%BD%95%E5%86%99tls%E8%87%AA%E5%8A%A8%E6%9C%BA class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%A6%82%E4%BD%95%E5%86%99tls%E8%87%AA%E5%8A%A8%E6%9C%BA aria-label=锚点>#</a></span></h1><h2 class="relative group">0 前言<div id=0-%E5%89%8D%E8%A8%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#0-%E5%89%8D%E8%A8%80 aria-label=锚点>#</a></span></h2><p>前段时间这个写一半嫌累，就暂停了，今天补上。这里的TLS自动机设计和总结不会设计加到线程安全，因为那个纯属于实现级别。我同样附加上了安全开发和安全运营的内容，如果还有大量的总结和拓展，那么我会拆成单独的文章。</p><h2 class="relative group">1 TLS自动机设计理念<div id=1-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h2><h3 class="relative group">1.1 理念<div id=11-%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h3><p>设计时，我们的理念就三种：</p><ul><li>简单</li><li>分层</li><li>安全</li></ul><p>这三条理念说起来都很短的，但是实际上的理念是高度集成的，我们一条一条分开说：</p><h4 class="relative group">1.1.1简单<div id=111%E7%AE%80%E5%8D%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#111%E7%AE%80%E5%8D%95 aria-label=锚点>#</a></span></h4><p>简单的概念包含三种：</p><ul><li>自动机的设计要足够简单，没有用或者说能节省掉的流程，在保证安全的同时，一定要省略掉。这里千万不要忽视掉“保证安全”四个字，openssh曾经有个CVE(CVE-2018-15473)就是因为简单了，但是没考虑安全导致的。复杂的步骤除了带来计算的复杂度，也带来了安全的风险；而简单的状态实现一方面减少了实现的难度和麻烦，另一方面带来了可读性和吞吐性能的改善。这里需要注意的是，自动机的设计并不等同于RFC里面的状态机，这点是需要自动机设计者搞明白的。</li><li>自动机的状态转换，语义和可读性要足够简单，好理解。：任何涉及到大/小的状态转换，标记变化必须在明处写明白，能用一种变量表明的状态不要使用两种来做。就以TLS1.3的EARLYDATA的状态而言，这个状态EARLY_DATA_NONE表示没有0-RTT请求，不要用EARLY_DATA_NONE来表示拒绝了0-RTT请求。这一条“可读，语义简单”并不一定完全执行，有的时候处于内存申请的考虑是需要</li><li>最后一个简单的意思就是要减少复杂的操作，这里复杂的操作主要指就是系统调用：我司系统里面就是减少了malloc的申请（毕竟又是系统调用，又是缺页中断）能用uma_zone/slab管理器的地方，绝对不要用malloc来做，虽然对于TLS握手流程而言，非对称密钥的计算才是时间消耗的大头，但是内存的申请利用这块也要减少！</li></ul><h4 class="relative group">1.1.2 分层<div id=112-%E5%88%86%E5%B1%82 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#112-%E5%88%86%E5%B1%82 aria-label=锚点>#</a></span></h4><p>相比较简单而言，分层的概念简单多了，就两种：</p><ul><li>协议本身的分层是“分层理念”的基础，这点最直接就提现到了TLS的协议分层：外层为RECORD LAYER，内层为HANDSHAKE LAYER，内外层尽量减少干涉。但这种分层实际上并没有提现到OPENSSL的自动机里，或者说体现的不够明显，这也是我对OPENSSL自动机的主要不满之处。</li><li>实现层面的分层，举个操作系统的简单例子，分配内存时候只是分配虚拟内存，物理内存未必可以分配出来，真正需要的时候再进行缺页中断。这种方式主要是为了提高吞吐量。</li></ul><h4 class="relative group">1.1.3 安全<div id=113-%E5%AE%89%E5%85%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#113-%E5%AE%89%E5%85%A8 aria-label=锚点>#</a></span></h4><p>TLS状态机设计里面实际上安全是最难实现的，安全的原则说简单也简单，说难也难，抽象起来就两种：</p><ul><li>不要对下层协议释放过多的信息。这个设计到的攻击主要是针对信息泄露，任何时刻都需要对输入输出做边界检查（心脏滴血漏洞），对不同的行为但是相同的后果不要做出不同的回应（CVE(CVE-2018-15473)）。</li><li>上层协议的资源不要和下层保持同样的生命周期。这种设计理念主要是针对拒绝服务攻击，常见的拒绝服务攻击记大多都是由于资源错误释放时间。</li></ul><h2 class="relative group">2 TLS自动机实现时候的困难和问题<div id=2-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E5%80%99%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%92%8C%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E5%80%99%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%92%8C%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h2><p>下面针对性的给出我们做自动机的时候遇到的困难和问题，并简单描述我们给出的解决方案。这里需要注意的是里面一部分问题是理念导致的，一部分是实现导致的，在写代码的时候要区分开抽象和具体的区别。</p><h3 class="relative group">2.1 简单理念<div id=21-%E7%AE%80%E5%8D%95%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E7%AE%80%E5%8D%95%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h3><ul><li>问题1，冗余的状态：TLS1.3里在客户端复用的流程下的psk ==> binder_key ==> hmac_key状态切换冗余而且麻烦，会降低复用的性能。出于简单理念，我将状态机的从psk ==> binder_key ==> hmac_key的状态切分压缩到一步，并且将hmac_key计算流程放在了服务端，使得客户端可以直接利用hmac_key(加密存储在ticket identity里)</li><li>问题2，TLS1.2自动机里隐晦的状态转换：我在写TLS1.3自动机之前，参与了我司对TLS1.2的状态机优化，除了代码层面的优化，也修改了TLS1.2里面一部分隐晦状态的改变问题，TLS1.2的验签藏在一个非常深的函数里，因为验签涉及到跨进程通信，因此这个地方的修改非常不显眼，及其容易引起误解！我改了两次：第一次只是加了注释，第二次将跨进程通信的flag打在了明处。</li><li>问题3，session identity的lazy delete，当一个session identity失效的时候我们不会直接调用释放函数（在CPP里面是析构函数），相反我们只是打上一个flag表示无效，当new不出来的时候就遍历一遍链表查找失效的identity然后复用。这种方法很简单，效率高。但是带来了问题即多线程的争用，读写和无效化，解决方式很多，不多赘述。</li></ul><h3 class="relative group">2.2 分层理念<div id=22-%E5%88%86%E5%B1%82%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E5%88%86%E5%B1%82%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h3><p>分层理念带来了逻辑的简单，但也带来了一些比较麻烦的问题。</p><ul><li><p>问题1，Record Layer层的饿死：和handshake layer不同，record layer实际上是无状态的，因此如果有报文加密又有报文解密的时候record layer应当向上驱动还是向下驱动呢？OPENSSL将record layer包含在handshakel layer里解决这个问题，我的解决方法是如果上次是解密，此时有加密就先做加密。</p></li><li><p>问题2，上下层的通信：通常来说层与层之间只有依赖，而没有通信，但TLS1.3里的0-RTT导致1record layer和handshake layer需要通信决定lazy alloc enc/dec ctx 2 0-RTT加密/解密失败时候需要丢弃数据，而不是丢弃自动机，这两个情况就需要设计两个层的通信。我目前没有给出这个问题的规整解决，只是看EARLY_DATA_STATUE，如果复杂化了再建立通信机制。</p></li><li><p>问题3，0-RTT的自驱动：TLS1.3之前，自动机都是由数据驱动的，因此都是RECORD LAYER驱动了HANDSHAKE LAYER，但是0-RTT导致了一个自驱动。正是这个自驱动导致TLS自动机的RECORD LAYER和HANDSHAKE LAYER分层复杂化，解决方法也不难，在handshake layer添加一个自己触发自己的状态，该状态会频繁触发record layer的自驱动（这里面隐藏着一个问题1）。</p></li></ul><h3 class="relative group">2.3 安全理念<div id=23-%E5%AE%89%E5%85%A8%E7%90%86%E5%BF%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-%E5%AE%89%E5%85%A8%E7%90%86%E5%BF%B5 aria-label=锚点>#</a></span></h3><ul><li>问题1，错误的NST颁发：NST(Session Identity)的颁发需要握手完成，但是握手完成不代表对端可信，必须是单转双之后才能发送NST。我最早的逻辑是只要发送了finish报文就发送NST，后来我发现这个安全（逻辑）漏洞。</li><li>问题2，错误的证书授权者：这个问题实际上是个协议+实现导致的问题，比方说我是一个黑客，我可以在某个不靠谱的CA申请了GITHUB的网站证书，然后我就可以假冒GITHUB了。关于这点我们提供了严格的CA校验，就是对于特定的访问只能通过特定的CA，以此来对抗此类攻击。</li><li>问题3，错误的证书验证（黑白名单功能）：这个问题和实现没关系，是设计的缺陷。CRL记录的是吊销证书，也就是黑名单，如果在crl里面找不到的证书会验证通过。这个缺陷我最后实现的时候改成了白名单模式，如果没找到就直接拒绝连接。如果采用了公钥钉扎，那么就不需要担心这个问题了。但目前看起来钉扎做的还不是那么到位</li></ul><h2 class="relative group">3 不遵守三种理念导致的问题<div id=3-%E4%B8%8D%E9%81%B5%E5%AE%88%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-%E4%B8%8D%E9%81%B5%E5%AE%88%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h2><p>下面我会列出一些CVE，这些CVE就是由于不遵守相应的理念导致的问题，作为一个安全协议的实现人员（分析人员），一定不要忽视小小的问题。有一点需要注意，我并不只列出OPENSSL的cve，其他软件也会有，不过基本都是我修过/探究过的。除此之外，我写过很多好玩的东西，比方说假SNI做代理，但这些都不属于标准行为，不具备任何参考价值。</p><ul><li>臭名昭著的心脏滴血漏洞（CVE-2014-0160），该问题就是由于安全理念考虑不到位，对拷贝边界/信息校验没做到位。因此在实现的时候，我们对边界坐了严格的校验。实际上我们在实现的时候有一部分可以上送/下移的功能出于安全考虑的角度也没做，因为多做实际上就意味着可攻击。</li><li>因为区分存在用户名和不存在用户名导致的攻击（CVE-2018-15473），该问题是由于将存在的用户名校验流程和不存在的用户名校验流程的步骤可区分导致的信息泄漏，我当时修复就是把两个流程改一致。在平时的代码实现的时候，这个问题可能是不可避免的，也就是说，可能存在的用户名和不存在的用户名处理流程不同是客户想要的，尤其以银行为首的一部分企业。</li><li>弱hash算法（CVE-2004-2761），这个问题没啥好说的，现代计算机算力增强了，木的办法。再赘述一句，我国很多企业（还是以银行为首）使用的包括ATM，内部网关，内部数据的通信还是以弱TLS为主，这是一个很可怕的事情。某些基本不存在任何安全可言的CIPHER还在使用。</li><li>因为校验没到位导致的（CVE-2015-4458）和不安全重协商攻击，对消息的mac没包含足量信息导致。这里考虑的东西实际上是一种信任关系的拓展和层与层之间的关联，加密过的信息必须是经过上一步加密过的信息保证保密性和关联。有一个很有意思（很蛋疼）的东西，这种关联在设计不合理的时候反而会成为被攻击点，就好比HKDF应该包含EXPAND+EXTRACT，如果只有一个那么可能反而是不安全的。</li><li>因为校验没做到位（ Zombie POODLE），最常见的填充攻击就是针对这个，很巧妙，因此我们在实现的时候，对于任何参与的信息都坐了加密，划重点：参与了计算最好就加密！</li><li>证书链校验攻击（Microsoft CryptoAPI错误等多种），这种问题在代码实现时很难被发现，因为人们对证书链校验的不完备导致。因此我们实现的时候改了逻辑，做了最严格的校验，发现一层无效，链式就无效。</li><li>随机数范围过小攻击，这个问题实际上是因为random种子需要随机导致的，我们只是规定了必须有种子，没详细规定种子的来源。</li><li>BEAST攻击，我当时看这个攻击看的是一愣一愣的，感觉就是俩字，牛逼，真正的协议攻击。该问题就是因为IV可见了。TLS协议本身避开了这个问题，TLS1.2使用了EXPLICT IV来解决这个问题。</li></ul><h2 class="relative group">4 针对三种理念做的优化<div id=4-%E9%92%88%E5%AF%B9%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%81%9A%E7%9A%84%E4%BC%98%E5%8C%96 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-%E9%92%88%E5%AF%B9%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%81%9A%E7%9A%84%E4%BC%98%E5%8C%96 aria-label=锚点>#</a></span></h2><p>这里的优化并不是单纯针对三种理念的，是一种杂糅的优化策略，有的优化访问速度，有的优化安全性能。</p><ul><li>不要将证书过于绑定，安全方面的角度，不需要过多解释。</li><li>部署OCSP STAPLING，这个东西实际上是减少访问时延的措施，比较有效。</li><li>性能转移，将一部分的计算操作放到客户端让复用减少性能消耗是一种非常常见的方法，这个不展开说了，需要具体情况而定。</li></ul><h2 class="relative group">5 再谈安全开发<div id=5-%E5%86%8D%E8%B0%88%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%E5%86%8D%E8%B0%88%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91 aria-label=锚点>#</a></span></h2><p>提到安全开发头头是道，真到开发的时候抓瞎了。身为一个从预研到开发的程序工程师，我来简单说说我所认识到的安全开发。由于我是单纯从开发干起，很多东西都是（我自己总结的）从开发的角度来谈的，因此难免有局限性。</p><h3 class="relative group">5.1 安全开发流程初期<div id=51-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%88%9D%E6%9C%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#51-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%88%9D%E6%9C%9F aria-label=锚点>#</a></span></h3><p>安全开发名字高大上，但是实际上是个苦差事，因为安全并不是水桶，而是一个气球：哪里扎破一个洞，立刻整个就崩了。因此初期把握好安全开发就很重要，我比较喜欢从下面几个方面来分析：</p><ul><li>目的是提供一款什么样子的安全产品？是提供端到端的加密？认证服务不可抵赖？秘钥管理？权限管理？安全监测？每种不同的属性对应着不同的功能。project leader还常常需要进行产品的横向对比，从而能够保证功能的灵活性和创造性。</li><li>需要保护哪些敏感信息，等级分为几种？比方说身份信息，权限信息，支付信息，爱好信息等等方面都可以被划归为敏感信息。</li><li>可能遭受哪些攻击？相比上两种，这个问题是最具体的攻击，常见的攻击很多种：供应链攻击，SQL注入</li><li>可以复用哪些已有的安全工具和代码块？不要老去造轮子，要学会组合而不是创造。</li></ul><p>上面几个问题实际上是安全开发当中大的目标，分析好上面几个问题之后，最大的问题就来了，怎么落地？说起来也不难：</p><ol><li>第一步 培训：培训的目的包含三个方面：使得每个参与者（不限于开发者，测试者，经理，审计&mldr;.）了解产品提供的安全属性，安全准则和具体功能，尤其是要对产品经理培训使得其明白安全不是个绝对概念，是有选择倾向的，总要做出抉择；对每个参与进来的开发者培训，使得其清楚常见的安全知识，比方说对称加密的安全性由秘钥保证，hash不是加密，什么方法提供认证功能等基础知识；对核心开发者明确产品的核心逻辑和模块的设计（不一定是高速开发者，而是让核心开发者设计），必须达成对功能和安全的共识！我们在做TLS自动机的时候核心就三个人，每个人都可以相互替换对面的功能，TLS1.3新功能REUSE和0-RTT的核心逻辑也是我设计完了，争论了几次才确定的，我们的测试完全参与不到我们的培训里，因为听不懂。。。</li><li>第二步 需求和功能划分：确定需求是个很有趣，却不困难的工作。因为核心逻辑是围绕关键信息的，所以基本确定了敏感信息和核心逻辑之后，需求划分就比较简单了。但功能划分是个很麻烦的事情，一方面核心逻辑可能并不复杂，但是边界错误和细枝末节可能会出现大量问题，因此每个细微的工程都需要有人把关；另一方面，安全开发产品有很强的连续性，安全经常是成环的，因此要确保具体的代码开发者是了解开发的模块的输入/输出/隐喻/保障的，因此需要保证开发者是真的懂怎么回事，而不是似是而非模棱两可。这里注意，划分功能意味着划分责任，有的开发爱甩锅，有的QA爱甩锅，这时候就看project leader的功力了。</li><li>第三步 颁发安全准则：培训了，需求确定了，功能划分了，到了写代码的时候新的问题就来了，怎么保证代码是安全的呢？针对TLS可以看我写过TLS三理念，更具体的一般是：第三方安全性，很多安全问题是由第三方安全保证的，开发工程师精力不够，找QA啊；函数安全；工具安全。</li></ol><p>多赘述一点东西：安全属性不是隔离的，端到端加密是很多功能的保证，但是奥卡姆的剃刀原则务必不要忘记，如无必要勿增实体，不要把其他层的东西放到本层来做！</p><h3 class="relative group">5.2 安全开发流程中<div id=52-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E4%B8%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#52-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E4%B8%AD aria-label=锚点>#</a></span></h3><p>安全开发流程中期实际上是个工程师埋头干活，抬头开会报进度的流程，这阶段的关注点在于project leader上。project leader不但要对项目进度做好把握还要把握好需求变更的问题。project leader还需要检查行为变化，细化安全规范。这就需要project leader能够明确安全的行为，并且能够根据具体的功能黑盒灵活的改变行为。</p><p>坦白讲，做TLS自动机研发的时候，虽然复用和0-RTT是我负责，但是关于排期这事我没咋催，主力是我，小功能分出去的时候我会提前培训开发的同事；每天问问进度和问题；明确行为规范。所以没啥排期的变更，行为这块一开始三个核心争了很久，也很确定，所以没遇到啥大问题。</p><h3 class="relative group">5.3 安全开发流程后期<div id=53-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%90%8E%E6%9C%9F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#53-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%90%8E%E6%9C%9F aria-label=锚点>#</a></span></h3><p>安全开发流程后期实际上主要的关注点不再开发工程师上了，在于QA和运营人员：运营人员要执行静态检测和动态监测；QA要执行模糊测试，输入测试等多种功能，这都不是问题。问题在于：project leader和开发者要在开发前期和开发后期以高度透明的角度，参与QA的测试CASE制定！换言之QA和开发必须都审核过测试CASE，从而避免出现什么“现实不可能发生，测试不全面”的扯皮。</p><p>此外，需要记录开发过程当中遇到的实际问题和BUG，并且将这些问题归类，加入到安全规范中。一方面能够给工程师提供具体的案例分析，另一方面能够很明确的细化规范和经验。实际上关于0-RTT的DDOS攻击我在分析OPENSSL的时候虽然想到了但是没明确，是后来QA参与进来我们才定性规定这是个问题的。</p><p>最后，最蛋疼的收尾工作来了：</p><ul><li>如果出现问题，如何应对？project leader需要根据具体的威胁制定针对补足方案，开发需要明确出现某种问题时，谁第一阶段参与，谁来参与追责。</li><li>如果在具体的安全规范出现问题，依据什么原则，听谁的？</li><li>开发和测试当中的资料归档在哪里？值得商榷的行为和安全保证的细节必须高度透明的写出来，并且能够被明确归档。</li><li>可复用的工具，代码和属性是哪些？哪些应当成为标准组件？这些（第三方，第一方）工具，代码安全吗？实际上这里我最直接想到的就是HKDF-EXTRACT & HKDF-EXPAND，一个安全并且规范化的灵活伪随机码产生工具。实际上这个工作是需要一线开发工程师一起参与的。当然TLS研发完了，也就我自己想了想这块。。。。。</li></ul><h3 class="relative group">5.4 遇到的安全开发中的问题<div id=54-%E9%81%87%E5%88%B0%E7%9A%84%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#54-%E9%81%87%E5%88%B0%E7%9A%84%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>简单说说我们在开发过程当中遇到的一些实际问题：</p><ul><li>人力不充足：人员短缺的问题很蛋疼，核心三人组是又订规范，又商量行为，光研究RFC就花了很久，更别提给其他人培训了。虽然能力增加了不少，但是确实很蛋疼。</li><li>需求的变更：我对需求变更实在是太烦了，小的需求比方说拓展的支持还好说，解析的时候多花点功夫即可。如果大的属性变了，那排期就得大变。</li><li>项目周期紧：这个对我们来说还好，虽然我们设计阶段功夫很多，但是设计好了我们的开发还是很快的。</li></ul><h2 class="relative group">6 再提安全运营<div id=6-%E5%86%8D%E6%8F%90%E5%AE%89%E5%85%A8%E8%BF%90%E8%90%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-%E5%86%8D%E6%8F%90%E5%AE%89%E5%85%A8%E8%BF%90%E8%90%A5 aria-label=锚点>#</a></span></h2><p>我只所以写这个有两个原因，一个是因为昨天晚上11点，我们的SE忽然给我打电话，说了一个卡顿的问题，然后说是必须明天10点给回复，然后我去看了下BUGZILLA对应的页面，前几天我在里面回复的要查询测试的点一个都没做/然后说好的统计数据和日志也没有上传。另一个事情是看FREEBUF上安全甲方群的讨论，里面的几个回复有所感慨，还是以开发的角度来聊聊技术支持和安全运营。</p><p>从我的观点来看，安全运营实际上分为两个方向：对内&ndash;针对开发和测试，对外&mdash;对客户。这两点说完了，再写一点对SE的建议。</p><h3 class="relative group">6.1 对客户<div id=61-%E5%AF%B9%E5%AE%A2%E6%88%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#61-%E5%AF%B9%E5%AE%A2%E6%88%B7 aria-label=锚点>#</a></span></h3><p>对客户而言，SE是问题的解决者，在解决问题的时候应当：</p><ul><li>正视漏洞（问题）存在的客观性，不要去抵赖或者无视问题，但是要明白安全是有所选择的。</li><li>能够明白具体问题是什么，出在哪个层面，不要乱承诺。</li><li>和服务商进行沟通，确保有业务保障的应急方案。应急方案是必须得有的，怎么能没有应急方案呢？应对策略</li><li>和运维团队（如果可能的话）一起评估风险，并制定紧急干预措施（如果可行）</li><li>事后复盘，评估服务商的综合能力。</li><li>保证高效的解决方案的能力，不能磨蹭，尤其是不能在低效的沟通上磨蹭时间。</li></ul><p>除此之外，由于我们是TOB的，漏洞的发现往往会早于客户环境遇到，因此应该：</p><ul><li>积极关注客户的方案和环境，如果产品出现了问题或漏洞，要第一时间通知客户</li></ul><h3 class="relative group">6.2 对内<div id=62-%E5%AF%B9%E5%86%85 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#62-%E5%AF%B9%E5%86%85 aria-label=锚点>#</a></span></h3><p>对内，或者说对开发和测试工程师而言，SE是寻求帮助的人，SE应当：</p><ul><li>了解产品，了解基本的技术。至少和开发/测试够通的时候能够说明白具体问题出在哪个组件上。</li><li>能够清晰的够通具体问题和针对现象，对开发/测试给出的探查方向和原因要能搞明白，要做一道桥，而不是做一堵墙。</li><li>解决问题，给出测试等流程要块，务必不要11号发现，18号截至，然后17号忽然电话打过来说赶紧给解决方案，然后一看啥分析数据都没有。</li></ul><h3 class="relative group">6.3 SE的自我修养<div id=63-se%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#63-se%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB aria-label=锚点>#</a></span></h3><p>我不是SE，但是我想所有的问题都是一致的。</p><ul><li>SE要去学习技术，不说精通，至少得熟悉模块/功能/划分</li><li>SE应当提炼工作手段，将可利用的部分组件化，而不是每次都抓瞎</li><li>SE应当适当的利用自动化技术，不要老是手动操作，尝试安全高效的解决问题。</li></ul><h3 class="relative group">7 自动机的闲言碎语<div id=7-%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#7-%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD aria-label=锚点>#</a></span></h3><p>过几天要说说自动机的东西，今天说一点有限状态自动机的内容：</p><ul><li>自动机的作用：自动机是多状态/多输入情况下有效减少考虑问题复杂度的方法，之所以用自动机是因为对单个状态的输入是有限的，但是总的输入很多</li><li>自动机的目标：可靠性和简单，越简单越好。尽量状态少一些，避免出现很多状态，状态多了可能死锁</li><li>自动机问题1 死锁，两种情况触发死锁：a没有条件跳出当前状态。b跳出条件不会触发</li><li>自动机问题2 无法到达特定状态：a没有条件到达这个状态。b有条件，但是条件无法被触发</li><li>自动机问题3 livelock活锁：</li><li>怎么检测自动机死锁/活锁：</li></ul><h2 class="relative group">结尾的闲言碎语<div id=%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD aria-label=锚点>#</a></span></h2><p>写到这里差不多就可以结束了，就不多说了。TLS这块还有啥不明白的直接告诉我就成了<figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2020-09-16-到底该怎么写自动机\\index.md",oid_likes="likes_posts\\2020-09-16-到底该怎么写自动机\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">内存学习(1)</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">TLS自动机实现时一些不错地方</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2020-09-16T00:00:00+00:00>2020 年 9 月 16 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>到底该怎么写自动机 &middot; 菜狗的blog</title>
+  <meta name="title" content="到底该怎么写自动机 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="TLS, FSM, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="到底该怎么写自动机">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2020-09-16T00:00:00+00:00">
+    <meta property="article:modified_time" content="2020-09-16T00:00:00+00:00">
+    <meta property="article:tag" content="TLS">
+    <meta property="article:tag" content="FSM">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="到底该怎么写自动机">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "到底该怎么写自动机",
+    "headline": "到底该怎么写自动机",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2020-09-16-%E5%88%B0%E5%BA%95%E8%AF%A5%E6%80%8E%E4%B9%88%E5%86%99%E8%87%AA%E5%8A%A8%E6%9C%BA\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2020",
+    "dateCreated": "2020-09-16T00:00:00\u002b00:00",
+    "datePublished": "2020-09-16T00:00:00\u002b00:00",
+    
+    "dateModified": "2020-09-16T00:00:00\u002b00:00",
+    
+    "keywords": ["TLS","FSM"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "7971"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      到底该怎么写自动机
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2020-09-16T00:00:00&#43;00:00">2020 年 9 月 16 日</time><span class="px-2 text-primary-500">&middot;</span><span>7971 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">16 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-前言">0 前言</a></li>
+    <li><a href="#1-tls自动机设计理念">1 TLS自动机设计理念</a>
+      <ul>
+        <li><a href="#11-理念">1.1 理念</a>
+          <ul>
+            <li><a href="#111简单">1.1.1简单</a></li>
+            <li><a href="#112-分层">1.1.2 分层</a></li>
+            <li><a href="#113-安全">1.1.3 安全</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-tls自动机实现时候的困难和问题">2 TLS自动机实现时候的困难和问题</a>
+      <ul>
+        <li><a href="#21-简单理念">2.1 简单理念</a></li>
+        <li><a href="#22-分层理念">2.2 分层理念</a></li>
+        <li><a href="#23-安全理念">2.3 安全理念</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-不遵守三种理念导致的问题">3 不遵守三种理念导致的问题</a></li>
+    <li><a href="#4-针对三种理念做的优化">4 针对三种理念做的优化</a></li>
+    <li><a href="#5-再谈安全开发">5 再谈安全开发</a>
+      <ul>
+        <li><a href="#51-安全开发流程初期">5.1 安全开发流程初期</a></li>
+        <li><a href="#52-安全开发流程中">5.2 安全开发流程中</a></li>
+        <li><a href="#53-安全开发流程后期">5.3 安全开发流程后期</a></li>
+        <li><a href="#54-遇到的安全开发中的问题">5.4 遇到的安全开发中的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-再提安全运营">6 再提安全运营</a>
+      <ul>
+        <li><a href="#61-对客户">6.1 对客户</a></li>
+        <li><a href="#62-对内">6.2 对内</a></li>
+        <li><a href="#63-se的自我修养">6.3 SE的自我修养</a></li>
+        <li><a href="#7-自动机的闲言碎语">7 自动机的闲言碎语</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾的闲言碎语">结尾的闲言碎语</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#0-前言">0 前言</a></li>
+    <li><a href="#1-tls自动机设计理念">1 TLS自动机设计理念</a>
+      <ul>
+        <li><a href="#11-理念">1.1 理念</a>
+          <ul>
+            <li><a href="#111简单">1.1.1简单</a></li>
+            <li><a href="#112-分层">1.1.2 分层</a></li>
+            <li><a href="#113-安全">1.1.3 安全</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-tls自动机实现时候的困难和问题">2 TLS自动机实现时候的困难和问题</a>
+      <ul>
+        <li><a href="#21-简单理念">2.1 简单理念</a></li>
+        <li><a href="#22-分层理念">2.2 分层理念</a></li>
+        <li><a href="#23-安全理念">2.3 安全理念</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-不遵守三种理念导致的问题">3 不遵守三种理念导致的问题</a></li>
+    <li><a href="#4-针对三种理念做的优化">4 针对三种理念做的优化</a></li>
+    <li><a href="#5-再谈安全开发">5 再谈安全开发</a>
+      <ul>
+        <li><a href="#51-安全开发流程初期">5.1 安全开发流程初期</a></li>
+        <li><a href="#52-安全开发流程中">5.2 安全开发流程中</a></li>
+        <li><a href="#53-安全开发流程后期">5.3 安全开发流程后期</a></li>
+        <li><a href="#54-遇到的安全开发中的问题">5.4 遇到的安全开发中的问题</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-再提安全运营">6 再提安全运营</a>
+      <ul>
+        <li><a href="#61-对客户">6.1 对客户</a></li>
+        <li><a href="#62-对内">6.2 对内</a></li>
+        <li><a href="#63-se的自我修养">6.3 SE的自我修养</a></li>
+        <li><a href="#7-自动机的闲言碎语">7 自动机的闲言碎语</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾的闲言碎语">结尾的闲言碎语</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">如何写TLS自动机？ 
+    <div id="%E5%A6%82%E4%BD%95%E5%86%99tls%E8%87%AA%E5%8A%A8%E6%9C%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%A6%82%E4%BD%95%E5%86%99tls%E8%87%AA%E5%8A%A8%E6%9C%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">0 前言 
+    <div id="0-%E5%89%8D%E8%A8%80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#0-%E5%89%8D%E8%A8%80" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>前段时间这个写一半嫌累，就暂停了，今天补上。这里的TLS自动机设计和总结不会设计加到线程安全，因为那个纯属于实现级别。我同样附加上了安全开发和安全运营的内容，如果还有大量的总结和拓展，那么我会拆成单独的文章。</p>
+
+
+<h2 class="relative group">1 TLS自动机设计理念 
+    <div id="1-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E8%AE%BE%E8%AE%A1%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">1.1 理念 
+    <div id="11-%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#11-%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>设计时，我们的理念就三种：</p>
+<ul>
+<li>简单</li>
+<li>分层</li>
+<li>安全</li>
+</ul>
+<p>这三条理念说起来都很短的，但是实际上的理念是高度集成的，我们一条一条分开说：</p>
+
+
+<h4 class="relative group">1.1.1简单 
+    <div id="111%E7%AE%80%E5%8D%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#111%E7%AE%80%E5%8D%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>简单的概念包含三种：</p>
+<ul>
+<li>自动机的设计要足够简单，没有用或者说能节省掉的流程，在保证安全的同时，一定要省略掉。这里千万不要忽视掉“保证安全”四个字，openssh曾经有个CVE(CVE-2018-15473)就是因为简单了，但是没考虑安全导致的。复杂的步骤除了带来计算的复杂度，也带来了安全的风险；而简单的状态实现一方面减少了实现的难度和麻烦，另一方面带来了可读性和吞吐性能的改善。这里需要注意的是，自动机的设计并不等同于RFC里面的状态机，这点是需要自动机设计者搞明白的。</li>
+<li>自动机的状态转换，语义和可读性要足够简单，好理解。：任何涉及到大/小的状态转换，标记变化必须在明处写明白，能用一种变量表明的状态不要使用两种来做。就以TLS1.3的EARLYDATA的状态而言，这个状态EARLY_DATA_NONE表示没有0-RTT请求，不要用EARLY_DATA_NONE来表示拒绝了0-RTT请求。这一条“可读，语义简单”并不一定完全执行，有的时候处于内存申请的考虑是需要</li>
+<li>最后一个简单的意思就是要减少复杂的操作，这里复杂的操作主要指就是系统调用：我司系统里面就是减少了malloc的申请（毕竟又是系统调用，又是缺页中断）能用uma_zone/slab管理器的地方，绝对不要用malloc来做，虽然对于TLS握手流程而言，非对称密钥的计算才是时间消耗的大头，但是内存的申请利用这块也要减少！</li>
+</ul>
+
+
+<h4 class="relative group">1.1.2 分层 
+    <div id="112-%E5%88%86%E5%B1%82" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#112-%E5%88%86%E5%B1%82" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>相比较简单而言，分层的概念简单多了，就两种：</p>
+<ul>
+<li>协议本身的分层是“分层理念”的基础，这点最直接就提现到了TLS的协议分层：外层为RECORD LAYER，内层为HANDSHAKE LAYER，内外层尽量减少干涉。但这种分层实际上并没有提现到OPENSSL的自动机里，或者说体现的不够明显，这也是我对OPENSSL自动机的主要不满之处。</li>
+<li>实现层面的分层，举个操作系统的简单例子，分配内存时候只是分配虚拟内存，物理内存未必可以分配出来，真正需要的时候再进行缺页中断。这种方式主要是为了提高吞吐量。</li>
+</ul>
+
+
+<h4 class="relative group">1.1.3 安全 
+    <div id="113-%E5%AE%89%E5%85%A8" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#113-%E5%AE%89%E5%85%A8" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>TLS状态机设计里面实际上安全是最难实现的，安全的原则说简单也简单，说难也难，抽象起来就两种：</p>
+<ul>
+<li>不要对下层协议释放过多的信息。这个设计到的攻击主要是针对信息泄露，任何时刻都需要对输入输出做边界检查（心脏滴血漏洞），对不同的行为但是相同的后果不要做出不同的回应（CVE(CVE-2018-15473)）。</li>
+<li>上层协议的资源不要和下层保持同样的生命周期。这种设计理念主要是针对拒绝服务攻击，常见的拒绝服务攻击记大多都是由于资源错误释放时间。</li>
+</ul>
+
+
+<h2 class="relative group">2 TLS自动机实现时候的困难和问题 
+    <div id="2-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E5%80%99%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%92%8C%E9%97%AE%E9%A2%98" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E5%80%99%E7%9A%84%E5%9B%B0%E9%9A%BE%E5%92%8C%E9%97%AE%E9%A2%98" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>下面针对性的给出我们做自动机的时候遇到的困难和问题，并简单描述我们给出的解决方案。这里需要注意的是里面一部分问题是理念导致的，一部分是实现导致的，在写代码的时候要区分开抽象和具体的区别。</p>
+
+
+<h3 class="relative group">2.1 简单理念 
+    <div id="21-%E7%AE%80%E5%8D%95%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E7%AE%80%E5%8D%95%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>问题1，冗余的状态：TLS1.3里在客户端复用的流程下的psk ==&gt; binder_key ==&gt; hmac_key状态切换冗余而且麻烦，会降低复用的性能。出于简单理念，我将状态机的从psk ==&gt; binder_key ==&gt; hmac_key的状态切分压缩到一步，并且将hmac_key计算流程放在了服务端，使得客户端可以直接利用hmac_key(加密存储在ticket identity里)</li>
+<li>问题2，TLS1.2自动机里隐晦的状态转换：我在写TLS1.3自动机之前，参与了我司对TLS1.2的状态机优化，除了代码层面的优化，也修改了TLS1.2里面一部分隐晦状态的改变问题，TLS1.2的验签藏在一个非常深的函数里，因为验签涉及到跨进程通信，因此这个地方的修改非常不显眼，及其容易引起误解！我改了两次：第一次只是加了注释，第二次将跨进程通信的flag打在了明处。</li>
+<li>问题3，session identity的lazy delete，当一个session identity失效的时候我们不会直接调用释放函数（在CPP里面是析构函数），相反我们只是打上一个flag表示无效，当new不出来的时候就遍历一遍链表查找失效的identity然后复用。这种方法很简单，效率高。但是带来了问题即多线程的争用，读写和无效化，解决方式很多，不多赘述。</li>
+</ul>
+
+
+<h3 class="relative group">2.2 分层理念 
+    <div id="22-%E5%88%86%E5%B1%82%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-%E5%88%86%E5%B1%82%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>分层理念带来了逻辑的简单，但也带来了一些比较麻烦的问题。</p>
+<ul>
+<li>
+<p>问题1，Record Layer层的饿死：和handshake layer不同，record layer实际上是无状态的，因此如果有报文加密又有报文解密的时候record layer应当向上驱动还是向下驱动呢？OPENSSL将record layer包含在handshakel layer里解决这个问题，我的解决方法是如果上次是解密，此时有加密就先做加密。</p>
+</li>
+<li>
+<p>问题2，上下层的通信：通常来说层与层之间只有依赖，而没有通信，但TLS1.3里的0-RTT导致1record layer和handshake layer需要通信决定lazy alloc enc/dec ctx 2 0-RTT加密/解密失败时候需要丢弃数据，而不是丢弃自动机，这两个情况就需要设计两个层的通信。我目前没有给出这个问题的规整解决，只是看EARLY_DATA_STATUE，如果复杂化了再建立通信机制。</p>
+</li>
+<li>
+<p>问题3，0-RTT的自驱动：TLS1.3之前，自动机都是由数据驱动的，因此都是RECORD LAYER驱动了HANDSHAKE LAYER，但是0-RTT导致了一个自驱动。正是这个自驱动导致TLS自动机的RECORD LAYER和HANDSHAKE LAYER分层复杂化，解决方法也不难，在handshake layer添加一个自己触发自己的状态，该状态会频繁触发record layer的自驱动（这里面隐藏着一个问题1）。</p>
+</li>
+</ul>
+
+
+<h3 class="relative group">2.3 安全理念 
+    <div id="23-%E5%AE%89%E5%85%A8%E7%90%86%E5%BF%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-%E5%AE%89%E5%85%A8%E7%90%86%E5%BF%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>问题1，错误的NST颁发：NST(Session Identity)的颁发需要握手完成，但是握手完成不代表对端可信，必须是单转双之后才能发送NST。我最早的逻辑是只要发送了finish报文就发送NST，后来我发现这个安全（逻辑）漏洞。</li>
+<li>问题2，错误的证书授权者：这个问题实际上是个协议+实现导致的问题，比方说我是一个黑客，我可以在某个不靠谱的CA申请了GITHUB的网站证书，然后我就可以假冒GITHUB了。关于这点我们提供了严格的CA校验，就是对于特定的访问只能通过特定的CA，以此来对抗此类攻击。</li>
+<li>问题3，错误的证书验证（黑白名单功能）：这个问题和实现没关系，是设计的缺陷。CRL记录的是吊销证书，也就是黑名单，如果在crl里面找不到的证书会验证通过。这个缺陷我最后实现的时候改成了白名单模式，如果没找到就直接拒绝连接。如果采用了公钥钉扎，那么就不需要担心这个问题了。但目前看起来钉扎做的还不是那么到位</li>
+</ul>
+
+
+<h2 class="relative group">3 不遵守三种理念导致的问题 
+    <div id="3-%E4%B8%8D%E9%81%B5%E5%AE%88%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3-%E4%B8%8D%E9%81%B5%E5%AE%88%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%AF%BC%E8%87%B4%E7%9A%84%E9%97%AE%E9%A2%98" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>下面我会列出一些CVE，这些CVE就是由于不遵守相应的理念导致的问题，作为一个安全协议的实现人员（分析人员），一定不要忽视小小的问题。有一点需要注意，我并不只列出OPENSSL的cve，其他软件也会有，不过基本都是我修过/探究过的。除此之外，我写过很多好玩的东西，比方说假SNI做代理，但这些都不属于标准行为，不具备任何参考价值。</p>
+<ul>
+<li>臭名昭著的心脏滴血漏洞（CVE-2014-0160），该问题就是由于安全理念考虑不到位，对拷贝边界/信息校验没做到位。因此在实现的时候，我们对边界坐了严格的校验。实际上我们在实现的时候有一部分可以上送/下移的功能出于安全考虑的角度也没做，因为多做实际上就意味着可攻击。</li>
+<li>因为区分存在用户名和不存在用户名导致的攻击（CVE-2018-15473），该问题是由于将存在的用户名校验流程和不存在的用户名校验流程的步骤可区分导致的信息泄漏，我当时修复就是把两个流程改一致。在平时的代码实现的时候，这个问题可能是不可避免的，也就是说，可能存在的用户名和不存在的用户名处理流程不同是客户想要的，尤其以银行为首的一部分企业。</li>
+<li>弱hash算法（CVE-2004-2761），这个问题没啥好说的，现代计算机算力增强了，木的办法。再赘述一句，我国很多企业（还是以银行为首）使用的包括ATM，内部网关，内部数据的通信还是以弱TLS为主，这是一个很可怕的事情。某些基本不存在任何安全可言的CIPHER还在使用。</li>
+<li>因为校验没到位导致的（CVE-2015-4458）和不安全重协商攻击，对消息的mac没包含足量信息导致。这里考虑的东西实际上是一种信任关系的拓展和层与层之间的关联，加密过的信息必须是经过上一步加密过的信息保证保密性和关联。有一个很有意思（很蛋疼）的东西，这种关联在设计不合理的时候反而会成为被攻击点，就好比HKDF应该包含EXPAND+EXTRACT，如果只有一个那么可能反而是不安全的。</li>
+<li>因为校验没做到位（ Zombie POODLE），最常见的填充攻击就是针对这个，很巧妙，因此我们在实现的时候，对于任何参与的信息都坐了加密，划重点：参与了计算最好就加密！</li>
+<li>证书链校验攻击（Microsoft CryptoAPI错误等多种），这种问题在代码实现时很难被发现，因为人们对证书链校验的不完备导致。因此我们实现的时候改了逻辑，做了最严格的校验，发现一层无效，链式就无效。</li>
+<li>随机数范围过小攻击，这个问题实际上是因为random种子需要随机导致的，我们只是规定了必须有种子，没详细规定种子的来源。</li>
+<li>BEAST攻击，我当时看这个攻击看的是一愣一愣的，感觉就是俩字，牛逼，真正的协议攻击。该问题就是因为IV可见了。TLS协议本身避开了这个问题，TLS1.2使用了EXPLICT IV来解决这个问题。</li>
+</ul>
+
+
+<h2 class="relative group">4 针对三种理念做的优化 
+    <div id="4-%E9%92%88%E5%AF%B9%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%81%9A%E7%9A%84%E4%BC%98%E5%8C%96" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4-%E9%92%88%E5%AF%B9%E4%B8%89%E7%A7%8D%E7%90%86%E5%BF%B5%E5%81%9A%E7%9A%84%E4%BC%98%E5%8C%96" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>这里的优化并不是单纯针对三种理念的，是一种杂糅的优化策略，有的优化访问速度，有的优化安全性能。</p>
+<ul>
+<li>不要将证书过于绑定，安全方面的角度，不需要过多解释。</li>
+<li>部署OCSP STAPLING，这个东西实际上是减少访问时延的措施，比较有效。</li>
+<li>性能转移，将一部分的计算操作放到客户端让复用减少性能消耗是一种非常常见的方法，这个不展开说了，需要具体情况而定。</li>
+</ul>
+
+
+<h2 class="relative group">5 再谈安全开发 
+    <div id="5-%E5%86%8D%E8%B0%88%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5-%E5%86%8D%E8%B0%88%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>提到安全开发头头是道，真到开发的时候抓瞎了。身为一个从预研到开发的程序工程师，我来简单说说我所认识到的安全开发。由于我是单纯从开发干起，很多东西都是（我自己总结的）从开发的角度来谈的，因此难免有局限性。</p>
+
+
+<h3 class="relative group">5.1 安全开发流程初期 
+    <div id="51-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%88%9D%E6%9C%9F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#51-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%88%9D%E6%9C%9F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>安全开发名字高大上，但是实际上是个苦差事，因为安全并不是水桶，而是一个气球：哪里扎破一个洞，立刻整个就崩了。因此初期把握好安全开发就很重要，我比较喜欢从下面几个方面来分析：</p>
+<ul>
+<li>目的是提供一款什么样子的安全产品？是提供端到端的加密？认证服务不可抵赖？秘钥管理？权限管理？安全监测？每种不同的属性对应着不同的功能。project leader还常常需要进行产品的横向对比，从而能够保证功能的灵活性和创造性。</li>
+<li>需要保护哪些敏感信息，等级分为几种？比方说身份信息，权限信息，支付信息，爱好信息等等方面都可以被划归为敏感信息。</li>
+<li>可能遭受哪些攻击？相比上两种，这个问题是最具体的攻击，常见的攻击很多种：供应链攻击，SQL注入</li>
+<li>可以复用哪些已有的安全工具和代码块？不要老去造轮子，要学会组合而不是创造。</li>
+</ul>
+<p>上面几个问题实际上是安全开发当中大的目标，分析好上面几个问题之后，最大的问题就来了，怎么落地？说起来也不难：</p>
+<ol>
+<li>第一步 培训：培训的目的包含三个方面：使得每个参与者（不限于开发者，测试者，经理，审计&hellip;.）了解产品提供的安全属性，安全准则和具体功能，尤其是要对产品经理培训使得其明白安全不是个绝对概念，是有选择倾向的，总要做出抉择；对每个参与进来的开发者培训，使得其清楚常见的安全知识，比方说对称加密的安全性由秘钥保证，hash不是加密，什么方法提供认证功能等基础知识；对核心开发者明确产品的核心逻辑和模块的设计（不一定是高速开发者，而是让核心开发者设计），必须达成对功能和安全的共识！我们在做TLS自动机的时候核心就三个人，每个人都可以相互替换对面的功能，TLS1.3新功能REUSE和0-RTT的核心逻辑也是我设计完了，争论了几次才确定的，我们的测试完全参与不到我们的培训里，因为听不懂。。。</li>
+<li>第二步 需求和功能划分：确定需求是个很有趣，却不困难的工作。因为核心逻辑是围绕关键信息的，所以基本确定了敏感信息和核心逻辑之后，需求划分就比较简单了。但功能划分是个很麻烦的事情，一方面核心逻辑可能并不复杂，但是边界错误和细枝末节可能会出现大量问题，因此每个细微的工程都需要有人把关；另一方面，安全开发产品有很强的连续性，安全经常是成环的，因此要确保具体的代码开发者是了解开发的模块的输入/输出/隐喻/保障的，因此需要保证开发者是真的懂怎么回事，而不是似是而非模棱两可。这里注意，划分功能意味着划分责任，有的开发爱甩锅，有的QA爱甩锅，这时候就看project leader的功力了。</li>
+<li>第三步 颁发安全准则：培训了，需求确定了，功能划分了，到了写代码的时候新的问题就来了，怎么保证代码是安全的呢？针对TLS可以看我写过TLS三理念，更具体的一般是：第三方安全性，很多安全问题是由第三方安全保证的，开发工程师精力不够，找QA啊；函数安全；工具安全。</li>
+</ol>
+<p>多赘述一点东西：安全属性不是隔离的，端到端加密是很多功能的保证，但是奥卡姆的剃刀原则务必不要忘记，如无必要勿增实体，不要把其他层的东西放到本层来做！</p>
+
+
+<h3 class="relative group">5.2 安全开发流程中 
+    <div id="52-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E4%B8%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#52-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E4%B8%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>安全开发流程中期实际上是个工程师埋头干活，抬头开会报进度的流程，这阶段的关注点在于project leader上。project leader不但要对项目进度做好把握还要把握好需求变更的问题。project leader还需要检查行为变化，细化安全规范。这就需要project leader能够明确安全的行为，并且能够根据具体的功能黑盒灵活的改变行为。</p>
+<p>坦白讲，做TLS自动机研发的时候，虽然复用和0-RTT是我负责，但是关于排期这事我没咋催，主力是我，小功能分出去的时候我会提前培训开发的同事；每天问问进度和问题；明确行为规范。所以没啥排期的变更，行为这块一开始三个核心争了很久，也很确定，所以没遇到啥大问题。</p>
+
+
+<h3 class="relative group">5.3 安全开发流程后期 
+    <div id="53-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%90%8E%E6%9C%9F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#53-%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B%E5%90%8E%E6%9C%9F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>安全开发流程后期实际上主要的关注点不再开发工程师上了，在于QA和运营人员：运营人员要执行静态检测和动态监测；QA要执行模糊测试，输入测试等多种功能，这都不是问题。问题在于：project leader和开发者要在开发前期和开发后期以高度透明的角度，参与QA的测试CASE制定！换言之QA和开发必须都审核过测试CASE，从而避免出现什么“现实不可能发生，测试不全面”的扯皮。</p>
+<p>此外，需要记录开发过程当中遇到的实际问题和BUG，并且将这些问题归类，加入到安全规范中。一方面能够给工程师提供具体的案例分析，另一方面能够很明确的细化规范和经验。实际上关于0-RTT的DDOS攻击我在分析OPENSSL的时候虽然想到了但是没明确，是后来QA参与进来我们才定性规定这是个问题的。</p>
+<p>最后，最蛋疼的收尾工作来了：</p>
+<ul>
+<li>如果出现问题，如何应对？project leader需要根据具体的威胁制定针对补足方案，开发需要明确出现某种问题时，谁第一阶段参与，谁来参与追责。</li>
+<li>如果在具体的安全规范出现问题，依据什么原则，听谁的？</li>
+<li>开发和测试当中的资料归档在哪里？值得商榷的行为和安全保证的细节必须高度透明的写出来，并且能够被明确归档。</li>
+<li>可复用的工具，代码和属性是哪些？哪些应当成为标准组件？这些（第三方，第一方）工具，代码安全吗？实际上这里我最直接想到的就是HKDF-EXTRACT &amp; HKDF-EXPAND，一个安全并且规范化的灵活伪随机码产生工具。实际上这个工作是需要一线开发工程师一起参与的。当然TLS研发完了，也就我自己想了想这块。。。。。</li>
+</ul>
+
+
+<h3 class="relative group">5.4 遇到的安全开发中的问题 
+    <div id="54-%E9%81%87%E5%88%B0%E7%9A%84%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#54-%E9%81%87%E5%88%B0%E7%9A%84%E5%AE%89%E5%85%A8%E5%BC%80%E5%8F%91%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>简单说说我们在开发过程当中遇到的一些实际问题：</p>
+<ul>
+<li>人力不充足：人员短缺的问题很蛋疼，核心三人组是又订规范，又商量行为，光研究RFC就花了很久，更别提给其他人培训了。虽然能力增加了不少，但是确实很蛋疼。</li>
+<li>需求的变更：我对需求变更实在是太烦了，小的需求比方说拓展的支持还好说，解析的时候多花点功夫即可。如果大的属性变了，那排期就得大变。</li>
+<li>项目周期紧：这个对我们来说还好，虽然我们设计阶段功夫很多，但是设计好了我们的开发还是很快的。</li>
+</ul>
+
+
+<h2 class="relative group">6 再提安全运营 
+    <div id="6-%E5%86%8D%E6%8F%90%E5%AE%89%E5%85%A8%E8%BF%90%E8%90%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#6-%E5%86%8D%E6%8F%90%E5%AE%89%E5%85%A8%E8%BF%90%E8%90%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>我只所以写这个有两个原因，一个是因为昨天晚上11点，我们的SE忽然给我打电话，说了一个卡顿的问题，然后说是必须明天10点给回复，然后我去看了下BUGZILLA对应的页面，前几天我在里面回复的要查询测试的点一个都没做/然后说好的统计数据和日志也没有上传。另一个事情是看FREEBUF上安全甲方群的讨论，里面的几个回复有所感慨，还是以开发的角度来聊聊技术支持和安全运营。</p>
+<p>从我的观点来看，安全运营实际上分为两个方向：对内&ndash;针对开发和测试，对外&mdash;对客户。这两点说完了，再写一点对SE的建议。</p>
+
+
+<h3 class="relative group">6.1 对客户 
+    <div id="61-%E5%AF%B9%E5%AE%A2%E6%88%B7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#61-%E5%AF%B9%E5%AE%A2%E6%88%B7" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>对客户而言，SE是问题的解决者，在解决问题的时候应当：</p>
+<ul>
+<li>正视漏洞（问题）存在的客观性，不要去抵赖或者无视问题，但是要明白安全是有所选择的。</li>
+<li>能够明白具体问题是什么，出在哪个层面，不要乱承诺。</li>
+<li>和服务商进行沟通，确保有业务保障的应急方案。应急方案是必须得有的，怎么能没有应急方案呢？应对策略</li>
+<li>和运维团队（如果可能的话）一起评估风险，并制定紧急干预措施（如果可行）</li>
+<li>事后复盘，评估服务商的综合能力。</li>
+<li>保证高效的解决方案的能力，不能磨蹭，尤其是不能在低效的沟通上磨蹭时间。</li>
+</ul>
+<p>除此之外，由于我们是TOB的，漏洞的发现往往会早于客户环境遇到，因此应该：</p>
+<ul>
+<li>积极关注客户的方案和环境，如果产品出现了问题或漏洞，要第一时间通知客户</li>
+</ul>
+
+
+<h3 class="relative group">6.2 对内 
+    <div id="62-%E5%AF%B9%E5%86%85" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#62-%E5%AF%B9%E5%86%85" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>对内，或者说对开发和测试工程师而言，SE是寻求帮助的人，SE应当：</p>
+<ul>
+<li>了解产品，了解基本的技术。至少和开发/测试够通的时候能够说明白具体问题出在哪个组件上。</li>
+<li>能够清晰的够通具体问题和针对现象，对开发/测试给出的探查方向和原因要能搞明白，要做一道桥，而不是做一堵墙。</li>
+<li>解决问题，给出测试等流程要块，务必不要11号发现，18号截至，然后17号忽然电话打过来说赶紧给解决方案，然后一看啥分析数据都没有。</li>
+</ul>
+
+
+<h3 class="relative group">6.3 SE的自我修养 
+    <div id="63-se%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#63-se%E7%9A%84%E8%87%AA%E6%88%91%E4%BF%AE%E5%85%BB" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>我不是SE，但是我想所有的问题都是一致的。</p>
+<ul>
+<li>SE要去学习技术，不说精通，至少得熟悉模块/功能/划分</li>
+<li>SE应当提炼工作手段，将可利用的部分组件化，而不是每次都抓瞎</li>
+<li>SE应当适当的利用自动化技术，不要老是手动操作，尝试安全高效的解决问题。</li>
+</ul>
+
+
+<h3 class="relative group">7 自动机的闲言碎语 
+    <div id="7-%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#7-%E8%87%AA%E5%8A%A8%E6%9C%BA%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>过几天要说说自动机的东西，今天说一点有限状态自动机的内容：</p>
+<ul>
+<li>自动机的作用：自动机是多状态/多输入情况下有效减少考虑问题复杂度的方法，之所以用自动机是因为对单个状态的输入是有限的，但是总的输入很多</li>
+<li>自动机的目标：可靠性和简单，越简单越好。尽量状态少一些，避免出现很多状态，状态多了可能死锁</li>
+<li>自动机问题1 死锁，两种情况触发死锁：a没有条件跳出当前状态。b跳出条件不会触发</li>
+<li>自动机问题2 无法到达特定状态：a没有条件到达这个状态。b有条件，但是条件无法被触发</li>
+<li>自动机问题3 livelock活锁：</li>
+<li>怎么检测自动机死锁/活锁：</li>
+</ul>
+
+
+<h2 class="relative group">结尾的闲言碎语 
+    <div id="%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE%E7%9A%84%E9%97%B2%E8%A8%80%E7%A2%8E%E8%AF%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>写到这里差不多就可以结束了，就不多说了。TLS这块还有啥不明白的直接告诉我就成了
+
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2020-09-16-到底该怎么写自动机\/index.md"
+        var oid_likes = "likes_posts\/2020-09-16-到底该怎么写自动机\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2020-09-16-%E5%86%85%E5%AD%98%E5%AD%A6%E4%B9%A01/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >内存学习(1)</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2020-09-16T00:00:00&#43;00:00">2020 年 9 月 16 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2020-10-13-tls%E8%87%AA%E5%8A%A8%E6%9C%BA%E5%AE%9E%E7%8E%B0%E6%97%B6%E4%B8%80%E4%BA%9B%E4%B8%8D%E9%94%99%E5%9C%B0%E6%96%B9/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >TLS自动机实现时一些不错地方</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2020-09-16T00:00:00&#43;00:00">2020 年 9 月 16 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

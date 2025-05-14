@@ -1,175 +1,1143 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>ci_cd相关学习 &#183; 菜狗的blog</title>
-<meta name=title content="ci_cd相关学习 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="debug,"><link rel=canonical href=https://hxndg.github.io/posts/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="ci_cd相关学习"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-10-11T00:00:00+00:00"><meta property="article:modified_time" content="2021-10-11T00:00:00+00:00"><meta property="article:tag" content="Debug"><meta name=twitter:card content="summary"><meta name=twitter:title content="ci_cd相关学习"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"ci_cd相关学习","headline":"ci_cd相关学习","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-10-11T00:00:00\u002b00:00","datePublished":"2021-10-11T00:00:00\u002b00:00","dateModified":"2021-10-11T00:00:00\u002b00:00","keywords":["debug"],"mainEntityOfPage":"true","wordCount":"9474"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">ci_cd相关学习</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-10-11T00:00:00+00:00>2021 年 10 月 11 日</time><span class="px-2 text-primary-500">&#183;</span><span>9474 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>19 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-cicd使用原理相关>1 CI/CD使用原理相关</a></li><li><a href=#2-bazel编译部署相关>2 Bazel编译部署相关</a><ul><li><a href=#21-part1-bazel入门>2.1 part1 bazel入门</a></li><li><a href=#22-part2-了解bazel>2.2 part2 了解bazel</a><ul><li><a href=#221-走进bazel>2.2.1 走进Bazel</a></li><li><a href=#222-其它bazel解决的问题和技巧>2.2.2 其它bazel解决的问题和技巧</a></li><li><a href=#223-分布式构建>2.2.3 分布式构建</a></li><li><a href=#224-处理模块与依赖>2.2.4 处理模块与依赖</a></li><li><a href=#225-外部依赖>2.2.5 外部依赖</a></li></ul></li><li><a href=#23-part3-bazel简单demo>2.3 part3 bazel简单demo</a></li></ul></li><li><a href=#3-gitlab的ci--cd>3 gitlab的CI & CD</a><ul><li><a href=#31-gitlab-ciyml-文件>3.1 .gitlab-ci.yml 文件</a></li></ul></li><li><a href=#4-学习kubernetes>4 学习kubernetes</a><ul><li><a href=#41-k8s架构>4.1 k8s架构</a></li><li><a href=#42-运行应用>4.2 运行应用</a><ul><li><a href=#421-deployment>4.2.1 deployment</a></li><li><a href=#422-daemon-set>4.2.2 daemon set</a></li><li><a href=#423-job>4.2.3 Job</a></li></ul></li><li><a href=#43-service>4.3 service</a><ul><li><a href=#heading-1></a></li></ul></li></ul></li><li><a href=#5-docker相关内容的简单学习>5 Docker相关内容的简单学习</a></li><li><a href=#6-shell遇到的一些小问题和教程>6 SHELL遇到的一些小问题和教程</a><ul><li><a href=#61-sed替换问题>6.1 SED替换问题</a></li><li><a href=#62-shell脚本当中变量的部分含义>6.2 SHELL脚本当中变量的部分含义</a></li></ul></li><li><a href=#缺省值->缺省值（:-）</a></li><li><a href=#指定缺省值>指定缺省值（:=）</a></li><li><a href=#变量是否存在检查>变量是否存在检查（:?）</a></li><li><a href=#覆盖缺省值>覆盖缺省值(:+)</a></li><li><a href=#替换部分字符串n>替换部分字符串（:n）</a></li><li><a href=#使用模板进行子字符串的替换>使用模板进行子字符串的替换（//）</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-cicd使用原理相关>1 CI/CD使用原理相关</a></li><li><a href=#2-bazel编译部署相关>2 Bazel编译部署相关</a><ul><li><a href=#21-part1-bazel入门>2.1 part1 bazel入门</a></li><li><a href=#22-part2-了解bazel>2.2 part2 了解bazel</a><ul><li><a href=#221-走进bazel>2.2.1 走进Bazel</a></li><li><a href=#222-其它bazel解决的问题和技巧>2.2.2 其它bazel解决的问题和技巧</a></li><li><a href=#223-分布式构建>2.2.3 分布式构建</a></li><li><a href=#224-处理模块与依赖>2.2.4 处理模块与依赖</a></li><li><a href=#225-外部依赖>2.2.5 外部依赖</a></li></ul></li><li><a href=#23-part3-bazel简单demo>2.3 part3 bazel简单demo</a></li></ul></li><li><a href=#3-gitlab的ci--cd>3 gitlab的CI & CD</a><ul><li><a href=#31-gitlab-ciyml-文件>3.1 .gitlab-ci.yml 文件</a></li></ul></li><li><a href=#4-学习kubernetes>4 学习kubernetes</a><ul><li><a href=#41-k8s架构>4.1 k8s架构</a></li><li><a href=#42-运行应用>4.2 运行应用</a><ul><li><a href=#421-deployment>4.2.1 deployment</a></li><li><a href=#422-daemon-set>4.2.2 daemon set</a></li><li><a href=#423-job>4.2.3 Job</a></li></ul></li><li><a href=#43-service>4.3 service</a><ul><li><a href=#heading-1></a></li></ul></li></ul></li><li><a href=#5-docker相关内容的简单学习>5 Docker相关内容的简单学习</a></li><li><a href=#6-shell遇到的一些小问题和教程>6 SHELL遇到的一些小问题和教程</a><ul><li><a href=#61-sed替换问题>6.1 SED替换问题</a></li><li><a href=#62-shell脚本当中变量的部分含义>6.2 SHELL脚本当中变量的部分含义</a></li></ul></li><li><a href=#缺省值->缺省值（:-）</a></li><li><a href=#指定缺省值>指定缺省值（:=）</a></li><li><a href=#变量是否存在检查>变量是否存在检查（:?）</a></li><li><a href=#覆盖缺省值>覆盖缺省值(:+)</a></li><li><a href=#替换部分字符串n>替换部分字符串（:n）</a></li><li><a href=#使用模板进行子字符串的替换>使用模板进行子字符串的替换（//）</a></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">ci_cd相关学习<div id=ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0 aria-label=锚点>#</a></span></h1><h2 class="relative group">1 CI/CD使用原理相关<div id=1-cicd%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-cicd%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3 aria-label=锚点>#</a></span></h2><h2 class="relative group">2 Bazel编译部署相关<div id=2-bazel%E7%BC%96%E8%AF%91%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-bazel%E7%BC%96%E8%AF%91%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3 aria-label=锚点>#</a></span></h2><h3 class="relative group">2.1 part1 bazel入门<div id=21-part1-bazel%E5%85%A5%E9%97%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-part1-bazel%E5%85%A5%E9%97%A8 aria-label=锚点>#</a></span></h3><p>文章链接为：https://zhuanlan.zhihu.com/p/262171925</p><p>为何需要自动构建系统？</p><ul><li>代码无需人工干涉即可构建、测试并发布生产</li><li>提交代码到code review的时候可以直接测试</li><li>底层库可以对整个代码库测试代码修改，确保修改是安全的</li><li>程序员可以进行大规模的代码修改</li></ul><p>如果没有构建系统呢？可以想见华耀的时候：</p><ul><li>漫长的编译时间</li><li>不能单独编译并替换单个文件</li><li>没办法共享其它语言的模块和代码（比方说php和python）</li><li>大量的脚本文件，不断地修修补补</li></ul><p>因此我们需要一个moder build system。</p><p>但是我们需要解决哪些问题呢？</p><ul><li>如何解决脚本无法保证完成任务的问题？</li><li>如何并发？避免出现记录文件的冲突</li><li>如何实现增量构建？</li><li>维护和调试脚本的难度</li></ul><p>为了解决这些问题，google（bazel）的解决方法是</p><blockquote><p>我们需要从程序员手里拿走一些能力，把这些能力交换到系统本身，并且重新定义系统角色不再是执行任务(running tasks)，而是生成制品(artifacts)。这就是Google对于Blaze和Bazel的做法，我们下面就会讲到。</p></blockquote><h3 class="relative group">2.2 part2 了解bazel<div id=22-part2-%E4%BA%86%E8%A7%A3bazel class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-part2-%E4%BA%86%E8%A7%A3bazel aria-label=锚点>#</a></span></h3><p>文章链接为：https://zhuanlan.zhihu.com/p/262497747</p><p>与其让程序员自己定义任务，不如让系统定义一组任务，程序员受限的情况下进行配置。</p><blockquote><p>一个构建系统最重要的功能是去构建代码。程序员仍然需要告诉系统他们想去build什么东西，但是“如何构建“则是系统自己的事情。</p><p>这就是Blaze以及其它基于artifact的构建系统（如Bazel, Pants, 及Buck）所采用的方案。和基于task任务的系统一样，我们仍然需要buildfile，但是这些buildfile的内容就很不一样了。相对于之前使用图灵完备的脚本语言来实现各种命令(an imperative set of commands)，以描述如何生成结果的方式，Blaze的buildfile是一种声明式的形式(declarative manifest)来描述一组制品(artifacts)如何去构建，他们的相互依赖，以及一组受限的选项来定义如何构建。当程序员运行blaze命令行时，他们会定义一组要构建的目标(what)，然后blaze负责配置、运行和调度编译步骤(how)。由于现在构建系统完全控制了运行时所用的工具，它才能确保运行期间的高效和正确。</p></blockquote><p>但是有个问题，即任务的定义还是来自程序员，只不过程序员只关心成品，还是有点迷惑bazel的</p><h4 class="relative group">2.2.1 走进Bazel<div id=221-%E8%B5%B0%E8%BF%9Bbazel class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#221-%E8%B5%B0%E8%BF%9Bbazel aria-label=锚点>#</a></span></h4><p>先看一个bazel的语法：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=err>java_binary(</span>
-</span></span><span class=line><span class=cl><span class=nv>name</span> <span class=o>=</span> <span class=s2>&#34;MyBinary&#34;</span>,
-</span></span><span class=line><span class=cl><span class=nv>srcs</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;MyBinary.java&#34;</span><span class=o>]</span>, 
-</span></span><span class=line><span class=cl><span class=nv>deps</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;:mylib&#34;</span>, <span class=o>]</span>,
-</span></span><span class=line><span class=cl><span class=err>)</span>
-</span></span><span class=line><span class=cl><span class=err>java_library(</span>
-</span></span><span class=line><span class=cl><span class=nv>name</span> <span class=o>=</span> <span class=s2>&#34;mylib&#34;</span>,
-</span></span><span class=line><span class=cl><span class=nv>srcs</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;MyLibrary.java&#34;</span>, <span class=s2>&#34;MyHelper.java&#34;</span><span class=o>]</span>,
-</span></span><span class=line><span class=cl><span class=nv>visibility</span> <span class=o>=</span> <span class=o>[</span><span class=s2>&#34;//java/com/example/myproduct:__subpackages__&#34;</span><span class=o>]</span>,
-</span></span><span class=line><span class=cl><span class=nv>deps</span> <span class=o>=</span> <span class=o>[</span>
-</span></span><span class=line><span class=cl><span class=s2>&#34;//java/com/example/common&#34;</span><span class=err>,</span> <span class=s2>&#34;//java/com/example/myproduct/otherlib&#34;</span><span class=err>,</span> <span class=s2>&#34;@com_google_common_guava_guava//jar&#34;</span><span class=err>,</span>
-</span></span><span class=line><span class=cl><span class=err>],</span> <span class=err>)</span>
-</span></span></code></pre></div><p>在Bazel中，BUILD文件定义了targets。上面的两个targets分别是java_binary和java_library. 每个target都对应着bazel能够创建的一种artifact.</p><p>binary targets生成能够直接运行的二进制文件，library targets生成能够被其它binary或者library所使用的内容。每个target都有一个name（定义它在命令行和其它target中应该如何被引用)，srcs（定义必须被编译的相关源文件以生成对应的target制品），以及deps（定义前置必须先构建或链接的依赖）。</p><p>依赖关系可以限制在当前package以内（e.g. MyBinary依赖于:mylib），也可以是在同一个源代码层级中的不同package(e.g. mylib依赖于//java/com/example/common)，或者源代码层级之外的第三方artifact(e.g. mylib依赖于"@com_google_common_grava_grava//jar"). 每个源代码层级(source hierarchy)都被称为一个workspace，并由根目录下的一个WORKSPACE文件来标示。</p><h4 class="relative group">2.2.2 其它bazel解决的问题和技巧<div id=222-%E5%85%B6%E5%AE%83bazel%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E6%8A%80%E5%B7%A7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#222-%E5%85%B6%E5%AE%83bazel%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E6%8A%80%E5%B7%A7 aria-label=锚点>#</a></span></h4><ul><li><p>对工具的依赖（比方说开发authsdk时依赖boost & gcc的版本），解决方式是将工具当成依赖，即<strong>Tools as dependencies</strong></p></li><li><p>拓展构建系统，Bazel允许通过自定义规则(custom rules)来扩展所支持的target类型。要定义一个Bazel的rule，开发者首先要定义rule需要的input(以BUILD文件中传递的参数形式)和该rule所生成的output。开发者还要定义该rule所要生成的actions. 每个action同样也要声明input和output，运行一个特定可执行文件或在文件中写入特定字符串，并能够通过input/output连接到其它的action. 这也意味着在Bazel里面，action是最底层的可编辑单元(lowest-level composable unit)&ndash;只要一个action只使用它所声明的input/output，它就能做任何它想做的事情，而Bazel则会负责对action进行规划安排并在合适的时候缓存其执行结果。</p></li><li><p>环境隔离，使用沙盒来实现action后果的隔离</p></li><li><p>可确定的外部依赖，更新一个依赖应该是一个有意识的行为，但这个行为应该由一个中心控制来一次完成，而不是由单独的程序员或者系统自动完成。这是因为我们希望构建本身是可确定的(deterministic)，这意味着如果你check out上周的一个commit，你应该看到所有的依赖都和上周时一样，而不会仍然是今天的版本。</p><p>Bazel和其它构建系统通过workspace范围内的清单(manifest)来处理这个问题，这个清单列出了所有外部依赖的加密hash值(cryptographic hash)。这个hash值是一个相当简洁的方式来唯一标示外部依赖文件，而无需将文件本身提交到source control. 只要workspace中有任何新的外部依赖被引用时，该依赖的hash值就会加入到清单中，有可能是自动的，也可能是手动。当Bazel执行一个构建的时候，它会去检查缓存中的依赖(dependency)的hash值，和清单中的hash值做比较，如果不同的话则再去重新下载。</p></li></ul><h4 class="relative group">2.2.3 分布式构建<div id=223-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%84%E5%BB%BA class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#223-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%84%E5%BB%BA aria-label=锚点>#</a></span></h4><ul><li>远程缓存，多个developer workstations，都共享一个指向公用缓存服务，bazel本身就支持保证共享artifact和其输入是相同的</li><li>远程执行，</li><li>Google的分布式构建（<strong>Distributed Builds at Google</strong>）</li><li><strong>时间、规模与取舍(Time, Scale, Trade-Offs)</strong></li></ul><h4 class="relative group">2.2.4 处理模块与依赖<div id=224-%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97%E4%B8%8E%E4%BE%9D%E8%B5%96 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#224-%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97%E4%B8%8E%E4%BE%9D%E8%B5%96 aria-label=锚点>#</a></span></h4><ul><li><strong>使用精调的模块和1:1:1规则(Using Fine-Grained Modules and the 1:1:1 Rule)</strong>，需要决定一个独立模块到底要包含多少功能。对于Bazel而言，一个“模块”则是用target来定义的一个可构建的单位，例如java_library或go_library.</li><li><strong>最小化模块可见度(Minimizing Module Visibility)</strong></li><li><strong>内部依赖(INTERNAL DEPENDENCIES)</strong>，内部依赖主要是A=>B=>C，本来A包含B&amp;C，但是某天B不在包含C那么，A就找不到C了，但这个问题并不是依赖本身的问题，是开发者对依赖脚本的编写导致的。因此最终Google在bazel中严格传递依赖模式：在这个模式中，Blaze如果监测到一个target试图引用一个没有直接依赖的符号(symbol)，就直接报错，同时提供一个脚本命令来直接插入该依赖。对Google内部推广这种形式并重构几百万个targets，让他们显式列出自己的依赖项是一个需要多年时间的投入，但是很值得。现在google的构建快了很多，因为不必要的依赖项都移除了，同时开发人员也不再担心会错误移除依赖项。</li></ul><h4 class="relative group">2.2.5 外部依赖<div id=225-%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#225-%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96 aria-label=锚点>#</a></span></h4><p>外部依赖，和内部依赖不同，外部依赖存在版本。因此外部依赖采用了三个规则：</p><ul><li><p>Bazel要求所有依赖项都手动定义。即便在中等规模项目中，手工定义版本号所带来的额外工作，相对于所带来的稳定性而言也是非常值得的；</p></li><li><p>不同的library版本通常用不同的artifacts来表示，所以理论上讲，一个构建系统中没有理由对一个相同的外部依赖采用不同版本。尽管如此，每个target实际上都能选择它自己想要的依赖项。Google则发现这会导致很多实践问题，所以我们强制了严格的单一版本规则(One-version rule)，要求所有内部代码库的第三方依赖都是用同样的版本。（实际上这个问题就可以解决当时遇见到的authsdk使用多个log4cplus问题：clogv2用了1.2.2的log4cplus，而我们用的默认log4cplus，冲突了，实际上我们是避免宝石状依赖）；</p></li><li><p><strong>使用外部依赖缓存构建结果</strong></p></li><li><p><strong>外部依赖的安全性和可靠性</strong>，依赖第三方源的artifacts本质上是有风险的。例如存在可用性风险，如果第三方源因为某些原因挂掉，而你的整个构建就可能会因为无法下载外部依赖项而停止。这也可能有安全风险，如果第三方系统被人攻击，攻击者可能会把你用到的artifact用他们自己的东西替换，从而在你的构建中注入他们的代码。</p><p>这两个问题都可以通过对artifacts做镜像来解决，这样你就可以控制并阻止你的系统访问第三方仓库如Maven Central. 然而代价就是需要投入时间和资源去维护镜像，所以是否采用这种方式取决于你的项目规模。安全问题也可以被解决，只需要要求每个第三方artifact都在代码仓库中定义它的hash值，这样如果artifact被污染，构建就会直接终止。</p><p>另一个可选方案是把你项目的依赖项完全独立出去（原文有外包/出租的意思，vendor）。当一个项目独立之后，他会把这些依赖项和源代码一起check in到项目的source control中，用源代码或二进制都可以。这就以为和所有的外部依赖都变成了内部依赖。实际上，Google内部就采用了这种方式，把引用到的每个第三方库都提交到一个叫third_party的目录。然而，Google用这种方式也是因为Google自己的source control系统是设计来处理巨大的monorepo的形式，所以这种方式未必适合其它公司。</p></li></ul><h3 class="relative group">2.3 part3 bazel简单demo<div id=23-part3-bazel%E7%AE%80%E5%8D%95demo class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-part3-bazel%E7%AE%80%E5%8D%95demo aria-label=锚点>#</a></span></h3><p>原文链接为：https://zhuanlan.zhihu.com/p/263600968</p><p>以https://github.com/bazelbuild/examples/ 为例，参照里面的文件为例子</p><p>希望同时编译两个binary，两者不是同级的，两种解决方法：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#一种是把第二个binary变为第一个binary的依赖，加入的src里面</span>
-</span></span><span class=line><span class=cl><span class=c1>#另一种是filegroup，或者deps里面，但是可能会导致默认的文件位置错误</span>
-</span></span></code></pre></div><h2 class="relative group">3 gitlab的CI & CD<div id=3-gitlab%E7%9A%84ci--cd class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-gitlab%E7%9A%84ci--cd aria-label=锚点>#</a></span></h2><p>关于环境相关：</p><p>相关文档：</p><ul><li><p><a href=https://zhuanlan.zhihu.com/p/105157319 target=_blank>https://zhuanlan.zhihu.com/p/105157319</a></p></li><li><p>单元测试pipeline部分教学：https://nick-chen.medium.com/gitlab-ci-%E5%85%A5%E9%96%80%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%AF%87-156455e2ad9f</p></li></ul><p>gitlab-pipeline：可以由一个或多个Stage 组成，即是一次CI/CD 的所有执行阶段，且会依序执行Stage。如果执行过程中只要有一个Job 错误了，预设后续的Stage 都会被略过（skip），一次<code>pipeline</code>其实相当于一次任务构建，里面可以包含多个流程，如安装依赖、运行测试、编译代码、部署测试服务器、部署生产服务器等。</p><p>gitlab-stage：可以包含一个或多个Job，代表一个执行阶段，<code>Stage</code>表示一个构建阶段，我们可以在一个<code>Pipeline</code>中定义多个<code>Stage</code>，这些<code>Stage</code>会有以下特点：</p><p>gitlab-job：是整个Gitlab-CI 里面最小的执行单位，<code>job</code>表示构建工作，即某个<code>Stage</code>里面执行的工作内容。我们可以在同一个<code>Stage</code>里面定义多个<code>Job</code>，相同的stage里面job并行执行，只有所有job成功才会成功</p><p>gitlab runner：实际上是一个docker 的image，在Gitlab CI/CD 中每一个工作(Job) 都是在此运行的，优点是可以确保每次执行的环境都是干净的，且可以让多个工作同时进行，比如执行多种测试项目就可以启用不同的runner 同步进行。</p><p>gitlab-ci：会在专案资料夹中侦测到Gitlab-ci.yml 这个设定档的时候触发，主要是负责协调在各种不同情境时Runner 该启动是否该启用及先后顺序，比如流程是先测试后部署，就会限制是测试成功后才能部属，不成功则中断。</p><p>简单总结：实际上是gitlab-ci/cd集成bazel+k8s进行runner test的环境，所以首先需要关注gitlab-ci/cd的基础命令。</p><p>简单来说我们使用gitlab ci/cd实现先编译，然后打tag（打tag的目的是标记本地镜像，并将之归为某一个仓库），再进行部署的操作。那么如何打tag的</p><h3 class="relative group">3.1 .gitlab-ci.yml 文件<div id=31-gitlab-ciyml-%E6%96%87%E4%BB%B6 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-gitlab-ciyml-%E6%96%87%E4%BB%B6 aria-label=锚点>#</a></span></h3><p>关键词详细参考文档为：https://docs.gitlab.com/ee/ci/yaml/</p><p>yml文件中主要是设定自动化部署的任务Job和脚本内。我们可以看到yml是一种文档方式的存储记录，以利用结构化优势。</p><p>yml文件首先通过stage区分阶段，一个阶段完成做下个阶段的内容。另一方面，stage内部再利用job来区分阶段。</p><p>简单举例，</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=nf>image</span><span class=o>:</span> <span class=n>lorisleiva</span>/<span class=n>laravel</span>-<span class=n>docker</span>:<span class=n>latest</span>     //表示镜像或者<span class=n>docker</span>的东西
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>stages</span><span class=o>:</span>             //阶段，必须完成每个阶段再执行下一个阶段
-</span></span><span class=line><span class=cl>  - testing
-</span></span><span class=line><span class=cl>  - deployment
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>unit_test</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  stage: testing   //表明属于哪个阶段，单元测试阶段
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
-</span></span><span class=line><span class=cl>    - ./vendor/bin/phpunit --testsuit Unit
-</span></span><span class=line><span class=cl>  
-</span></span><span class=line><span class=cl><span class=nf>production_deploy</span><span class=o>:</span>     //<span class=n>job</span>，下面的内容用于指定阶段，变量，内容等东西
-</span></span><span class=line><span class=cl>  stage: deployment    //部署阶段
-</span></span><span class=line><span class=cl>  tags:                //tag用于说明哪些runner可以执行job，从而可以挑选机器来进行相关的job，方便选择runner
-</span></span><span class=line><span class=cl>    - server1          
-</span></span><span class=line><span class=cl>    - server2
-</span></span><span class=line><span class=cl>  variables:           //执行脚本时内部的变量内容
-</span></span><span class=line><span class=cl>    HEROKU_PROJECT_NAME: <span class=nv>$HEROKU_PRODUCTION_PROJECT_NAME</span>
-</span></span><span class=line><span class=cl>    HEROKU_API_KEY: <span class=nv>$HEROKU_PRODUCTION_API_KEY</span>
-</span></span><span class=line><span class=cl>  before_script:       //每个job执行关键script之前执行的内容
-</span></span><span class=line><span class=cl>    - apk add ruby ruby-dev ruby-irb ruby-rake ruby-io-console ruby-bigdecimal ruby-json ruby-bundler yarn ruby-rdoc &gt;&gt; /dev/null
-</span></span><span class=line><span class=cl>    - apk update
-</span></span><span class=line><span class=cl>    - gem install dpl &gt;&gt; /dev/null
-</span></span><span class=line><span class=cl>  script:              //具体执行脚本内容，每个job的关键步骤
-</span></span><span class=line><span class=cl>    - dpl --provider<span class=o>=</span>heroku --app<span class=o>=</span><span class=nv>$HEROKU_PRODUCTION_PROJECT_NAME</span> --api-key<span class=o>=</span><span class=nv>$HEROKU_API_KEY</span>
-</span></span><span class=line><span class=cl>  only:                //设定只能在哪些分支进行部署
-</span></span><span class=line><span class=cl>    - master
-</span></span></code></pre></div><p>再看一个例子，实际上我需要做的工作就是将deploy流程自动化，添加灰度发布。换言之，build，打包，发布融入代码当中</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-makefile data-lang=makefile><span class=line><span class=cl><span class=nf>image</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  name: golang:1.10.3-stretch
-</span></span><span class=line><span class=cl>  entrypoint: <span class=o>[</span><span class=s2>&#34;/bin/sh&#34;</span>, <span class=s2>&#34;-c&#34;</span><span class=o>]</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c># 为了能够使用go get，需要将代码放在 $GOPATH 中，比如你的 gitlab 域名是 mydomain.com，你的代码仓库是 repos/projectname，默认的 GOPATH 是 /go，然后你就需要将你的代码放置到 GOPATH 下面，/go/src/mydomain.com/repos/projectname，用一个软链接指过来就可以了
-</span></span></span><span class=line><span class=cl><span class=c></span><span class=nf>before_script</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  - mkdir -p <span class=s2>&#34;/go/src/git.qikqiak.com/</span><span class=si>${</span><span class=nv>CI_PROJECT_NAMESPACE</span><span class=si>}</span><span class=s2>&#34;</span>
-</span></span><span class=line><span class=cl>  - ln -sf <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_PROJECT_DIR</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;/go/src/git.qikqiak.com/</span><span class=si>${</span><span class=nv>CI_PROJECT_PATH</span><span class=si>}</span><span class=s2>&#34;</span>
-</span></span><span class=line><span class=cl>  - <span class=nb>cd</span> <span class=s2>&#34;/go/src/git.qikqiak.com/</span><span class=si>${</span><span class=nv>CI_PROJECT_PATH</span><span class=si>}</span><span class=s2>/&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>stages</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  - <span class=nb>test</span>
-</span></span><span class=line><span class=cl>  - build
-</span></span><span class=line><span class=cl>  - release
-</span></span><span class=line><span class=cl>  - review
-</span></span><span class=line><span class=cl>  - deploy
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>test</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  stage: <span class=nb>test</span>
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - make <span class=nb>test</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>test2</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  stage: <span class=nb>test</span>
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - sleep <span class=m>3</span>
-</span></span><span class=line><span class=cl>    - <span class=nb>echo</span> <span class=s2>&#34;We did it! Something else runs in parallel!&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>compile</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  stage: build
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    <span class=c1># 添加所有的依赖，或者使用 glide/govendor/...</span>
-</span></span><span class=line><span class=cl>    - make build
-</span></span><span class=line><span class=cl>  artifacts:
-</span></span><span class=line><span class=cl>    paths:
-</span></span><span class=line><span class=cl>      - app
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>image_build</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  stage: release
-</span></span><span class=line><span class=cl>  image: docker:latest
-</span></span><span class=line><span class=cl>  variables:
-</span></span><span class=line><span class=cl>    DOCKER_DRIVER: overlay
-</span></span><span class=line><span class=cl>    DOCKER_HOST: tcp://localhost:2375
-</span></span><span class=line><span class=cl>  services:
-</span></span><span class=line><span class=cl>    - name: docker:17.03-dind
-</span></span><span class=line><span class=cl>      command: <span class=o>[</span><span class=s2>&#34;--insecure-registry=registry.qikqiak.com&#34;</span><span class=o>]</span>
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - docker info
-</span></span><span class=line><span class=cl>    - docker login -u <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_USER</span><span class=si>}</span><span class=s2>&#34;</span> -p <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_PASSWORD</span><span class=si>}</span><span class=s2>&#34;</span> registry.qikqiak.com
-</span></span><span class=line><span class=cl>    - docker build -t <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_IMAGE</span><span class=si>}</span><span class=s2>:latest&#34;</span> .
-</span></span><span class=line><span class=cl>    - docker tag <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_IMAGE</span><span class=si>}</span><span class=s2>:latest&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_IMAGE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>CI_COMMIT_REF_NAME</span><span class=si>}</span><span class=s2>&#34;</span>
-</span></span><span class=line><span class=cl>    - <span class=nb>test</span> ! -z <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_COMMIT_TAG</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> docker push <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_IMAGE</span><span class=si>}</span><span class=s2>:latest&#34;</span>
-</span></span><span class=line><span class=cl>    - docker push <span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_REGISTRY_IMAGE</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>CI_COMMIT_REF_NAME</span><span class=si>}</span><span class=s2>&#34;</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>deploy_review</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  image: cnych/kubectl  <span class=c1>#用于镜像，具体含义为</span>
-</span></span><span class=line><span class=cl>  stage: review
-</span></span><span class=line><span class=cl>  only:
-</span></span><span class=line><span class=cl>    - branches
-</span></span><span class=line><span class=cl>  except:
-</span></span><span class=line><span class=cl>    - tags
-</span></span><span class=line><span class=cl>  <span class=c1># 环境，用于指定具体部署的环境，我们的希望部署到哪个环境，就往哪个name发出数据</span>
-</span></span><span class=line><span class=cl>  environment:
-</span></span><span class=line><span class=cl>    <span class=c1># 环境名字，想往哪个环境进行部署就需要对这个name进行修改</span>
-</span></span><span class=line><span class=cl>    name: dev
-</span></span><span class=line><span class=cl>    <span class=c1># a URL, which determines the deployment URL。但是说实话我没明白这个url是干啥的？</span>
-</span></span><span class=line><span class=cl>    url: https://dev-gitlab-k8s-demo.qikqiak.com
-</span></span><span class=line><span class=cl>    on_stop: stop_review
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - kubectl version
-</span></span><span class=line><span class=cl>    - <span class=nb>cd</span> manifests/
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s/__CI_ENVIRONMENT_SLUG__/</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span><span class=s2>/&#34;</span> deployment.yaml ingress.yaml service.yaml
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s/__VERSION__/</span><span class=si>${</span><span class=nv>CI_COMMIT_REF_NAME</span><span class=si>}</span><span class=s2>/&#34;</span> deployment.yaml ingress.yaml service.yaml
-</span></span><span class=line><span class=cl>    - <span class=p>|</span>
-</span></span><span class=line><span class=cl>      <span class=k>if</span> kubectl apply -f deployment.yaml <span class=p>|</span> grep -q unchanged<span class=p>;</span> <span class=k>then</span>
-</span></span><span class=line><span class=cl>          <span class=nb>echo</span> <span class=s2>&#34;=&gt; Patching deployment to force image update.&#34;</span>
-</span></span><span class=line><span class=cl>          kubectl patch -f deployment.yaml -p <span class=s2>&#34;{\&#34;spec\&#34;:{\&#34;template\&#34;:{\&#34;metadata\&#34;:{\&#34;annotations\&#34;:{\&#34;ci-last-updated\&#34;:\&#34;</span><span class=k>$(</span>date +<span class=s1>&#39;%s&#39;</span><span class=k>)</span><span class=s2>\&#34;}}}}}&#34;</span>
-</span></span><span class=line><span class=cl>      <span class=k>else</span>
-</span></span><span class=line><span class=cl>          <span class=nb>echo</span> <span class=s2>&#34;=&gt; Deployment apply has changed the object, no need to force image update.&#34;</span>
-</span></span><span class=line><span class=cl>      <span class=k>fi</span>
-</span></span><span class=line><span class=cl>    - kubectl apply -f service.yaml <span class=o>||</span> <span class=nb>true</span>
-</span></span><span class=line><span class=cl>    - kubectl apply -f ingress.yaml
-</span></span><span class=line><span class=cl>    - kubectl rollout status -f deployment.yaml
-</span></span><span class=line><span class=cl>    - kubectl get all,ing -l <span class=nv>ref</span><span class=o>=</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>stop_review</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  image: cnych/kubectl
-</span></span><span class=line><span class=cl>  stage: review
-</span></span><span class=line><span class=cl>  variables:
-</span></span><span class=line><span class=cl>    GIT_STRATEGY: none
-</span></span><span class=line><span class=cl>  when: manual
-</span></span><span class=line><span class=cl>  only:
-</span></span><span class=line><span class=cl>    - branches
-</span></span><span class=line><span class=cl>  except:
-</span></span><span class=line><span class=cl>    - master
-</span></span><span class=line><span class=cl>    - tags
-</span></span><span class=line><span class=cl>  environment:
-</span></span><span class=line><span class=cl>    name: dev
-</span></span><span class=line><span class=cl>    action: stop
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - kubectl version
-</span></span><span class=line><span class=cl>    - kubectl delete ing -l <span class=nv>ref</span><span class=o>=</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span>
-</span></span><span class=line><span class=cl>    - kubectl delete all -l <span class=nv>ref</span><span class=o>=</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span>
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=nf>deploy_live</span><span class=o>:</span>
-</span></span><span class=line><span class=cl>  image: cnych/kubectl
-</span></span><span class=line><span class=cl>  stage: deploy
-</span></span><span class=line><span class=cl>  environment:
-</span></span><span class=line><span class=cl>    name: live
-</span></span><span class=line><span class=cl>    url: https://live-gitlab-k8s-demo.qikqiak.com
-</span></span><span class=line><span class=cl>  only:
-</span></span><span class=line><span class=cl>    - tags
-</span></span><span class=line><span class=cl>  when: manual
-</span></span><span class=line><span class=cl>  script:
-</span></span><span class=line><span class=cl>    - kubectl version
-</span></span><span class=line><span class=cl>    - <span class=nb>cd</span> manifests/
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s/__CI_ENVIRONMENT_SLUG__/</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span><span class=s2>/&#34;</span> deployment.yaml ingress.yaml service.yaml
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s/__VERSION__/</span><span class=si>${</span><span class=nv>CI_COMMIT_REF_NAME</span><span class=si>}</span><span class=s2>/&#34;</span> deployment.yaml ingress.yaml service.yaml
-</span></span><span class=line><span class=cl>    - kubectl apply -f deployment.yaml
-</span></span><span class=line><span class=cl>    - kubectl apply -f service.yaml
-</span></span><span class=line><span class=cl>    - kubectl apply -f ingress.yaml
-</span></span><span class=line><span class=cl>    - kubectl rollout status -f deployment.yaml
-</span></span><span class=line><span class=cl>    - kubectl get all,ing -l <span class=nv>ref</span><span class=o>=</span><span class=si>${</span><span class=nv>CI_ENVIRONMENT_SLUG</span><span class=si>}</span>
-</span></span></code></pre></div><p>我们的pipeline触发的条件很大，</p><pre tabindex=0><code>  only:
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>ci_cd相关学习 &middot; 菜狗的blog</title>
+  <meta name="title" content="ci_cd相关学习 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="debug, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="ci_cd相关学习">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-10-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-10-11T00:00:00+00:00">
+    <meta property="article:tag" content="Debug">
+
+  
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="ci_cd相关学习">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "ci_cd相关学习",
+    "headline": "ci_cd相关学习",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2021-10-11-ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2021",
+    "dateCreated": "2021-10-11T00:00:00\u002b00:00",
+    "datePublished": "2021-10-11T00:00:00\u002b00:00",
+    
+    "dateModified": "2021-10-11T00:00:00\u002b00:00",
+    
+    "keywords": ["debug"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "9474"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+ 
+
+
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      ci_cd相关学习
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2021-10-11T00:00:00&#43;00:00">2021 年 10 月 11 日</time><span class="px-2 text-primary-500">&middot;</span><span>9474 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">19 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-cicd使用原理相关">1 CI/CD使用原理相关</a></li>
+    <li><a href="#2-bazel编译部署相关">2 Bazel编译部署相关</a>
+      <ul>
+        <li><a href="#21-part1-bazel入门">2.1 part1 bazel入门</a></li>
+        <li><a href="#22-part2-了解bazel">2.2 part2 了解bazel</a>
+          <ul>
+            <li><a href="#221-走进bazel">2.2.1 走进Bazel</a></li>
+            <li><a href="#222-其它bazel解决的问题和技巧">2.2.2 其它bazel解决的问题和技巧</a></li>
+            <li><a href="#223-分布式构建">2.2.3 分布式构建</a></li>
+            <li><a href="#224-处理模块与依赖">2.2.4 处理模块与依赖</a></li>
+            <li><a href="#225-外部依赖">2.2.5 外部依赖</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-part3-bazel简单demo">2.3 part3 bazel简单demo</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-gitlab的ci--cd">3 gitlab的CI &amp; CD</a>
+      <ul>
+        <li><a href="#31-gitlab-ciyml-文件">3.1 .gitlab-ci.yml 文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-学习kubernetes">4 学习kubernetes</a>
+      <ul>
+        <li><a href="#41-k8s架构">4.1 k8s架构</a></li>
+        <li><a href="#42-运行应用">4.2 运行应用</a>
+          <ul>
+            <li><a href="#421-deployment">4.2.1 deployment</a></li>
+            <li><a href="#422-daemon-set">4.2.2 daemon set</a></li>
+            <li><a href="#423-job">4.2.3 Job</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-service">4.3 service</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-docker相关内容的简单学习">5 Docker相关内容的简单学习</a></li>
+    <li><a href="#6-shell遇到的一些小问题和教程">6 SHELL遇到的一些小问题和教程</a>
+      <ul>
+        <li><a href="#61-sed替换问题">6.1 SED替换问题</a></li>
+        <li><a href="#62-shell脚本当中变量的部分含义">6.2 SHELL脚本当中变量的部分含义</a></li>
+      </ul>
+    </li>
+    <li><a href="#缺省值-">缺省值（:-）</a></li>
+    <li><a href="#指定缺省值">指定缺省值（:=）</a></li>
+    <li><a href="#变量是否存在检查">变量是否存在检查（:?）</a></li>
+    <li><a href="#覆盖缺省值">覆盖缺省值(:+)</a></li>
+    <li><a href="#替换部分字符串n">替换部分字符串（:n）</a></li>
+    <li><a href="#使用模板进行子字符串的替换">使用模板进行子字符串的替换（//）</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-cicd使用原理相关">1 CI/CD使用原理相关</a></li>
+    <li><a href="#2-bazel编译部署相关">2 Bazel编译部署相关</a>
+      <ul>
+        <li><a href="#21-part1-bazel入门">2.1 part1 bazel入门</a></li>
+        <li><a href="#22-part2-了解bazel">2.2 part2 了解bazel</a>
+          <ul>
+            <li><a href="#221-走进bazel">2.2.1 走进Bazel</a></li>
+            <li><a href="#222-其它bazel解决的问题和技巧">2.2.2 其它bazel解决的问题和技巧</a></li>
+            <li><a href="#223-分布式构建">2.2.3 分布式构建</a></li>
+            <li><a href="#224-处理模块与依赖">2.2.4 处理模块与依赖</a></li>
+            <li><a href="#225-外部依赖">2.2.5 外部依赖</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-part3-bazel简单demo">2.3 part3 bazel简单demo</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-gitlab的ci--cd">3 gitlab的CI &amp; CD</a>
+      <ul>
+        <li><a href="#31-gitlab-ciyml-文件">3.1 .gitlab-ci.yml 文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-学习kubernetes">4 学习kubernetes</a>
+      <ul>
+        <li><a href="#41-k8s架构">4.1 k8s架构</a></li>
+        <li><a href="#42-运行应用">4.2 运行应用</a>
+          <ul>
+            <li><a href="#421-deployment">4.2.1 deployment</a></li>
+            <li><a href="#422-daemon-set">4.2.2 daemon set</a></li>
+            <li><a href="#423-job">4.2.3 Job</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-service">4.3 service</a>
+          <ul>
+            <li></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-docker相关内容的简单学习">5 Docker相关内容的简单学习</a></li>
+    <li><a href="#6-shell遇到的一些小问题和教程">6 SHELL遇到的一些小问题和教程</a>
+      <ul>
+        <li><a href="#61-sed替换问题">6.1 SED替换问题</a></li>
+        <li><a href="#62-shell脚本当中变量的部分含义">6.2 SHELL脚本当中变量的部分含义</a></li>
+      </ul>
+    </li>
+    <li><a href="#缺省值-">缺省值（:-）</a></li>
+    <li><a href="#指定缺省值">指定缺省值（:=）</a></li>
+    <li><a href="#变量是否存在检查">变量是否存在检查（:?）</a></li>
+    <li><a href="#覆盖缺省值">覆盖缺省值(:+)</a></li>
+    <li><a href="#替换部分字符串n">替换部分字符串（:n）</a></li>
+    <li><a href="#使用模板进行子字符串的替换">使用模板进行子字符串的替换（//）</a></li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">ci_cd相关学习 
+    <div id="ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#ci_cd%E7%9B%B8%E5%85%B3%E5%AD%A6%E4%B9%A0" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+
+
+<h2 class="relative group">1 CI/CD使用原理相关 
+    <div id="1-cicd%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-cicd%E4%BD%BF%E7%94%A8%E5%8E%9F%E7%90%86%E7%9B%B8%E5%85%B3" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h2 class="relative group">2 Bazel编译部署相关 
+    <div id="2-bazel%E7%BC%96%E8%AF%91%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-bazel%E7%BC%96%E8%AF%91%E9%83%A8%E7%BD%B2%E7%9B%B8%E5%85%B3" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">2.1 part1 bazel入门 
+    <div id="21-part1-bazel%E5%85%A5%E9%97%A8" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-part1-bazel%E5%85%A5%E9%97%A8" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>文章链接为：https://zhuanlan.zhihu.com/p/262171925</p>
+<p>为何需要自动构建系统？</p>
+<ul>
+<li>代码无需人工干涉即可构建、测试并发布生产</li>
+<li>提交代码到code review的时候可以直接测试</li>
+<li>底层库可以对整个代码库测试代码修改，确保修改是安全的</li>
+<li>程序员可以进行大规模的代码修改</li>
+</ul>
+<p>如果没有构建系统呢？可以想见华耀的时候：</p>
+<ul>
+<li>漫长的编译时间</li>
+<li>不能单独编译并替换单个文件</li>
+<li>没办法共享其它语言的模块和代码（比方说php和python）</li>
+<li>大量的脚本文件，不断地修修补补</li>
+</ul>
+<p>因此我们需要一个moder build system。</p>
+<p>但是我们需要解决哪些问题呢？</p>
+<ul>
+<li>如何解决脚本无法保证完成任务的问题？</li>
+<li>如何并发？避免出现记录文件的冲突</li>
+<li>如何实现增量构建？</li>
+<li>维护和调试脚本的难度</li>
+</ul>
+<p>为了解决这些问题，google（bazel）的解决方法是</p>
+<blockquote>
+<p>我们需要从程序员手里拿走一些能力，把这些能力交换到系统本身，并且重新定义系统角色不再是执行任务(running tasks)，而是生成制品(artifacts)。这就是Google对于Blaze和Bazel的做法，我们下面就会讲到。</p></blockquote>
+
+
+<h3 class="relative group">2.2 part2 了解bazel 
+    <div id="22-part2-%E4%BA%86%E8%A7%A3bazel" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-part2-%E4%BA%86%E8%A7%A3bazel" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>文章链接为：https://zhuanlan.zhihu.com/p/262497747</p>
+<p>与其让程序员自己定义任务，不如让系统定义一组任务，程序员受限的情况下进行配置。</p>
+<blockquote>
+<p>一个构建系统最重要的功能是去构建代码。程序员仍然需要告诉系统他们想去build什么东西，但是“如何构建“则是系统自己的事情。</p>
+<p>这就是Blaze以及其它基于artifact的构建系统（如Bazel, Pants, 及Buck）所采用的方案。和基于task任务的系统一样，我们仍然需要buildfile，但是这些buildfile的内容就很不一样了。相对于之前使用图灵完备的脚本语言来实现各种命令(an imperative set of commands)，以描述如何生成结果的方式，Blaze的buildfile是一种声明式的形式(declarative manifest)来描述一组制品(artifacts)如何去构建，他们的相互依赖，以及一组受限的选项来定义如何构建。当程序员运行blaze命令行时，他们会定义一组要构建的目标(what)，然后blaze负责配置、运行和调度编译步骤(how)。由于现在构建系统完全控制了运行时所用的工具，它才能确保运行期间的高效和正确。</p></blockquote>
+<p>但是有个问题，即任务的定义还是来自程序员，只不过程序员只关心成品，还是有点迷惑bazel的</p>
+
+
+<h4 class="relative group">2.2.1 走进Bazel 
+    <div id="221-%E8%B5%B0%E8%BF%9Bbazel" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#221-%E8%B5%B0%E8%BF%9Bbazel" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>先看一个bazel的语法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="err">java_binary(</span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span> <span class="o">=</span> <span class="s2">&#34;MyBinary&#34;</span>,
+</span></span><span class="line"><span class="cl"><span class="nv">srcs</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;MyBinary.java&#34;</span><span class="o">]</span>, 
+</span></span><span class="line"><span class="cl"><span class="nv">deps</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;:mylib&#34;</span>, <span class="o">]</span>,
+</span></span><span class="line"><span class="cl"><span class="err">)</span>
+</span></span><span class="line"><span class="cl"><span class="err">java_library(</span>
+</span></span><span class="line"><span class="cl"><span class="nv">name</span> <span class="o">=</span> <span class="s2">&#34;mylib&#34;</span>,
+</span></span><span class="line"><span class="cl"><span class="nv">srcs</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;MyLibrary.java&#34;</span>, <span class="s2">&#34;MyHelper.java&#34;</span><span class="o">]</span>,
+</span></span><span class="line"><span class="cl"><span class="nv">visibility</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&#34;//java/com/example/myproduct:__subpackages__&#34;</span><span class="o">]</span>,
+</span></span><span class="line"><span class="cl"><span class="nv">deps</span> <span class="o">=</span> <span class="o">[</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;//java/com/example/common&#34;</span><span class="err">,</span> <span class="s2">&#34;//java/com/example/myproduct/otherlib&#34;</span><span class="err">,</span> <span class="s2">&#34;@com_google_common_guava_guava//jar&#34;</span><span class="err">,</span>
+</span></span><span class="line"><span class="cl"><span class="err">],</span> <span class="err">)</span>
+</span></span></code></pre></div><p>在Bazel中，BUILD文件定义了targets。上面的两个targets分别是java_binary和java_library. 每个target都对应着bazel能够创建的一种artifact.</p>
+<p>binary targets生成能够直接运行的二进制文件，library targets生成能够被其它binary或者library所使用的内容。每个target都有一个name（定义它在命令行和其它target中应该如何被引用)，srcs（定义必须被编译的相关源文件以生成对应的target制品），以及deps（定义前置必须先构建或链接的依赖）。</p>
+<p>依赖关系可以限制在当前package以内（e.g. MyBinary依赖于:mylib），也可以是在同一个源代码层级中的不同package(e.g. mylib依赖于//java/com/example/common)，或者源代码层级之外的第三方artifact(e.g. mylib依赖于&quot;@com_google_common_grava_grava//jar&quot;). 每个源代码层级(source hierarchy)都被称为一个workspace，并由根目录下的一个WORKSPACE文件来标示。</p>
+
+
+<h4 class="relative group">2.2.2 其它bazel解决的问题和技巧 
+    <div id="222-%E5%85%B6%E5%AE%83bazel%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E6%8A%80%E5%B7%A7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#222-%E5%85%B6%E5%AE%83bazel%E8%A7%A3%E5%86%B3%E7%9A%84%E9%97%AE%E9%A2%98%E5%92%8C%E6%8A%80%E5%B7%A7" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<ul>
+<li>
+<p>对工具的依赖（比方说开发authsdk时依赖boost &amp; gcc的版本），解决方式是将工具当成依赖，即<strong>Tools as dependencies</strong></p>
+</li>
+<li>
+<p>拓展构建系统，Bazel允许通过自定义规则(custom rules)来扩展所支持的target类型。要定义一个Bazel的rule，开发者首先要定义rule需要的input(以BUILD文件中传递的参数形式)和该rule所生成的output。开发者还要定义该rule所要生成的actions. 每个action同样也要声明input和output，运行一个特定可执行文件或在文件中写入特定字符串，并能够通过input/output连接到其它的action. 这也意味着在Bazel里面，action是最底层的可编辑单元(lowest-level composable unit)&ndash;只要一个action只使用它所声明的input/output，它就能做任何它想做的事情，而Bazel则会负责对action进行规划安排并在合适的时候缓存其执行结果。</p>
+</li>
+<li>
+<p>环境隔离，使用沙盒来实现action后果的隔离</p>
+</li>
+<li>
+<p>可确定的外部依赖，更新一个依赖应该是一个有意识的行为，但这个行为应该由一个中心控制来一次完成，而不是由单独的程序员或者系统自动完成。这是因为我们希望构建本身是可确定的(deterministic)，这意味着如果你check out上周的一个commit，你应该看到所有的依赖都和上周时一样，而不会仍然是今天的版本。</p>
+<p>Bazel和其它构建系统通过workspace范围内的清单(manifest)来处理这个问题，这个清单列出了所有外部依赖的加密hash值(cryptographic hash)。这个hash值是一个相当简洁的方式来唯一标示外部依赖文件，而无需将文件本身提交到source control. 只要workspace中有任何新的外部依赖被引用时，该依赖的hash值就会加入到清单中，有可能是自动的，也可能是手动。当Bazel执行一个构建的时候，它会去检查缓存中的依赖(dependency)的hash值，和清单中的hash值做比较，如果不同的话则再去重新下载。</p>
+</li>
+</ul>
+
+
+<h4 class="relative group">2.2.3 分布式构建 
+    <div id="223-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%84%E5%BB%BA" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#223-%E5%88%86%E5%B8%83%E5%BC%8F%E6%9E%84%E5%BB%BA" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<ul>
+<li>远程缓存，多个developer workstations，都共享一个指向公用缓存服务，bazel本身就支持保证共享artifact和其输入是相同的</li>
+<li>远程执行，</li>
+<li>Google的分布式构建（<strong>Distributed Builds at Google</strong>）</li>
+<li><strong>时间、规模与取舍(Time, Scale, Trade-Offs)</strong></li>
+</ul>
+
+
+<h4 class="relative group">2.2.4 处理模块与依赖 
+    <div id="224-%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97%E4%B8%8E%E4%BE%9D%E8%B5%96" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#224-%E5%A4%84%E7%90%86%E6%A8%A1%E5%9D%97%E4%B8%8E%E4%BE%9D%E8%B5%96" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<ul>
+<li><strong>使用精调的模块和1:1:1规则(Using Fine-Grained Modules and the 1:1:1 Rule)</strong>，需要决定一个独立模块到底要包含多少功能。对于Bazel而言，一个“模块”则是用target来定义的一个可构建的单位，例如java_library或go_library.</li>
+<li><strong>最小化模块可见度(Minimizing Module Visibility)</strong></li>
+<li><strong>内部依赖(INTERNAL DEPENDENCIES)</strong>，内部依赖主要是A=&gt;B=&gt;C，本来A包含B&amp;C，但是某天B不在包含C那么，A就找不到C了，但这个问题并不是依赖本身的问题，是开发者对依赖脚本的编写导致的。因此最终Google在bazel中严格传递依赖模式：在这个模式中，Blaze如果监测到一个target试图引用一个没有直接依赖的符号(symbol)，就直接报错，同时提供一个脚本命令来直接插入该依赖。对Google内部推广这种形式并重构几百万个targets，让他们显式列出自己的依赖项是一个需要多年时间的投入，但是很值得。现在google的构建快了很多，因为不必要的依赖项都移除了，同时开发人员也不再担心会错误移除依赖项。</li>
+</ul>
+
+
+<h4 class="relative group">2.2.5 外部依赖 
+    <div id="225-%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#225-%E5%A4%96%E9%83%A8%E4%BE%9D%E8%B5%96" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>外部依赖，和内部依赖不同，外部依赖存在版本。因此外部依赖采用了三个规则：</p>
+<ul>
+<li>
+<p>Bazel要求所有依赖项都手动定义。即便在中等规模项目中，手工定义版本号所带来的额外工作，相对于所带来的稳定性而言也是非常值得的；</p>
+</li>
+<li>
+<p>不同的library版本通常用不同的artifacts来表示，所以理论上讲，一个构建系统中没有理由对一个相同的外部依赖采用不同版本。尽管如此，每个target实际上都能选择它自己想要的依赖项。Google则发现这会导致很多实践问题，所以我们强制了严格的单一版本规则(One-version rule)，要求所有内部代码库的第三方依赖都是用同样的版本。（实际上这个问题就可以解决当时遇见到的authsdk使用多个log4cplus问题：clogv2用了1.2.2的log4cplus，而我们用的默认log4cplus，冲突了，实际上我们是避免宝石状依赖）；</p>
+</li>
+<li>
+<p><strong>使用外部依赖缓存构建结果</strong></p>
+</li>
+<li>
+<p><strong>外部依赖的安全性和可靠性</strong>，依赖第三方源的artifacts本质上是有风险的。例如存在可用性风险，如果第三方源因为某些原因挂掉，而你的整个构建就可能会因为无法下载外部依赖项而停止。这也可能有安全风险，如果第三方系统被人攻击，攻击者可能会把你用到的artifact用他们自己的东西替换，从而在你的构建中注入他们的代码。</p>
+<p>这两个问题都可以通过对artifacts做镜像来解决，这样你就可以控制并阻止你的系统访问第三方仓库如Maven Central. 然而代价就是需要投入时间和资源去维护镜像，所以是否采用这种方式取决于你的项目规模。安全问题也可以被解决，只需要要求每个第三方artifact都在代码仓库中定义它的hash值，这样如果artifact被污染，构建就会直接终止。</p>
+<p>另一个可选方案是把你项目的依赖项完全独立出去（原文有外包/出租的意思，vendor）。当一个项目独立之后，他会把这些依赖项和源代码一起check in到项目的source control中，用源代码或二进制都可以。这就以为和所有的外部依赖都变成了内部依赖。实际上，Google内部就采用了这种方式，把引用到的每个第三方库都提交到一个叫third_party的目录。然而，Google用这种方式也是因为Google自己的source control系统是设计来处理巨大的monorepo的形式，所以这种方式未必适合其它公司。</p>
+</li>
+</ul>
+
+
+<h3 class="relative group">2.3 part3 bazel简单demo 
+    <div id="23-part3-bazel%E7%AE%80%E5%8D%95demo" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-part3-bazel%E7%AE%80%E5%8D%95demo" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>原文链接为：https://zhuanlan.zhihu.com/p/263600968</p>
+<p>以https://github.com/bazelbuild/examples/ 为例，参照里面的文件为例子</p>
+<p>希望同时编译两个binary，两者不是同级的，两种解决方法：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#一种是把第二个binary变为第一个binary的依赖，加入的src里面</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#另一种是filegroup，或者deps里面，但是可能会导致默认的文件位置错误</span>
+</span></span></code></pre></div>
+
+<h2 class="relative group">3 gitlab的CI &amp; CD 
+    <div id="3-gitlab%E7%9A%84ci--cd" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3-gitlab%E7%9A%84ci--cd" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>关于环境相关：</p>
+<p>相关文档：</p>
+<ul>
+<li>
+<p><a href="https://zhuanlan.zhihu.com/p/105157319" target="_blank">https://zhuanlan.zhihu.com/p/105157319</a></p>
+</li>
+<li>
+<p>单元测试pipeline部分教学：https://nick-chen.medium.com/gitlab-ci-%E5%85%A5%E9%96%80%E7%AD%86%E8%A8%98-%E5%96%AE%E5%85%83%E6%B8%AC%E8%A9%A6%E7%AF%87-156455e2ad9f</p>
+</li>
+</ul>
+<p>gitlab-pipeline：可以由一个或多个Stage 组成，即是一次CI/CD 的所有执行阶段，且会依序执行Stage。如果执行过程中只要有一个Job 错误了，预设后续的Stage 都会被略过（skip），一次<code>pipeline</code>其实相当于一次任务构建，里面可以包含多个流程，如安装依赖、运行测试、编译代码、部署测试服务器、部署生产服务器等。</p>
+<p>gitlab-stage：可以包含一个或多个Job，代表一个执行阶段，<code>Stage</code>表示一个构建阶段，我们可以在一个<code>Pipeline</code>中定义多个<code>Stage</code>，这些<code>Stage</code>会有以下特点：</p>
+<p>gitlab-job：是整个Gitlab-CI 里面最小的执行单位，<code>job</code>表示构建工作，即某个<code>Stage</code>里面执行的工作内容。我们可以在同一个<code>Stage</code>里面定义多个<code>Job</code>，相同的stage里面job并行执行，只有所有job成功才会成功</p>
+<p>gitlab runner：实际上是一个docker 的image，在Gitlab CI/CD 中每一个工作(Job) 都是在此运行的，优点是可以确保每次执行的环境都是干净的，且可以让多个工作同时进行，比如执行多种测试项目就可以启用不同的runner 同步进行。</p>
+<p>gitlab-ci：会在专案资料夹中侦测到Gitlab-ci.yml 这个设定档的时候触发，主要是负责协调在各种不同情境时Runner 该启动是否该启用及先后顺序，比如流程是先测试后部署，就会限制是测试成功后才能部属，不成功则中断。</p>
+<p>简单总结：实际上是gitlab-ci/cd集成bazel+k8s进行runner test的环境，所以首先需要关注gitlab-ci/cd的基础命令。</p>
+<p>简单来说我们使用gitlab ci/cd实现先编译，然后打tag（打tag的目的是标记本地镜像，并将之归为某一个仓库），再进行部署的操作。那么如何打tag的</p>
+
+
+<h3 class="relative group">3.1 .gitlab-ci.yml 文件 
+    <div id="31-gitlab-ciyml-%E6%96%87%E4%BB%B6" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-gitlab-ciyml-%E6%96%87%E4%BB%B6" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>关键词详细参考文档为：https://docs.gitlab.com/ee/ci/yaml/</p>
+<p>yml文件中主要是设定自动化部署的任务Job和脚本内。我们可以看到yml是一种文档方式的存储记录，以利用结构化优势。</p>
+<p>yml文件首先通过stage区分阶段，一个阶段完成做下个阶段的内容。另一方面，stage内部再利用job来区分阶段。</p>
+<p>简单举例，</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nf">image</span><span class="o">:</span> <span class="n">lorisleiva</span>/<span class="n">laravel</span>-<span class="n">docker</span>:<span class="n">latest</span>     //表示镜像或者<span class="n">docker</span>的东西
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">stages</span><span class="o">:</span>             //阶段，必须完成每个阶段再执行下一个阶段
+</span></span><span class="line"><span class="cl">  - testing
+</span></span><span class="line"><span class="cl">  - deployment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">unit_test</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  stage: testing   //表明属于哪个阶段，单元测试阶段
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+</span></span><span class="line"><span class="cl">    - ./vendor/bin/phpunit --testsuit Unit
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="nf">production_deploy</span><span class="o">:</span>     //<span class="n">job</span>，下面的内容用于指定阶段，变量，内容等东西
+</span></span><span class="line"><span class="cl">  stage: deployment    //部署阶段
+</span></span><span class="line"><span class="cl">  tags:                //tag用于说明哪些runner可以执行job，从而可以挑选机器来进行相关的job，方便选择runner
+</span></span><span class="line"><span class="cl">    - server1          
+</span></span><span class="line"><span class="cl">    - server2
+</span></span><span class="line"><span class="cl">  variables:           //执行脚本时内部的变量内容
+</span></span><span class="line"><span class="cl">    HEROKU_PROJECT_NAME: <span class="nv">$HEROKU_PRODUCTION_PROJECT_NAME</span>
+</span></span><span class="line"><span class="cl">    HEROKU_API_KEY: <span class="nv">$HEROKU_PRODUCTION_API_KEY</span>
+</span></span><span class="line"><span class="cl">  before_script:       //每个job执行关键script之前执行的内容
+</span></span><span class="line"><span class="cl">    - apk add ruby ruby-dev ruby-irb ruby-rake ruby-io-console ruby-bigdecimal ruby-json ruby-bundler yarn ruby-rdoc &gt;&gt; /dev/null
+</span></span><span class="line"><span class="cl">    - apk update
+</span></span><span class="line"><span class="cl">    - gem install dpl &gt;&gt; /dev/null
+</span></span><span class="line"><span class="cl">  script:              //具体执行脚本内容，每个job的关键步骤
+</span></span><span class="line"><span class="cl">    - dpl --provider<span class="o">=</span>heroku --app<span class="o">=</span><span class="nv">$HEROKU_PRODUCTION_PROJECT_NAME</span> --api-key<span class="o">=</span><span class="nv">$HEROKU_API_KEY</span>
+</span></span><span class="line"><span class="cl">  only:                //设定只能在哪些分支进行部署
+</span></span><span class="line"><span class="cl">    - master
+</span></span></code></pre></div><p>再看一个例子，实际上我需要做的工作就是将deploy流程自动化，添加灰度发布。换言之，build，打包，发布融入代码当中</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="line"><span class="cl"><span class="nf">image</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  name: golang:1.10.3-stretch
+</span></span><span class="line"><span class="cl">  entrypoint: <span class="o">[</span><span class="s2">&#34;/bin/sh&#34;</span>, <span class="s2">&#34;-c&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 为了能够使用go get，需要将代码放在 $GOPATH 中，比如你的 gitlab 域名是 mydomain.com，你的代码仓库是 repos/projectname，默认的 GOPATH 是 /go，然后你就需要将你的代码放置到 GOPATH 下面，/go/src/mydomain.com/repos/projectname，用一个软链接指过来就可以了
+</span></span></span><span class="line"><span class="cl"><span class="c"></span><span class="nf">before_script</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  - mkdir -p <span class="s2">&#34;/go/src/git.qikqiak.com/</span><span class="si">${</span><span class="nv">CI_PROJECT_NAMESPACE</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  - ln -sf <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_PROJECT_DIR</span><span class="si">}</span><span class="s2">&#34;</span> <span class="s2">&#34;/go/src/git.qikqiak.com/</span><span class="si">${</span><span class="nv">CI_PROJECT_PATH</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">  - <span class="nb">cd</span> <span class="s2">&#34;/go/src/git.qikqiak.com/</span><span class="si">${</span><span class="nv">CI_PROJECT_PATH</span><span class="si">}</span><span class="s2">/&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">stages</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  - <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">  - build
+</span></span><span class="line"><span class="cl">  - release
+</span></span><span class="line"><span class="cl">  - review
+</span></span><span class="line"><span class="cl">  - deploy
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">test</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  stage: <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - make <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">test2</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  stage: <span class="nb">test</span>
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - sleep <span class="m">3</span>
+</span></span><span class="line"><span class="cl">    - <span class="nb">echo</span> <span class="s2">&#34;We did it! Something else runs in parallel!&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">compile</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  stage: build
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    <span class="c1"># 添加所有的依赖，或者使用 glide/govendor/...</span>
+</span></span><span class="line"><span class="cl">    - make build
+</span></span><span class="line"><span class="cl">  artifacts:
+</span></span><span class="line"><span class="cl">    paths:
+</span></span><span class="line"><span class="cl">      - app
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">image_build</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  stage: release
+</span></span><span class="line"><span class="cl">  image: docker:latest
+</span></span><span class="line"><span class="cl">  variables:
+</span></span><span class="line"><span class="cl">    DOCKER_DRIVER: overlay
+</span></span><span class="line"><span class="cl">    DOCKER_HOST: tcp://localhost:2375
+</span></span><span class="line"><span class="cl">  services:
+</span></span><span class="line"><span class="cl">    - name: docker:17.03-dind
+</span></span><span class="line"><span class="cl">      command: <span class="o">[</span><span class="s2">&#34;--insecure-registry=registry.qikqiak.com&#34;</span><span class="o">]</span>
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - docker info
+</span></span><span class="line"><span class="cl">    - docker login -u <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_USER</span><span class="si">}</span><span class="s2">&#34;</span> -p <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_PASSWORD</span><span class="si">}</span><span class="s2">&#34;</span> registry.qikqiak.com
+</span></span><span class="line"><span class="cl">    - docker build -t <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_IMAGE</span><span class="si">}</span><span class="s2">:latest&#34;</span> .
+</span></span><span class="line"><span class="cl">    - docker tag <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_IMAGE</span><span class="si">}</span><span class="s2">:latest&#34;</span> <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_IMAGE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">CI_COMMIT_REF_NAME</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    - <span class="nb">test</span> ! -z <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_COMMIT_TAG</span><span class="si">}</span><span class="s2">&#34;</span> <span class="o">&amp;&amp;</span> docker push <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_IMAGE</span><span class="si">}</span><span class="s2">:latest&#34;</span>
+</span></span><span class="line"><span class="cl">    - docker push <span class="s2">&#34;</span><span class="si">${</span><span class="nv">CI_REGISTRY_IMAGE</span><span class="si">}</span><span class="s2">:</span><span class="si">${</span><span class="nv">CI_COMMIT_REF_NAME</span><span class="si">}</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">deploy_review</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  image: cnych/kubectl  <span class="c1">#用于镜像，具体含义为</span>
+</span></span><span class="line"><span class="cl">  stage: review
+</span></span><span class="line"><span class="cl">  only:
+</span></span><span class="line"><span class="cl">    - branches
+</span></span><span class="line"><span class="cl">  except:
+</span></span><span class="line"><span class="cl">    - tags
+</span></span><span class="line"><span class="cl">  <span class="c1"># 环境，用于指定具体部署的环境，我们的希望部署到哪个环境，就往哪个name发出数据</span>
+</span></span><span class="line"><span class="cl">  environment:
+</span></span><span class="line"><span class="cl">    <span class="c1"># 环境名字，想往哪个环境进行部署就需要对这个name进行修改</span>
+</span></span><span class="line"><span class="cl">    name: dev
+</span></span><span class="line"><span class="cl">    <span class="c1"># a URL, which determines the deployment URL。但是说实话我没明白这个url是干啥的？</span>
+</span></span><span class="line"><span class="cl">    url: https://dev-gitlab-k8s-demo.qikqiak.com
+</span></span><span class="line"><span class="cl">    on_stop: stop_review
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - kubectl version
+</span></span><span class="line"><span class="cl">    - <span class="nb">cd</span> manifests/
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s/__CI_ENVIRONMENT_SLUG__/</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span><span class="s2">/&#34;</span> deployment.yaml ingress.yaml service.yaml
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s/__VERSION__/</span><span class="si">${</span><span class="nv">CI_COMMIT_REF_NAME</span><span class="si">}</span><span class="s2">/&#34;</span> deployment.yaml ingress.yaml service.yaml
+</span></span><span class="line"><span class="cl">    - <span class="p">|</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> kubectl apply -f deployment.yaml <span class="p">|</span> grep -q unchanged<span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">          <span class="nb">echo</span> <span class="s2">&#34;=&gt; Patching deployment to force image update.&#34;</span>
+</span></span><span class="line"><span class="cl">          kubectl patch -f deployment.yaml -p <span class="s2">&#34;{\&#34;spec\&#34;:{\&#34;template\&#34;:{\&#34;metadata\&#34;:{\&#34;annotations\&#34;:{\&#34;ci-last-updated\&#34;:\&#34;</span><span class="k">$(</span>date +<span class="s1">&#39;%s&#39;</span><span class="k">)</span><span class="s2">\&#34;}}}}}&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">else</span>
+</span></span><span class="line"><span class="cl">          <span class="nb">echo</span> <span class="s2">&#34;=&gt; Deployment apply has changed the object, no need to force image update.&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="k">fi</span>
+</span></span><span class="line"><span class="cl">    - kubectl apply -f service.yaml <span class="o">||</span> <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">    - kubectl apply -f ingress.yaml
+</span></span><span class="line"><span class="cl">    - kubectl rollout status -f deployment.yaml
+</span></span><span class="line"><span class="cl">    - kubectl get all,ing -l <span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">stop_review</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  image: cnych/kubectl
+</span></span><span class="line"><span class="cl">  stage: review
+</span></span><span class="line"><span class="cl">  variables:
+</span></span><span class="line"><span class="cl">    GIT_STRATEGY: none
+</span></span><span class="line"><span class="cl">  when: manual
+</span></span><span class="line"><span class="cl">  only:
+</span></span><span class="line"><span class="cl">    - branches
+</span></span><span class="line"><span class="cl">  except:
+</span></span><span class="line"><span class="cl">    - master
+</span></span><span class="line"><span class="cl">    - tags
+</span></span><span class="line"><span class="cl">  environment:
+</span></span><span class="line"><span class="cl">    name: dev
+</span></span><span class="line"><span class="cl">    action: stop
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - kubectl version
+</span></span><span class="line"><span class="cl">    - kubectl delete ing -l <span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">    - kubectl delete all -l <span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">deploy_live</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">  image: cnych/kubectl
+</span></span><span class="line"><span class="cl">  stage: deploy
+</span></span><span class="line"><span class="cl">  environment:
+</span></span><span class="line"><span class="cl">    name: live
+</span></span><span class="line"><span class="cl">    url: https://live-gitlab-k8s-demo.qikqiak.com
+</span></span><span class="line"><span class="cl">  only:
+</span></span><span class="line"><span class="cl">    - tags
+</span></span><span class="line"><span class="cl">  when: manual
+</span></span><span class="line"><span class="cl">  script:
+</span></span><span class="line"><span class="cl">    - kubectl version
+</span></span><span class="line"><span class="cl">    - <span class="nb">cd</span> manifests/
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s/__CI_ENVIRONMENT_SLUG__/</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span><span class="s2">/&#34;</span> deployment.yaml ingress.yaml service.yaml
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s/__VERSION__/</span><span class="si">${</span><span class="nv">CI_COMMIT_REF_NAME</span><span class="si">}</span><span class="s2">/&#34;</span> deployment.yaml ingress.yaml service.yaml
+</span></span><span class="line"><span class="cl">    - kubectl apply -f deployment.yaml
+</span></span><span class="line"><span class="cl">    - kubectl apply -f service.yaml
+</span></span><span class="line"><span class="cl">    - kubectl apply -f ingress.yaml
+</span></span><span class="line"><span class="cl">    - kubectl rollout status -f deployment.yaml
+</span></span><span class="line"><span class="cl">    - kubectl get all,ing -l <span class="nv">ref</span><span class="o">=</span><span class="si">${</span><span class="nv">CI_ENVIRONMENT_SLUG</span><span class="si">}</span>
+</span></span></code></pre></div><p>我们的pipeline触发的条件很大，</p>
+<pre tabindex="0"><code>  only:
     refs:
       - merge_requests   //只有merge request试用
     variables:
@@ -184,51 +1152,357 @@
     - !reference [.mr_rule_templates, skip_rule]
     - !reference [.mr_rule_templates, bazel_rule]
     - !reference [.mr_rule_templates, default_rule]
-</code></pre><h2 class="relative group">4 学习kubernetes<div id=4-%E5%AD%A6%E4%B9%A0kubernetes class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-%E5%AD%A6%E4%B9%A0kubernetes aria-label=锚点>#</a></span></h2><p>参考的书籍是《每天5分钟玩转kubernetes》，使用minikube学习，命令为https://minikube.sigs.k8s.io/docs/start/</p><p>基础概念：</p><ul><li>cluster：集群</li><li>master：调度的关键，决定调度给哪个node</li><li>node：执行任务的单位，负责监控并汇报容器状态</li><li>pod：最小工作单元，每个pod包含一个或多个容器。POD的容器会作为一个整体被master调度到一个node上运行。</li><li>Controller：</li><li>Service：</li><li>Namespace：</li></ul><h3 class="relative group">4.1 k8s架构<div id=41-k8s%E6%9E%B6%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#41-k8s%E6%9E%B6%E6%9E%84 aria-label=锚点>#</a></span></h3><p>master节点：</p><ul><li>API Server：提供各种http/https/restful管理方式，前端接口，通过api server进行管理</li><li>scheduler：决定将pod放在哪个nod运行</li><li>controller manager：资源管理</li><li>etcd：保存资源的信息方便检索</li><li>pod网络：方便pod之间通信</li></ul><p>nod节点：</p><ul><li>kubelet：node的agent，scheduler获得在某个node上运行pod后，会将pod的具体配置信息（image，volume）发送给该节点的kubelet，然后该节点创建和运行容器，进行工作</li><li>kube-proxy：部署完了pod，外界实际是访问服务。kube-proxy负责实现请求转发</li><li>pod网络：pod之间通信使用</li></ul><h3 class="relative group">4.2 运行应用<div id=42-%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#42-%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8 aria-label=锚点>#</a></span></h3><h4 class="relative group">4.2.1 deployment<div id=421-deployment class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#421-deployment aria-label=锚点>#</a></span></h4><h5 class="relative group">4.2.1.1 手动部署<div id=4211-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4211-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2 aria-label=锚点>#</a></span></h5><p>手动部署的方式：创建deployment之后会创建replicast再创建pod，简单描述过程就是：从deployment ==> replicast ==> pod。这里要注意k8s会按照replicaset的数量创建副本，如果某个node挂了，上面的pod的状态就变为unknown，然后会在别的node上创建足够数量的pod。等故障node恢复以后，不会恢复这个node上的pod，而是删除这个node上的pod</p><p>具体的命令参看下面：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl><span class=c1>#该命令用于发起一个部署</span>
-</span></span><span class=line><span class=cl>kubectl run nginx-deployment --image<span class=o>=</span>nginx:1.7.9 --replicase<span class=o>=</span><span class=m>2</span>
-</span></span><span class=line><span class=cl><span class=c1>#该命令用于获得部署状态</span>
-</span></span><span class=line><span class=cl>kubectl get deployment nginx-deployment
-</span></span><span class=line><span class=cl><span class=c1>#该命令用于获得部署的详细状况</span>
-</span></span><span class=line><span class=cl>kubectl describe deployment nginx-deployment
-</span></span><span class=line><span class=cl><span class=c1>#获得replicaset &amp; 获得replicaset详细信息</span>
-</span></span><span class=line><span class=cl>kubectl get replicast
-</span></span><span class=line><span class=cl>kubectl describe replicast
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl><span class=c1>#然后再获得pod信息，和描述pod</span>
-</span></span><span class=line><span class=cl>kubectl get pod
-</span></span><span class=line><span class=cl>kubectl describe pod
-</span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>    - scripts/build_sim_server_v2.sh
-</span></span><span class=line><span class=cl>    <span class=c1># replace image name</span>
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s#qcraft-docker.qcraft.ai/qcraft/offboard/dashboard/sim_server:live#qcraft-docker.qcraft.ai/qcraft/offboard/dashboard/sim_server:</span><span class=si>${</span><span class=nv>CI_COMMIT_SHA</span><span class=si>}</span><span class=s2>#g&#34;</span> <span class=s2>&#34;production/k8s/offboard/dashboard/sim_server/base/deployment.yaml&#34;</span>
-</span></span><span class=line><span class=cl>    <span class=c1># replace namespace name</span>
-</span></span><span class=line><span class=cl>    - sed -i <span class=s2>&#34;s#production:</span><span class=si>${</span><span class=nv>KUBE_NAMESPACE</span><span class=si>}</span><span class=s2>#g&#34;</span>
-</span></span><span class=line><span class=cl>    - kubectl apply -k production/k8s/offboard/dashboard/sim_server/cn_edge
-</span></span><span class=line><span class=cl>  dependencies: <span class=o>[]</span>
-</span></span></code></pre></div><h5 class="relative group">4.2.1.2 文件部署<div id=4212-%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4212-%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2 aria-label=锚点>#</a></span></h5><p>再来看通过文件方式部署，看下部署到哪里</p><h5 class="relative group">4.2.1.3 label控制部署到哪里<div id=4213-label%E6%8E%A7%E5%88%B6%E9%83%A8%E7%BD%B2%E5%88%B0%E5%93%AA%E9%87%8C class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4213-label%E6%8E%A7%E5%88%B6%E9%83%A8%E7%BD%B2%E5%88%B0%E5%93%AA%E9%87%8C aria-label=锚点>#</a></span></h5><p>如果向控制具体部署到哪里，可以通过给node添加标签，然后再修改部署文件里面的nodeSelector添加disktype:ssd即可实现部署到特定机器上：</p><pre tabindex=0><code>#添加一个标签，
+</code></pre>
+
+<h2 class="relative group">4 学习kubernetes 
+    <div id="4-%E5%AD%A6%E4%B9%A0kubernetes" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4-%E5%AD%A6%E4%B9%A0kubernetes" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>参考的书籍是《每天5分钟玩转kubernetes》，使用minikube学习，命令为https://minikube.sigs.k8s.io/docs/start/</p>
+<p>基础概念：</p>
+<ul>
+<li>cluster：集群</li>
+<li>master：调度的关键，决定调度给哪个node</li>
+<li>node：执行任务的单位，负责监控并汇报容器状态</li>
+<li>pod：最小工作单元，每个pod包含一个或多个容器。POD的容器会作为一个整体被master调度到一个node上运行。</li>
+<li>Controller：</li>
+<li>Service：</li>
+<li>Namespace：</li>
+</ul>
+
+
+<h3 class="relative group">4.1 k8s架构 
+    <div id="41-k8s%E6%9E%B6%E6%9E%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#41-k8s%E6%9E%B6%E6%9E%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>master节点：</p>
+<ul>
+<li>API Server：提供各种http/https/restful管理方式，前端接口，通过api server进行管理</li>
+<li>scheduler：决定将pod放在哪个nod运行</li>
+<li>controller manager：资源管理</li>
+<li>etcd：保存资源的信息方便检索</li>
+<li>pod网络：方便pod之间通信</li>
+</ul>
+<p>nod节点：</p>
+<ul>
+<li>kubelet：node的agent，scheduler获得在某个node上运行pod后，会将pod的具体配置信息（image，volume）发送给该节点的kubelet，然后该节点创建和运行容器，进行工作</li>
+<li>kube-proxy：部署完了pod，外界实际是访问服务。kube-proxy负责实现请求转发</li>
+<li>pod网络：pod之间通信使用</li>
+</ul>
+
+
+<h3 class="relative group">4.2 运行应用 
+    <div id="42-%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#42-%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h4 class="relative group">4.2.1 deployment 
+    <div id="421-deployment" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#421-deployment" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+
+
+<h5 class="relative group">4.2.1.1 手动部署 
+    <div id="4211-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4211-%E6%89%8B%E5%8A%A8%E9%83%A8%E7%BD%B2" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>手动部署的方式：创建deployment之后会创建replicast再创建pod，简单描述过程就是：从deployment ==&gt; replicast ==&gt; pod。这里要注意k8s会按照replicaset的数量创建副本，如果某个node挂了，上面的pod的状态就变为unknown，然后会在别的node上创建足够数量的pod。等故障node恢复以后，不会恢复这个node上的pod，而是删除这个node上的pod</p>
+<p>具体的命令参看下面：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1">#该命令用于发起一个部署</span>
+</span></span><span class="line"><span class="cl">kubectl run nginx-deployment --image<span class="o">=</span>nginx:1.7.9 --replicase<span class="o">=</span><span class="m">2</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#该命令用于获得部署状态</span>
+</span></span><span class="line"><span class="cl">kubectl get deployment nginx-deployment
+</span></span><span class="line"><span class="cl"><span class="c1">#该命令用于获得部署的详细状况</span>
+</span></span><span class="line"><span class="cl">kubectl describe deployment nginx-deployment
+</span></span><span class="line"><span class="cl"><span class="c1">#获得replicaset &amp; 获得replicaset详细信息</span>
+</span></span><span class="line"><span class="cl">kubectl get replicast
+</span></span><span class="line"><span class="cl">kubectl describe replicast
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#然后再获得pod信息，和描述pod</span>
+</span></span><span class="line"><span class="cl">kubectl get pod
+</span></span><span class="line"><span class="cl">kubectl describe pod
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    - scripts/build_sim_server_v2.sh
+</span></span><span class="line"><span class="cl">    <span class="c1"># replace image name</span>
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s#qcraft-docker.qcraft.ai/qcraft/offboard/dashboard/sim_server:live#qcraft-docker.qcraft.ai/qcraft/offboard/dashboard/sim_server:</span><span class="si">${</span><span class="nv">CI_COMMIT_SHA</span><span class="si">}</span><span class="s2">#g&#34;</span> <span class="s2">&#34;production/k8s/offboard/dashboard/sim_server/base/deployment.yaml&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># replace namespace name</span>
+</span></span><span class="line"><span class="cl">    - sed -i <span class="s2">&#34;s#production:</span><span class="si">${</span><span class="nv">KUBE_NAMESPACE</span><span class="si">}</span><span class="s2">#g&#34;</span>
+</span></span><span class="line"><span class="cl">    - kubectl apply -k production/k8s/offboard/dashboard/sim_server/cn_edge
+</span></span><span class="line"><span class="cl">  dependencies: <span class="o">[]</span>
+</span></span></code></pre></div>
+
+<h5 class="relative group">4.2.1.2 文件部署 
+    <div id="4212-%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4212-%E6%96%87%E4%BB%B6%E9%83%A8%E7%BD%B2" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>再来看通过文件方式部署，看下部署到哪里</p>
+
+
+<h5 class="relative group">4.2.1.3 label控制部署到哪里 
+    <div id="4213-label%E6%8E%A7%E5%88%B6%E9%83%A8%E7%BD%B2%E5%88%B0%E5%93%AA%E9%87%8C" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4213-label%E6%8E%A7%E5%88%B6%E9%83%A8%E7%BD%B2%E5%88%B0%E5%93%AA%E9%87%8C" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+<p>如果向控制具体部署到哪里，可以通过给node添加标签，然后再修改部署文件里面的nodeSelector添加disktype:ssd即可实现部署到特定机器上：</p>
+<pre tabindex="0"><code>#添加一个标签，
 kubectl label node k8s-node1 disktype=ssd
-</code></pre><h4 class="relative group">4.2.2 daemon set<div id=422-daemon-set class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#422-daemon-set aria-label=锚点>#</a></span></h4><p>和deployment不同，daemon set在每个node上只能有一个副本</p><h5 class="relative group"><div id=heading class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#heading aria-label=锚点>#</a></span></h5><h4 class="relative group">4.2.3 Job<div id=423-job class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#423-job aria-label=锚点>#</a></span></h4><p>容器分为两种，一种是服务类容器，另一种是工作类容器，其中服务类容器需要一直运行，而工作类容器只需要运行一次</p><h3 class="relative group">4.3 service<div id=43-service class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#43-service aria-label=锚点>#</a></span></h3><h4 class="relative group"><div id=heading-1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#heading-1 aria-label=锚点>#</a></span></h4><h2 class="relative group">5 Docker相关内容的简单学习<div id=5-docker%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E7%9A%84%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-docker%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E7%9A%84%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0 aria-label=锚点>#</a></span></h2><p>Docker是什么？</p><h2 class="relative group">6 SHELL遇到的一些小问题和教程<div id=6-shell%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98%E5%92%8C%E6%95%99%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-shell%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98%E5%92%8C%E6%95%99%E7%A8%8B aria-label=锚点>#</a></span></h2><h3 class="relative group">6.1 SED替换问题<div id=61-sed%E6%9B%BF%E6%8D%A2%E9%97%AE%E9%A2%98 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#61-sed%E6%9B%BF%E6%8D%A2%E9%97%AE%E9%A2%98 aria-label=锚点>#</a></span></h3><p>今天在做一个很简单的事情，利用commit hash作为tag，获取commit hash很简单<code>git rev-parse HEAD</code>，然后使用sed命令替换镜像名称，然后遇到一个问题就是sed替换的原始名称当中包含"/"，这个会导致sed报错</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sed: -e expression <span class=c1>#1, char 34: unknown option to `s&#39;</span>
-</span></span></code></pre></div><p>如何解决呢？有一个很简单的解决方法，因为sed的分隔符并不是固定的，它是sed -s后面的第一个字符当成分隔符，也就是说如果把命令改成</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>sed -i <span class=s2>&#34;s#</span><span class=nv>$FROM</span><span class=s2>:live#</span><span class=nv>$TO</span><span class=s2>:</span><span class=si>${</span><span class=nv>TAG</span><span class=si>}</span><span class=s2>#g&#34;</span> <span class=s2>&#34;</span><span class=nv>$FILE_NAME</span><span class=s2>&#34;</span>
-</span></span></code></pre></div><p>就会以#为分隔符，而不需要自己进行地址里面"/&ldquo;的转义了。</p><h3 class="relative group">6.2 SHELL脚本当中变量的部分含义<div id=62-shell%E8%84%9A%E6%9C%AC%E5%BD%93%E4%B8%AD%E5%8F%98%E9%87%8F%E7%9A%84%E9%83%A8%E5%88%86%E5%90%AB%E4%B9%89 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#62-shell%E8%84%9A%E6%9C%AC%E5%BD%93%E4%B8%AD%E5%8F%98%E9%87%8F%E7%9A%84%E9%83%A8%E5%88%86%E5%90%AB%E4%B9%89 aria-label=锚点>#</a></span></h3><h2 class="relative group">缺省值（:-）<div id=%E7%BC%BA%E7%9C%81%E5%80%BC- class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BC%BA%E7%9C%81%E5%80%BC- aria-label=锚点>#</a></span></h2><p>${var:-string} 若变量var为空或者未定义,则用在命令行中用string来替换${var:-string} 否则变量var不为空时,则用变量var的值来替换${var:-string}</p><blockquote><pre tabindex=0><code>$ COMPANY=
+</code></pre>
+
+<h4 class="relative group">4.2.2 daemon set 
+    <div id="422-daemon-set" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#422-daemon-set" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>和deployment不同，daemon set在每个node上只能有一个副本</p>
+
+
+<h5 class="relative group"> 
+    <div id="" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#" aria-label="锚点">#</a>
+    </span>        
+    
+</h5>
+
+
+<h4 class="relative group">4.2.3 Job 
+    <div id="423-job" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#423-job" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+<p>容器分为两种，一种是服务类容器，另一种是工作类容器，其中服务类容器需要一直运行，而工作类容器只需要运行一次</p>
+
+
+<h3 class="relative group">4.3 service 
+    <div id="43-service" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#43-service" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h4 class="relative group"> 
+    <div id="" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#" aria-label="锚点">#</a>
+    </span>        
+    
+</h4>
+
+
+<h2 class="relative group">5 Docker相关内容的简单学习 
+    <div id="5-docker%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E7%9A%84%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5-docker%E7%9B%B8%E5%85%B3%E5%86%85%E5%AE%B9%E7%9A%84%E7%AE%80%E5%8D%95%E5%AD%A6%E4%B9%A0" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>Docker是什么？</p>
+
+
+<h2 class="relative group">6 SHELL遇到的一些小问题和教程 
+    <div id="6-shell%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98%E5%92%8C%E6%95%99%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#6-shell%E9%81%87%E5%88%B0%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B0%8F%E9%97%AE%E9%A2%98%E5%92%8C%E6%95%99%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">6.1 SED替换问题 
+    <div id="61-sed%E6%9B%BF%E6%8D%A2%E9%97%AE%E9%A2%98" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#61-sed%E6%9B%BF%E6%8D%A2%E9%97%AE%E9%A2%98" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>今天在做一个很简单的事情，利用commit hash作为tag，获取commit hash很简单<code>git rev-parse HEAD</code>，然后使用sed命令替换镜像名称，然后遇到一个问题就是sed替换的原始名称当中包含&quot;/&quot;，这个会导致sed报错</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed: -e expression <span class="c1">#1, char 34: unknown option to `s&#39;</span>
+</span></span></code></pre></div><p>如何解决呢？有一个很简单的解决方法，因为sed的分隔符并不是固定的，它是sed -s后面的第一个字符当成分隔符，也就是说如果把命令改成</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s2">&#34;s#</span><span class="nv">$FROM</span><span class="s2">:live#</span><span class="nv">$TO</span><span class="s2">:</span><span class="si">${</span><span class="nv">TAG</span><span class="si">}</span><span class="s2">#g&#34;</span> <span class="s2">&#34;</span><span class="nv">$FILE_NAME</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>就会以#为分隔符，而不需要自己进行地址里面&quot;/&ldquo;的转义了。</p>
+
+
+<h3 class="relative group">6.2 SHELL脚本当中变量的部分含义 
+    <div id="62-shell%E8%84%9A%E6%9C%AC%E5%BD%93%E4%B8%AD%E5%8F%98%E9%87%8F%E7%9A%84%E9%83%A8%E5%88%86%E5%90%AB%E4%B9%89" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#62-shell%E8%84%9A%E6%9C%AC%E5%BD%93%E4%B8%AD%E5%8F%98%E9%87%8F%E7%9A%84%E9%83%A8%E5%88%86%E5%90%AB%E4%B9%89" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h2 class="relative group">缺省值（:-） 
+    <div id="%E7%BC%BA%E7%9C%81%E5%80%BC-" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BC%BA%E7%9C%81%E5%80%BC-" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>${var:-string} 若变量var为空或者未定义,则用在命令行中用string来替换${var:-string} 否则变量var不为空时,则用变量var的值来替换${var:-string}</p>
+<blockquote>
+<pre tabindex="0"><code>$ COMPANY=
 $ printf &#34;%s\n&#34; &#34;${COMPANY:-Unknown Company}&#34;
 Unknown Company
 $ echo $COMPANY
-</code></pre><blockquote><p>变量的实际值保持不变。</p></blockquote></blockquote><h2 class="relative group">指定缺省值（:=）<div id=%E6%8C%87%E5%AE%9A%E7%BC%BA%E7%9C%81%E5%80%BC class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E6%8C%87%E5%AE%9A%E7%BC%BA%E7%9C%81%E5%80%BC aria-label=锚点>#</a></span></h2><blockquote><p>如果变量后面跟着冒号和等号，则给空变量指定一个缺省值。</p><pre tabindex=0><code>$ printf &#34;%s\n&#34; &#34;${COMPANY:=Nightlight Inc.}&#34;
+</code></pre><blockquote>
+<p>变量的实际值保持不变。</p></blockquote></blockquote>
+
+
+<h2 class="relative group">指定缺省值（:=） 
+    <div id="%E6%8C%87%E5%AE%9A%E7%BC%BA%E7%9C%81%E5%80%BC" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E6%8C%87%E5%AE%9A%E7%BC%BA%E7%9C%81%E5%80%BC" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<blockquote>
+<p>如果变量后面跟着冒号和等号，则给空变量指定一个缺省值。</p>
+<pre tabindex="0"><code>$ printf &#34;%s\n&#34; &#34;${COMPANY:=Nightlight Inc.}&#34;
 Nightlight Inc.
 $ printf &#34;%s\n&#34; &#34;${COMPANY}”
 Nightlight Inc.
-</code></pre><blockquote><p>变量的实际值已经改变了。 比较${var:-string}和${var:=string} 后者发现$var为空时,把string赋值给了var
-后者是一种赋值默认值的常见做法</p></blockquote></blockquote><h2 class="relative group">变量是否存在检查（:?）<div id=%E5%8F%98%E9%87%8F%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%A3%80%E6%9F%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%8F%98%E9%87%8F%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%A3%80%E6%9F%A5 aria-label=锚点>#</a></span></h2><blockquote><p>替换规则:若变量var不为空,则用变量var的值来替换${var:?string}
+</code></pre><blockquote>
+<p>变量的实际值已经改变了。 比较${var:-string}和${var:=string} 后者发现$var为空时,把string赋值给了var
+后者是一种赋值默认值的常见做法</p></blockquote></blockquote>
+
+
+<h2 class="relative group">变量是否存在检查（:?） 
+    <div id="%E5%8F%98%E9%87%8F%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%A3%80%E6%9F%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%8F%98%E9%87%8F%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8%E6%A3%80%E6%9F%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<blockquote>
+<p>替换规则:若变量var不为空,则用变量var的值来替换${var:?string}
 若变量var为空,则把string输出到标准错误中,并从脚本中退出。
-可利用此特性来检查是否设置了变量的值</p><blockquote><p>根据变量是否存在，显示不同的信息。信息不是必选的。</p><pre tabindex=0><code>printf &#34;Company is %s\n&#34; &#34;${COMPANY:?Error: Company has notbeen defined—aborting}&#34;
-</code></pre></blockquote></blockquote><h2 class="relative group">覆盖缺省值(:+)<div id=%E8%A6%86%E7%9B%96%E7%BC%BA%E7%9C%81%E5%80%BC class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E8%A6%86%E7%9B%96%E7%BC%BA%E7%9C%81%E5%80%BC aria-label=锚点>#</a></span></h2><blockquote><p>${var:+string} 规则和${var:-string},${var:=string}的完全相反 即只有当var不是空的时候才替换成string,若var为空时则不替换或者说是替换成变量var的值,即空值</p><pre tabindex=0><code>$ COMPANY=&#34;Nightlight Inc.&#34;
+可利用此特性来检查是否设置了变量的值</p>
+<blockquote>
+<p>根据变量是否存在，显示不同的信息。信息不是必选的。</p>
+<pre tabindex="0"><code>printf &#34;Company is %s\n&#34; &#34;${COMPANY:?Error: Company has notbeen defined—aborting}&#34;
+</code></pre></blockquote></blockquote>
+
+
+<h2 class="relative group">覆盖缺省值(:+) 
+    <div id="%E8%A6%86%E7%9B%96%E7%BC%BA%E7%9C%81%E5%80%BC" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E8%A6%86%E7%9B%96%E7%BC%BA%E7%9C%81%E5%80%BC" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<blockquote>
+<p>${var:+string} 规则和${var:-string},${var:=string}的完全相反 即只有当var不是空的时候才替换成string,若var为空时则不替换或者说是替换成变量var的值,即空值</p>
+<pre tabindex="0"><code>$ COMPANY=&#34;Nightlight Inc.&#34;
 $ printf &#34;%s\n&#34; &#34;${COMPANY:+Company has been overridden}&#34;
 Company has been overridden
-</code></pre></blockquote><h2 class="relative group">替换部分字符串（:n）<div id=%E6%9B%BF%E6%8D%A2%E9%83%A8%E5%88%86%E5%AD%97%E7%AC%A6%E4%B8%B2n class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E6%9B%BF%E6%8D%A2%E9%83%A8%E5%88%86%E5%AD%97%E7%AC%A6%E4%B8%B2n aria-label=锚点>#</a></span></h2><blockquote><p>如果变量后面跟着一个冒号和数字，则返回该数字开始的一个子字符串，如果后面还跟着一个冒号和数字。则第一个数字表示开始的字符，后面数字表示字符的长度。</p><pre tabindex=0><code>$ printf &#34;%s\n&#34; &#34;${COMPANY:5}&#34;
+</code></pre></blockquote>
+
+
+<h2 class="relative group">替换部分字符串（:n） 
+    <div id="%E6%9B%BF%E6%8D%A2%E9%83%A8%E5%88%86%E5%AD%97%E7%AC%A6%E4%B8%B2n" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E6%9B%BF%E6%8D%A2%E9%83%A8%E5%88%86%E5%AD%97%E7%AC%A6%E4%B8%B2n" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<blockquote>
+<p>如果变量后面跟着一个冒号和数字，则返回该数字开始的一个子字符串，如果后面还跟着一个冒号和数字。则第一个数字表示开始的字符，后面数字表示字符的长度。</p>
+<pre tabindex="0"><code>$ printf &#34;%s\n&#34; &#34;${COMPANY:5}&#34;
 light Inc.
 $ printf &#34;%s\n&#34; &#34;${COMPANY:5:5}&#34;
 light
-</code></pre><p>根据模板删除字串（%，#，%%，##） #删除左边,%删除右边 如果变量后面跟着井号，则返回匹配模板被删除后的字串。一个井号为最小可能性的匹配，两个井号为自大可能性的匹配。表达式返回模板右边的字符。</p><pre tabindex=0><code>$ COMPANY=&#34;Nightlight Inc.&#34;
+</code></pre><p>根据模板删除字串（%，#，%%，##） #删除左边,%删除右边 如果变量后面跟着井号，则返回匹配模板被删除后的字串。一个井号为最小可能性的匹配，两个井号为自大可能性的匹配。表达式返回模板右边的字符。</p>
+<pre tabindex="0"><code>$ COMPANY=&#34;Nightlight Inc.&#34;
 $ printf &#34;%s\n&#34; &#34;${COMPANY#Ni*}&#34;
 ghtlight Inc.
 $ printf &#34;%s\n&#34; &#34;${COMPANY##Ni*}&#34;
@@ -243,7 +1517,8 @@ $ printf &#34;%s\n&#34; &#34;${COMPANY%t*}&#34;
 Nightligh
 $ printf &#34;%s\n&#34; &#34;${COMPANY%%t*}&#34;
 Nigh
-</code></pre><p>案例: 获取文件名和后缀名</p><pre tabindex=0><code>$ f=file.tar.gz
+</code></pre><p>案例: 获取文件名和后缀名</p>
+<pre tabindex="0"><code>$ f=file.tar.gz
 $ echo ${f##*.}
 gz
 $ echo ${f%%.*}
@@ -261,28 +1536,265 @@ ${file%/*}：删掉最后一个  /  及其右边的字符串：/dir1/dir2/dir3
 ${file%%/*}：删掉第一个 /  及其右边的字符串：(空值)
 ${file%.*}：删掉最后一个  .  及其右边的字符串：/dir1/dir2/dir3/my.file
 ${file%%.*}：删掉第一个  .   及其右边的字符串：/dir1/dir2/dir3/my
-</code></pre><blockquote><p>记忆的方法为： #是 去掉左边（键盘上#在 $ 的左边） %是去掉右边（键盘上% 在$ 的右边） 单一符号是最小匹配；两个符号是最大匹配</p></blockquote></blockquote><h2 class="relative group">使用模板进行子字符串的替换（//）<div id=%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF%E8%BF%9B%E8%A1%8C%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%9B%BF%E6%8D%A2 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF%E8%BF%9B%E8%A1%8C%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%9B%BF%E6%8D%A2 aria-label=锚点>#</a></span></h2><blockquote><p>如果变量后只有一个斜杠，则两个斜杠中间的字符串是要被替换的字符串，而第二个斜杠后面的字符串是要替换的字符串。如果变量后面跟着两个斜杠，则所有出现在两个斜杠中间的字符都要被替换为最后一个斜杠后面的字符。</p><pre tabindex=0><code>$ printf &#34;%s\n&#34; &#34;${COMPANY/Inc./Incorporated}&#34;
+</code></pre><blockquote>
+<p>记忆的方法为： #是 去掉左边（键盘上#在 $ 的左边） %是去掉右边（键盘上% 在$ 的右边） 单一符号是最小匹配；两个符号是最大匹配</p></blockquote></blockquote>
+
+
+<h2 class="relative group">使用模板进行子字符串的替换（//） 
+    <div id="%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF%E8%BF%9B%E8%A1%8C%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%9B%BF%E6%8D%A2" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%9D%BF%E8%BF%9B%E8%A1%8C%E5%AD%90%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%9B%BF%E6%8D%A2" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<blockquote>
+<p>如果变量后只有一个斜杠，则两个斜杠中间的字符串是要被替换的字符串，而第二个斜杠后面的字符串是要替换的字符串。如果变量后面跟着两个斜杠，则所有出现在两个斜杠中间的字符都要被替换为最后一个斜杠后面的字符。</p>
+<pre tabindex="0"><code>$ printf &#34;%s\n&#34; &#34;${COMPANY/Inc./Incorporated}&#34;
 Nightlight Incorporated
 $ printf &#34;You are the I in %s\n&#34; &#34;${COMPANY//i/I}&#34;
 You are the I in NIghtlIght Inc.
-</code></pre><p>如果模板以#号开始，则匹配以模板开始的字符，如果模板以%号结尾(在centos7上测试不生效)，则匹配以模板结尾的字符。</p><pre tabindex=0><code>$ COMPANY=&#34;NightLight Night Lighting Inc.&#34;
+</code></pre><p>如果模板以#号开始，则匹配以模板开始的字符，如果模板以%号结尾(在centos7上测试不生效)，则匹配以模板结尾的字符。</p>
+<pre tabindex="0"><code>$ COMPANY=&#34;NightLight Night Lighting Inc.&#34;
 $ printf &#34;%s\n&#34; &#34;$COMPANY&#34;
 NightLight Night Lighting Inc.
 $ printf &#34;%s&#34; &#34;${COMPANY//Night/NIGHT}&#34;
 NIGHTLight NIGHT Lighting Inc.
 $ printf &#34;%s&#34; &#34;${COMPANY//#Night/NIGHT}&#34;
 NIGHTLight Night Lighting Inc.
-</code></pre></blockquote><p><strong>如果没有指定新的值，则匹配的字符会被删除。</strong></p><blockquote><pre tabindex=0><code>$ COMPANY=&#34;Nightlight Inc.&#34;
+</code></pre></blockquote>
+<p><strong>如果没有指定新的值，则匹配的字符会被删除。</strong></p>
+<blockquote>
+<pre tabindex="0"><code>$ COMPANY=&#34;Nightlight Inc.&#34;
 $ printf &#34;%s\n&#34; &#34;${COMPANY/light}&#34;
 Night Inc.
-</code></pre><p>也可以使用范围符号。例如：删除所有字符串中的标点符号，使用范围[:punct:]。</p><pre tabindex=0><code>$ printf &#34;%s&#34; &#34;${COMPANY//[[:punct:]]}&#34;
+</code></pre><p>也可以使用范围符号。例如：删除所有字符串中的标点符号，使用范围[:punct:]。</p>
+<pre tabindex="0"><code>$ printf &#34;%s&#34; &#34;${COMPANY//[[:punct:]]}&#34;
 Nightlight Inc
-</code></pre><p>使用<em>号或@符号替换变量会替换shell脚本中所有的参数，同样，在数组中使用</em>号或@符号也会替换数组中的所有元素</p></blockquote><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-10-11-ci_cd相关学习\\index.md",oid_likes="likes_posts\\2021-10-11-ci_cd相关学习\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-10-28-gitlabjob%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">gitlab常见问题总结</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-10-11T00:00:00+00:00>2021 年 10 月 11 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-11-09-%E4%B8%80%E4%BA%9B%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9%E7%9A%84%E6%91%98%E6%8A%84/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">一些网页内容的摘抄</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-11-09T00:00:00+00:00>2021 年 11 月 9 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+</code></pre><p>使用<em>号或@符号替换变量会替换shell脚本中所有的参数，同样，在数组中使用</em>号或@符号也会替换数组中的所有元素</p></blockquote>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2021-10-11-ci_cd相关学习\/index.md"
+        var oid_likes = "likes_posts\/2021-10-11-ci_cd相关学习\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2021-10-28-gitlabjob%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >gitlab常见问题总结</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-10-11T00:00:00&#43;00:00">2021 年 10 月 11 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2021-11-09-%E4%B8%80%E4%BA%9B%E7%BD%91%E9%A1%B5%E5%86%85%E5%AE%B9%E7%9A%84%E6%91%98%E6%8A%84/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >一些网页内容的摘抄</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-11-09T00:00:00&#43;00:00">2021 年 11 月 9 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

@@ -1,15 +1,2511 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2023-06-11-程序员修养 &#183; 菜狗的blog</title>
-<meta name=title content="2023-06-11-程序员修养 &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="架构,"><link rel=canonical href=https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2023-06-11-程序员修养"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2023-06-11T00:00:00+00:00"><meta property="article:modified_time" content="2023-06-11T00:00:00+00:00"><meta property="article:tag" content="架构"><meta property="og:image" content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured.png"><meta name=twitter:title content="2023-06-11-程序员修养"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2023-06-11-程序员修养","headline":"2023-06-11-程序员修养","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2023","dateCreated":"2023-06-11T00:00:00\u002b00:00","datePublished":"2023-06-11T00:00:00\u002b00:00","dateModified":"2023-06-11T00:00:00\u002b00:00","keywords":["架构"],"mainEntityOfPage":"true","wordCount":"15770"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><div id=hero class="h-[150px] md:h-[200px]"></div><div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom" style=background-image:url(/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured_hu8733635360979002344.png)><div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div><div class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div></div><div id=background-blur class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div><script>window.addEventListener("scroll",function(){var t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n=document.getElementById("background-blur");n.style.opacity=t/300})</script><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2023-06-11-程序员修养</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2023-06-11T00:00:00+00:00>2023 年 6 月 11 日</time><span class="px-2 text-primary-500">&#183;</span><span>15770 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>32 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#开发个人检查清单>开发个人检查清单</a><ul><li><a href=#1-需求>1 需求</a></li><li><a href=#2-架构>2 架构</a></li><li><a href=#3-前期准备>3 前期准备</a></li><li><a href=#4-重要的构建实践>4 重要的构建实践</a></li><li><a href=#5-软件构建中的设计>5 软件构建中的设计</a></li><li><a href=#6-类的质量>6 类的质量</a></li><li><a href=#7-高质量的子程序>7 高质量的子程序</a></li><li><a href=#8-防御式编程>8 防御式编程</a></li><li><a href=#9-伪代码编程过程>9 伪代码编程过程</a></li><li><a href=#10-数据使用中的常规注意事项>10 数据使用中的常规注意事项</a></li><li><a href=#11-变量命名>11 变量命名</a></li><li><a href=#12-基本数据类型>12 基本数据类型</a></li><li><a href=#13-不常见数据类型的注意事项>13 不常见数据类型的注意事项</a></li><li><a href=#14-组织直线型代码>14 组织直线型代码</a></li><li><a href=#15-使用条件语句>15 使用条件语句</a></li><li><a href=#16-循环>16 循环</a></li><li><a href=#17-不常见控制结构>17 不常见控制结构</a></li><li><a href=#18-表驱动法>18 表驱动法</a></li><li><a href=#19-控制结构>19 控制结构</a></li><li><a href=#20-质量保证计划>20 质量保证计划</a></li><li><a href=#21-有效的结对编程>21 有效的结对编程</a></li><li><a href=#22-有效的审查>22 有效的审查</a></li><li><a href=#23-测试用例>23 测试用例</a></li><li><a href=#24-调试要点>24 调试要点</a></li><li><a href=#25-重构的理由>25 重构的理由</a></li><li><a href=#26-重构总结>26 重构总结</a></li><li><a href=#27-安全重构>27 安全重构</a></li><li><a href=#28-代码调优策略>28 代码调优策略</a></li><li><a href=#29-代码调优技术>29 代码调优技术</a></li><li><a href=#30-配置管理>30 配置管理</a></li><li><a href=#31-集成>31 集成</a></li><li><a href=#32-编程工具>32 编程工具</a></li><li><a href=#33-布局>33 布局</a></li><li><a href=#34-自文档代码>34 自文档代码</a></li><li><a href=#35-好的注释>35 好的注释</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#开发个人检查清单>开发个人检查清单</a><ul><li><a href=#1-需求>1 需求</a></li><li><a href=#2-架构>2 架构</a></li><li><a href=#3-前期准备>3 前期准备</a></li><li><a href=#4-重要的构建实践>4 重要的构建实践</a></li><li><a href=#5-软件构建中的设计>5 软件构建中的设计</a></li><li><a href=#6-类的质量>6 类的质量</a></li><li><a href=#7-高质量的子程序>7 高质量的子程序</a></li><li><a href=#8-防御式编程>8 防御式编程</a></li><li><a href=#9-伪代码编程过程>9 伪代码编程过程</a></li><li><a href=#10-数据使用中的常规注意事项>10 数据使用中的常规注意事项</a></li><li><a href=#11-变量命名>11 变量命名</a></li><li><a href=#12-基本数据类型>12 基本数据类型</a></li><li><a href=#13-不常见数据类型的注意事项>13 不常见数据类型的注意事项</a></li><li><a href=#14-组织直线型代码>14 组织直线型代码</a></li><li><a href=#15-使用条件语句>15 使用条件语句</a></li><li><a href=#16-循环>16 循环</a></li><li><a href=#17-不常见控制结构>17 不常见控制结构</a></li><li><a href=#18-表驱动法>18 表驱动法</a></li><li><a href=#19-控制结构>19 控制结构</a></li><li><a href=#20-质量保证计划>20 质量保证计划</a></li><li><a href=#21-有效的结对编程>21 有效的结对编程</a></li><li><a href=#22-有效的审查>22 有效的审查</a></li><li><a href=#23-测试用例>23 测试用例</a></li><li><a href=#24-调试要点>24 调试要点</a></li><li><a href=#25-重构的理由>25 重构的理由</a></li><li><a href=#26-重构总结>26 重构总结</a></li><li><a href=#27-安全重构>27 安全重构</a></li><li><a href=#28-代码调优策略>28 代码调优策略</a></li><li><a href=#29-代码调优技术>29 代码调优技术</a></li><li><a href=#30-配置管理>30 配置管理</a></li><li><a href=#31-集成>31 集成</a></li><li><a href=#32-编程工具>32 编程工具</a></li><li><a href=#33-布局>33 布局</a></li><li><a href=#34-自文档代码>34 自文档代码</a></li><li><a href=#35-好的注释>35 好的注释</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h2 class="relative group">开发个人检查清单<div id=%E5%BC%80%E5%8F%91%E4%B8%AA%E4%BA%BA%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E5%BC%80%E5%8F%91%E4%B8%AA%E4%BA%BA%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95 aria-label=锚点>#</a></span></h2><p>下面的内容我实际上是抄的代码大全2检查清单的内容，因为没看到哪里有所有的检查清单的内容。所以利用OCR+AI来拿出来所有的文字，除此之外，补上了部分我自己的检查内容，斜体是我自己的内容。</p><h3 class="relative group">1 需求<div id=1-%E9%9C%80%E6%B1%82 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E9%9C%80%E6%B1%82 aria-label=锚点>#</a></span></h3><ul><li><p>具体的功能需求</p><ul><li><p>是否指定了系统的所有输入，包括其来源、精度、值的范围和出现频率？</p></li><li><p>是否指定了系统的所有输出，包括其目标、精度、值的范围、出现频率和格式?</p></li><li><p>是否为Web 页面和报表等指定了所有输出格式？</p></li><li><p>是否指定了所有外部硬件和软件接口?</p></li><li><p>是否指定了所有外部通信接口，包括握手、错误检查和通信切议?</p></li><li><p>是否指定了用户想要执行的所有任务?</p></li><li><p>是否指定了每个任务中使用的数据和每个任务产生的数据。要给出产生的数据量一个预估值。</p></li></ul></li><li><p>特定的非功能性(质量)需求</p><ul><li>从用户的角度来看，是否为所有必要的操作指定了预期的响应时间？ <em>尽量避免任何跨公网，以及本地的文件拷贝</em></li><li>是否指定了其他时间考虑因素，比如处理时间、数据传输速率和系统吞吐量</li><li>是否指定了安全级别?</li><li>是否指定了可靠性，包括软件故障的后果、需要在故障中得到保护的重要信息以及错误测和恢复策略？</li><li>是否指定了最小机器内存和空闲磁盘空间?</li><li>是否指定了系统的可维护性，包括适应特定功能的更改、操作环境的更改以及与其他软件接口的更改的能力？</li><li>是否包括了成功和失败的定义?</li></ul></li><li><p>需求质量</p><ul><li>需求是用用户的语言编写的么？用户这么认为么？</li><li><strong>每个需求都避免了与其他需求的冲突么</strong></li><li>是否详细说明了竞争属性之间的可接受的这种，例如健壮性和正确性的折中</li><li>是否避免了在需求中规定设计</li><li>需求在详细程度上是一致的么，是否有需求需要更详细的说明？是否有需求不需要那么详细的说明</li><li><strong>需求是否足够清晰，以至于可以移交给一个独立的团队进行构建，且不会产生误解？开发人员这么认为么？</strong></li><li>每个条款都与待解决的问题及其解决方案相关么？能从每个条款上溯到在问题域中对应的根源么</li><li>每个需求都是可测试的么？是否有可能通过独立测试来确定每个需求都被满足了</li><li><strong>是否说明了需求的所有可能变更以及每种变更的可能性</strong></li><li><em><strong>需求合理性考察，很多需求实际上是非常不清楚或者不合理地，简单补充一个点。如果要检查一个文件是否正常合理，那么文件应该在它生成的过程当中就测试。而不是滞后</strong></em></li><li><em><strong>需要考虑需求的优先级，需要区分出来哪些是必须完成的，哪些是可能完成的。很多情况下不重要的就后推，只考虑重要的需求。简单来说也是需求的完整性</strong></em></li></ul></li><li><p>需求的完整性</p><ul><li><strong>对于在开发中无法获得的信息，是否详细描述了信息不完整的区域</strong></li><li><strong>需求的完备程度是否可以达到这种高度：如果产品满足了所有需求，就说明它是可以接受的</strong></li><li><strong>对全部需求都感到满意么？是否已经去掉了那些不可能实现的需求，那些只是为了安抚客户和老板的东西</strong></li></ul></li></ul><h3 class="relative group">2 架构<div id=2-%E6%9E%B6%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E6%9E%B6%E6%9E%84 aria-label=锚点>#</a></span></h3><ul><li>针对各架构主题<ul><li>顶目的整体组织是否清晰，包括良好的架构概述及其理由</li><li>主要构件是否定义良好，包括它们的职贡范围以及它们与其他构件的接口</li><li>在需求中列出的所有功能都被合理覆盖了吗？</li><li>最关键的类是否有描述和论证？</li><li>数据设计是否有描述和论证？</li><li>是否说明了数据库的组织和内容？</li><li>是否确定了所有关键业务规则及其对系统的影响?</li><li>是否描述了用户界面设计的策略？</li><li>用户界面是模块化的，因此它的更改不会影响程序的其余部分吗?</li><li>是否描述井论证了处理IO的策略？</li><li>是否估算了稀缺资源(如线程、数据库连接、句糖和网络带宽等)的使用量，是否描述并论证了资源管理的策略?</li><li>是否描述了架构的安全需求"</li><li>架构是否为每个类、每个子系统或每个功能域提出时间和空间预算?</li><li>架构是否描述了如何实现可伸缩性?</li><li>架构是否关注了互操作性?</li><li>是否描述了国际化和本地化的策略？</li><li>是否提供了一套一致性的错误处理策略</li><li>是否提供了容错的方法（如果需要的话)</li><li>是否证实了系统各部分的技术可行性，<em>要求系统各个部分能认识到技术难点是比较困难的</em></li><li>是否详细描述了过度工程的方法？</li><li>是否包舍了必要的购买还是构律的决策?</li><li>架构是否播述了如何加工被复用的代码，使之待合其他架构目际;</li><li>架构的设计是否能够适应极有可能出现的变更？</li></ul></li><li>架构的总体质量</li><li>架构是否解决了全部需求？</li><li>有没有哪个部分是过度架构或欠架构?是否明确提出了这方面的具体目标</li><li>整个架构是否在概念上协调一致?这个问题是可以大大拓展的，架构不是只针对代码，对所有的都可以</li><li>顶层设计是否独立于用于实现它的机器和语言</li><li>是否提供了所有主要决策的动机?</li><li>作为一个将要实现系统的程序员，你是否对架构感到满意”</li></ul><h3 class="relative group">3 前期准备<div id=3-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87 aria-label=锚点>#</a></span></h3><ul><li>你是否已经确定了你正在从事的软件项目的类型，并适当调整了你的方法</li><li>需求是否有充分明确的定义，并且足够稳定，可以开始构建(详见需求检查）</li><li>架构是否有充分明确的定义，以便开始构建(详见架构检查清单)</li><li>你的特定顶目所特有的其他风随是否得到了解决，从而使构建不会被暴露在不必要的风险中？</li></ul><h3 class="relative group">4 重要的构建实践<div id=4-%E9%87%8D%E8%A6%81%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9E%E8%B7%B5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#4-%E9%87%8D%E8%A6%81%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9E%E8%B7%B5 aria-label=锚点>#</a></span></h3><ul><li>编码<ul><li>是否定义了有多少设计工作要预先完成，以及多少工作再编码的同时完成</li><li>是否为名称、注释和代码格式等制定了编码约定?</li><li>是否定义了架构所隐含的特定编码实践?例如，如何处理错误条件: 如何处理安全性？类接口使用什么约定？对重用代码应用什么标准?在编码时对性能要考虑到什么程度？</li><li>是否已经确定了自己在科技浪潮中所处的阶段，井调整了自己的方法来？如果有此要,是否已经确定了如何深入语言来编程,而不是受限于只会用语言来绵程</li></ul></li><li>团队工作</li><li>是否定义了集成工序，即是否定义了程序员在将代码登入主干之前必须经过的特定步骤? <em>简单来说就是对应的test和集成测试需要提前完成</em></li><li>程序员是结对编程还是独立编程，还是采用两者的组合?</li></ul><h3 class="relative group">5 软件构建中的设计<div id=5-%E8%BD%AF%E4%BB%B6%E6%9E%84%E5%BB%BA%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#5-%E8%BD%AF%E4%BB%B6%E6%9E%84%E5%BB%BA%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1 aria-label=锚点>#</a></span></h3><ul><li>设计实践<ul><li>是否已做过迭代，从多个结果中选择了最佳的一种，而不是简单地选择首次尝试的结果? <em>分布式的时代需要考虑性能，可靠性，数据量，是否可管理等多方面</em></li><li>尝试过以多种方式分解系统以确定哪种最好吗?</li><li>同时采用了自上而下和自下而上的方法来解决设计回题吗?</li><li>针对系统中有风险或者不熟悉的部分进行过原型设计，写数量最小的抛弃型代码来回答特定回题吗</li><li>自己的设计方案被其他人评审过吗？无论正式与否</li><li>一直在推动设计，直至实现细节昭然若揭吗</li><li>使用某种适当的技术(例如Wiki、电子邮件、挂图、数码照片、UML、CRC卡片或者代码中内嵌的注释)来记录设计了吗？</li></ul></li><li>设计目标<ul><li>设计是否充分解决了在整体架构层面确定并决定推迟实现的问题？</li><li>设计是否分层的？</li><li>对于将程序分解为子系统、包和类的方式是否感到满意</li><li>对于将类分解为子程序的方式是否感到满意？</li><li>类的设计是否使它们之间的交互最小化？</li><li>类和子系统的设计是否方便你在其他系统中重用</li><li>程序是否容易维护？<em>程序的维护不是单纯地开发，针对出了问题快速定位原因及时暴露错误码也是是否容易维护的判断标准之一。程序内部采用快速失败是一个比较好的策略，如果出错了还继续执行可能造成无法理解的后果</em></li><li>设计是否精简？它的所有部分都是绝对必要的吗？</li><li>设计是否使用了标准技术来避免奇特的、难以理解的元素？</li><li>总的来说，这个设计是否有助于将偶然和本质的复杂性降至最低？</li></ul></li></ul><h3 class="relative group">6 类的质量<div id=6-%E7%B1%BB%E7%9A%84%E8%B4%A8%E9%87%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#6-%E7%B1%BB%E7%9A%84%E8%B4%A8%E9%87%8F aria-label=锚点>#</a></span></h3><ul><li><p>抽象数据类型</p><ul><li>是否将程序中的类视为抽象数据类型，是否从这个角度评估了他们的接口？</li></ul></li><li><p>抽象</p><ul><li>类是否有一个中心目的</li><li>类的命名是否恰当？其名字是否表达了其中心目的？</li><li>类的接口是否呈现了一致的抽象？</li><li>类的接口是否让人一眼就知道应该如何使用这个类？</li><li>类的接口是否足够抽象，使开发者无需考虑它的服务具体是如何实现的能将类看作是一个黑盒吗？</li><li>类的服务是否足够完整，使其他类无需摆弄其内部数据？</li><li>是否已经从类中移除了无关信息？</li><li>是否考虑过将类进一步分解为组件类？是否已经尽可能地进行了分解？</li><li>修改类时是否保持了其接口的完整性？</li></ul></li><li><p>封装</p><ul><li>是否最小化了类成员的可访问性？</li><li>类是否避免了公开其成员数据？</li><li>在编程语言允许的范围内，类是否尽可能地隐藏了具体实现细节？</li><li>类的设计是否避免了对其用户（包括其派生类）做出假设？这是一个很有趣的点，如果企鹅能够继承鸟，那么用户一般会假设鸟会飞，但是很明显企鹅不会飞。所以实际上如果真正实现的话，建议是拆解部分非通用的属性不在基类</li><li>类是否不依赖于其他类？是否松耦合？</li></ul></li><li><p>继承</p><ul><li>继承是否只用来建立"is-a"关系？即派生类是否遵循了里氏替换原则（lsp）而非仅仅为了重用代码？</li><li>类的文档是否描述了其继承策略？</li><li>派生类是否免除了"覆盖不可覆盖的函数"的限制？</li><li>是否足够清晰地指定了派生类如何重载、扩展和覆盖基类的行为，并将待继承的的通用接口数据放在了继承树上层？</li><li>继承树是否很浅？</li><li>是否将基类中的所有成员都定义为私有或受保护的？</li></ul></li><li><p>与实现相关的其它问题</p><ul><li>类的数据成员是否只有七个或更少？</li><li>是否将类中直接调用其他类的子程序的数量减到最少了？</li><li>类是否只在绝对必要时才与其他类协作？</li><li>是否所有数据成员都在构造函数中进行了初始化？</li><li>是否经过论证，类被设计为深拷贝而不是浅拷贝来使用？</li><li>语言特定问题，针对您所使用的编程语言，是否研究过语言特定的和与类相关的问题？</li></ul></li></ul><h3 class="relative group">7 高质量的子程序<div id=7-%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%AD%90%E7%A8%8B%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#7-%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%AD%90%E7%A8%8B%E5%BA%8F aria-label=锚点>#</a></span></h3><ul><li><p>主要问题</p><ul><li>是否有充分的理由来创建该子程序？ <em>创建子程序的理由应该是不同功能的拆分，和代码复用</em></li><li>在该子程序中，哪些部分更适合抽取出来作为独立的子过程或函数？</li><li>关于该子程序的命名，是否使用了清晰的、强有力的动词加上对其操作对象的描述作为过程的名称，或者使用了对返回值的描述作为函数的名称？</li><li>该子程序的名称是否准确地描述了它所做的一切事情？</li><li>是否为一些常用操作建立了命名规范？</li><li>该子程序是否具有高内聚性，即只做一件事，并且做得很好？</li><li>该子程序是否具有松散的耦合性？该子程序与其他子程序的关联是否简单、专用、可见和灵活？</li><li>该子程序的长度是否是由它的功能和逻辑自然决定的，而不是由人为制定的编码标准决定的？<em>这个可能有点反直觉，很多情况下会有规定程序不能太长</em></li></ul></li><li><p>参数传递问题</p><ul><li>该子程序的参数列表作为一个整体是否呈现了一致的接口抽象？</li><li>该子程序的参数是否按合理顺序进行排列，与其他类似子程序的参数顺序一致？</li><li>是否对接口假设进行了文档记录？</li><li>该子程序的参数数量是否少于或等于7个？</li><li>在该子程序中是否使用了每个输入参数？</li><li>在该子程序中是否使用了每个输出参数？</li><li>是否避免将输入参数作为工作变量使用？<em>这里面有个问题，有的时候我们就是要把这个做工作变量，不过理论上应该是最小量的更新，获取之类的</em></li><li>如果该子程序是一个函数，在所有可能的情况下是否都返回了一个有意义的值？</li></ul></li></ul><h3 class="relative group">8 防御式编程<div id=8-%E9%98%B2%E5%BE%A1%E5%BC%8F%E7%BC%96%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#8-%E9%98%B2%E5%BE%A1%E5%BC%8F%E7%BC%96%E7%A8%8B aria-label=锚点>#</a></span></h3><ul><li><p>一般事宜</p><ul><li>子程序否可以保护自己免受输入参数的破坏？</li><li>是否使用断言来声明假设，包括前置条件和后置条件？</li><li>断言是否只用于声明永远不应该发生的情况？</li><li>是否在架构或高层级设计中指定了一组特定的错误处理技术？尽管有点反直觉，目前部分C++代码规范是反对使用异常的，很多函数有对应的不抛异常版本</li><li>是否在架构或高层级设计中规定了错误处理应该偏向于健壮性还是正确性？<em>健壮性会带来时间和试错的成本，正确性的最简单选择就是快速失败</em></li><li>是否建立了防护屏障来防止可能造成破坏的错误，并减少与错误处理有关的代码数量？比方说一个json解析失败不应该导致整个服务器崩溃。这也是为什么微服务会兴起的原因</li><li>代码中是否使用了辅助调试代码？</li><li>如果要启用和停用辅助调试代码，是否不需要大动干戈？</li><li>防御式编程引入的代码的数量是否合适，既不太多也不太少？</li><li>在开发阶段是否使用攻击式编程技术使错误很难被忽视？<em>这个是指混沌工程主动显示错误是吧？</em></li></ul></li><li><p>异常</p><ul><li>在项目中是否定义了一种标准化的异常处理方法？</li><li>是否考虑过异常之外的其他替代方案？</li><li>错误是否已尽可能在局部处理，而不是作为异常向外抛出？</li><li>代码中是否避免在构造函数和析构函数中抛出异常？</li><li>是否所有的异常都与抛出它们的子程序处于同一抽象层次上？</li><li>每个异常是否包含了关于异常发生的所有背景信息？</li><li>代码中是否没有使用空的catch块？或者，如果使用空的catch块，是否很合适？</li></ul></li><li><p>安全事宜</p><ul><li>检查错误输入数据的代码是否也检查了缓冲区溢出、SQL注入、HTML注入、整数溢出和其他恶意输入？</li><li>是否检查了所有错误返回码？</li><li>是否捕获了所有的异常？</li><li>出错消息中是否避免了出现有助于攻击者攻入系统的信息？心脏滴血漏洞实际上还不能说是出错信息，而是泄漏了过多信息</li></ul></li></ul><h3 class="relative group">9 伪代码编程过程<div id=9-%E4%BC%AA%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%E8%BF%87%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#9-%E4%BC%AA%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%E8%BF%87%E7%A8%8B aria-label=锚点>#</a></span></h3><ul><li>确认已满足所有先决条件了吗？</li><li>定义好要解决的问题了吗？</li><li>概要设计足够清晰，能为类及其每个子程序起一个好的名字吗？</li><li>考虑过应该如何测试类及其每个子程序吗？</li><li>主要是从可靠的接口和可读性好的实现，还是从满足资源和速度预算的效率考虑？一般是初期考虑可读性，后期专人负责优化和设计</li><li>在标准库或其他代码库中找过可用的子程序或组件了吗？</li><li>在参考书中查找过有用的算法了吗？</li><li>采用详细的伪代码去设计了每一个子程序吗？</li><li>已经在心头检查过伪代码吗？这些伪代码容易理解吗？</li><li>关注过那些可能会让自己重返设计的警告信息了吗？例如，关于全局变量的使用以及一些似乎更适合放在另一个类或子程序中的操作等？</li><li>将伪代码准确转换成实际代码了吗？</li><li>以递归方式运用编程过程，并根据需要将一些子程序拆分成更小的子程序了吗？</li><li>在做出假设时对它们进行说明了吗？</li><li>删除多余注释了吗？</li><li>是否从几次迭代中选择了效果最好的，而不是在第一次迭代之后就停止尝试？</li><li>是否完全理解了自己写的代码？它们是否容易理解？</li></ul><h3 class="relative group">10 数据使用中的常规注意事项<div id=10-%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#10-%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 aria-label=锚点>#</a></span></h3><ul><li><p>初始化变量</p><ul><li>是否一个子程序都检查输入参数的合法性吗？</li><li>每个子程序是否检查输入参数的有效性？</li><li>代码是否在首次使用变量的地方声明变量？</li><li>如果可能的话，代码是否在声明变量时对其进行初始化？</li><li>如果不能同时声明和初始化变量，代码是否在靠近首次使用的地方初始化变量？</li><li>是否正确初始化了计数器和累加器？如有必要，是否在每次使用时都重新初始化？</li><li>在重复执行的代码中，变量的重新初始化是否正确？</li><li>代码编译时，编译器是否发出警告？启用了所有可用的警告吗？</li><li>如果所用的语言允许隐式声明，是否为由此引发的问题做好了补偿措施？</li></ul></li><li><p>使用数据的其他事项</p><ul><li>所有变量都有最小的作用域吗？</li><li>对变量的引用都尽可能集中在一起吗？对同一变量的两次相邻引用以及变量的整个生命周期，是否都这样做了？</li><li>控制结构是否与数据类型相对应？</li><li>是否使用了所有已声明的变量？这种可以用编译器的设定来解决</li><li>变量都是在适当时同绑定的吗？也就是说，是否有意在后期绑定所带来的灵活性与增加的复杂度之间做出了平衡？</li><li>每个变量是否都有且只有一个用途？</li><li>每个变量的名称都很明确且没有隐含含义吗？</li></ul></li></ul><h3 class="relative group">11 变量命名<div id=11-%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D aria-label=锚点>#</a></span></h3><ul><li><p>命名的常规注意事项</p><ul><li>名称是否完整且准确地描述了变量所代表的内容？<em>举一个简单的例子，配置kubernetes comfigmap的对象，不应该叫做kubeconfig</em></li><li>名称是指现实世界的问题，而不是编程语言解决方案吗？</li><li>名称是否长到没有必要去猜测它的含义？</li><li>如果有计算值限定符，是否把它放在了命名的末尾？</li><li>名称是否使用了Count或Index而不是Num？</li></ul></li><li><p>特定类型数据的命名</p><ul><li>循环索引的命名是否有意义（如循环超过一两行或是嵌套的，则不应是i、j或k）？</li><li>所有“临时”变量是否被重新命名为更有意义的名字？</li><li>当布尔变量的值为真时，变量名能准确表达其含义吗？</li><li>枚举类型的名称是否包含一个表示其类别的前缀或后缀，比如用于Color Red、Color Green、Color Blue等？</li><li>具名常量是以其所代表的抽象实体而不是所指代的数字来命名的吗？</li></ul></li><li><p>命名规范</p><ul><li>规范是否对局部数据、类数据和全局数据进行了区分？</li><li>规范是否对类型名、只名常量、枚举类型和变量进行了区分？</li><li>在不强制命名只读输入参数的情况下，是否明确标识了子程序中的只读参数？</li><li>规范是否能够兼容于语言的标准规范？</li><li>名称的格式是否便于阅读？</li></ul></li><li><p>短名称</p><ul><li>代码是否使用了长的名称（除非有必要用短的名称）？</li><li>代码是否避免了使用只节省一个字符的缩写？</li><li>所有单词的缩写是否一致？</li><li>名称是否可读？</li><li>是否避免了可能误读或发生错误的名称？</li><li>短的名称是否记录在了缩写对照表中？</li></ul></li><li><p>常见的命名问题: 是否避免了使用&mldr;</p><ul><li>&mldr;是否避免了使用误导性的名称？</li><li>&mldr;是否避免了使用含义相似的名称？</li><li>&mldr;是否只有一两个字符不同的名称？</li><li>&mldr;是否避免了使用发音相似的名称？</li><li>&mldr;是否避免了使用包含数字的名称？</li><li>&mldr;是否避免了故意拼错名称为了更短？</li><li>&mldr;是否避免了英语中经常拼错的名称？</li><li>&mldr;是否避免了与标准库子程序名或预定义变量名冲突的名称？</li><li>&mldr;是否避免了过于随意的名称？</li><li>&mldr;是否避免了包含容易混淆字符的名称？</li></ul></li></ul><h3 class="relative group">12 基本数据类型<div id=12-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B aria-label=锚点>#</a></span></h3><ul><li><p>一般的数字</p><ul><li>代码是否避免了魔法数字？</li><li>代码是否考虑了除零错误？</li><li>类型转换是否明显？</li><li>是否按照期望进行计算？</li><li>代码是否避免了混合类型的比较？</li><li>程序编译时是否没有警告？</li></ul></li><li><p>整型</p><ul><li>使用整数除法的表达式是否按预期工作？</li><li>整数表达式是否避免了整数溢出问题？</li></ul></li><li><p>浮点型</p><ul><li>代码是否避免对大小差别很大的数字进行加减运算？</li><li>代码是否系统地防止了舍入错误？</li><li>代码是否避免了对浮点数做等价比较？</li></ul></li><li><p>字符和字符串</p><ul><li>代码是否避免了魔法字符和魔法字符串？</li><li>使用字符串时是否避免了差一错误？</li><li>C语言的代码是否区别对待了字符串指针和字符数组？</li><li>C语言的代码是否在适当的时候使用字符数组而不是指针？</li></ul></li><li><p>枚举类型</p><ul><li>程序是否使用枚举类型而非具名敞亮来提高可读性，可靠性和可修改性</li><li>使用枚举类型的判断是否能检测出无效值？</li><li>枚举类型的第一个元素是否保留为“无效值”？</li></ul></li><li><p>具名常量</p><ul><li>程序是否将具名常量而非魔法数字用于数据声明和循环控制？</li><li>具名常量的使用是否一致，是否避免在某些地方使用具名常量而在其他地方使用字面量？</li></ul></li><li><p>数组</p><ul><li>所有的数组索引是否都在数组的边界范围内？</li><li>数组引用是否避免了差一错误？</li><li>多维数组的所有索引顺序是否正确？</li><li>在嵌套循环中，是否使用正确的变量作为数组索引，以避免循环索引混淆？</li></ul></li><li><p>创建类型</p><ul><li>程序是否为每一种可能变化的数据使用不同的类型？</li><li>类型名称是否以类型所代表的现实世界实体为导向，而不是以编程语言类型为导向？</li><li>类型名是否具有足够的描述性，可以帮助解释数据声明？</li><li>是否避免了重新定义预定义类型？</li><li>是否考虑过创建一个新的类而不是简单地重新定义一个类型？</li></ul></li></ul><h3 class="relative group">13 不常见数据类型的注意事项<div id=13-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#13-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9 aria-label=锚点>#</a></span></h3><ul><li><p>结构体</p><ul><li>是否适当使用了结构体而不是单纯的变量来组织和保持相关的数据？</li><li>是否考虑过使用类来替代结构体？</li></ul></li><li><p>全局数据</p><ul><li>除非绝对有必要，否则所有变量都应该具有局部作用域或类作用域。</li><li>变量命名规范是否区分了局部数据、类数据和全局数据？</li><li>是否为所有全局变量提供了文档说明？</li><li>代码中是否没有伪全局数据（pseudoglobal data），即不要包含将杂乱的数据传递给每个子程序的数据的巨大对象</li><li>是否使用了访问器子程序替代全局数据？</li><li>访问器子程序和数据是否组织在类中？</li><li>访问器子程序是否提供了一个在底层数据类型实现之上的抽象层？</li><li>所有相关的访问器子程序是否处于同一抽象层？</li></ul></li><li><p>指针</p><ul><li>指针操作是否隔离在子程序中？</li><li>指针引用是否有效？或者指针是否有可能成为野指针？</li><li>在使用指针之前是否检查了其有效性？</li><li>在使用指针引用的变量之前是否检查了其有效性？</li><li>指针释放后是否被设置为空？</li><li>为了提高可读性，代码是否使用了所有必需的指针变量？</li><li>链表中的指针是否按照正确的顺序进行释放？</li><li>程序是否分配了一块紧急备用内存，以便在内存耗尽时可以优雅地退出？</li><li>是否在没有其他方法可用的情况下才使用指针？</li></ul></li></ul><h3 class="relative group">14 组织直线型代码<div id=14-%E7%BB%84%E7%BB%87%E7%9B%B4%E7%BA%BF%E5%9E%8B%E4%BB%A3%E7%A0%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#14-%E7%BB%84%E7%BB%87%E7%9B%B4%E7%BA%BF%E5%9E%8B%E4%BB%A3%E7%A0%81 aria-label=锚点>#</a></span></h3><ul><li>代码能明确语句之间的依赖关系吗？</li><li>子程序的名称能明确表达依赖关系吗？</li><li>子程序的参数能明确表达依赖关系吗？</li><li>是否使用注释描述了不够明确的依赖关系？</li><li>是否使用内部处理变量来验证关键代码中的顺序依赖关系？</li><li>代码能够自上而下流畅地阅读吗？</li><li>相关语句是否进行了分组？</li><li>是否将相对独立的语句组转化为独立的子程序？</li></ul><h3 class="relative group">15 使用条件语句<div id=15-%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#15-%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5 aria-label=锚点>#</a></span></h3><ul><li><p>if-then语句</p><ul><li>代码中的正常路径清晰吗？</li><li>if-then基于相等性测试的正确分支了吗？</li><li>else子句是否使用并添加了注释？</li><li>else子句用得正确吗？</li><li>是否正确使用了if和else子句？它们有没有被用反了？</li><li>正常情况是跟在if后面而非else后面吗？</li></ul></li><li><p>if-then-else-if链</p><ul><li>复杂测试封装到布尔函数调用中了吗？</li><li>最先测试的是最常见的情况吗？</li><li>是否覆盖了所有情况？</li><li>if-then-else-if链是最佳实现方式吗？是否比case语句更好？</li></ul></li><li><p>case语句</p><ul><li>所有case都按有意义的方式排列吗？</li><li>每个case的动作都简单吗？必要时是否调用了其他子程序？</li><li>case语句判断的是一个真实变量，而非只为滥用case语句而虚构的变量吗？</li><li>default子句用得正当吗？</li><li>default子句是用来检测和报告出乎预料的情况吗？</li><li>在C语言、C++语言或Java语言中，每个case的结尾处都有break吗？</li></ul></li></ul><h3 class="relative group">16 循环<div id=16-%E5%BE%AA%E7%8E%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#16-%E5%BE%AA%E7%8E%AF aria-label=锚点>#</a></span></h3><ul><li><p>循环的选择和创建</p><ul><li>是否在合适的时候采用while循环取代其他循环了吗？</li><li>循环是由内向外创建的吗？</li></ul></li><li><p>进入循环</p><ul><li>是否从顶部进入循环？</li><li>初始化代码是否直接放在循环前面了吗？</li><li>如果是无限循环或事件循环，其结构是否清晰，而不是采用类似于"while True"这样简单的代码？</li><li>如果循环属于C/C++或者Java的for循环，循环控制代码是否都放在循环头部了吗？</li></ul></li><li><p>循环内部</p><ul><li>是否使用括号或其等价形式来封闭循环体以免修改不当而出错？</li><li>循环体里面有内容吗？它是非空的吗？</li><li>内务处理代码是否集中存放在循环开始或者循环结束的位置了吗？</li><li>循环是否就像定义良好的子程序那样只执行一种功能？</li><li>循环是否短到足以让人一目了然？</li><li>循环的嵌套层数控制在三层以内吗？</li><li>长循环的内容是否转移到相应的子程序中了吗？</li><li>如果循环很长，是不是特别清晰？</li></ul></li><li><p>循环索引</p><ul><li>For循环体内的代码有没有随意改动循环索引值？</li><li>是否专门用变量保存重要的循环索引值，而不是在循环体外部使用循环索引？</li><li>循环索引是否是整数类型或者枚举类型，而不是浮点类型？</li><li>循环索引的名称有意义吗？</li><li>循环是否避免了索引串扰问题？</li></ul></li><li><p>退出循环</p><ul><li>循环是否在所有情况下可以终止</li><li>循环内是否使用安全计数器</li><li>循环的终止条件是否显而易见</li></ul></li></ul><h3 class="relative group">17 不常见控制结构<div id=17-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#17-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84 aria-label=锚点>#</a></span></h3><ul><li><p>return</p><ul><li>每个子程序是否都只在必要的时候才使用return？</li><li>return 是否增强了可读性？</li></ul></li><li><p>递归</p><ul><li>递归子程序是否包含用于终止递归的代码？</li><li>子程序是否使用安全计数器保证自己终止？</li><li>递归是否只限于一个子程序（没有循环递归）？</li><li>子程序递归深度是否在栈的大小限制范围内？</li><li>递归是实现子程序最好的方式吗？比简单的迭代好？</li></ul></li><li><p>goto</p><ul><li>goto 是否只是用作最后的紧急手段，还是为了增强代码的可读性和可维护性？</li><li>如果为了效率而使用goto，是否对效率的提升进行了度量和注释？</li><li>每个子程序的goto 是否只限于使用一个标签？</li><li>所有的goto 是否都是向前的而不是向后的？</li><li>所有的goto 标签都用到了吗？</li></ul></li></ul><h3 class="relative group">18 表驱动法<div id=18-%E8%A1%A8%E9%A9%B1%E5%8A%A8%E6%B3%95 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#18-%E8%A1%A8%E9%A9%B1%E5%8A%A8%E6%B3%95 aria-label=锚点>#</a></span></h3><ul><li><p>是否考虑过将表驱动法作为复杂逻辑的替代方案？</p></li><li><p>是否考虑过将表驱动法作为复杂继承结构的替代方案？</p></li><li><p>是否考虑过将表数据存储在程序外部，并在运行期间读取，以实现在不修改代码的前提下进行修改？</p></li><li><p>如果无法采用直接的数组索引来访问表（例如像age例子那样），是否考虑提取键的计算功能为一个单独的子程序，而不是在代码中复制这些计算？</p></li></ul><h3 class="relative group">19 控制结构<div id=19-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#19-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84 aria-label=锚点>#</a></span></h3><p>大部分都是语言层面的错误</p><h3 class="relative group">20 质量保证计划<div id=20-%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81%E8%AE%A1%E5%88%92 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#20-%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81%E8%AE%A1%E5%88%92 aria-label=锚点>#</a></span></h3><ul><li>是否已经确定了对项目至关重要的具体质量特性？</li><li>是否让其他人员了解项目的质量目标？</li><li>是否区分了外部和内部质量特征？</li><li>是否考虑了某些特性之间相互制约或促进的具体方式？最简单的考虑就是CAP了</li><li>是否要求针对不同错误类型使用不同的错误检测技术？</li><li>质量保证计划中是否有步骤来保证软件在开发各阶段的质量？</li><li>是否以某种方式度量质量，以便能够判断质量是在改进还是降低？</li><li>管理层是否理解质量保证在前期会消耗额外成本，但目的是在项目后期降低成本？</li></ul><h3 class="relative group">21 有效的结对编程<div id=21-%E6%9C%89%E6%95%88%E7%9A%84%E7%BB%93%E5%AF%B9%E7%BC%96%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E6%9C%89%E6%95%88%E7%9A%84%E7%BB%93%E5%AF%B9%E7%BC%96%E7%A8%8B aria-label=锚点>#</a></span></h3><ul><li>是否有编码规范，以便结对编程人员能够专注于编程，而不是编程风格的纠缠</li><li>结对双方是否都积极参与?</li><li>是否避免了对所有内容进行结对编程，而足选择真正能够受益于结对编程的任务?</li><li>是否定期对人员和工作任务进行轮换?</li><li>两人在速度和个性方面是否匹配良好?</li><li>是否有组长担任联络人来负责与项目外部管理层和其他人员沟通?</li></ul><h3 class="relative group">22 有效的审查<div id=22-%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%A1%E6%9F%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%A1%E6%9F%A5 aria-label=锚点>#</a></span></h3><ul><li>是否有清单可以使审查人的注意力集中于过去有问题的领域？</li><li>是否将审查侧重于找出缺陷，而不是去修正它们？</li><li>是否考虑过为审查人分配特定的视角或场景，以帮助他们在做准备工作时加强专注？</li><li>审查人在审查会议前是否有充足的时间进行准备，并且每个人都做好了准备？</li><li>每个参与者是否都扮演了明确的角色：主持人、审查人和记录员等？</li><li>会议是否以高效的速度进行？</li><li>会议时间是否限制在两小时以内？</li><li>所有审查参与者是否都接受过有针对性的审查培训，以及主持人是否接受过专门的主持技能培训？</li><li>每次审查时是否收集有关错误类型的数据，以便为组织量身定制未来的改进清单？</li><li>是否收集了有关准备速度和审查速度的数据，以便优化未来的准备和审查工作？</li><li>每次审查是否分配了行动项，由主持人亲自跟进或者安排一次重新审查进行跟进？</li><li>管理层是否理解自己不应该参加审查会议？</li><li>是否有跟进计划以确保问题已经得到正确修复？</li></ul><h3 class="relative group">23 测试用例<div id=23-%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B aria-label=锚点>#</a></span></h3><ul><li>是否用手头所有的测试用例保证了每个部分有足够的测试覆盖吗？包括函数覆盖率，runtime覆盖率和需求满足情况</li><li>类和子函数的设计中每个元素都有各自所对应的测试用例吗？</li><li>每行代码至少用一个测试用例进行了测试吗？ 是否考虑了计算测试每行代码所需的最小测试用例数量来进行验证？</li><li>是否用至少一个测试用例对每条“已定义-已使用”的数据流路径进行了测试？</li><li>是否检查了代码中不太可能正确的数据流模式，例如"已定义-已定义"和"已定义-未撤销"？</li><li>在编写测试用例时是否参考了一个常见错误的列表来检测过去经常出现的错误？</li><li>是否测试了所有的简单边界条件：最大值、最小值和差一边界？</li><li>是否测试了所有的复合边界条件，即多个输入数据的组合可能导致计算得出的变量过小或过大？</li><li>测试用例是否检查了错误的数据类型，例如，薪资管理程序中将员工数量设为负数？</li><li>是否测试了有代表性的、普遍性的取值？</li><li>是否测试了最小正常配置？</li><li>是否测试了最大正常配置？</li><li>是否对旧数据进行了兼容性测试？是否针对旧的硬件、旧版本的操作系统以及与旧版本的其他软件的接口进行了测试？</li><li>该测试用例是否易于进行手工查看？</li></ul><h3 class="relative group">24 调试要点<div id=24-%E8%B0%83%E8%AF%95%E8%A6%81%E7%82%B9 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#24-%E8%B0%83%E8%AF%95%E8%A6%81%E7%82%B9 aria-label=锚点>#</a></span></h3><ul><li>发现缺陷的技术<ul><li>使用所有可用的数据来创建假设</li><li>精炼产生错误的测试用例</li><li>在单元测试套件中运行代码</li><li>使用可用的工具</li><li>使用不同的方法重现错误</li><li>生成更多的数据以产生更多的假设</li><li>利用负面测试的结果</li><li>头脑风暴找出可能的假设</li><li>在桌子旁边放一个记事本，把要尝试的事情都列出来</li><li>缩小可疑的代码区域</li><li>以前有缺陷的类和子程序值得怀疑</li><li>检查最近修改的代码</li><li>扩大可疑的代码区域</li><li>逐步集成</li><li>检查常见的缺陷</li><li>向某人讲述发现的问题</li><li>把问题放一放，先休息一下</li><li>为快而糙的调试设置最大时间</li><li>整理一个暴力技术的清单，并且使用它们</li></ul></li><li>语法错误的技术<ul><li>不要相信编译器消息中的行号</li><li>不要相信编译器消息</li><li>不要相信编译器的第二条消息</li><li>分而治之</li><li>使用语法制导编辑器发现错误的注释和引号</li></ul></li><li>修复缺陷的技术<ul><li>在复现前先理解问题</li><li>理解程序，而不仅仅是问题</li><li>确认缺陷诊断结论</li><li>放松</li><li>保存原始代码</li><li>修复问题，而不是症状</li><li>仅在有充分理由的情况下修改代码</li><li>一次只做一处修改</li><li>检查修复的程序</li><li>添加一个暴露缺陷的单元测试</li><li>寻找类似的缺陷</li></ul></li><li>常用的调试方法<ul><li>你是否将调试作为了解程序、错误、代码质量和解决问题方法的机会？</li><li>你是否避免了试错、迷信的调试方法？</li><li>你是否假设错误是你犯错导致的？</li><li>你是否使用科学的方法来复现间歇性错误？</li><li>你是否使用科学的方法来发现缺陷？</li><li>你不是每都使用相同的方法，而是使用几种不同的技术来发现缺陷吗？</li><li>你是否验证了修复的正确性？</li><li>你是否使用了编译器告警消息</li></ul></li></ul><h3 class="relative group">25 重构的理由<div id=25-%E9%87%8D%E6%9E%84%E7%9A%84%E7%90%86%E7%94%B1 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#25-%E9%87%8D%E6%9E%84%E7%9A%84%E7%90%86%E7%94%B1 aria-label=锚点>#</a></span></h3><ul><li>代码发生重复</li><li>子程序太长</li><li>循环太长或嵌套太深</li><li>类的内聚力很差</li><li>类的接口不能提供一致的抽象层级</li><li>参数表有太多参数</li><li>在类中进行的修改各自独立</li><li>需要平行修改多个类</li><li>需要平行修改继承层级结构</li><li>需要平行修改 case 语句</li><li>一起使用的相关数据项没有被组织成类</li><li>一个子程序使用了另一个类(而非它自己的类)更多的特性</li><li>无脑使用基本数据类型</li><li>类的作用不大</li><li>子程序间传递流浪数据</li><li>一个中间对象没有做任何事情</li><li>一个类与另一个类过于亲密</li><li>某个子程序的名字太差劲</li><li>公共数据成员</li><li>一个子类只使用了其父类的一小部分功能</li><li>用注释解释难以理解的代码</li><li>全局变量的使用</li><li>程序包舍的代码似乎有一天会被需要</li></ul><h3 class="relative group">26 重构总结<div id=26-%E9%87%8D%E6%9E%84%E6%80%BB%E7%BB%93 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#26-%E9%87%8D%E6%9E%84%E6%80%BB%E7%BB%93 aria-label=锚点>#</a></span></h3><ul><li>数据级重构<ul><li>用具名常量替换神秘数字。</li><li>用更清晰或更有信息量的名字重命名变量</li><li>使表达式内联。</li><li>用子程序替代表达式</li><li>引入中间变量。</li><li>将一个多用途的变量转换为多个单用途的变量，</li><li>局部用途的就用局部变量，而不要用参数</li><li>将数据基元转换为类</li><li>将一组类型代码转换为类或枚举，</li><li>将一组类型代码转换为带有子类的类，</li><li>将数组改为对象、</li><li>封装集合</li><li>用数据类替代传统记录</li></ul></li><li>语句级重构<ul><li>分解布尔表达式.</li><li>将复杂布尔表达式移入一个命名良好的布尔函数。</li><li>合并条件语句不同部分的重复片段</li><li>使用 break 或 return 替代循环控制变量</li><li>知道答案后立即返回，而不是在嵌套 if-then-else 语句中赋一个返回值。</li><li>用多态替代条件语句(尤其是重复的 case 语句)。</li><li>创建和使用空对象，而不是测试空值</li></ul></li><li>子程序级重构<ul><li>提取子程序</li><li>内联子程序的代码、将长的子程序转快为短动词短语</li><li>用简单算法代替复杂算法。</li><li>增加参数、</li><li>删除参数</li><li>将查询操作与修改操作分开</li><li>通过参数化合并类似的子程序</li><li>分解行为依赖于传入参数的子程序</li><li>传递整个对象而不是特定的字段。</li><li>传递特定的字段而不是整个对象。</li><li>封装向下转型 (downcasting)。</li></ul></li><li>类实现重构<ul><li>将值对象修改为引用对象</li><li>将引用对象修改为值对象</li><li>用数据初始化替代虚函数、</li><li>改变成员函数或数据的位置.</li><li>将特化代码提取到一个子类中</li><li>将相似代码合并到超类中，</li></ul></li><li>类接口重构<ul><li>移动方法到一个提供者。</li><li>将一个类转换为两个。</li><li>抽取类。</li><li>委托</li><li>去掉中间人。</li><li>用委托代替继承。</li><li>用继承代替委托。</li><li>引入外来的子程序</li><li>引入扩展类。</li><li>封装公开变量</li></ul></li><li>系统级重构<ul><li>为无法控制的数据创建一个明确的引用源</li><li>将单向累关联为双向类关联</li><li>提供工厂方法而不是简单构造函数</li><li>用异常代替错误代码或者相反</li></ul></li></ul><h3 class="relative group">27 安全重构<div id=27-%E5%AE%89%E5%85%A8%E9%87%8D%E6%9E%84 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#27-%E5%AE%89%E5%85%A8%E9%87%8D%E6%9E%84 aria-label=锚点>#</a></span></h3><ul><li>每次改动都是一个语言改动策略的一部分吗?</li><li>重构前是否保存了最初的代码？</li><li>是否保持每次重构的幅度都很小？</li><li>是否一次只进行一个重构？</li><li>是否列出了在重构过程中打算采取的步骤？</li><li>是否做了一个停车场，以便记住重构中途产生的想法？</li><li>每次重构后都重新测试了吗？</li><li>若改动很复杂，或者会影响关键任务，是否进行了代码审查？</li><li>是否考虑过特定重构的风险等级并相应地调整了你的方法？</li><li>这个修改是否改善而非降低了程序的内部质量？</li><li>是否避免了用重构作为编码和修复的幌子，或者作为不重写坏代码的借口?</li></ul><h3 class="relative group">28 代码调优策略<div id=28-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#28-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5 aria-label=锚点>#</a></span></h3><ul><li><p>程序整体性能</p><ul><li>考虑通过变更程序需求来提升性能了吗？</li><li>考虑通过修改程序设计来提升性能了吗？</li><li>考虑通过修改类的设计来提升性能了吗？</li><li>考虑通过避免程序与操作系统的交互来提升性能了吗？</li><li>考虑通过避免IO操作创建来提升性能了吗？</li><li>考虑用编译型语言替代解释型语言来提升性能了吗？</li><li>考虑启用编译器优化选项来提升性能了吗？</li><li>考虑通过切换到不同的硬件设备来提升性能了吗？</li><li>代码调优是不是万不得已的最后选择？</li></ul></li><li><p>代码调优方法</p><ul><li>在开始代码调优之前，程序是完全正确的吗？</li><li>在代码调优之前，度量过性能瓶颈了吗？</li><li>度量过每一次代码调优的效果了吗？</li><li>如果代码调优并没有带来预期的性能提升，是否已撤销所有的改动？</li><li>是否尝试过针对每一个性能瓶颈进行多次修改以提升性能？</li><li>是否对性能瓶颈进行过优化？性能优化通常需要多次迭代才能通过代码调优达到预期的性能提升。</li><li>性能只是整体软件质量的一个方面，而且通常并不是最重要的。精心调优的代码只是整体性能的一个方面，而且往往不是最关键的。相比于代码的效率，程序的架构设计、组件之间的协作关系以及算法的选择和优化等都有更大的影响。构建性能优秀的代码只是整体性能优化的一小部分：除非系统自身的瓶颈得到解决，否则优化的效果会很有限。</li><li>需要关注的是整体系统的细节设计以及各个模块之间的协调与规划，这些对于整体性能的提升具有重大的影响。</li><li>确定瓶颈的定位是实现性能优化的关键。百足城出能真正提供高性能的指引方向的重要手段。</li><li>在开始编码时，为性能工作做好准备是编写易于理解和修改的清晰的代码的关键。</li><li>除非系统自身的瓶颈，否则知道是哪些代码在占据时间或者系统的复杂度吗？</li></ul></li></ul><h3 class="relative group">29 代码调优技术<div id=29-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E6%8A%80%E6%9C%AF class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#29-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E6%8A%80%E6%9C%AF aria-label=锚点>#</a></span></h3><ul><li>同时改进速度和规模<ul><li>用查询表替代复杂逻辑。</li><li>合并循环</li><li>用整数而不是浮点变量</li><li>编译时初始化数据。</li><li>使用正确类型的常量。</li><li>预计算出结果。</li><li>消除公共子表达式</li><li>将关键子程序转化为低级语言</li></ul></li><li>只改进速度<ul><li>知道结果后，便停止测试:</li><li>按频率对 case 语句和 if-then-else 链中的测试进行排序，</li><li>比较相似逻辑结构的性能</li><li>使用惰性求值。</li><li>将循环中的条件判断提到外面</li><li>展开循环。</li><li>最小化循环内部的工作</li><li>在搜索循环中使用哨兵值</li><li>最忙的循环放到嵌套循环的内层</li><li>降低内层循环的运算强度</li><li>多维数组改为一维。</li><li>最小化数组引用。</li><li>为数据类型增加辅助索引。</li><li>缓存频繁使用的值，</li><li>利用代数恒等式。</li><li>降低逻辑和数学表达式的运算强度</li><li>小心系统子程序。</li><li>重写子程序以内联</li></ul></li></ul><h3 class="relative group">30 配置管理<div id=30-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#30-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86 aria-label=锚点>#</a></span></h3><ul><li>概要<ul><li>软件配置管理计划是设计用来帮助程序员将开销尽量减小的吗?</li><li>软件配置管理 (SCM) 避免了对项目的过度控制吗?</li><li>变更请求是进行了分阶段，当作一个整体处理的吗？无论采用非正式的方法(例如创建一份传统的变更清单)还是更系统化的方法(例如设立变更控制委员会)。</li><li>系统化地评估了提交的每一项变更请求对于成本、进度和质量的影响了吗?</li><li>将重大的变更视为需求分析不够完善的一个警示了吗?</li></ul></li><li>工具<ul><li>采用版本控制软件来帮助配置管理了吗？</li><li>采用版本控制软件减少团队工作中的协作问题了吗?</li></ul></li><li>备份<ul><li>定期备份所有项目资料了吗？</li><li>定期将项目备份数据转移到异地存储了吗？</li><li>所有资料(包括源代码、文档、图片和重要的笔记)都备份了吗？</li><li>测试过备份与还原过程吗？</li></ul></li></ul><h3 class="relative group">31 集成<div id=31-%E9%9B%86%E6%88%90 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-%E9%9B%86%E6%88%90 aria-label=锚点>#</a></span></h3><ul><li>集成策略<ul><li>是否为集成子系统、类和程序确定了最优顺序?</li><li>继承顺序是否和构建顺序相互协作，保证在正确的时间每个类都将会为集成就绪？</li><li>准备就绪？</li><li>这种集成策略是否能让缺陷的诊断变得容易?</li><li>这种集成策略是否能让脚手架代码数量降到最低？</li><li>这种集成策略是否比其他方法更好？</li><li>组件之间的接口是否已经被详细定义了吗?虽然定义接口并不属于集成的任务，但是验证它们是否已经被良好定义是集成的任务)</li></ul></li><li>每日构建和冒烟测试<ul><li>顶目是否频繁地构建(理想的情况是每天构建)以支持增量式集成?</li><li>是否随着每个构建都执行了冒烟测试以确定每个构建是运行正常的?</li><li>构建和冒烟测试实现了自动化吗?</li><li>开发人员频繁提交代码是否频繁，即两次代码提交之间不会超过一天或两天?</li><li>冒烟测试是否随时与最新的代码保持一致，随着代码的更新而演变?</li><li>构建失败是偶发事件吗?</li><li>即使在承受压力的情况下是否坚持构建和执行冒烟测试验证软件?</li></ul></li></ul><h3 class="relative group">32 编程工具<div id=32-%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#32-%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7 aria-label=锚点>#</a></span></h3><ul><li>是否有一个高效的 IDE?</li><li>IDE 是否集成了源代码控制工具(构建、测试和调试工具)及其他有用的功能?</li><li>是否有自动化常用重构操作的工具？</li><li>是否使用版本控制工具来管理源代码、文档、需求、设计、项目计划和其他项目工件？</li><li>如果在做一个超大型项目，是否有使用数据字典或者包含每个类的权威说明的中央知识库？</li><li>是否考虑过使用代码库而不是编写定制代码？哪里有可用的代码库？</li><li>是否在使用交互式调试器？</li><li>是否使用 make 或其他依赖关系控制软件来高效可靠地构建程序？</li><li>测试环境是否包含自动化测试框架、自动化测试生成器、覆盖率监控、系统扰动器、差异对比工具和缺陷跟踪软件?</li><li>是否有构建任何定制的工具以支持特定的项目需求，特别是自动化重复执行的任务的工具？</li><li>总的来说，目前的环境是否有足够的支持工具？</li></ul><h3 class="relative group">33 布局<div id=33-%E5%B8%83%E5%B1%80 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#33-%E5%B8%83%E5%B1%80 aria-label=锚点>#</a></span></h3><ul><li>通用<ul><li>是否正确地凸现了代码逻辑结构的首要任务？</li><li>这种代码格式是否可以在使用中保持前后一致？</li><li>这种代码格式是否能产生易于维护的代码？</li><li>这种代码格式是否能提高代码的可读性？</li></ul></li><li>控制结构<ul><li>在代码中是否使用开始-结束或者 {} 避免了双重缩进？</li><li>连续的多个程序块是否用空行进行了分隔？</li><li>是否调整了复杂表达式的格式以保证可读性？</li><li>所有的单条语句块是否格式一致？</li><li>case 语句的布局方式是否与其他控制结构保持一致？</li><li>goto 语句的格式是否使其在视觉上更明显？</li></ul></li><li>单条语句<ul><li>是否使用空白来改善逻辑表达式、数组引用和子程序参数的可读性？</li><li>是否确保不完整的语句在行断开的地方有明显的语法错误？</li><li>换行时是否采用了标准的缩进量？</li><li>一行最多只包含一条语句？</li><li>编写每条语句时是否确保不包含副作用？</li><li>一行最多只包含一条数据声明？</li></ul></li><li>注释<ul><li>注释是否与其对应的代码缩进量相同？</li><li>注释的布局风格是否易于维护？</li></ul></li><li>子程序<ul><li>是否使用空行来分隔子程序中的不同部分，如类、文件和程序？</li><li>对于大多数类和文件，是否存在一一对应的关系？</li></ul></li><li>类，文件和程序<ul><li>如果一个文件包含多个类，是否已经清楚地将每个类中的所有子程序分隔开？</li><li>文件中的子程序是否以空行明显地进行了分隔？</li><li>作为更强大的组织原则的妥协代替方法，是否按字母顺序排列了所有子程序？</li></ul></li></ul><h3 class="relative group">34 自文档代码<div id=34-%E8%87%AA%E6%96%87%E6%A1%A3%E4%BB%A3%E7%A0%81 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#34-%E8%87%AA%E6%96%87%E6%A1%A3%E4%BB%A3%E7%A0%81 aria-label=锚点>#</a></span></h3><ul><li><p>类</p><ul><li>类的接口是否体现了某种一致的抽象？</li><li>类是否取好了名称，名称能否准确描述其核心意图？</li><li>类的接口是否让你一目了然地知道如何使用这个类？</li><li>类的接口抽象是否足以让你无需考虑其实现方式？可以当成黑盒对待吗？</li></ul></li><li><p>子程序</p><ul><li>是否每个子程序的名称都能准确描述它们的功能？</li><li>是否每个子程序都只执行一个明确定义的任务？</li><li>相比这些子程序被放入各自的子程序之前和之后，它们有受益吗？</li><li>每个子程序的接口是否清晰明确？</li></ul></li><li><p>数据名称</p><ul><li>类型名称是否足以协助记录数据声明？</li><li>变量是否命名良好？</li><li>变量是否只用于其命名所示的用途？</li><li>循环计数器是否使用了比 i、j、k 更具信息量的名称命名？</li><li>是否使用了精心命名的枚举类型，而非临时标识布尔变量？</li><li>是否使用了具名常量而非魔法数字或魔法字符串？</li><li>是否能区分类型名称、枚举名称、物理尺寸、具名敞亮、局部变量、类变量和全局部变量？</li></ul></li><li><p>数据组织</p><ul><li>额外变量是否根据需要用于澄清？</li><li>变量的引用是否彼此接近？</li><li>数据类型是否简单达到最低复杂度？</li><li>复杂数据是否是通过抽象访问子程序（抽象数据类型）来访问</li></ul></li><li><p>控制</p><ul><li>代码中的常规路径是否清晰？</li><li>相关语句是否组合在一起？</li><li>相对独立的语句组是否打包成各自的子程序？</li><li>常见路径是放在 if 语句的后面还是 else 语句的后面？</li><li>控制结构是否足够简单，达到最低复杂度？</li><li>是否每个循环和定义良好的子程序一样，执行一个且只执行一个功能？</li><li>嵌套有否做到最少？</li><li>是否使用新增的布尔变量、布尔函数和决策表来简化布尔表达式？</li></ul></li><li><p>布局</p><ul><li>程序的布局是否能表现其逻辑结构？</li></ul></li><li><p>设计</p><ul><li>代码是否明确直接且没有自作聪明？</li><li>是否尽可能隐藏了实现细节？</li><li>写程序时，是否尽可能多地使用问题域的术语，而非计算机科学或程序语言结构的术语？</li></ul></li></ul><h3 class="relative group">35 好的注释<div id=35-%E5%A5%BD%E7%9A%84%E6%B3%A8%E9%87%8A class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#35-%E5%A5%BD%E7%9A%84%E6%B3%A8%E9%87%8A aria-label=锚点>#</a></span></h3><ul><li>通用<ul><li>别人拿到你的代码马上就能看懂吗？</li><li>注释是在解释代码意图或者总结代码做了什么，还是在复述代码？</li><li>是否采用伪代码编程法来减少注释的耗时？</li><li>对于重要的代码，是进行重写还是注释？</li><li>注释是最新的吗？</li><li>注释是否清晰、准确？</li><li>所用注释风格是否有利于修改注释？</li></ul></li><li>语句和段落<ul><li>是否避免在代码中使用行尾注释？</li><li>注释着重解释原因还是解释具体操作步骤？</li><li>注释是否有利于代码阅读者做好准备？</li><li>是否每条注释都有其用处？是否已删除或改进了多余的、无关紧要或过于随意的注释？</li><li>是否注释了代码的非常规之处？</li><li>是否避免使用缩略语？</li><li>主次注释的区别是否明显？</li><li>是否注释了用于处理某个缺陷或未公开特性的代码？</li></ul></li><li>数据声明<ul><li>是否已注释数据声明的数值单位？</li><li>是否已注释数值数据的取值范围？</li><li>是否已注释编码用途？</li><li>是否已注释输入数据的限制？</li><li>是否已注释位标志？</li><li>是否已在声明处注释各全局变量？</li><li>魔数是否已经替换为具名变量或者常量，而不是加注释</li></ul></li><li>控制结构<ul><li>是否对所有控制语句都进行了注释？</li><li>冗长或者复杂的控制结构，是否在代码结尾处进行了注释？或者竭力进行简化，而不再需要注释？</li></ul></li><li>子程序<ul><li>是否已注释各子程序的意图？</li><li>是否通过注释介绍了子程序的其他相关情况（如输入输出数据、接口假设、限制、纠错、全局效果和算法出处等）？</li></ul></li><li>文件、类和程序<ul><li>程序是否有一段简短的文档，就像书籍范本中介绍的那样，可以提供对程序组织方式的概览？</li><li>是否已说明各文件的意图？</li></ul></li></ul><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2023-06-11-程序员修养\\index.md",oid_likes="likes_posts\\2023-06-11-程序员修养\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-03-28-devsecops实践</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-03-28T00:00:00+00:00>2023 年 3 月 28 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2023-12-21-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2023-12-21-数据库基础知识</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2023-08-21T00:00:00+00:00>2023 年 8 月 21 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>2023-06-11-程序员修养 &middot; 菜狗的blog</title>
+  <meta name="title" content="2023-06-11-程序员修养 &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="架构, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="2023-06-11-程序员修养">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-06-11T00:00:00+00:00">
+    <meta property="article:modified_time" content="2023-06-11T00:00:00+00:00">
+    <meta property="article:tag" content="架构">
+    <meta property="og:image" content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hxndg.github.io/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured.png">
+  <meta name="twitter:title" content="2023-06-11-程序员修养">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "2023-06-11-程序员修养",
+    "headline": "2023-06-11-程序员修养",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2023",
+    "dateCreated": "2023-06-11T00:00:00\u002b00:00",
+    "datePublished": "2023-06-11T00:00:00\u002b00:00",
+    
+    "dateModified": "2023-06-11T00:00:00\u002b00:00",
+    
+    "keywords": ["架构"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "15770"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+<div id="hero" class="h-[150px] md:h-[200px]"></div>
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/posts/2023-06-11-%E7%A8%8B%E5%BA%8F%E5%91%98%E4%BF%AE%E5%85%BB/featured_hu_62bf10ffe7a2d703.png);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      2023-06-11-程序员修养
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2023-06-11T00:00:00&#43;00:00">2023 年 6 月 11 日</time><span class="px-2 text-primary-500">&middot;</span><span>15770 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">32 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#开发个人检查清单">开发个人检查清单</a>
+      <ul>
+        <li><a href="#1-需求">1 需求</a></li>
+        <li><a href="#2-架构">2 架构</a></li>
+        <li><a href="#3-前期准备">3 前期准备</a></li>
+        <li><a href="#4-重要的构建实践">4 重要的构建实践</a></li>
+        <li><a href="#5-软件构建中的设计">5 软件构建中的设计</a></li>
+        <li><a href="#6-类的质量">6 类的质量</a></li>
+        <li><a href="#7-高质量的子程序">7 高质量的子程序</a></li>
+        <li><a href="#8-防御式编程">8 防御式编程</a></li>
+        <li><a href="#9-伪代码编程过程">9 伪代码编程过程</a></li>
+        <li><a href="#10-数据使用中的常规注意事项">10 数据使用中的常规注意事项</a></li>
+        <li><a href="#11-变量命名">11 变量命名</a></li>
+        <li><a href="#12-基本数据类型">12 基本数据类型</a></li>
+        <li><a href="#13-不常见数据类型的注意事项">13 不常见数据类型的注意事项</a></li>
+        <li><a href="#14-组织直线型代码">14 组织直线型代码</a></li>
+        <li><a href="#15-使用条件语句">15 使用条件语句</a></li>
+        <li><a href="#16-循环">16 循环</a></li>
+        <li><a href="#17-不常见控制结构">17 不常见控制结构</a></li>
+        <li><a href="#18-表驱动法">18 表驱动法</a></li>
+        <li><a href="#19-控制结构">19 控制结构</a></li>
+        <li><a href="#20-质量保证计划">20 质量保证计划</a></li>
+        <li><a href="#21-有效的结对编程">21 有效的结对编程</a></li>
+        <li><a href="#22-有效的审查">22 有效的审查</a></li>
+        <li><a href="#23-测试用例">23 测试用例</a></li>
+        <li><a href="#24-调试要点">24 调试要点</a></li>
+        <li><a href="#25-重构的理由">25 重构的理由</a></li>
+        <li><a href="#26-重构总结">26 重构总结</a></li>
+        <li><a href="#27-安全重构">27 安全重构</a></li>
+        <li><a href="#28-代码调优策略">28 代码调优策略</a></li>
+        <li><a href="#29-代码调优技术">29 代码调优技术</a></li>
+        <li><a href="#30-配置管理">30 配置管理</a></li>
+        <li><a href="#31-集成">31 集成</a></li>
+        <li><a href="#32-编程工具">32 编程工具</a></li>
+        <li><a href="#33-布局">33 布局</a></li>
+        <li><a href="#34-自文档代码">34 自文档代码</a></li>
+        <li><a href="#35-好的注释">35 好的注释</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#开发个人检查清单">开发个人检查清单</a>
+      <ul>
+        <li><a href="#1-需求">1 需求</a></li>
+        <li><a href="#2-架构">2 架构</a></li>
+        <li><a href="#3-前期准备">3 前期准备</a></li>
+        <li><a href="#4-重要的构建实践">4 重要的构建实践</a></li>
+        <li><a href="#5-软件构建中的设计">5 软件构建中的设计</a></li>
+        <li><a href="#6-类的质量">6 类的质量</a></li>
+        <li><a href="#7-高质量的子程序">7 高质量的子程序</a></li>
+        <li><a href="#8-防御式编程">8 防御式编程</a></li>
+        <li><a href="#9-伪代码编程过程">9 伪代码编程过程</a></li>
+        <li><a href="#10-数据使用中的常规注意事项">10 数据使用中的常规注意事项</a></li>
+        <li><a href="#11-变量命名">11 变量命名</a></li>
+        <li><a href="#12-基本数据类型">12 基本数据类型</a></li>
+        <li><a href="#13-不常见数据类型的注意事项">13 不常见数据类型的注意事项</a></li>
+        <li><a href="#14-组织直线型代码">14 组织直线型代码</a></li>
+        <li><a href="#15-使用条件语句">15 使用条件语句</a></li>
+        <li><a href="#16-循环">16 循环</a></li>
+        <li><a href="#17-不常见控制结构">17 不常见控制结构</a></li>
+        <li><a href="#18-表驱动法">18 表驱动法</a></li>
+        <li><a href="#19-控制结构">19 控制结构</a></li>
+        <li><a href="#20-质量保证计划">20 质量保证计划</a></li>
+        <li><a href="#21-有效的结对编程">21 有效的结对编程</a></li>
+        <li><a href="#22-有效的审查">22 有效的审查</a></li>
+        <li><a href="#23-测试用例">23 测试用例</a></li>
+        <li><a href="#24-调试要点">24 调试要点</a></li>
+        <li><a href="#25-重构的理由">25 重构的理由</a></li>
+        <li><a href="#26-重构总结">26 重构总结</a></li>
+        <li><a href="#27-安全重构">27 安全重构</a></li>
+        <li><a href="#28-代码调优策略">28 代码调优策略</a></li>
+        <li><a href="#29-代码调优技术">29 代码调优技术</a></li>
+        <li><a href="#30-配置管理">30 配置管理</a></li>
+        <li><a href="#31-集成">31 集成</a></li>
+        <li><a href="#32-编程工具">32 编程工具</a></li>
+        <li><a href="#33-布局">33 布局</a></li>
+        <li><a href="#34-自文档代码">34 自文档代码</a></li>
+        <li><a href="#35-好的注释">35 好的注释</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h2 class="relative group">开发个人检查清单 
+    <div id="%E5%BC%80%E5%8F%91%E4%B8%AA%E4%BA%BA%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E5%BC%80%E5%8F%91%E4%B8%AA%E4%BA%BA%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>下面的内容我实际上是抄的代码大全2检查清单的内容，因为没看到哪里有所有的检查清单的内容。所以利用OCR+AI来拿出来所有的文字，除此之外，补上了部分我自己的检查内容，斜体是我自己的内容。</p>
+
+
+<h3 class="relative group">1 需求 
+    <div id="1-%E9%9C%80%E6%B1%82" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-%E9%9C%80%E6%B1%82" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>具体的功能需求</p>
+<ul>
+<li>
+<p>是否指定了系统的所有输入，包括其来源、精度、值的范围和出现频率？</p>
+</li>
+<li>
+<p>是否指定了系统的所有输出，包括其目标、精度、值的范围、出现频率和格式?</p>
+</li>
+<li>
+<p>是否为Web 页面和报表等指定了所有输出格式？</p>
+</li>
+<li>
+<p>是否指定了所有外部硬件和软件接口?</p>
+</li>
+<li>
+<p>是否指定了所有外部通信接口，包括握手、错误检查和通信切议?</p>
+</li>
+<li>
+<p>是否指定了用户想要执行的所有任务?</p>
+</li>
+<li>
+<p>是否指定了每个任务中使用的数据和每个任务产生的数据。要给出产生的数据量一个预估值。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>特定的非功能性(质量)需求</p>
+<ul>
+<li>从用户的角度来看，是否为所有必要的操作指定了预期的响应时间？ <em>尽量避免任何跨公网，以及本地的文件拷贝</em></li>
+<li>是否指定了其他时间考虑因素，比如处理时间、数据传输速率和系统吞吐量</li>
+<li>是否指定了安全级别?</li>
+<li>是否指定了可靠性，包括软件故障的后果、需要在故障中得到保护的重要信息以及错误测和恢复策略？</li>
+<li>是否指定了最小机器内存和空闲磁盘空间?</li>
+<li>是否指定了系统的可维护性，包括适应特定功能的更改、操作环境的更改以及与其他软件接口的更改的能力？</li>
+<li>是否包括了成功和失败的定义?</li>
+</ul>
+</li>
+<li>
+<p>需求质量</p>
+<ul>
+<li>需求是用用户的语言编写的么？用户这么认为么？</li>
+<li><strong>每个需求都避免了与其他需求的冲突么</strong></li>
+<li>是否详细说明了竞争属性之间的可接受的这种，例如健壮性和正确性的折中</li>
+<li>是否避免了在需求中规定设计</li>
+<li>需求在详细程度上是一致的么，是否有需求需要更详细的说明？是否有需求不需要那么详细的说明</li>
+<li><strong>需求是否足够清晰，以至于可以移交给一个独立的团队进行构建，且不会产生误解？开发人员这么认为么？</strong></li>
+<li>每个条款都与待解决的问题及其解决方案相关么？能从每个条款上溯到在问题域中对应的根源么</li>
+<li>每个需求都是可测试的么？是否有可能通过独立测试来确定每个需求都被满足了</li>
+<li><strong>是否说明了需求的所有可能变更以及每种变更的可能性</strong></li>
+<li><em><strong>需求合理性考察，很多需求实际上是非常不清楚或者不合理地，简单补充一个点。如果要检查一个文件是否正常合理，那么文件应该在它生成的过程当中就测试。而不是滞后</strong></em></li>
+<li><em><strong>需要考虑需求的优先级，需要区分出来哪些是必须完成的，哪些是可能完成的。很多情况下不重要的就后推，只考虑重要的需求。简单来说也是需求的完整性</strong></em></li>
+</ul>
+</li>
+<li>
+<p>需求的完整性</p>
+<ul>
+<li><strong>对于在开发中无法获得的信息，是否详细描述了信息不完整的区域</strong></li>
+<li><strong>需求的完备程度是否可以达到这种高度：如果产品满足了所有需求，就说明它是可以接受的</strong></li>
+<li><strong>对全部需求都感到满意么？是否已经去掉了那些不可能实现的需求，那些只是为了安抚客户和老板的东西</strong></li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">2 架构 
+    <div id="2-%E6%9E%B6%E6%9E%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E6%9E%B6%E6%9E%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>针对各架构主题
+<ul>
+<li>顶目的整体组织是否清晰，包括良好的架构概述及其理由</li>
+<li>主要构件是否定义良好，包括它们的职贡范围以及它们与其他构件的接口</li>
+<li>在需求中列出的所有功能都被合理覆盖了吗？</li>
+<li>最关键的类是否有描述和论证？</li>
+<li>数据设计是否有描述和论证？</li>
+<li>是否说明了数据库的组织和内容？</li>
+<li>是否确定了所有关键业务规则及其对系统的影响?</li>
+<li>是否描述了用户界面设计的策略？</li>
+<li>用户界面是模块化的，因此它的更改不会影响程序的其余部分吗?</li>
+<li>是否描述井论证了处理IO的策略？</li>
+<li>是否估算了稀缺资源(如线程、数据库连接、句糖和网络带宽等)的使用量，是否描述并论证了资源管理的策略?</li>
+<li>是否描述了架构的安全需求&quot;</li>
+<li>架构是否为每个类、每个子系统或每个功能域提出时间和空间预算?</li>
+<li>架构是否描述了如何实现可伸缩性?</li>
+<li>架构是否关注了互操作性?</li>
+<li>是否描述了国际化和本地化的策略？</li>
+<li>是否提供了一套一致性的错误处理策略</li>
+<li>是否提供了容错的方法（如果需要的话)</li>
+<li>是否证实了系统各部分的技术可行性，<em>要求系统各个部分能认识到技术难点是比较困难的</em></li>
+<li>是否详细描述了过度工程的方法？</li>
+<li>是否包舍了必要的购买还是构律的决策?</li>
+<li>架构是否播述了如何加工被复用的代码，使之待合其他架构目际;</li>
+<li>架构的设计是否能够适应极有可能出现的变更？</li>
+</ul>
+</li>
+<li>架构的总体质量</li>
+<li>架构是否解决了全部需求？</li>
+<li>有没有哪个部分是过度架构或欠架构?是否明确提出了这方面的具体目标</li>
+<li>整个架构是否在概念上协调一致?这个问题是可以大大拓展的，架构不是只针对代码，对所有的都可以</li>
+<li>顶层设计是否独立于用于实现它的机器和语言</li>
+<li>是否提供了所有主要决策的动机?</li>
+<li>作为一个将要实现系统的程序员，你是否对架构感到满意”</li>
+</ul>
+
+
+<h3 class="relative group">3 前期准备 
+    <div id="3-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3-%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>你是否已经确定了你正在从事的软件项目的类型，并适当调整了你的方法</li>
+<li>需求是否有充分明确的定义，并且足够稳定，可以开始构建(详见需求检查）</li>
+<li>架构是否有充分明确的定义，以便开始构建(详见架构检查清单)</li>
+<li>你的特定顶目所特有的其他风随是否得到了解决，从而使构建不会被暴露在不必要的风险中？</li>
+</ul>
+
+
+<h3 class="relative group">4 重要的构建实践 
+    <div id="4-%E9%87%8D%E8%A6%81%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9E%E8%B7%B5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#4-%E9%87%8D%E8%A6%81%E7%9A%84%E6%9E%84%E5%BB%BA%E5%AE%9E%E8%B7%B5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>编码
+<ul>
+<li>是否定义了有多少设计工作要预先完成，以及多少工作再编码的同时完成</li>
+<li>是否为名称、注释和代码格式等制定了编码约定?</li>
+<li>是否定义了架构所隐含的特定编码实践?例如，如何处理错误条件: 如何处理安全性？类接口使用什么约定？对重用代码应用什么标准?在编码时对性能要考虑到什么程度？</li>
+<li>是否已经确定了自己在科技浪潮中所处的阶段，井调整了自己的方法来？如果有此要,是否已经确定了如何深入语言来编程,而不是受限于只会用语言来绵程</li>
+</ul>
+</li>
+<li>团队工作</li>
+<li>是否定义了集成工序，即是否定义了程序员在将代码登入主干之前必须经过的特定步骤? <em>简单来说就是对应的test和集成测试需要提前完成</em></li>
+<li>程序员是结对编程还是独立编程，还是采用两者的组合?</li>
+</ul>
+
+
+<h3 class="relative group">5 软件构建中的设计 
+    <div id="5-%E8%BD%AF%E4%BB%B6%E6%9E%84%E5%BB%BA%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#5-%E8%BD%AF%E4%BB%B6%E6%9E%84%E5%BB%BA%E4%B8%AD%E7%9A%84%E8%AE%BE%E8%AE%A1" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>设计实践
+<ul>
+<li>是否已做过迭代，从多个结果中选择了最佳的一种，而不是简单地选择首次尝试的结果? <em>分布式的时代需要考虑性能，可靠性，数据量，是否可管理等多方面</em></li>
+<li>尝试过以多种方式分解系统以确定哪种最好吗?</li>
+<li>同时采用了自上而下和自下而上的方法来解决设计回题吗?</li>
+<li>针对系统中有风险或者不熟悉的部分进行过原型设计，写数量最小的抛弃型代码来回答特定回题吗</li>
+<li>自己的设计方案被其他人评审过吗？无论正式与否</li>
+<li>一直在推动设计，直至实现细节昭然若揭吗</li>
+<li>使用某种适当的技术(例如Wiki、电子邮件、挂图、数码照片、UML、CRC卡片或者代码中内嵌的注释)来记录设计了吗？</li>
+</ul>
+</li>
+<li>设计目标
+<ul>
+<li>设计是否充分解决了在整体架构层面确定并决定推迟实现的问题？</li>
+<li>设计是否分层的？</li>
+<li>对于将程序分解为子系统、包和类的方式是否感到满意</li>
+<li>对于将类分解为子程序的方式是否感到满意？</li>
+<li>类的设计是否使它们之间的交互最小化？</li>
+<li>类和子系统的设计是否方便你在其他系统中重用</li>
+<li>程序是否容易维护？<em>程序的维护不是单纯地开发，针对出了问题快速定位原因及时暴露错误码也是是否容易维护的判断标准之一。程序内部采用快速失败是一个比较好的策略，如果出错了还继续执行可能造成无法理解的后果</em></li>
+<li>设计是否精简？它的所有部分都是绝对必要的吗？</li>
+<li>设计是否使用了标准技术来避免奇特的、难以理解的元素？</li>
+<li>总的来说，这个设计是否有助于将偶然和本质的复杂性降至最低？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">6 类的质量 
+    <div id="6-%E7%B1%BB%E7%9A%84%E8%B4%A8%E9%87%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#6-%E7%B1%BB%E7%9A%84%E8%B4%A8%E9%87%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>抽象数据类型</p>
+<ul>
+<li>是否将程序中的类视为抽象数据类型，是否从这个角度评估了他们的接口？</li>
+</ul>
+</li>
+<li>
+<p>抽象</p>
+<ul>
+<li>类是否有一个中心目的</li>
+<li>类的命名是否恰当？其名字是否表达了其中心目的？</li>
+<li>类的接口是否呈现了一致的抽象？</li>
+<li>类的接口是否让人一眼就知道应该如何使用这个类？</li>
+<li>类的接口是否足够抽象，使开发者无需考虑它的服务具体是如何实现的能将类看作是一个黑盒吗？</li>
+<li>类的服务是否足够完整，使其他类无需摆弄其内部数据？</li>
+<li>是否已经从类中移除了无关信息？</li>
+<li>是否考虑过将类进一步分解为组件类？是否已经尽可能地进行了分解？</li>
+<li>修改类时是否保持了其接口的完整性？</li>
+</ul>
+</li>
+<li>
+<p>封装</p>
+<ul>
+<li>是否最小化了类成员的可访问性？</li>
+<li>类是否避免了公开其成员数据？</li>
+<li>在编程语言允许的范围内，类是否尽可能地隐藏了具体实现细节？</li>
+<li>类的设计是否避免了对其用户（包括其派生类）做出假设？这是一个很有趣的点，如果企鹅能够继承鸟，那么用户一般会假设鸟会飞，但是很明显企鹅不会飞。所以实际上如果真正实现的话，建议是拆解部分非通用的属性不在基类</li>
+<li>类是否不依赖于其他类？是否松耦合？</li>
+</ul>
+</li>
+<li>
+<p>继承</p>
+<ul>
+<li>继承是否只用来建立&quot;is-a&quot;关系？即派生类是否遵循了里氏替换原则（lsp）而非仅仅为了重用代码？</li>
+<li>类的文档是否描述了其继承策略？</li>
+<li>派生类是否免除了&quot;覆盖不可覆盖的函数&quot;的限制？</li>
+<li>是否足够清晰地指定了派生类如何重载、扩展和覆盖基类的行为，并将待继承的的通用接口数据放在了继承树上层？</li>
+<li>继承树是否很浅？</li>
+<li>是否将基类中的所有成员都定义为私有或受保护的？</li>
+</ul>
+</li>
+<li>
+<p>与实现相关的其它问题</p>
+<ul>
+<li>类的数据成员是否只有七个或更少？</li>
+<li>是否将类中直接调用其他类的子程序的数量减到最少了？</li>
+<li>类是否只在绝对必要时才与其他类协作？</li>
+<li>是否所有数据成员都在构造函数中进行了初始化？</li>
+<li>是否经过论证，类被设计为深拷贝而不是浅拷贝来使用？</li>
+<li>语言特定问题，针对您所使用的编程语言，是否研究过语言特定的和与类相关的问题？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">7 高质量的子程序 
+    <div id="7-%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%AD%90%E7%A8%8B%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#7-%E9%AB%98%E8%B4%A8%E9%87%8F%E7%9A%84%E5%AD%90%E7%A8%8B%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>主要问题</p>
+<ul>
+<li>是否有充分的理由来创建该子程序？ <em>创建子程序的理由应该是不同功能的拆分，和代码复用</em></li>
+<li>在该子程序中，哪些部分更适合抽取出来作为独立的子过程或函数？</li>
+<li>关于该子程序的命名，是否使用了清晰的、强有力的动词加上对其操作对象的描述作为过程的名称，或者使用了对返回值的描述作为函数的名称？</li>
+<li>该子程序的名称是否准确地描述了它所做的一切事情？</li>
+<li>是否为一些常用操作建立了命名规范？</li>
+<li>该子程序是否具有高内聚性，即只做一件事，并且做得很好？</li>
+<li>该子程序是否具有松散的耦合性？该子程序与其他子程序的关联是否简单、专用、可见和灵活？</li>
+<li>该子程序的长度是否是由它的功能和逻辑自然决定的，而不是由人为制定的编码标准决定的？<em>这个可能有点反直觉，很多情况下会有规定程序不能太长</em></li>
+</ul>
+</li>
+<li>
+<p>参数传递问题</p>
+<ul>
+<li>该子程序的参数列表作为一个整体是否呈现了一致的接口抽象？</li>
+<li>该子程序的参数是否按合理顺序进行排列，与其他类似子程序的参数顺序一致？</li>
+<li>是否对接口假设进行了文档记录？</li>
+<li>该子程序的参数数量是否少于或等于7个？</li>
+<li>在该子程序中是否使用了每个输入参数？</li>
+<li>在该子程序中是否使用了每个输出参数？</li>
+<li>是否避免将输入参数作为工作变量使用？<em>这里面有个问题，有的时候我们就是要把这个做工作变量，不过理论上应该是最小量的更新，获取之类的</em></li>
+<li>如果该子程序是一个函数，在所有可能的情况下是否都返回了一个有意义的值？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">8 防御式编程 
+    <div id="8-%E9%98%B2%E5%BE%A1%E5%BC%8F%E7%BC%96%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#8-%E9%98%B2%E5%BE%A1%E5%BC%8F%E7%BC%96%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>一般事宜</p>
+<ul>
+<li>子程序否可以保护自己免受输入参数的破坏？</li>
+<li>是否使用断言来声明假设，包括前置条件和后置条件？</li>
+<li>断言是否只用于声明永远不应该发生的情况？</li>
+<li>是否在架构或高层级设计中指定了一组特定的错误处理技术？尽管有点反直觉，目前部分C++代码规范是反对使用异常的，很多函数有对应的不抛异常版本</li>
+<li>是否在架构或高层级设计中规定了错误处理应该偏向于健壮性还是正确性？<em>健壮性会带来时间和试错的成本，正确性的最简单选择就是快速失败</em></li>
+<li>是否建立了防护屏障来防止可能造成破坏的错误，并减少与错误处理有关的代码数量？比方说一个json解析失败不应该导致整个服务器崩溃。这也是为什么微服务会兴起的原因</li>
+<li>代码中是否使用了辅助调试代码？</li>
+<li>如果要启用和停用辅助调试代码，是否不需要大动干戈？</li>
+<li>防御式编程引入的代码的数量是否合适，既不太多也不太少？</li>
+<li>在开发阶段是否使用攻击式编程技术使错误很难被忽视？<em>这个是指混沌工程主动显示错误是吧？</em></li>
+</ul>
+</li>
+<li>
+<p>异常</p>
+<ul>
+<li>在项目中是否定义了一种标准化的异常处理方法？</li>
+<li>是否考虑过异常之外的其他替代方案？</li>
+<li>错误是否已尽可能在局部处理，而不是作为异常向外抛出？</li>
+<li>代码中是否避免在构造函数和析构函数中抛出异常？</li>
+<li>是否所有的异常都与抛出它们的子程序处于同一抽象层次上？</li>
+<li>每个异常是否包含了关于异常发生的所有背景信息？</li>
+<li>代码中是否没有使用空的catch块？或者，如果使用空的catch块，是否很合适？</li>
+</ul>
+</li>
+<li>
+<p>安全事宜</p>
+<ul>
+<li>检查错误输入数据的代码是否也检查了缓冲区溢出、SQL注入、HTML注入、整数溢出和其他恶意输入？</li>
+<li>是否检查了所有错误返回码？</li>
+<li>是否捕获了所有的异常？</li>
+<li>出错消息中是否避免了出现有助于攻击者攻入系统的信息？心脏滴血漏洞实际上还不能说是出错信息，而是泄漏了过多信息</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">9 伪代码编程过程 
+    <div id="9-%E4%BC%AA%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%E8%BF%87%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#9-%E4%BC%AA%E4%BB%A3%E7%A0%81%E7%BC%96%E7%A8%8B%E8%BF%87%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>确认已满足所有先决条件了吗？</li>
+<li>定义好要解决的问题了吗？</li>
+<li>概要设计足够清晰，能为类及其每个子程序起一个好的名字吗？</li>
+<li>考虑过应该如何测试类及其每个子程序吗？</li>
+<li>主要是从可靠的接口和可读性好的实现，还是从满足资源和速度预算的效率考虑？一般是初期考虑可读性，后期专人负责优化和设计</li>
+<li>在标准库或其他代码库中找过可用的子程序或组件了吗？</li>
+<li>在参考书中查找过有用的算法了吗？</li>
+<li>采用详细的伪代码去设计了每一个子程序吗？</li>
+<li>已经在心头检查过伪代码吗？这些伪代码容易理解吗？</li>
+<li>关注过那些可能会让自己重返设计的警告信息了吗？例如，关于全局变量的使用以及一些似乎更适合放在另一个类或子程序中的操作等？</li>
+<li>将伪代码准确转换成实际代码了吗？</li>
+<li>以递归方式运用编程过程，并根据需要将一些子程序拆分成更小的子程序了吗？</li>
+<li>在做出假设时对它们进行说明了吗？</li>
+<li>删除多余注释了吗？</li>
+<li>是否从几次迭代中选择了效果最好的，而不是在第一次迭代之后就停止尝试？</li>
+<li>是否完全理解了自己写的代码？它们是否容易理解？</li>
+</ul>
+
+
+<h3 class="relative group">10 数据使用中的常规注意事项 
+    <div id="10-%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#10-%E6%95%B0%E6%8D%AE%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>初始化变量</p>
+<ul>
+<li>是否一个子程序都检查输入参数的合法性吗？</li>
+<li>每个子程序是否检查输入参数的有效性？</li>
+<li>代码是否在首次使用变量的地方声明变量？</li>
+<li>如果可能的话，代码是否在声明变量时对其进行初始化？</li>
+<li>如果不能同时声明和初始化变量，代码是否在靠近首次使用的地方初始化变量？</li>
+<li>是否正确初始化了计数器和累加器？如有必要，是否在每次使用时都重新初始化？</li>
+<li>在重复执行的代码中，变量的重新初始化是否正确？</li>
+<li>代码编译时，编译器是否发出警告？启用了所有可用的警告吗？</li>
+<li>如果所用的语言允许隐式声明，是否为由此引发的问题做好了补偿措施？</li>
+</ul>
+</li>
+<li>
+<p>使用数据的其他事项</p>
+<ul>
+<li>所有变量都有最小的作用域吗？</li>
+<li>对变量的引用都尽可能集中在一起吗？对同一变量的两次相邻引用以及变量的整个生命周期，是否都这样做了？</li>
+<li>控制结构是否与数据类型相对应？</li>
+<li>是否使用了所有已声明的变量？这种可以用编译器的设定来解决</li>
+<li>变量都是在适当时同绑定的吗？也就是说，是否有意在后期绑定所带来的灵活性与增加的复杂度之间做出了平衡？</li>
+<li>每个变量是否都有且只有一个用途？</li>
+<li>每个变量的名称都很明确且没有隐含含义吗？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">11 变量命名 
+    <div id="11-%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#11-%E5%8F%98%E9%87%8F%E5%91%BD%E5%90%8D" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>命名的常规注意事项</p>
+<ul>
+<li>名称是否完整且准确地描述了变量所代表的内容？<em>举一个简单的例子，配置kubernetes comfigmap的对象，不应该叫做kubeconfig</em></li>
+<li>名称是指现实世界的问题，而不是编程语言解决方案吗？</li>
+<li>名称是否长到没有必要去猜测它的含义？</li>
+<li>如果有计算值限定符，是否把它放在了命名的末尾？</li>
+<li>名称是否使用了Count或Index而不是Num？</li>
+</ul>
+</li>
+<li>
+<p>特定类型数据的命名</p>
+<ul>
+<li>循环索引的命名是否有意义（如循环超过一两行或是嵌套的，则不应是i、j或k）？</li>
+<li>所有“临时”变量是否被重新命名为更有意义的名字？</li>
+<li>当布尔变量的值为真时，变量名能准确表达其含义吗？</li>
+<li>枚举类型的名称是否包含一个表示其类别的前缀或后缀，比如用于Color Red、Color Green、Color Blue等？</li>
+<li>具名常量是以其所代表的抽象实体而不是所指代的数字来命名的吗？</li>
+</ul>
+</li>
+<li>
+<p>命名规范</p>
+<ul>
+<li>规范是否对局部数据、类数据和全局数据进行了区分？</li>
+<li>规范是否对类型名、只名常量、枚举类型和变量进行了区分？</li>
+<li>在不强制命名只读输入参数的情况下，是否明确标识了子程序中的只读参数？</li>
+<li>规范是否能够兼容于语言的标准规范？</li>
+<li>名称的格式是否便于阅读？</li>
+</ul>
+</li>
+<li>
+<p>短名称</p>
+<ul>
+<li>代码是否使用了长的名称（除非有必要用短的名称）？</li>
+<li>代码是否避免了使用只节省一个字符的缩写？</li>
+<li>所有单词的缩写是否一致？</li>
+<li>名称是否可读？</li>
+<li>是否避免了可能误读或发生错误的名称？</li>
+<li>短的名称是否记录在了缩写对照表中？</li>
+</ul>
+</li>
+<li>
+<p>常见的命名问题: 是否避免了使用&hellip;</p>
+<ul>
+<li>&hellip;是否避免了使用误导性的名称？</li>
+<li>&hellip;是否避免了使用含义相似的名称？</li>
+<li>&hellip;是否只有一两个字符不同的名称？</li>
+<li>&hellip;是否避免了使用发音相似的名称？</li>
+<li>&hellip;是否避免了使用包含数字的名称？</li>
+<li>&hellip;是否避免了故意拼错名称为了更短？</li>
+<li>&hellip;是否避免了英语中经常拼错的名称？</li>
+<li>&hellip;是否避免了与标准库子程序名或预定义变量名冲突的名称？</li>
+<li>&hellip;是否避免了过于随意的名称？</li>
+<li>&hellip;是否避免了包含容易混淆字符的名称？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">12 基本数据类型 
+    <div id="12-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#12-%E5%9F%BA%E6%9C%AC%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>一般的数字</p>
+<ul>
+<li>代码是否避免了魔法数字？</li>
+<li>代码是否考虑了除零错误？</li>
+<li>类型转换是否明显？</li>
+<li>是否按照期望进行计算？</li>
+<li>代码是否避免了混合类型的比较？</li>
+<li>程序编译时是否没有警告？</li>
+</ul>
+</li>
+<li>
+<p>整型</p>
+<ul>
+<li>使用整数除法的表达式是否按预期工作？</li>
+<li>整数表达式是否避免了整数溢出问题？</li>
+</ul>
+</li>
+<li>
+<p>浮点型</p>
+<ul>
+<li>代码是否避免对大小差别很大的数字进行加减运算？</li>
+<li>代码是否系统地防止了舍入错误？</li>
+<li>代码是否避免了对浮点数做等价比较？</li>
+</ul>
+</li>
+<li>
+<p>字符和字符串</p>
+<ul>
+<li>代码是否避免了魔法字符和魔法字符串？</li>
+<li>使用字符串时是否避免了差一错误？</li>
+<li>C语言的代码是否区别对待了字符串指针和字符数组？</li>
+<li>C语言的代码是否在适当的时候使用字符数组而不是指针？</li>
+</ul>
+</li>
+<li>
+<p>枚举类型</p>
+<ul>
+<li>程序是否使用枚举类型而非具名敞亮来提高可读性，可靠性和可修改性</li>
+<li>使用枚举类型的判断是否能检测出无效值？</li>
+<li>枚举类型的第一个元素是否保留为“无效值”？</li>
+</ul>
+</li>
+<li>
+<p>具名常量</p>
+<ul>
+<li>程序是否将具名常量而非魔法数字用于数据声明和循环控制？</li>
+<li>具名常量的使用是否一致，是否避免在某些地方使用具名常量而在其他地方使用字面量？</li>
+</ul>
+</li>
+<li>
+<p>数组</p>
+<ul>
+<li>所有的数组索引是否都在数组的边界范围内？</li>
+<li>数组引用是否避免了差一错误？</li>
+<li>多维数组的所有索引顺序是否正确？</li>
+<li>在嵌套循环中，是否使用正确的变量作为数组索引，以避免循环索引混淆？</li>
+</ul>
+</li>
+<li>
+<p>创建类型</p>
+<ul>
+<li>程序是否为每一种可能变化的数据使用不同的类型？</li>
+<li>类型名称是否以类型所代表的现实世界实体为导向，而不是以编程语言类型为导向？</li>
+<li>类型名是否具有足够的描述性，可以帮助解释数据声明？</li>
+<li>是否避免了重新定义预定义类型？</li>
+<li>是否考虑过创建一个新的类而不是简单地重新定义一个类型？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">13 不常见数据类型的注意事项 
+    <div id="13-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#13-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>结构体</p>
+<ul>
+<li>是否适当使用了结构体而不是单纯的变量来组织和保持相关的数据？</li>
+<li>是否考虑过使用类来替代结构体？</li>
+</ul>
+</li>
+<li>
+<p>全局数据</p>
+<ul>
+<li>除非绝对有必要，否则所有变量都应该具有局部作用域或类作用域。</li>
+<li>变量命名规范是否区分了局部数据、类数据和全局数据？</li>
+<li>是否为所有全局变量提供了文档说明？</li>
+<li>代码中是否没有伪全局数据（pseudoglobal data），即不要包含将杂乱的数据传递给每个子程序的数据的巨大对象</li>
+<li>是否使用了访问器子程序替代全局数据？</li>
+<li>访问器子程序和数据是否组织在类中？</li>
+<li>访问器子程序是否提供了一个在底层数据类型实现之上的抽象层？</li>
+<li>所有相关的访问器子程序是否处于同一抽象层？</li>
+</ul>
+</li>
+<li>
+<p>指针</p>
+<ul>
+<li>指针操作是否隔离在子程序中？</li>
+<li>指针引用是否有效？或者指针是否有可能成为野指针？</li>
+<li>在使用指针之前是否检查了其有效性？</li>
+<li>在使用指针引用的变量之前是否检查了其有效性？</li>
+<li>指针释放后是否被设置为空？</li>
+<li>为了提高可读性，代码是否使用了所有必需的指针变量？</li>
+<li>链表中的指针是否按照正确的顺序进行释放？</li>
+<li>程序是否分配了一块紧急备用内存，以便在内存耗尽时可以优雅地退出？</li>
+<li>是否在没有其他方法可用的情况下才使用指针？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">14 组织直线型代码 
+    <div id="14-%E7%BB%84%E7%BB%87%E7%9B%B4%E7%BA%BF%E5%9E%8B%E4%BB%A3%E7%A0%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#14-%E7%BB%84%E7%BB%87%E7%9B%B4%E7%BA%BF%E5%9E%8B%E4%BB%A3%E7%A0%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>代码能明确语句之间的依赖关系吗？</li>
+<li>子程序的名称能明确表达依赖关系吗？</li>
+<li>子程序的参数能明确表达依赖关系吗？</li>
+<li>是否使用注释描述了不够明确的依赖关系？</li>
+<li>是否使用内部处理变量来验证关键代码中的顺序依赖关系？</li>
+<li>代码能够自上而下流畅地阅读吗？</li>
+<li>相关语句是否进行了分组？</li>
+<li>是否将相对独立的语句组转化为独立的子程序？</li>
+</ul>
+
+
+<h3 class="relative group">15 使用条件语句 
+    <div id="15-%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#15-%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6%E8%AF%AD%E5%8F%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>if-then语句</p>
+<ul>
+<li>代码中的正常路径清晰吗？</li>
+<li>if-then基于相等性测试的正确分支了吗？</li>
+<li>else子句是否使用并添加了注释？</li>
+<li>else子句用得正确吗？</li>
+<li>是否正确使用了if和else子句？它们有没有被用反了？</li>
+<li>正常情况是跟在if后面而非else后面吗？</li>
+</ul>
+</li>
+<li>
+<p>if-then-else-if链</p>
+<ul>
+<li>复杂测试封装到布尔函数调用中了吗？</li>
+<li>最先测试的是最常见的情况吗？</li>
+<li>是否覆盖了所有情况？</li>
+<li>if-then-else-if链是最佳实现方式吗？是否比case语句更好？</li>
+</ul>
+</li>
+<li>
+<p>case语句</p>
+<ul>
+<li>所有case都按有意义的方式排列吗？</li>
+<li>每个case的动作都简单吗？必要时是否调用了其他子程序？</li>
+<li>case语句判断的是一个真实变量，而非只为滥用case语句而虚构的变量吗？</li>
+<li>default子句用得正当吗？</li>
+<li>default子句是用来检测和报告出乎预料的情况吗？</li>
+<li>在C语言、C++语言或Java语言中，每个case的结尾处都有break吗？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">16 循环 
+    <div id="16-%E5%BE%AA%E7%8E%AF" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#16-%E5%BE%AA%E7%8E%AF" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>循环的选择和创建</p>
+<ul>
+<li>是否在合适的时候采用while循环取代其他循环了吗？</li>
+<li>循环是由内向外创建的吗？</li>
+</ul>
+</li>
+<li>
+<p>进入循环</p>
+<ul>
+<li>是否从顶部进入循环？</li>
+<li>初始化代码是否直接放在循环前面了吗？</li>
+<li>如果是无限循环或事件循环，其结构是否清晰，而不是采用类似于&quot;while True&quot;这样简单的代码？</li>
+<li>如果循环属于C/C++或者Java的for循环，循环控制代码是否都放在循环头部了吗？</li>
+</ul>
+</li>
+<li>
+<p>循环内部</p>
+<ul>
+<li>是否使用括号或其等价形式来封闭循环体以免修改不当而出错？</li>
+<li>循环体里面有内容吗？它是非空的吗？</li>
+<li>内务处理代码是否集中存放在循环开始或者循环结束的位置了吗？</li>
+<li>循环是否就像定义良好的子程序那样只执行一种功能？</li>
+<li>循环是否短到足以让人一目了然？</li>
+<li>循环的嵌套层数控制在三层以内吗？</li>
+<li>长循环的内容是否转移到相应的子程序中了吗？</li>
+<li>如果循环很长，是不是特别清晰？</li>
+</ul>
+</li>
+<li>
+<p>循环索引</p>
+<ul>
+<li>For循环体内的代码有没有随意改动循环索引值？</li>
+<li>是否专门用变量保存重要的循环索引值，而不是在循环体外部使用循环索引？</li>
+<li>循环索引是否是整数类型或者枚举类型，而不是浮点类型？</li>
+<li>循环索引的名称有意义吗？</li>
+<li>循环是否避免了索引串扰问题？</li>
+</ul>
+</li>
+<li>
+<p>退出循环</p>
+<ul>
+<li>循环是否在所有情况下可以终止</li>
+<li>循环内是否使用安全计数器</li>
+<li>循环的终止条件是否显而易见</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">17 不常见控制结构 
+    <div id="17-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#17-%E4%B8%8D%E5%B8%B8%E8%A7%81%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>return</p>
+<ul>
+<li>每个子程序是否都只在必要的时候才使用return？</li>
+<li>return 是否增强了可读性？</li>
+</ul>
+</li>
+<li>
+<p>递归</p>
+<ul>
+<li>递归子程序是否包含用于终止递归的代码？</li>
+<li>子程序是否使用安全计数器保证自己终止？</li>
+<li>递归是否只限于一个子程序（没有循环递归）？</li>
+<li>子程序递归深度是否在栈的大小限制范围内？</li>
+<li>递归是实现子程序最好的方式吗？比简单的迭代好？</li>
+</ul>
+</li>
+<li>
+<p>goto</p>
+<ul>
+<li>goto 是否只是用作最后的紧急手段，还是为了增强代码的可读性和可维护性？</li>
+<li>如果为了效率而使用goto，是否对效率的提升进行了度量和注释？</li>
+<li>每个子程序的goto 是否只限于使用一个标签？</li>
+<li>所有的goto 是否都是向前的而不是向后的？</li>
+<li>所有的goto 标签都用到了吗？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">18 表驱动法 
+    <div id="18-%E8%A1%A8%E9%A9%B1%E5%8A%A8%E6%B3%95" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#18-%E8%A1%A8%E9%A9%B1%E5%8A%A8%E6%B3%95" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>是否考虑过将表驱动法作为复杂逻辑的替代方案？</p>
+</li>
+<li>
+<p>是否考虑过将表驱动法作为复杂继承结构的替代方案？</p>
+</li>
+<li>
+<p>是否考虑过将表数据存储在程序外部，并在运行期间读取，以实现在不修改代码的前提下进行修改？</p>
+</li>
+<li>
+<p>如果无法采用直接的数组索引来访问表（例如像age例子那样），是否考虑提取键的计算功能为一个单独的子程序，而不是在代码中复制这些计算？</p>
+</li>
+</ul>
+
+
+<h3 class="relative group">19 控制结构 
+    <div id="19-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#19-%E6%8E%A7%E5%88%B6%E7%BB%93%E6%9E%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>大部分都是语言层面的错误</p>
+
+
+<h3 class="relative group">20 质量保证计划 
+    <div id="20-%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81%E8%AE%A1%E5%88%92" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#20-%E8%B4%A8%E9%87%8F%E4%BF%9D%E8%AF%81%E8%AE%A1%E5%88%92" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>是否已经确定了对项目至关重要的具体质量特性？</li>
+<li>是否让其他人员了解项目的质量目标？</li>
+<li>是否区分了外部和内部质量特征？</li>
+<li>是否考虑了某些特性之间相互制约或促进的具体方式？最简单的考虑就是CAP了</li>
+<li>是否要求针对不同错误类型使用不同的错误检测技术？</li>
+<li>质量保证计划中是否有步骤来保证软件在开发各阶段的质量？</li>
+<li>是否以某种方式度量质量，以便能够判断质量是在改进还是降低？</li>
+<li>管理层是否理解质量保证在前期会消耗额外成本，但目的是在项目后期降低成本？</li>
+</ul>
+
+
+<h3 class="relative group">21 有效的结对编程 
+    <div id="21-%E6%9C%89%E6%95%88%E7%9A%84%E7%BB%93%E5%AF%B9%E7%BC%96%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E6%9C%89%E6%95%88%E7%9A%84%E7%BB%93%E5%AF%B9%E7%BC%96%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>是否有编码规范，以便结对编程人员能够专注于编程，而不是编程风格的纠缠</li>
+<li>结对双方是否都积极参与?</li>
+<li>是否避免了对所有内容进行结对编程，而足选择真正能够受益于结对编程的任务?</li>
+<li>是否定期对人员和工作任务进行轮换?</li>
+<li>两人在速度和个性方面是否匹配良好?</li>
+<li>是否有组长担任联络人来负责与项目外部管理层和其他人员沟通?</li>
+</ul>
+
+
+<h3 class="relative group">22 有效的审查 
+    <div id="22-%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%A1%E6%9F%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-%E6%9C%89%E6%95%88%E7%9A%84%E5%AE%A1%E6%9F%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>是否有清单可以使审查人的注意力集中于过去有问题的领域？</li>
+<li>是否将审查侧重于找出缺陷，而不是去修正它们？</li>
+<li>是否考虑过为审查人分配特定的视角或场景，以帮助他们在做准备工作时加强专注？</li>
+<li>审查人在审查会议前是否有充足的时间进行准备，并且每个人都做好了准备？</li>
+<li>每个参与者是否都扮演了明确的角色：主持人、审查人和记录员等？</li>
+<li>会议是否以高效的速度进行？</li>
+<li>会议时间是否限制在两小时以内？</li>
+<li>所有审查参与者是否都接受过有针对性的审查培训，以及主持人是否接受过专门的主持技能培训？</li>
+<li>每次审查时是否收集有关错误类型的数据，以便为组织量身定制未来的改进清单？</li>
+<li>是否收集了有关准备速度和审查速度的数据，以便优化未来的准备和审查工作？</li>
+<li>每次审查是否分配了行动项，由主持人亲自跟进或者安排一次重新审查进行跟进？</li>
+<li>管理层是否理解自己不应该参加审查会议？</li>
+<li>是否有跟进计划以确保问题已经得到正确修复？</li>
+</ul>
+
+
+<h3 class="relative group">23 测试用例 
+    <div id="23-%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>是否用手头所有的测试用例保证了每个部分有足够的测试覆盖吗？包括函数覆盖率，runtime覆盖率和需求满足情况</li>
+<li>类和子函数的设计中每个元素都有各自所对应的测试用例吗？</li>
+<li>每行代码至少用一个测试用例进行了测试吗？ 是否考虑了计算测试每行代码所需的最小测试用例数量来进行验证？</li>
+<li>是否用至少一个测试用例对每条“已定义-已使用”的数据流路径进行了测试？</li>
+<li>是否检查了代码中不太可能正确的数据流模式，例如&quot;已定义-已定义&quot;和&quot;已定义-未撤销&quot;？</li>
+<li>在编写测试用例时是否参考了一个常见错误的列表来检测过去经常出现的错误？</li>
+<li>是否测试了所有的简单边界条件：最大值、最小值和差一边界？</li>
+<li>是否测试了所有的复合边界条件，即多个输入数据的组合可能导致计算得出的变量过小或过大？</li>
+<li>测试用例是否检查了错误的数据类型，例如，薪资管理程序中将员工数量设为负数？</li>
+<li>是否测试了有代表性的、普遍性的取值？</li>
+<li>是否测试了最小正常配置？</li>
+<li>是否测试了最大正常配置？</li>
+<li>是否对旧数据进行了兼容性测试？是否针对旧的硬件、旧版本的操作系统以及与旧版本的其他软件的接口进行了测试？</li>
+<li>该测试用例是否易于进行手工查看？</li>
+</ul>
+
+
+<h3 class="relative group">24 调试要点 
+    <div id="24-%E8%B0%83%E8%AF%95%E8%A6%81%E7%82%B9" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#24-%E8%B0%83%E8%AF%95%E8%A6%81%E7%82%B9" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>发现缺陷的技术
+<ul>
+<li>使用所有可用的数据来创建假设</li>
+<li>精炼产生错误的测试用例</li>
+<li>在单元测试套件中运行代码</li>
+<li>使用可用的工具</li>
+<li>使用不同的方法重现错误</li>
+<li>生成更多的数据以产生更多的假设</li>
+<li>利用负面测试的结果</li>
+<li>头脑风暴找出可能的假设</li>
+<li>在桌子旁边放一个记事本，把要尝试的事情都列出来</li>
+<li>缩小可疑的代码区域</li>
+<li>以前有缺陷的类和子程序值得怀疑</li>
+<li>检查最近修改的代码</li>
+<li>扩大可疑的代码区域</li>
+<li>逐步集成</li>
+<li>检查常见的缺陷</li>
+<li>向某人讲述发现的问题</li>
+<li>把问题放一放，先休息一下</li>
+<li>为快而糙的调试设置最大时间</li>
+<li>整理一个暴力技术的清单，并且使用它们</li>
+</ul>
+</li>
+<li>语法错误的技术
+<ul>
+<li>不要相信编译器消息中的行号</li>
+<li>不要相信编译器消息</li>
+<li>不要相信编译器的第二条消息</li>
+<li>分而治之</li>
+<li>使用语法制导编辑器发现错误的注释和引号</li>
+</ul>
+</li>
+<li>修复缺陷的技术
+<ul>
+<li>在复现前先理解问题</li>
+<li>理解程序，而不仅仅是问题</li>
+<li>确认缺陷诊断结论</li>
+<li>放松</li>
+<li>保存原始代码</li>
+<li>修复问题，而不是症状</li>
+<li>仅在有充分理由的情况下修改代码</li>
+<li>一次只做一处修改</li>
+<li>检查修复的程序</li>
+<li>添加一个暴露缺陷的单元测试</li>
+<li>寻找类似的缺陷</li>
+</ul>
+</li>
+<li>常用的调试方法
+<ul>
+<li>你是否将调试作为了解程序、错误、代码质量和解决问题方法的机会？</li>
+<li>你是否避免了试错、迷信的调试方法？</li>
+<li>你是否假设错误是你犯错导致的？</li>
+<li>你是否使用科学的方法来复现间歇性错误？</li>
+<li>你是否使用科学的方法来发现缺陷？</li>
+<li>你不是每都使用相同的方法，而是使用几种不同的技术来发现缺陷吗？</li>
+<li>你是否验证了修复的正确性？</li>
+<li>你是否使用了编译器告警消息</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">25 重构的理由 
+    <div id="25-%E9%87%8D%E6%9E%84%E7%9A%84%E7%90%86%E7%94%B1" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#25-%E9%87%8D%E6%9E%84%E7%9A%84%E7%90%86%E7%94%B1" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>代码发生重复</li>
+<li>子程序太长</li>
+<li>循环太长或嵌套太深</li>
+<li>类的内聚力很差</li>
+<li>类的接口不能提供一致的抽象层级</li>
+<li>参数表有太多参数</li>
+<li>在类中进行的修改各自独立</li>
+<li>需要平行修改多个类</li>
+<li>需要平行修改继承层级结构</li>
+<li>需要平行修改 case 语句</li>
+<li>一起使用的相关数据项没有被组织成类</li>
+<li>一个子程序使用了另一个类(而非它自己的类)更多的特性</li>
+<li>无脑使用基本数据类型</li>
+<li>类的作用不大</li>
+<li>子程序间传递流浪数据</li>
+<li>一个中间对象没有做任何事情</li>
+<li>一个类与另一个类过于亲密</li>
+<li>某个子程序的名字太差劲</li>
+<li>公共数据成员</li>
+<li>一个子类只使用了其父类的一小部分功能</li>
+<li>用注释解释难以理解的代码</li>
+<li>全局变量的使用</li>
+<li>程序包舍的代码似乎有一天会被需要</li>
+</ul>
+
+
+<h3 class="relative group">26 重构总结 
+    <div id="26-%E9%87%8D%E6%9E%84%E6%80%BB%E7%BB%93" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#26-%E9%87%8D%E6%9E%84%E6%80%BB%E7%BB%93" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>数据级重构
+<ul>
+<li>用具名常量替换神秘数字。</li>
+<li>用更清晰或更有信息量的名字重命名变量</li>
+<li>使表达式内联。</li>
+<li>用子程序替代表达式</li>
+<li>引入中间变量。</li>
+<li>将一个多用途的变量转换为多个单用途的变量，</li>
+<li>局部用途的就用局部变量，而不要用参数</li>
+<li>将数据基元转换为类</li>
+<li>将一组类型代码转换为类或枚举，</li>
+<li>将一组类型代码转换为带有子类的类，</li>
+<li>将数组改为对象、</li>
+<li>封装集合</li>
+<li>用数据类替代传统记录</li>
+</ul>
+</li>
+<li>语句级重构
+<ul>
+<li>分解布尔表达式.</li>
+<li>将复杂布尔表达式移入一个命名良好的布尔函数。</li>
+<li>合并条件语句不同部分的重复片段</li>
+<li>使用 break 或 return 替代循环控制变量</li>
+<li>知道答案后立即返回，而不是在嵌套 if-then-else 语句中赋一个返回值。</li>
+<li>用多态替代条件语句(尤其是重复的 case 语句)。</li>
+<li>创建和使用空对象，而不是测试空值</li>
+</ul>
+</li>
+<li>子程序级重构
+<ul>
+<li>提取子程序</li>
+<li>内联子程序的代码、将长的子程序转快为短动词短语</li>
+<li>用简单算法代替复杂算法。</li>
+<li>增加参数、</li>
+<li>删除参数</li>
+<li>将查询操作与修改操作分开</li>
+<li>通过参数化合并类似的子程序</li>
+<li>分解行为依赖于传入参数的子程序</li>
+<li>传递整个对象而不是特定的字段。</li>
+<li>传递特定的字段而不是整个对象。</li>
+<li>封装向下转型 (downcasting)。</li>
+</ul>
+</li>
+<li>类实现重构
+<ul>
+<li>将值对象修改为引用对象</li>
+<li>将引用对象修改为值对象</li>
+<li>用数据初始化替代虚函数、</li>
+<li>改变成员函数或数据的位置.</li>
+<li>将特化代码提取到一个子类中</li>
+<li>将相似代码合并到超类中，</li>
+</ul>
+</li>
+<li>类接口重构
+<ul>
+<li>移动方法到一个提供者。</li>
+<li>将一个类转换为两个。</li>
+<li>抽取类。</li>
+<li>委托</li>
+<li>去掉中间人。</li>
+<li>用委托代替继承。</li>
+<li>用继承代替委托。</li>
+<li>引入外来的子程序</li>
+<li>引入扩展类。</li>
+<li>封装公开变量</li>
+</ul>
+</li>
+<li>系统级重构
+<ul>
+<li>为无法控制的数据创建一个明确的引用源</li>
+<li>将单向累关联为双向类关联</li>
+<li>提供工厂方法而不是简单构造函数</li>
+<li>用异常代替错误代码或者相反</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">27 安全重构 
+    <div id="27-%E5%AE%89%E5%85%A8%E9%87%8D%E6%9E%84" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#27-%E5%AE%89%E5%85%A8%E9%87%8D%E6%9E%84" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>每次改动都是一个语言改动策略的一部分吗?</li>
+<li>重构前是否保存了最初的代码？</li>
+<li>是否保持每次重构的幅度都很小？</li>
+<li>是否一次只进行一个重构？</li>
+<li>是否列出了在重构过程中打算采取的步骤？</li>
+<li>是否做了一个停车场，以便记住重构中途产生的想法？</li>
+<li>每次重构后都重新测试了吗？</li>
+<li>若改动很复杂，或者会影响关键任务，是否进行了代码审查？</li>
+<li>是否考虑过特定重构的风险等级并相应地调整了你的方法？</li>
+<li>这个修改是否改善而非降低了程序的内部质量？</li>
+<li>是否避免了用重构作为编码和修复的幌子，或者作为不重写坏代码的借口?</li>
+</ul>
+
+
+<h3 class="relative group">28 代码调优策略 
+    <div id="28-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#28-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E7%AD%96%E7%95%A5" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>程序整体性能</p>
+<ul>
+<li>考虑通过变更程序需求来提升性能了吗？</li>
+<li>考虑通过修改程序设计来提升性能了吗？</li>
+<li>考虑通过修改类的设计来提升性能了吗？</li>
+<li>考虑通过避免程序与操作系统的交互来提升性能了吗？</li>
+<li>考虑通过避免IO操作创建来提升性能了吗？</li>
+<li>考虑用编译型语言替代解释型语言来提升性能了吗？</li>
+<li>考虑启用编译器优化选项来提升性能了吗？</li>
+<li>考虑通过切换到不同的硬件设备来提升性能了吗？</li>
+<li>代码调优是不是万不得已的最后选择？</li>
+</ul>
+</li>
+<li>
+<p>代码调优方法</p>
+<ul>
+<li>在开始代码调优之前，程序是完全正确的吗？</li>
+<li>在代码调优之前，度量过性能瓶颈了吗？</li>
+<li>度量过每一次代码调优的效果了吗？</li>
+<li>如果代码调优并没有带来预期的性能提升，是否已撤销所有的改动？</li>
+<li>是否尝试过针对每一个性能瓶颈进行多次修改以提升性能？</li>
+<li>是否对性能瓶颈进行过优化？性能优化通常需要多次迭代才能通过代码调优达到预期的性能提升。</li>
+<li>性能只是整体软件质量的一个方面，而且通常并不是最重要的。精心调优的代码只是整体性能的一个方面，而且往往不是最关键的。相比于代码的效率，程序的架构设计、组件之间的协作关系以及算法的选择和优化等都有更大的影响。构建性能优秀的代码只是整体性能优化的一小部分：除非系统自身的瓶颈得到解决，否则优化的效果会很有限。</li>
+<li>需要关注的是整体系统的细节设计以及各个模块之间的协调与规划，这些对于整体性能的提升具有重大的影响。</li>
+<li>确定瓶颈的定位是实现性能优化的关键。百足城出能真正提供高性能的指引方向的重要手段。</li>
+<li>在开始编码时，为性能工作做好准备是编写易于理解和修改的清晰的代码的关键。</li>
+<li>除非系统自身的瓶颈，否则知道是哪些代码在占据时间或者系统的复杂度吗？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">29 代码调优技术 
+    <div id="29-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E6%8A%80%E6%9C%AF" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#29-%E4%BB%A3%E7%A0%81%E8%B0%83%E4%BC%98%E6%8A%80%E6%9C%AF" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>同时改进速度和规模
+<ul>
+<li>用查询表替代复杂逻辑。</li>
+<li>合并循环</li>
+<li>用整数而不是浮点变量</li>
+<li>编译时初始化数据。</li>
+<li>使用正确类型的常量。</li>
+<li>预计算出结果。</li>
+<li>消除公共子表达式</li>
+<li>将关键子程序转化为低级语言</li>
+</ul>
+</li>
+<li>只改进速度
+<ul>
+<li>知道结果后，便停止测试:</li>
+<li>按频率对 case 语句和 if-then-else 链中的测试进行排序，</li>
+<li>比较相似逻辑结构的性能</li>
+<li>使用惰性求值。</li>
+<li>将循环中的条件判断提到外面</li>
+<li>展开循环。</li>
+<li>最小化循环内部的工作</li>
+<li>在搜索循环中使用哨兵值</li>
+<li>最忙的循环放到嵌套循环的内层</li>
+<li>降低内层循环的运算强度</li>
+<li>多维数组改为一维。</li>
+<li>最小化数组引用。</li>
+<li>为数据类型增加辅助索引。</li>
+<li>缓存频繁使用的值，</li>
+<li>利用代数恒等式。</li>
+<li>降低逻辑和数学表达式的运算强度</li>
+<li>小心系统子程序。</li>
+<li>重写子程序以内联</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">30 配置管理 
+    <div id="30-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#30-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>概要
+<ul>
+<li>软件配置管理计划是设计用来帮助程序员将开销尽量减小的吗?</li>
+<li>软件配置管理 (SCM) 避免了对项目的过度控制吗?</li>
+<li>变更请求是进行了分阶段，当作一个整体处理的吗？无论采用非正式的方法(例如创建一份传统的变更清单)还是更系统化的方法(例如设立变更控制委员会)。</li>
+<li>系统化地评估了提交的每一项变更请求对于成本、进度和质量的影响了吗?</li>
+<li>将重大的变更视为需求分析不够完善的一个警示了吗?</li>
+</ul>
+</li>
+<li>工具
+<ul>
+<li>采用版本控制软件来帮助配置管理了吗？</li>
+<li>采用版本控制软件减少团队工作中的协作问题了吗?</li>
+</ul>
+</li>
+<li>备份
+<ul>
+<li>定期备份所有项目资料了吗？</li>
+<li>定期将项目备份数据转移到异地存储了吗？</li>
+<li>所有资料(包括源代码、文档、图片和重要的笔记)都备份了吗？</li>
+<li>测试过备份与还原过程吗？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">31 集成 
+    <div id="31-%E9%9B%86%E6%88%90" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-%E9%9B%86%E6%88%90" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>集成策略
+<ul>
+<li>是否为集成子系统、类和程序确定了最优顺序?</li>
+<li>继承顺序是否和构建顺序相互协作，保证在正确的时间每个类都将会为集成就绪？</li>
+<li>准备就绪？</li>
+<li>这种集成策略是否能让缺陷的诊断变得容易?</li>
+<li>这种集成策略是否能让脚手架代码数量降到最低？</li>
+<li>这种集成策略是否比其他方法更好？</li>
+<li>组件之间的接口是否已经被详细定义了吗?虽然定义接口并不属于集成的任务，但是验证它们是否已经被良好定义是集成的任务)</li>
+</ul>
+</li>
+<li>每日构建和冒烟测试
+<ul>
+<li>顶目是否频繁地构建(理想的情况是每天构建)以支持增量式集成?</li>
+<li>是否随着每个构建都执行了冒烟测试以确定每个构建是运行正常的?</li>
+<li>构建和冒烟测试实现了自动化吗?</li>
+<li>开发人员频繁提交代码是否频繁，即两次代码提交之间不会超过一天或两天?</li>
+<li>冒烟测试是否随时与最新的代码保持一致，随着代码的更新而演变?</li>
+<li>构建失败是偶发事件吗?</li>
+<li>即使在承受压力的情况下是否坚持构建和执行冒烟测试验证软件?</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">32 编程工具 
+    <div id="32-%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#32-%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>是否有一个高效的 IDE?</li>
+<li>IDE 是否集成了源代码控制工具(构建、测试和调试工具)及其他有用的功能?</li>
+<li>是否有自动化常用重构操作的工具？</li>
+<li>是否使用版本控制工具来管理源代码、文档、需求、设计、项目计划和其他项目工件？</li>
+<li>如果在做一个超大型项目，是否有使用数据字典或者包含每个类的权威说明的中央知识库？</li>
+<li>是否考虑过使用代码库而不是编写定制代码？哪里有可用的代码库？</li>
+<li>是否在使用交互式调试器？</li>
+<li>是否使用 make 或其他依赖关系控制软件来高效可靠地构建程序？</li>
+<li>测试环境是否包含自动化测试框架、自动化测试生成器、覆盖率监控、系统扰动器、差异对比工具和缺陷跟踪软件?</li>
+<li>是否有构建任何定制的工具以支持特定的项目需求，特别是自动化重复执行的任务的工具？</li>
+<li>总的来说，目前的环境是否有足够的支持工具？</li>
+</ul>
+
+
+<h3 class="relative group">33 布局 
+    <div id="33-%E5%B8%83%E5%B1%80" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#33-%E5%B8%83%E5%B1%80" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>通用
+<ul>
+<li>是否正确地凸现了代码逻辑结构的首要任务？</li>
+<li>这种代码格式是否可以在使用中保持前后一致？</li>
+<li>这种代码格式是否能产生易于维护的代码？</li>
+<li>这种代码格式是否能提高代码的可读性？</li>
+</ul>
+</li>
+<li>控制结构
+<ul>
+<li>在代码中是否使用开始-结束或者 {} 避免了双重缩进？</li>
+<li>连续的多个程序块是否用空行进行了分隔？</li>
+<li>是否调整了复杂表达式的格式以保证可读性？</li>
+<li>所有的单条语句块是否格式一致？</li>
+<li>case 语句的布局方式是否与其他控制结构保持一致？</li>
+<li>goto 语句的格式是否使其在视觉上更明显？</li>
+</ul>
+</li>
+<li>单条语句
+<ul>
+<li>是否使用空白来改善逻辑表达式、数组引用和子程序参数的可读性？</li>
+<li>是否确保不完整的语句在行断开的地方有明显的语法错误？</li>
+<li>换行时是否采用了标准的缩进量？</li>
+<li>一行最多只包含一条语句？</li>
+<li>编写每条语句时是否确保不包含副作用？</li>
+<li>一行最多只包含一条数据声明？</li>
+</ul>
+</li>
+<li>注释
+<ul>
+<li>注释是否与其对应的代码缩进量相同？</li>
+<li>注释的布局风格是否易于维护？</li>
+</ul>
+</li>
+<li>子程序
+<ul>
+<li>是否使用空行来分隔子程序中的不同部分，如类、文件和程序？</li>
+<li>对于大多数类和文件，是否存在一一对应的关系？</li>
+</ul>
+</li>
+<li>类，文件和程序
+<ul>
+<li>如果一个文件包含多个类，是否已经清楚地将每个类中的所有子程序分隔开？</li>
+<li>文件中的子程序是否以空行明显地进行了分隔？</li>
+<li>作为更强大的组织原则的妥协代替方法，是否按字母顺序排列了所有子程序？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">34 自文档代码 
+    <div id="34-%E8%87%AA%E6%96%87%E6%A1%A3%E4%BB%A3%E7%A0%81" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#34-%E8%87%AA%E6%96%87%E6%A1%A3%E4%BB%A3%E7%A0%81" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>
+<p>类</p>
+<ul>
+<li>类的接口是否体现了某种一致的抽象？</li>
+<li>类是否取好了名称，名称能否准确描述其核心意图？</li>
+<li>类的接口是否让你一目了然地知道如何使用这个类？</li>
+<li>类的接口抽象是否足以让你无需考虑其实现方式？可以当成黑盒对待吗？</li>
+</ul>
+</li>
+<li>
+<p>子程序</p>
+<ul>
+<li>是否每个子程序的名称都能准确描述它们的功能？</li>
+<li>是否每个子程序都只执行一个明确定义的任务？</li>
+<li>相比这些子程序被放入各自的子程序之前和之后，它们有受益吗？</li>
+<li>每个子程序的接口是否清晰明确？</li>
+</ul>
+</li>
+<li>
+<p>数据名称</p>
+<ul>
+<li>类型名称是否足以协助记录数据声明？</li>
+<li>变量是否命名良好？</li>
+<li>变量是否只用于其命名所示的用途？</li>
+<li>循环计数器是否使用了比 i、j、k 更具信息量的名称命名？</li>
+<li>是否使用了精心命名的枚举类型，而非临时标识布尔变量？</li>
+<li>是否使用了具名常量而非魔法数字或魔法字符串？</li>
+<li>是否能区分类型名称、枚举名称、物理尺寸、具名敞亮、局部变量、类变量和全局部变量？</li>
+</ul>
+</li>
+<li>
+<p>数据组织</p>
+<ul>
+<li>额外变量是否根据需要用于澄清？</li>
+<li>变量的引用是否彼此接近？</li>
+<li>数据类型是否简单达到最低复杂度？</li>
+<li>复杂数据是否是通过抽象访问子程序（抽象数据类型）来访问</li>
+</ul>
+</li>
+<li>
+<p>控制</p>
+<ul>
+<li>代码中的常规路径是否清晰？</li>
+<li>相关语句是否组合在一起？</li>
+<li>相对独立的语句组是否打包成各自的子程序？</li>
+<li>常见路径是放在 if 语句的后面还是 else 语句的后面？</li>
+<li>控制结构是否足够简单，达到最低复杂度？</li>
+<li>是否每个循环和定义良好的子程序一样，执行一个且只执行一个功能？</li>
+<li>嵌套有否做到最少？</li>
+<li>是否使用新增的布尔变量、布尔函数和决策表来简化布尔表达式？</li>
+</ul>
+</li>
+<li>
+<p>布局</p>
+<ul>
+<li>程序的布局是否能表现其逻辑结构？</li>
+</ul>
+</li>
+<li>
+<p>设计</p>
+<ul>
+<li>代码是否明确直接且没有自作聪明？</li>
+<li>是否尽可能隐藏了实现细节？</li>
+<li>写程序时，是否尽可能多地使用问题域的术语，而非计算机科学或程序语言结构的术语？</li>
+</ul>
+</li>
+</ul>
+
+
+<h3 class="relative group">35 好的注释 
+    <div id="35-%E5%A5%BD%E7%9A%84%E6%B3%A8%E9%87%8A" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#35-%E5%A5%BD%E7%9A%84%E6%B3%A8%E9%87%8A" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>通用
+<ul>
+<li>别人拿到你的代码马上就能看懂吗？</li>
+<li>注释是在解释代码意图或者总结代码做了什么，还是在复述代码？</li>
+<li>是否采用伪代码编程法来减少注释的耗时？</li>
+<li>对于重要的代码，是进行重写还是注释？</li>
+<li>注释是最新的吗？</li>
+<li>注释是否清晰、准确？</li>
+<li>所用注释风格是否有利于修改注释？</li>
+</ul>
+</li>
+<li>语句和段落
+<ul>
+<li>是否避免在代码中使用行尾注释？</li>
+<li>注释着重解释原因还是解释具体操作步骤？</li>
+<li>注释是否有利于代码阅读者做好准备？</li>
+<li>是否每条注释都有其用处？是否已删除或改进了多余的、无关紧要或过于随意的注释？</li>
+<li>是否注释了代码的非常规之处？</li>
+<li>是否避免使用缩略语？</li>
+<li>主次注释的区别是否明显？</li>
+<li>是否注释了用于处理某个缺陷或未公开特性的代码？</li>
+</ul>
+</li>
+<li>数据声明
+<ul>
+<li>是否已注释数据声明的数值单位？</li>
+<li>是否已注释数值数据的取值范围？</li>
+<li>是否已注释编码用途？</li>
+<li>是否已注释输入数据的限制？</li>
+<li>是否已注释位标志？</li>
+<li>是否已在声明处注释各全局变量？</li>
+<li>魔数是否已经替换为具名变量或者常量，而不是加注释</li>
+</ul>
+</li>
+<li>控制结构
+<ul>
+<li>是否对所有控制语句都进行了注释？</li>
+<li>冗长或者复杂的控制结构，是否在代码结尾处进行了注释？或者竭力进行简化，而不再需要注释？</li>
+</ul>
+</li>
+<li>子程序
+<ul>
+<li>是否已注释各子程序的意图？</li>
+<li>是否通过注释介绍了子程序的其他相关情况（如输入输出数据、接口假设、限制、纠错、全局效果和算法出处等）？</li>
+</ul>
+</li>
+<li>文件、类和程序
+<ul>
+<li>程序是否有一段简短的文档，就像书籍范本中介绍的那样，可以提供对程序组织方式的概览？</li>
+<li>是否已说明各文件的意图？</li>
+</ul>
+</li>
+</ul>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2023-06-11-程序员修养\/index.md"
+        var oid_likes = "likes_posts\/2023-06-11-程序员修养\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2023-03-28-devsecops%E5%AE%9E%E8%B7%B5/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2023-03-28-devsecops实践</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-03-28T00:00:00&#43;00:00">2023 年 3 月 28 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2023-12-21-%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2023-12-21-数据库基础知识</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2023-08-21T00:00:00&#43;00:00">2023 年 8 月 21 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

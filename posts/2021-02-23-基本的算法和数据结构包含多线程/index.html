@@ -1,50 +1,1027 @@
-<!doctype html><html lang=cn dir=ltr class=scroll-smooth data-default-appearance=light data-auto-appearance=true><head><meta charset=utf-8><meta http-equiv=content-language content="zh-cn"><meta name=viewport content="width=device-width,initial-scale=1"><meta http-equiv=X-UA-Compatible content="ie=edge"><title>2021-02-23-基本的算法和数据结构(包含多线程) &#183; 菜狗的blog</title>
-<meta name=title content="2021-02-23-基本的算法和数据结构(包含多线程) &#183; 菜狗的blog"><meta name=description content="菜狗's website"><meta name=keywords content="八股,"><link rel=canonical href=https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/><link type=text/css rel=stylesheet href=/css/main.bundle.min.ba3775bebd52a2b4837f8da64e32ee36e5c52bf284a0ce2262562782398b701543947527ad1498487717b1b96fe2a4e48d365a02e0b5d00e224893052e99d83c.css integrity><script type=text/javascript src=/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj+e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script><script defer type=text/javascript id=script-bundle src=/js/main.bundle.min.764eb2fe8d6a6b086c7c58f87d12c64fa79a7585117fc27eb53f688f80c287a6eff16277f9d186cd223a39ff700e294d64482834faece5e07ee0498fa042d056.js integrity="sha512-dk6y/o1qawhsfFj4fRLGT6eadYURf8J+tT9oj4DCh6bv8WJ3+dGGzSI6Of9wDilNZEgoNPrs5eB+4EmPoELQVg==" data-copy data-copied></script><script src=/lib/zoom/zoom.min.3530c2657381259433194af312ec3d322a97a2ad85661810299757fe793b24c3b8e07ab97fa8e5cf96cff1208f271e75394b6eaa56c2e39e7e2c3ca49fb1921c.js integrity="sha512-NTDCZXOBJZQzGUrzEuw9MiqXoq2FZhgQKZdX/nk7JMO44Hq5f6jlz5bP8SCPJx51OUtuqlbC455+LDykn7GSHA=="></script><link rel=apple-touch-icon sizes=180x180 href=/apple-touch-icon.png><link rel=icon type=image/png sizes=32x32 href=/favicon-32x32.png><link rel=icon type=image/png sizes=16x16 href=/favicon-16x16.png><link rel=manifest href=/site.webmanifest><meta property="og:url" content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/"><meta property="og:site_name" content="菜狗的blog"><meta property="og:title" content="2021-02-23-基本的算法和数据结构(包含多线程)"><meta property="og:description" content="菜狗's website"><meta property="og:locale" content="zh_cn"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2021-02-23T00:00:00+00:00"><meta property="article:modified_time" content="2021-02-23T00:00:00+00:00"><meta property="article:tag" content="八股"><meta property="og:image" content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png"><meta name=twitter:title content="2021-02-23-基本的算法和数据结构(包含多线程)"><meta name=twitter:description content="菜狗's website"><script type=application/ld+json>[{"@context":"https://schema.org","@type":"Article","articleSection":"Posts","name":"2021-02-23-基本的算法和数据结构(包含多线程)","headline":"2021-02-23-基本的算法和数据结构(包含多线程)","inLanguage":"zh-cn","url":"https:\/\/hxndg.github.io\/posts\/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B\/","author":{"@type":"Person","name":"菜狗"},"copyrightYear":"2021","dateCreated":"2021-02-23T00:00:00\u002b00:00","datePublished":"2021-02-23T00:00:00\u002b00:00","dateModified":"2021-02-23T00:00:00\u002b00:00","keywords":["八股"],"mainEntityOfPage":"true","wordCount":"3876"}]</script><meta name=author content="菜狗"><script src=/lib/jquery/jquery.slim.min.03cb160e3cfdb2667a2e2c80d283bebcf63ff8bbc4b629c9ab2babf6fae1d0c07ad470edae783efa4fabda2ac01c58d60e63b98b3c336be8208460f08f4354f5.js integrity="sha512-A8sWDjz9smZ6LiyA0oO+vPY/+LvEtinJqyur9vrh0MB61HDtrng++k+r2irAHFjWDmO5izwza+gghGDwj0NU9Q=="></script><meta name=theme-color></head><body class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600"><div id=the-top class="absolute flex self-center"><a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600" href=#main-content><span class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a></div><div style=padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3"><div class="flex flex-1 items-center justify-between"><nav class="flex space-x-3"><a href=/ class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a></nav><nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12"><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Home</p></a><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Posts</p></a><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-base font-medium" title>Tags</p></a><button id=search-button aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></button><div class="flex items-center"><button id=appearance-switcher aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></nav><div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12"><span></span>
-<button id=search-button-mobile aria-label=Search class="text-base hover:text-primary-600 dark:hover:text-primary-400" title>
-<span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
-</span></button>
-<button id=appearance-switcher-mobile aria-label="Dark mode switcher" type=button class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1"><div class="flex items-center justify-center dark:hidden"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M32 256C32 132.2 132.3 32 255.8 32c11.36.0 29.7 1.668 40.9 3.746 9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3 9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480 132.1 480 32 379.6 32 256z"/></svg></span></div><div class="items-center justify-center hidden dark:flex"><span class="relative block icon"><svg viewBox="0 0 512 512"><path fill="currentcolor" d="M256 159.1c-53.02.0-95.1 42.98-95.1 95.1s41.2 96.9 95.1 96.9 95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347l-63.2-91.9 63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89 164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6 12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256 2.74 347.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7 19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109 109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69.0-127.1-57.31-127.1-127.1.0-70.69 57.31-127.1 127.1-127.1S383.1 186.2 383.1 256c0 70.7-56.4 127.1-127.1 127.1z"/></svg></span></div></button></div></div><div class="-my-2 md:hidden"><label id=menu-button class=block><div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 448 512"><path fill="currentcolor" d="M0 96C0 78.33 14.33 64 32 64H416c17.7.0 32 14.33 32 32 0 17.7-14.3 32-32 32H32C14.33 128 0 113.7.0 96zM0 256c0-17.7 14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32H32c-17.67.0-32-14.3-32-32zM416 448H32c-17.67.0-32-14.3-32-32s14.33-32 32-32H416c17.7.0 32 14.3 32 32s-14.3 32-32 32z"/></svg></span></div><div id=menu-wrapper style=padding-top:5px class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50"><ul class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl"><li id=menu-close-button><span class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400"><span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></span></li><li class=mt-1><a href=/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Home</p></a></li><li class=mt-1><a href=/posts/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Posts</p></a></li><li class=mt-1><a href=/tags/ class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400"><p class="text-bg font-bg" title>Tags</p></a></li></ul></div></label></div></div><div class="relative flex flex-col grow"><main id=main-content class=grow><article><div id=hero class="h-[150px] md:h-[200px]"></div><div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom" style=background-image:url(/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured_hu623839882578504225.png)><div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal"></div><div class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal"></div></div><div id=background-blur class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div><script>window.addEventListener("scroll",function(){var t=window.pageYOffset||document.documentElement.scrollTop||document.body.scrollTop||0,n=document.getElementById("background-blur");n.style.opacity=t/300})</script><header id=single_header class="mt-5 max-w-prose"><h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">2021-02-23-基本的算法和数据结构(包含多线程)</h1><div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden"><div class="flex flex-row flex-wrap items-center"><time datetime=2021-02-23T00:00:00+00:00>2021 年 2 月 23 日</time><span class="px-2 text-primary-500">&#183;</span><span>3876 字</span><span class="px-2 text-primary-500">&#183;</span><span title=预计阅读>8 分钟</span></div></div><div class="flex author"><div class=place-self-center><div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">作者</div><div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">菜狗</div><div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div><div class="text-2xl sm:text-lg"></div></div></div><div class=mb-5></div></header><section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row"><div class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8"><div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10"><details open id=TOCView class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block"><summary class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-抽象实现和stl>1 抽象，实现和STL</a><ul><li><a href=#11-stl-数据结构vector>1.1 STL 数据结构VECTOR</a></li><li><a href=#12-map和multimap>1.2 map和multimap</a></li><li><a href=#13-unordered_map-与unordered_multimap>1.3 unordered_map 与unordered_multimap</a></li><li><a href=#14-set--multiset>1.4 set & multiset</a></li><li><a href=#15-优先队列priority_queue>1.5 优先队列priority_queue</a></li><li><a href=#16-list>1.6 list</a></li><li><a href=#17-stack>1.7 stack</a></li></ul></li><li><a href=#2-排序>2 排序</a><ul><li><a href=#21-最简单的排序>2.1 最简单的排序</a></li><li><a href=#22-归并排序>2.2 归并排序</a></li><li><a href=#23-快速排序>2.3 快速排序</a></li><li><a href=#24-堆排序>2.4 堆排序</a></li><li><a href=#25-从排序向外发散>2.5 从排序向外发散</a></li></ul></li><li><a href=#3-查找>3 查找</a><ul><li><a href=#31-二叉树二叉查找树>3.1 二叉树（二叉查找树）</a></li></ul></li><li><a href=#linux内核的基础知识>linux内核的基础知识</a><ul><li><a href=#1-进程调度>1 进程调度</a></li><li><a href=#2-缺页中断>2 缺页中断</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden"><summary class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">目录</summary><div class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600"><nav id=TableOfContents><ul><li><a href=#1-抽象实现和stl>1 抽象，实现和STL</a><ul><li><a href=#11-stl-数据结构vector>1.1 STL 数据结构VECTOR</a></li><li><a href=#12-map和multimap>1.2 map和multimap</a></li><li><a href=#13-unordered_map-与unordered_multimap>1.3 unordered_map 与unordered_multimap</a></li><li><a href=#14-set--multiset>1.4 set & multiset</a></li><li><a href=#15-优先队列priority_queue>1.5 优先队列priority_queue</a></li><li><a href=#16-list>1.6 list</a></li><li><a href=#17-stack>1.7 stack</a></li></ul></li><li><a href=#2-排序>2 排序</a><ul><li><a href=#21-最简单的排序>2.1 最简单的排序</a></li><li><a href=#22-归并排序>2.2 归并排序</a></li><li><a href=#23-快速排序>2.3 快速排序</a></li><li><a href=#24-堆排序>2.4 堆排序</a></li><li><a href=#25-从排序向外发散>2.5 从排序向外发散</a></li></ul></li><li><a href=#3-查找>3 查找</a><ul><li><a href=#31-二叉树二叉查找树>3.1 二叉树（二叉查找树）</a></li></ul></li><li><a href=#linux内核的基础知识>linux内核的基础知识</a><ul><li><a href=#1-进程调度>1 进程调度</a></li><li><a href=#2-缺页中断>2 缺页中断</a></li></ul></li><li><a href=#结尾>结尾</a></li></ul></nav></div></details><script>var margin=200,marginError=50;(function(){var t=$(window),e=$("#TOCView"),s=e.height();function n(){var n=t.height()-margin;s>=n?(e.css("overflow-y","scroll"),e.css("max-height",n+marginError+"px")):(e.css("overflow-y","hidden"),e.css("max-height","9999999px"))}t.on("resize",n),$(document).ready(n)})()</script></div></div><div class="min-w-0 min-h-0 max-w-fit"><div class="article-content max-w-prose mb-20"><h1 class="relative group">2021-02-23-基本的算法和数据结构(包含多线程)<div id=2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B aria-label=锚点>#</a></span></h1><p>为什么写这个？通用的方法常常隐藏常见的方法。</p><h2 class="relative group">1 抽象，实现和STL<div id=1-%E6%8A%BD%E8%B1%A1%E5%AE%9E%E7%8E%B0%E5%92%8Cstl class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E6%8A%BD%E8%B1%A1%E5%AE%9E%E7%8E%B0%E5%92%8Cstl aria-label=锚点>#</a></span></h2><h3 class="relative group">1.1 STL 数据结构VECTOR<div id=11-stl-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84vector class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#11-stl-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84vector aria-label=锚点>#</a></span></h3><ul><li>O(1)时间的快速访问</li><li>顺序存储，所以插入到非尾结点位置所需时间复杂度为O(n)，删除也一样</li><li>当我们新建一个vector的时候，会首先分配给他一片连续的内存空间，如<code>std::vector&lt;int> vec</code>，当通过push_back向其中增加元素时，如果初始分配空间已满，就会引起vector扩容，其扩容规则在gcc下以2倍方式完成：首先重新申请一个2倍大的内存空间；然后将原空间的内容拷贝过来；最后将原空间内容进行释放，将内存交还给操作系统；</li><li>执行插入/删除后，所有执行点之后迭代器和指针引用失效，同理，扩容之后的所有迭代器指针和引用也失效。</li><li>常用的函数：<em>push_back 在数组的最后添加一个数据</em>，*pop_back 去掉数组的最后一个数据，*<em>begin 得到数组头的指针</em> <em>end 得到数组的最后一个单元+1的指针</em> <em>capacity 当前vector分配的大小</em> <em>size 当前使用数据的大小</em> <em>erase 删除指针指向的数据项</em> <em>clear 清空当前的vector</em> <em>empty 判断vector是否为空</em></li></ul><h3 class="relative group">1.2 map和multimap<div id=12-map%E5%92%8Cmultimap class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#12-map%E5%92%8Cmultimap aria-label=锚点>#</a></span></h3><ul><li>两个都是关联容器，也就是提供一对一key-value的数据处理能力。map与multimap的区别在于，multimap允许关键字重复，而map不允许重复。</li><li>这两个关联容器的底层数据结构均为<strong>红黑树</strong>。根据红黑树的原理，map与multimap可以实现**O(lgn)**的查找，插入和删除。</li><li>常用的函数：clear(） 删除所有元素，empty() 如果 map 为空则返回 true，find() 查找一个元素， insert() 插入元素，end() 返回指向 map 末尾的迭代器，insert(pair &lt; int,string > (1,&ldquo;Jim&rdquo;)) 插入元素的时候要把元素的类型组织出来，size()返回map的大小，erase() 删除一个元素</li></ul><h3 class="relative group">1.3 unordered_map 与unordered_multimap<div id=13-unordered_map-%E4%B8%8Eunordered_multimap class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#13-unordered_map-%E4%B8%8Eunordered_multimap aria-label=锚点>#</a></span></h3><ul><li>map与multimap为<strong>有序的</strong></li><li>而unordered_map与unordered_multimap中key为无序排列，其底层实现为<strong>hash table</strong>，因此其查找时间复杂度理论上达到了<strong>O(1)</strong></li><li>常用的函数为</li></ul><h3 class="relative group">1.4 set & multiset<div id=14-set--multiset class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#14-set--multiset aria-label=锚点>#</a></span></h3><ul><li>set系列的数据结构是只有值，因此可以认为set是只保存关键字的容器。</li><li>set与multiset有序存储元素，这两种容器的底层实现与map一样都是<strong>红黑树</strong>，所以能实现O(lgn)的查找，插入，删除操作。</li><li>常用的函数为</li></ul><h3 class="relative group">1.5 优先队列priority_queue<div id=15-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97priority_queue class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#15-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97priority_queue aria-label=锚点>#</a></span></h3><ul><li>优先级队列相当于一个<strong>有权值</strong>的单向队列queue，在这个队列中，所有元素是按照优先级排列的。</li><li>priority_queue根据<strong>堆</strong>的处理规则来调整元素之间的位置，根据堆的特性，优先级队列实现了取出最大最小元素时间复杂度为O(1),对于插入和删除，其最坏情况为O(lgn)。</li><li>常用的函数为：priority_queue&lt;Type, Container, Functional>Type数据类型，Container是容器类型，Functional是排序的函数,常，一般Functional默认是std::less&lt;Type>小顶堆，不过我们可以穿进去std::greater&lt;Type>来构建大顶堆，这个用于声明。push(const T& obj)：将obj的副本放到容器的适当位置，这通常会包含一个排序操作。push(T&& obj)：将obj放到容器的适当位置，这通常会包含一个排序操作。top()：返回优先级队列中第一个元素的引用。pop()：移除第一个元素。size()：返回队列中元素的个数。empty()：如果队列为空的话，返回true。</li></ul><h3 class="relative group">1.6 list<div id=16-list class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#16-list aria-label=锚点>#</a></span></h3><ul><li>底层一般是</li><li></li></ul><h3 class="relative group">1.7 stack<div id=17-stack class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#17-stack aria-label=锚点>#</a></span></h3><ul><li>底层一般是链表</li><li>常用的函数为：std::stack&lt;std::string,std::list<a href=std::string>std::string</a>> fruit; 用于初始化。top()：返回一个栈顶元素的引用，类型为 T&。如果栈为空，返回值未定义。push(const T& obj)：可以将对象副本压入栈顶。这是通过调用底层容器的 push_back() 函数完成的。pop()：弹出栈顶元素。empty()：在栈中没有元素的情况下返回 true。size()：返回栈中元素的个数。</li></ul><h2 class="relative group">2 排序<div id=2-%E6%8E%92%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E6%8E%92%E5%BA%8F aria-label=锚点>#</a></span></h2><p>基于比较的排序算法，其时间复杂度不可能低于 n∗logn<em>n</em>∗<em>l<strong>o</strong>g**n</em>，这是由排序过程中的决策树模型决定的</p><p><strong>决策树模型：</strong></p><ul><li><strong>节点表示比较：</strong> 决策树上的每个节点都代表一次元素比较操作（例如，比较数组中两个元素的大小）。</li><li><strong>分支表示比较结果：</strong> 每个节点根据比较结果产生不同的分支，例如，大于、小于或等于。</li><li><strong>叶子节点表示排序结果：</strong> 每一种可能的排序结果都对应着决策树上的一个叶子节点。</li></ul><p><strong>为什么最优时间复杂度是 n*logn：</strong></p><ol><li><strong>叶子节点数量：</strong> 对于 N 个元素，共有 N! (N 的阶乘) 种不同的排列方式，也就是 N! 种可能的排序结果。因此，决策树必须至少包含 N! 个叶子节点才能表示所有情况。</li><li><strong>树的高度与比较次数：</strong> 决策树的高度（从根节点到最深叶子节点的路径长度）代表了排序算法在最坏情况下需要进行的最多比较次数。</li><li><strong>树的高度限制：</strong> 对于一棵二叉树（大多数比较排序都是基于二叉比较），高度为 h 的树最多拥有 2h2<em>h</em> 个叶子节点。</li><li><strong>推导出最优高度：</strong> 为了容纳 N! 个叶子节点，树的高度 h 必须满足 2h>=N!2<em>h</em>>=<em>N</em>! 。 使用斯特林公式近似计算阶乘：N!≈2πN(Ne)N<em>N</em>!≈2<em>π**N</em>(<em>e**N</em>)<em>N</em>，可以推导出 h>=log2(N!)≈N∗log2N<em>h</em>>=<em>l<strong>o</strong>g</em>2(<em>N</em>!)≈<em>N</em>∗<em>l<strong>o</strong>g</em>2<em>N</em>。</li></ol><p><strong>结论：</strong></p><p>由于决策树的高度决定了比较次数，而为了表示所有可能的排序结果，树的高度至少为 N∗log2N<em>N</em>∗<em>l<strong>o</strong>g</em>2<em>N</em>，所以任何基于比较的排序算法，其时间复杂度都不可能低于 n∗logn<em>n</em>∗<em>l<strong>o</strong>g**n</em>。 这被称为比较排序算法的时间复杂度下限。</p><h3 class="relative group">2.1 最简单的排序<div id=21-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%8E%92%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#21-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%8E%92%E5%BA%8F aria-label=锚点>#</a></span></h3><p>常见的排序算法就不多赘述了：</p><ul><li>选择排序：每次选择出来最小的元素然后交换到检查数组的首部，因此对于长度为N的数组选择排序需要大约N^2/2次比较和N次交换。问题是这个算法运行时间和输入无关（这不是个好消息）。但是数据移动最少。</li><li>插入排序：我更喜欢叫做插扑克排序，每次将当前元素插入到已经拍好的合适的位置。这个算法的时间和原本数组的排序有关。但是插入排序最惨情况也需要N^2/2的比较和N^2/2的交换，最好情况只需要N-1比较和0次交换。</li></ul><h3 class="relative group">2.2 归并排序<div id=22-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#22-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F aria-label=锚点>#</a></span></h3><p>比较方法做的排序上限是多少？答案是：没有任何基于比较的算法能保证使用少于lg(N!)~NlgN的比较次数，将长度为N的数组排序。</p><p>归并排序，一种思考的方法</p><ul><li><p>归并排序依托的原理是：两个有序的数组（长度都为N/2)，在整体重排的时候最多只需要比较N次。由于每次都是一半次数的缩减，因此这种复杂度直接减少到了N*log(N)。</p></li><li><p>实际上归并排序就是典型的分治思想，将问题拆解为两份（如果拆解相等，一般是最优的），两个部分都做处理。整体的有序处理会简单很多。</p></li><li><p>归并排序有两种实现，一种从上向下，一种从下向上。</p></li></ul><h3 class="relative group">2.3 快速排序<div id=23-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#23-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F aria-label=锚点>#</a></span></h3><p>快速排序大概是最著名的排序了，基本所有人都知道快排，实际上快排也是基于分治法。由于快排的特殊性，所以将伪码写上。</p><ul><li>快排平均需要2N*lnN次比较，以及1/6次交换。</li><li>快排最惨需要N^2/2次比较，但打乱数组会避免这种算法</li></ul><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>public</span><span class=w> </span><span class=kd>class</span> <span class=nc>quick</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>public</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>sort</span><span class=p>(</span><span class=n>Comparele</span><span class=o>[]</span><span class=w> </span><span class=n>a</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Random</span><span class=p>.</span><span class=na>shuffle</span><span class=p>(</span><span class=n>a</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>sort</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=n>0</span><span class=p>,</span><span class=n>a</span><span class=p>.</span><span class=na>length</span><span class=o>-</span><span class=n>1</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>sort</span><span class=p>(</span><span class=n>Comparable</span><span class=o>[]</span><span class=w> </span><span class=n>a</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>lo</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>hi</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>hi</span><span class=w> </span><span class=o>&lt;</span><span class=w> </span><span class=n>lo</span><span class=p>)</span><span class=w> </span><span class=k>return</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>int</span><span class=w> </span><span class=n>j</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>partition</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=n>lo</span><span class=p>,</span><span class=n>hi</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>sort</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=n>lo</span><span class=p>,</span><span class=n>j</span><span class=o>-</span><span class=n>1</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>sort</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=n>j</span><span class=o>+</span><span class=n>1</span><span class=p>,</span><span class=n>hi</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=kd>private</span><span class=w> </span><span class=kd>static</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=nf>partition</span><span class=p>(</span><span class=n>Comparable</span><span class=o>[]</span><span class=w> </span><span class=n>a</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>lo</span><span class=p>,</span><span class=w> </span><span class=kt>int</span><span class=w> </span><span class=n>hi</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>int</span><span class=w> </span><span class=n>i</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>lo</span><span class=p>,</span><span class=w> </span><span class=n>j</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>hi</span><span class=w> </span><span class=o>+</span><span class=w> </span><span class=n>1</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>Comparable</span><span class=w> </span><span class=n>v</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>a</span><span class=o>[</span><span class=n>lo</span><span class=o>]</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>while</span><span class=p>(</span><span class=n>1</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>while</span><span class=p>(</span><span class=n>less</span><span class=p>(</span><span class=n>a</span><span class=o>[++</span><span class=n>i</span><span class=o>]</span><span class=p>,</span><span class=n>v</span><span class=p>))</span><span class=w> </span><span class=k>if</span><span class=p>(</span><span class=n>i</span><span class=o>==</span><span class=n>hi</span><span class=p>)</span><span class=w> </span><span class=k>break</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>while</span><span class=p>(</span><span class=n>less</span><span class=p>(</span><span class=n>v</span><span class=p>,</span><span class=n>a</span><span class=o>[--</span><span class=n>j</span><span class=o>]</span><span class=p>))</span><span class=w> </span><span class=k>if</span><span class=p>(</span><span class=n>j</span><span class=o>==</span><span class=n>lo</span><span class=p>)</span><span class=w> </span><span class=k>break</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>i</span><span class=w> </span><span class=o>&gt;=</span><span class=w> </span><span class=n>j</span><span class=p>)</span><span class=w> </span><span class=k>break</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>            </span><span class=n>exchange</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=w> </span><span class=n>i</span><span class=p>,</span><span class=w> </span><span class=n>j</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>exchange</span><span class=p>(</span><span class=n>a</span><span class=p>,</span><span class=n>lo</span><span class=p>,</span><span class=n>j</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>return</span><span class=w> </span><span class=n>j</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></div><h3 class="relative group">2.4 堆排序<div id=24-%E5%A0%86%E6%8E%92%E5%BA%8F class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#24-%E5%A0%86%E6%8E%92%E5%BA%8F aria-label=锚点>#</a></span></h3><p>简单来说我觉得堆排序是一个非常好玩的问题，实际上对常见问题的考虑都是一致的。堆大多都是大顶堆/小顶堆</p><p>代码如下:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-java data-lang=java><span class=line><span class=cl><span class=kd>private</span><span class=w> </span><span class=kt>void</span><span class=w> </span><span class=nf>sink</span><span class=p>(</span><span class=kt>int</span><span class=w> </span><span class=n>k</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=k>while</span><span class=p>(</span><span class=n>2</span><span class=o>*</span><span class=n>k</span><span class=w> </span><span class=o>&lt;=</span><span class=w> </span><span class=n>N</span><span class=p>)</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>{</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=kt>int</span><span class=w> </span><span class=n>j</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>2</span><span class=o>*</span><span class=n>k</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=w> </span><span class=p>(</span><span class=n>j</span><span class=w> </span><span class=o>&lt;</span><span class=w> </span><span class=n>N</span><span class=w> </span><span class=o>&amp;&amp;</span><span class=w> </span><span class=n>less</span><span class=p>(</span><span class=n>j</span><span class=p>,</span><span class=n>j</span><span class=o>+</span><span class=n>1</span><span class=p>))</span><span class=w> </span><span class=n>j</span><span class=o>++</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=k>if</span><span class=p>(</span><span class=o>!</span><span class=n>less</span><span class=p>(</span><span class=n>k</span><span class=p>,</span><span class=n>j</span><span class=p>))</span><span class=w> </span><span class=k>break</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>exchange</span><span class=p>(</span><span class=n>k</span><span class=p>,</span><span class=n>j</span><span class=p>);</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=n>k</span><span class=w> </span><span class=o>=</span><span class=w> </span><span class=n>j</span><span class=p>;</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=p>}</span><span class=w>
-</span></span></span><span class=line><span class=cl><span class=w></span><span class=p>}</span><span class=w>
-</span></span></span></code></pre></div><h3 class="relative group">2.5 从排序向外发散<div id=25-%E4%BB%8E%E6%8E%92%E5%BA%8F%E5%90%91%E5%A4%96%E5%8F%91%E6%95%A3 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#25-%E4%BB%8E%E6%8E%92%E5%BA%8F%E5%90%91%E5%A4%96%E5%8F%91%E6%95%A3 aria-label=锚点>#</a></span></h3><p>一个很常见的问题实际上是，最小的第K个数，这个问题的答案就是两种堆排序和快排思路</p><h2 class="relative group">3 查找<div id=3-%E6%9F%A5%E6%89%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#3-%E6%9F%A5%E6%89%BE aria-label=锚点>#</a></span></h2><h3 class="relative group">3.1 二叉树（二叉查找树）<div id=31-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#31-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91 aria-label=锚点>#</a></span></h3><p>常见的先序遍历，中序遍历和后序遍历都是递归，下面给个迭代版本的实现。实际上还是利用非常常见的思想，也就是模拟计算机的栈而已。具体流程不明白的，就看下知乎上画的那个遍历的图片。</p><p>先序遍历</p><pre tabindex=0><code class=language-作者：晚安 data-lang=作者：晚安>class Solution {
+<!DOCTYPE html>
+<html lang="cn" dir="ltr" class="scroll-smooth" data-default-appearance="light"
+  data-auto-appearance="true"><head>
+  <meta charset="utf-8" />
+  
+  <meta http-equiv="content-language" content="zh-cn" />
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  
+  <title>2021-02-23-基本的算法和数据结构(包含多线程) &middot; 菜狗的blog</title>
+  <meta name="title" content="2021-02-23-基本的算法和数据结构(包含多线程) &middot; 菜狗的blog" />
+  
+  <meta name="description" content="菜狗&#39;s website" />
+  <meta name="keywords" content="八股, " />
+  
+  
+  <link rel="canonical" href="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/" />
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <link type="text/css" rel="stylesheet" href="/css/main.bundle.min.36c3cd7950e4533fa7da3150d972e3edf34d07f83c0264ff04cad0969dfdb3b8a7065b0ed6c730c6d34a7bad516cfc6f6a5917ab1fdb10b25f481f8a17b54c16.css"
+    integrity="" />
+  
+  
+  <script type="text/javascript" src="/js/appearance.min.516a16745bea5a9bd011138d254cc0fd3973cd55ce6e15f3dec763e7c7c2c7448f8fe7b54cca811cb821b0c7e12cd161caace1dd794ac3d34d40937cbcc9ee12.js"
+    integrity="sha512-UWoWdFvqWpvQERONJUzA/TlzzVXObhXz3sdj58fCx0SPj&#43;e1TMqBHLghsMfhLNFhyqzh3XlKw9NNQJN8vMnuEg=="></script>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <script defer type="text/javascript" id="script-bundle" src="/js/main.bundle.min.b6411b5d4cd56c0068d34c4acbce043846adad56b824e3d486a06d3459aed2eb7f7413874b7871cc2c822c8c8834cbed944022918bcc8cca710a962167c36d32.js"
+    integrity="sha512-tkEbXUzVbABo00xKy84EOEatrVa4JOPUhqBtNFmu0ut/dBOHS3hxzCyCLIyINMvtlEAikYvMjMpxCpYhZ8NtMg==" data-copy="复制" data-copied="已复制"></script>
+  
+  
+  
+  <script src="/lib/zoom/zoom.min.f592a181a15d2a5b042daa7f746c3721acf9063f8b6acd175d989129865a37d400ae0e85b640f9ad42cd98d1f8ad30931718cf8811abdcc5fcb264400d1a2b0c.js" integrity="sha512-9ZKhgaFdKlsELap/dGw3Iaz5Bj&#43;Las0XXZiRKYZaN9QArg6FtkD5rULNmNH4rTCTFxjPiBGr3MX8smRADRorDA=="></script>
+  
+  
+  
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:url" content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+  <meta property="og:site_name" content="菜狗的blog">
+  <meta property="og:title" content="2021-02-23-基本的算法和数据结构(包含多线程)">
+  <meta property="og:description" content="菜狗&#39;s website">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-02-23T00:00:00+00:00">
+    <meta property="article:modified_time" content="2021-02-23T00:00:00+00:00">
+    <meta property="article:tag" content="八股">
+    <meta property="og:image" content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png">
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://hxndg.github.io/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured.png">
+  <meta name="twitter:title" content="2021-02-23-基本的算法和数据结构(包含多线程)">
+  <meta name="twitter:description" content="菜狗&#39;s website">
+
+  
+  <script type="application/ld+json">
+  [{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "articleSection": "Posts",
+    "name": "2021-02-23-基本的算法和数据结构(包含多线程)",
+    "headline": "2021-02-23-基本的算法和数据结构(包含多线程)",
+    
+    
+    "inLanguage": "zh-cn",
+    "url" : "https:\/\/hxndg.github.io\/posts\/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B\/",
+    "author" : {
+      "@type": "Person",
+      "name": "菜狗"
+    },
+    "copyrightYear": "2021",
+    "dateCreated": "2021-02-23T00:00:00\u002b00:00",
+    "datePublished": "2021-02-23T00:00:00\u002b00:00",
+    
+    "dateModified": "2021-02-23T00:00:00\u002b00:00",
+    
+    "keywords": ["八股"],
+    
+    "mainEntityOfPage": "true",
+    "wordCount": "3876"
+  }]
+  </script>
+
+
+  
+  
+  <meta name="author" content="菜狗" />
+  
+  
+  
+
+<script src="/lib/jquery/jquery.slim.min.b0dca576e87d7eaa5850ae4e61759c065786cdb6489d68fcc82240539eebd5da522bdb4fda085ffd245808c8fe2acb2516408eb774ef26b5f6015fc6737c0ea8.js" integrity="sha512-sNylduh9fqpYUK5OYXWcBleGzbZInWj8yCJAU57r1dpSK9tP2ghf/SRYCMj&#43;KsslFkCOt3TvJrX2AV/Gc3wOqA=="></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6X9LWNJ427"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6X9LWNJ427');
+</script>
+
+
+
+  
+  
+  <meta name="theme-color"/>
+  
+  
+</head>
+<body
+  class="flex flex-col h-screen px-6 m-auto text-lg leading-7 max-w-7xl bg-neutral text-neutral-900 dark:bg-neutral-800 dark:text-neutral sm:px-14 md:px-24 lg:px-32 scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600">
+  <div id="the-top" class="absolute flex self-center">
+    <a class="px-3 py-1 text-sm -translate-y-8 rounded-b-lg bg-primary-200 focus:translate-y-0 dark:bg-neutral-600"
+      href="#main-content"><span
+        class="font-bold text-primary-600 ltr:pr-2 rtl:pl-2 dark:text-primary-400">&darr;</span>跳过正文</a>
+  </div>
+  
+  
+  <div style="padding-left:0;padding-right:0;padding-top:2px;padding-bottom:3px"
+    class="main-menu flex items-center justify-between px-4 py-6 sm:px-6 md:justify-start gap-x-3">
+    
+    <div class="flex flex-1 items-center justify-between">
+        <nav class="flex space-x-3">
+
+            
+            <a href="/" class="text-base font-medium text-gray-500 hover:text-gray-900">菜狗的blog</a>
+            
+
+        </nav>
+        <nav class="hidden md:flex items-center gap-x-5 md:ml-12 h-12">
+
+            
+            
+            
+  <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="菜狗的blog">
+        Home
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Posts">
+        Posts
+    </p>
+</a>
+
+
+
+            
+            
+  <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+    
+    <p class="text-base font-medium" title="Tags">
+        Tags
+    </p>
+</a>
+
+
+
+            
+            
+
+            
+
+
+            
+            <button id="search-button" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+
+            
+            
+            <div
+                class=" flex items-center">
+                <button id="appearance-switcher" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400">
+                    <div class="flex items-center justify-center dark:hidden">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                    </div>
+                    <div class="items-center justify-center hidden dark:flex">
+                        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                    </div>
+                </button>
+            </div>
+            
+
+        </nav>
+        <div class="flex md:hidden items-center gap-x-5 md:ml-12 h-12">
+
+            <span></span>
+
+            
+
+
+            
+            <button id="search-button-mobile" aria-label="Search" class="text-base hover:text-primary-600 dark:hover:text-primary-400"
+                title="">
+                
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+            </button>
+            
+
+            
+            
+            <button id="appearance-switcher-mobile" aria-label="Dark mode switcher" type="button" class="text-base hover:text-primary-600 dark:hover:text-primary-400 ltr:mr-1 rtl:ml-1">
+                <div class="flex items-center justify-center dark:hidden">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 256c0-123.8 100.3-224 223.8-224c11.36 0 29.7 1.668 40.9 3.746c9.616 1.777 11.75 14.63 3.279 19.44C245 86.5 211.2 144.6 211.2 207.8c0 109.7 99.71 193 208.3 172.3c9.561-1.805 16.28 9.324 10.11 16.95C387.9 448.6 324.8 480 255.8 480C132.1 480 32 379.6 32 256z"/></svg>
+
+  </span>
+
+
+                </div>
+                <div class="items-center justify-center hidden dark:flex">
+                    
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M256 159.1c-53.02 0-95.1 42.98-95.1 95.1S202.1 351.1 256 351.1s95.1-42.98 95.1-95.1S309 159.1 256 159.1zM509.3 347L446.1 255.1l63.15-91.01c6.332-9.125 1.104-21.74-9.826-23.72l-109-19.7l-19.7-109c-1.975-10.93-14.59-16.16-23.72-9.824L256 65.89L164.1 2.736c-9.125-6.332-21.74-1.107-23.72 9.824L121.6 121.6L12.56 141.3C1.633 143.2-3.596 155.9 2.736 164.1L65.89 256l-63.15 91.01c-6.332 9.125-1.105 21.74 9.824 23.72l109 19.7l19.7 109c1.975 10.93 14.59 16.16 23.72 9.824L256 446.1l91.01 63.15c9.127 6.334 21.75 1.107 23.72-9.822l19.7-109l109-19.7C510.4 368.8 515.6 356.1 509.3 347zM256 383.1c-70.69 0-127.1-57.31-127.1-127.1c0-70.69 57.31-127.1 127.1-127.1s127.1 57.3 127.1 127.1C383.1 326.7 326.7 383.1 256 383.1z"/></svg>
+
+  </span>
+
+
+                </div>
+            </button>
+            
+
+        </div>
+    </div>
+    <div class="-my-2 md:hidden">
+
+        <label id="menu-button" class="block">
+            
+            <div class="cursor-pointer hover:text-primary-600 dark:hover:text-primary-400">
+                
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M0 96C0 78.33 14.33 64 32 64H416C433.7 64 448 78.33 448 96C448 113.7 433.7 128 416 128H32C14.33 128 0 113.7 0 96zM0 256C0 238.3 14.33 224 32 224H416C433.7 224 448 238.3 448 256C448 273.7 433.7 288 416 288H32C14.33 288 0 273.7 0 256zM416 448H32C14.33 448 0 433.7 0 416C0 398.3 14.33 384 32 384H416C433.7 384 448 398.3 448 416C448 433.7 433.7 448 416 448z"/></svg>
+
+  </span>
+
+
+            </div>
+            <div id="menu-wrapper" style="padding-top:5px;"
+                class="fixed inset-0 z-30 invisible w-screen h-screen m-0 overflow-auto transition-opacity opacity-0 cursor-default bg-neutral-100/50 backdrop-blur-sm dark:bg-neutral-900/50">
+                <ul
+                    class="flex space-y-2 mt-3 flex-col items-end w-full px-6 py-6 mx-auto overflow-visible list-none ltr:text-right rtl:text-left max-w-7xl">
+
+                    <li id="menu-close-button">
+                        <span
+                            class="cursor-pointer inline-block align-text-bottom hover:text-primary-600 dark:hover:text-primary-400">
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+</span>
+                    </li>
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="菜狗的blog">
+            Home
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/posts/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Posts">
+            Posts
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                    
+  <li class="mt-1">
+    <a href="/tags/"  class="flex items-center text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">
+        
+        <p class="text-bg font-bg" title="Tags">
+            Tags
+        </p>
+    </a>
+</li>
+
+
+
+
+                    
+
+                </ul>
+                
+                
+
+            </div>
+        </label>
+    </div>
+</div>
+
+
+
+
+
+  
+  <div class="relative flex flex-col grow">
+    <main id="main-content" class="grow">
+      
+
+
+<article>
+  
+  
+  
+  
+  
+  
+
+
+<div id="hero" class="h-[150px] md:h-[200px]"></div>
+
+
+
+    
+    <div class="fixed inset-x-0 top-0 h-[800px] single_hero_background nozoom"
+    style="background-image:url(/posts/2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B/featured_hu_cd34a58a7442f3d1.png);">
+    
+
+
+    <div class="absolute inset-0 bg-gradient-to-t from-neutral dark:from-neutral-800 to-transparent mix-blend-normal">
+    </div>
+    <div
+        class="absolute inset-0 opacity-60 bg-gradient-to-t from-neutral dark:from-neutral-800 to-neutral-100 dark:to-neutral-800 mix-blend-normal">
+    </div>
+</div>
+
+<div id="background-blur" class="fixed opacity-0 inset-x-0 top-0 h-full single_hero_background nozoom backdrop-blur-2xl"></div>
+<script>
+    window.addEventListener('scroll', function (e) {
+        var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        var background_blur = document.getElementById('background-blur');
+        background_blur.style.opacity = (scroll / 300)
+    });
+</script>
+
+  
+  
+
+  <header id="single_header" class="mt-5 max-w-prose">
+    
+    <h1 class="mt-0 text-4xl font-extrabold text-neutral-900 dark:text-neutral">
+      2021-02-23-基本的算法和数据结构(包含多线程)
+    </h1>
+    <div class="mt-1 mb-6 text-base text-neutral-500 dark:text-neutral-400 print:hidden">
+      
+
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="flex flex-row flex-wrap items-center">
+  
+  
+  <time datetime="2021-02-23T00:00:00&#43;00:00">2021 年 2 月 23 日</time><span class="px-2 text-primary-500">&middot;</span><span>3876 字</span><span class="px-2 text-primary-500">&middot;</span><span title="预计阅读">8 分钟</span>
+  
+
+  
+  
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+    
+    
+    
+    
+    
+
+    
+
+    
+      
+      
+        
+        
+<div class="flex author">
+  
+  <div class="place-self-center">
+    
+    <div class="text-[0.6rem] uppercase leading-3 text-neutral-500 dark:text-neutral-400">
+      作者
+    </div>
+    <div class="font-semibold leading-6 text-neutral-800 dark:text-neutral-300">
+      菜狗
+    </div>
+    
+    
+    <div class="text-sm text-neutral-700 dark:text-neutral-400">Focus</div>
+    
+    <div class="text-2xl sm:text-lg">
+</div>
+  </div>
+</div>
+
+      
+
+      
+
+      
+      <div class="mb-5"></div>
+      
+
+    
+
+  </header>
+  
+  <section class="flex flex-col max-w-full mt-0 prose dark:prose-invert lg:flex-row">
+    
+     <div
+      class="order-first lg:ml-auto px-0 lg:order-last ltr:lg:pl-8 rtl:lg:pr-8">
+      <div class="toc ltr:pl-5 rtl:pr-5 print:hidden lg:sticky lg:top-10">
+
+         <details open id="TOCView"
+  class="toc-right mt-0 overflow-y-scroll overscroll-contain scrollbar-thin scrollbar-track-neutral-200 scrollbar-thumb-neutral-400 dark:scrollbar-track-neutral-800 dark:scrollbar-thumb-neutral-600 rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 hidden lg:block">
+  <summary
+    class="block py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="min-w-[220px] py-2 border-dotted ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-抽象实现和stl">1 抽象，实现和STL</a>
+      <ul>
+        <li><a href="#11-stl-数据结构vector">1.1 STL 数据结构VECTOR</a></li>
+        <li><a href="#12-map和multimap">1.2 map和multimap</a></li>
+        <li><a href="#13-unordered_map-与unordered_multimap">1.3 unordered_map 与unordered_multimap</a></li>
+        <li><a href="#14-set--multiset">1.4 set &amp; multiset</a></li>
+        <li><a href="#15-优先队列priority_queue">1.5 优先队列priority_queue</a></li>
+        <li><a href="#16-list">1.6 list</a></li>
+        <li><a href="#17-stack">1.7 stack</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-排序">2 排序</a>
+      <ul>
+        <li><a href="#21-最简单的排序">2.1 最简单的排序</a></li>
+        <li><a href="#22-归并排序">2.2 归并排序</a></li>
+        <li><a href="#23-快速排序">2.3 快速排序</a></li>
+        <li><a href="#24-堆排序">2.4 堆排序</a></li>
+        <li><a href="#25-从排序向外发散">2.5 从排序向外发散</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-查找">3 查找</a>
+      <ul>
+        <li><a href="#31-二叉树二叉查找树">3.1 二叉树（二叉查找树）</a></li>
+      </ul>
+    </li>
+    <li><a href="#linux内核的基础知识">linux内核的基础知识</a>
+      <ul>
+        <li><a href="#1-进程调度">1 进程调度</a></li>
+        <li><a href="#2-缺页中断">2 缺页中断</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+<details class="toc-inside mt-0 overflow-hidden rounded-lg ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 lg:hidden">
+  <summary
+    class="py-1 text-lg font-semibold cursor-pointer bg-neutral-100 text-neutral-800 ltr:-ml-5 ltr:pl-5 rtl:-mr-5 rtl:pr-5 dark:bg-neutral-700 dark:text-neutral-100 lg:hidden">
+    目录
+  </summary>
+  <div
+    class="py-2 border-dotted border-neutral-300 ltr:-ml-5 ltr:border-l ltr:pl-5 rtl:-mr-5 rtl:border-r rtl:pr-5 dark:border-neutral-600">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-抽象实现和stl">1 抽象，实现和STL</a>
+      <ul>
+        <li><a href="#11-stl-数据结构vector">1.1 STL 数据结构VECTOR</a></li>
+        <li><a href="#12-map和multimap">1.2 map和multimap</a></li>
+        <li><a href="#13-unordered_map-与unordered_multimap">1.3 unordered_map 与unordered_multimap</a></li>
+        <li><a href="#14-set--multiset">1.4 set &amp; multiset</a></li>
+        <li><a href="#15-优先队列priority_queue">1.5 优先队列priority_queue</a></li>
+        <li><a href="#16-list">1.6 list</a></li>
+        <li><a href="#17-stack">1.7 stack</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-排序">2 排序</a>
+      <ul>
+        <li><a href="#21-最简单的排序">2.1 最简单的排序</a></li>
+        <li><a href="#22-归并排序">2.2 归并排序</a></li>
+        <li><a href="#23-快速排序">2.3 快速排序</a></li>
+        <li><a href="#24-堆排序">2.4 堆排序</a></li>
+        <li><a href="#25-从排序向外发散">2.5 从排序向外发散</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-查找">3 查找</a>
+      <ul>
+        <li><a href="#31-二叉树二叉查找树">3.1 二叉树（二叉查找树）</a></li>
+      </ul>
+    </li>
+    <li><a href="#linux内核的基础知识">linux内核的基础知识</a>
+      <ul>
+        <li><a href="#1-进程调度">1 进程调度</a></li>
+        <li><a href="#2-缺页中断">2 缺页中断</a></li>
+      </ul>
+    </li>
+    <li><a href="#结尾">结尾</a></li>
+  </ul>
+</nav>
+  </div>
+</details>
+
+<script>
+
+  var margin = 200;
+  var marginError = 50;
+
+  (function () {
+    var $window = $(window);
+    var $toc = $('#TOCView');
+    var tocHeight = $toc.height();
+
+    function onResize() {
+      var windowAndMarginHeight = $window.height() - margin;
+      if(tocHeight >= windowAndMarginHeight) {
+        $toc.css("overflow-y", "scroll")
+        $toc.css("max-height", (windowAndMarginHeight + marginError) + "px")
+      } else {
+        $toc.css("overflow-y", "hidden")
+        $toc.css("max-height", "9999999px")
+      }
+    }
+
+    $window.on('resize', onResize);
+    $(document).ready(onResize);
+  })();
+
+
+
+</script>
+   </div>
+      </div>
+      
+
+      <div class="min-w-0 min-h-0 max-w-fit">
+        
+        
+
+
+        <div class="article-content max-w-prose mb-20">
+          
+
+<h1 class="relative group">2021-02-23-基本的算法和数据结构(包含多线程) 
+    <div id="2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2021-02-23-%E5%9F%BA%E6%9C%AC%E7%9A%84%E7%AE%97%E6%B3%95%E5%92%8C%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%8C%85%E5%90%AB%E5%A4%9A%E7%BA%BF%E7%A8%8B" aria-label="锚点">#</a>
+    </span>        
+    
+</h1>
+<p>为什么写这个？通用的方法常常隐藏常见的方法。</p>
+
+
+<h2 class="relative group">1 抽象，实现和STL 
+    <div id="1-%E6%8A%BD%E8%B1%A1%E5%AE%9E%E7%8E%B0%E5%92%8Cstl" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-%E6%8A%BD%E8%B1%A1%E5%AE%9E%E7%8E%B0%E5%92%8Cstl" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">1.1 STL 数据结构VECTOR 
+    <div id="11-stl-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84vector" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#11-stl-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84vector" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>O(1)时间的快速访问</li>
+<li>顺序存储，所以插入到非尾结点位置所需时间复杂度为O(n)，删除也一样</li>
+<li>当我们新建一个vector的时候，会首先分配给他一片连续的内存空间，如<code>std::vector&lt;int&gt; vec</code>，当通过push_back向其中增加元素时，如果初始分配空间已满，就会引起vector扩容，其扩容规则在gcc下以2倍方式完成：首先重新申请一个2倍大的内存空间；然后将原空间的内容拷贝过来；最后将原空间内容进行释放，将内存交还给操作系统；</li>
+<li>执行插入/删除后，所有执行点之后迭代器和指针引用失效，同理，扩容之后的所有迭代器指针和引用也失效。</li>
+<li>常用的函数：<em>push_back 在数组的最后添加一个数据</em>，*pop_back 去掉数组的最后一个数据，*<em>begin 得到数组头的指针</em> <em>end 得到数组的最后一个单元+1的指针</em> <em>capacity 当前vector分配的大小</em> <em>size 当前使用数据的大小</em> <em>erase 删除指针指向的数据项</em>  <em>clear 清空当前的vector</em>  <em>empty 判断vector是否为空</em></li>
+</ul>
+
+
+<h3 class="relative group">1.2 map和multimap 
+    <div id="12-map%E5%92%8Cmultimap" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#12-map%E5%92%8Cmultimap" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>两个都是关联容器，也就是提供一对一key-value的数据处理能力。map与multimap的区别在于，multimap允许关键字重复，而map不允许重复。</li>
+<li>这两个关联容器的底层数据结构均为<strong>红黑树</strong>。根据红黑树的原理，map与multimap可以实现**O(lgn)**的查找，插入和删除。</li>
+<li>常用的函数：clear(） 删除所有元素，empty() 如果 map 为空则返回 true，find()  查找一个元素， insert()  插入元素，end()  返回指向 map 末尾的迭代器，insert(pair &lt; int,string &gt; (1,&ldquo;Jim&rdquo;)) 插入元素的时候要把元素的类型组织出来，size()返回map的大小，erase()  删除一个元素</li>
+</ul>
+
+
+<h3 class="relative group">1.3 unordered_map 与unordered_multimap 
+    <div id="13-unordered_map-%E4%B8%8Eunordered_multimap" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#13-unordered_map-%E4%B8%8Eunordered_multimap" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>map与multimap为<strong>有序的</strong></li>
+<li>而unordered_map与unordered_multimap中key为无序排列，其底层实现为<strong>hash table</strong>，因此其查找时间复杂度理论上达到了<strong>O(1)</strong></li>
+<li>常用的函数为</li>
+</ul>
+
+
+<h3 class="relative group">1.4 set &amp; multiset 
+    <div id="14-set--multiset" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#14-set--multiset" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>set系列的数据结构是只有值，因此可以认为set是只保存关键字的容器。</li>
+<li>set与multiset有序存储元素，这两种容器的底层实现与map一样都是<strong>红黑树</strong>，所以能实现O(lgn)的查找，插入，删除操作。</li>
+<li>常用的函数为</li>
+</ul>
+
+
+<h3 class="relative group">1.5 优先队列priority_queue 
+    <div id="15-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97priority_queue" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#15-%E4%BC%98%E5%85%88%E9%98%9F%E5%88%97priority_queue" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>优先级队列相当于一个<strong>有权值</strong>的单向队列queue，在这个队列中，所有元素是按照优先级排列的。</li>
+<li>priority_queue根据<strong>堆</strong>的处理规则来调整元素之间的位置，根据堆的特性，优先级队列实现了取出最大最小元素时间复杂度为O(1),对于插入和删除，其最坏情况为O(lgn)。</li>
+<li>常用的函数为：priority_queue&lt;Type, Container, Functional&gt;Type数据类型，Container是容器类型，Functional是排序的函数,常，一般Functional默认是std::less&lt;Type&gt;小顶堆，不过我们可以穿进去std::greater&lt;Type&gt;来构建大顶堆，这个用于声明。push(const T&amp; obj)：将obj的副本放到容器的适当位置，这通常会包含一个排序操作。push(T&amp;&amp; obj)：将obj放到容器的适当位置，这通常会包含一个排序操作。top()：返回优先级队列中第一个元素的引用。pop()：移除第一个元素。size()：返回队列中元素的个数。empty()：如果队列为空的话，返回true。</li>
+</ul>
+
+
+<h3 class="relative group">1.6 list 
+    <div id="16-list" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#16-list" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>底层一般是</li>
+<li></li>
+</ul>
+
+
+<h3 class="relative group">1.7 stack 
+    <div id="17-stack" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#17-stack" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<ul>
+<li>底层一般是链表</li>
+<li>常用的函数为：std::stack&lt;std::string,std::list<a href="std::string">std::string</a>&gt; fruit; 用于初始化。top()：返回一个栈顶元素的引用，类型为 T&amp;。如果栈为空，返回值未定义。push(const T&amp; obj)：可以将对象副本压入栈顶。这是通过调用底层容器的 push_back() 函数完成的。pop()：弹出栈顶元素。empty()：在栈中没有元素的情况下返回 true。size()：返回栈中元素的个数。</li>
+</ul>
+
+
+<h2 class="relative group">2 排序 
+    <div id="2-%E6%8E%92%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E6%8E%92%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>基于比较的排序算法，其时间复杂度不可能低于 n∗logn<em>n</em>∗<em>l<strong>o</strong>g**n</em>，这是由排序过程中的决策树模型决定的</p>
+<p><strong>决策树模型：</strong></p>
+<ul>
+<li><strong>节点表示比较：</strong> 决策树上的每个节点都代表一次元素比较操作（例如，比较数组中两个元素的大小）。</li>
+<li><strong>分支表示比较结果：</strong> 每个节点根据比较结果产生不同的分支，例如，大于、小于或等于。</li>
+<li><strong>叶子节点表示排序结果：</strong> 每一种可能的排序结果都对应着决策树上的一个叶子节点。</li>
+</ul>
+<p><strong>为什么最优时间复杂度是 n*logn：</strong></p>
+<ol>
+<li><strong>叶子节点数量：</strong> 对于 N 个元素，共有 N! (N 的阶乘) 种不同的排列方式，也就是 N! 种可能的排序结果。因此，决策树必须至少包含 N! 个叶子节点才能表示所有情况。</li>
+<li><strong>树的高度与比较次数：</strong> 决策树的高度（从根节点到最深叶子节点的路径长度）代表了排序算法在最坏情况下需要进行的最多比较次数。</li>
+<li><strong>树的高度限制：</strong> 对于一棵二叉树（大多数比较排序都是基于二叉比较），高度为 h 的树最多拥有 2h2<em>h</em> 个叶子节点。</li>
+<li><strong>推导出最优高度：</strong> 为了容纳 N! 个叶子节点，树的高度 h 必须满足 2h&gt;=N!2<em>h</em>&gt;=<em>N</em>! 。 使用斯特林公式近似计算阶乘：N!≈2πN(Ne)N<em>N</em>!≈2<em>π**N</em>(<em>e**N</em>)<em>N</em>，可以推导出 h&gt;=log2(N!)≈N∗log2N<em>h</em>&gt;=<em>l<strong>o</strong>g</em>2(<em>N</em>!)≈<em>N</em>∗<em>l<strong>o</strong>g</em>2<em>N</em>。</li>
+</ol>
+<p><strong>结论：</strong></p>
+<p>由于决策树的高度决定了比较次数，而为了表示所有可能的排序结果，树的高度至少为 N∗log2N<em>N</em>∗<em>l<strong>o</strong>g</em>2<em>N</em>，所以任何基于比较的排序算法，其时间复杂度都不可能低于 n∗logn<em>n</em>∗<em>l<strong>o</strong>g**n</em>。 这被称为比较排序算法的时间复杂度下限。</p>
+
+
+<h3 class="relative group">2.1 最简单的排序 
+    <div id="21-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%8E%92%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#21-%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E6%8E%92%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>常见的排序算法就不多赘述了：</p>
+<ul>
+<li>选择排序：每次选择出来最小的元素然后交换到检查数组的首部，因此对于长度为N的数组选择排序需要大约N^2/2次比较和N次交换。问题是这个算法运行时间和输入无关（这不是个好消息）。但是数据移动最少。</li>
+<li>插入排序：我更喜欢叫做插扑克排序，每次将当前元素插入到已经拍好的合适的位置。这个算法的时间和原本数组的排序有关。但是插入排序最惨情况也需要N^2/2的比较和N^2/2的交换，最好情况只需要N-1比较和0次交换。</li>
+</ul>
+
+
+<h3 class="relative group">2.2 归并排序 
+    <div id="22-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#22-%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>比较方法做的排序上限是多少？答案是：没有任何基于比较的算法能保证使用少于lg(N!)~NlgN的比较次数，将长度为N的数组排序。</p>
+<p>归并排序，一种思考的方法</p>
+<ul>
+<li>
+<p>归并排序依托的原理是：两个有序的数组（长度都为N/2)，在整体重排的时候最多只需要比较N次。由于每次都是一半次数的缩减，因此这种复杂度直接减少到了N*log(N)。</p>
+</li>
+<li>
+<p>实际上归并排序就是典型的分治思想，将问题拆解为两份（如果拆解相等，一般是最优的），两个部分都做处理。整体的有序处理会简单很多。</p>
+</li>
+<li>
+<p>归并排序有两种实现，一种从上向下，一种从下向上。</p>
+</li>
+</ul>
+
+
+<h3 class="relative group">2.3 快速排序 
+    <div id="23-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#23-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>快速排序大概是最著名的排序了，基本所有人都知道快排，实际上快排也是基于分治法。由于快排的特殊性，所以将伪码写上。</p>
+<ul>
+<li>快排平均需要2N*lnN次比较，以及1/6次交换。</li>
+<li>快排最惨需要N^2/2次比较，但打乱数组会避免这种算法</li>
+</ul>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">quick</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="n">Comparele</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Random</span><span class="p">.</span><span class="na">shuffle</span><span class="p">(</span><span class="n">a</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">0</span><span class="p">,</span><span class="n">a</span><span class="p">.</span><span class="na">length</span><span class="o">-</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sort</span><span class="p">(</span><span class="n">Comparable</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hi</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">hi</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">lo</span><span class="p">)</span><span class="w"> </span><span class="k">return</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">partition</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">hi</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">j</span><span class="o">-</span><span class="n">1</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sort</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="n">1</span><span class="p">,</span><span class="n">hi</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="nf">partition</span><span class="p">(</span><span class="n">Comparable</span><span class="o">[]</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">hi</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">lo</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hi</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Comparable</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="o">[</span><span class="n">lo</span><span class="o">]</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">while</span><span class="p">(</span><span class="n">1</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="n">less</span><span class="p">(</span><span class="n">a</span><span class="o">[++</span><span class="n">i</span><span class="o">]</span><span class="p">,</span><span class="n">v</span><span class="p">))</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">i</span><span class="o">==</span><span class="n">hi</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">while</span><span class="p">(</span><span class="n">less</span><span class="p">(</span><span class="n">v</span><span class="p">,</span><span class="n">a</span><span class="o">[--</span><span class="n">j</span><span class="o">]</span><span class="p">))</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">j</span><span class="o">==</span><span class="n">lo</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">exchange</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exchange</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">lo</span><span class="p">,</span><span class="n">j</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div>
+
+<h3 class="relative group">2.4 堆排序 
+    <div id="24-%E5%A0%86%E6%8E%92%E5%BA%8F" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#24-%E5%A0%86%E6%8E%92%E5%BA%8F" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>简单来说我觉得堆排序是一个非常好玩的问题，实际上对常见问题的考虑都是一致的。堆大多都是大顶堆/小顶堆</p>
+<p>代码如下:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">private</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">sink</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">k</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="n">2</span><span class="o">*</span><span class="n">k</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="n">N</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">2</span><span class="o">*</span><span class="n">k</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">N</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">less</span><span class="p">(</span><span class="n">j</span><span class="p">,</span><span class="n">j</span><span class="o">+</span><span class="n">1</span><span class="p">))</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">less</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">))</span><span class="w"> </span><span class="k">break</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">exchange</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="n">j</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">j</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div>
+
+<h3 class="relative group">2.5 从排序向外发散 
+    <div id="25-%E4%BB%8E%E6%8E%92%E5%BA%8F%E5%90%91%E5%A4%96%E5%8F%91%E6%95%A3" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#25-%E4%BB%8E%E6%8E%92%E5%BA%8F%E5%90%91%E5%A4%96%E5%8F%91%E6%95%A3" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>一个很常见的问题实际上是，最小的第K个数，这个问题的答案就是两种堆排序和快排思路</p>
+
+
+<h2 class="relative group">3 查找 
+    <div id="3-%E6%9F%A5%E6%89%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#3-%E6%9F%A5%E6%89%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">3.1 二叉树（二叉查找树） 
+    <div id="31-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#31-%E4%BA%8C%E5%8F%89%E6%A0%91%E4%BA%8C%E5%8F%89%E6%9F%A5%E6%89%BE%E6%A0%91" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>常见的先序遍历，中序遍历和后序遍历都是递归，下面给个迭代版本的实现。实际上还是利用非常常见的思想，也就是模拟计算机的栈而已。具体流程不明白的，就看下知乎上画的那个遍历的图片。</p>
+<p>先序遍历</p>
+<pre tabindex="0"><code class="language-作者：晚安" data-lang="作者：晚安">class Solution {
     public List&lt;Integer&gt; preorderTraversal(TreeNode root) {
         List&lt;Integer&gt; preOrderList = new ArrayList&lt;&gt;(); //存放访问顺序
         Stack&lt;TreeNode&gt; stack = new Stack&lt;&gt;();  //存放结点，用于回溯
@@ -61,23 +1038,25 @@
         return preOrderList;
     }
 }
-</code></pre><p>中序遍历</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-c++ data-lang=c++><span class=line><span class=cl><span class=k>class</span> <span class=nc>Solution</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>    <span class=k>public</span> <span class=n>List</span><span class=o>&lt;</span><span class=n>Integer</span><span class=o>&gt;</span> <span class=n>inorderTraversal</span><span class=p>(</span><span class=n>TreeNode</span> <span class=n>root</span><span class=p>)</span> <span class=p>{</span>
-</span></span><span class=line><span class=cl>        <span class=n>List</span><span class=o>&lt;</span><span class=n>Integer</span><span class=o>&gt;</span> <span class=n>inOrderList</span> <span class=o>=</span> <span class=k>new</span> <span class=n>ArrayList</span><span class=o>&lt;&gt;</span><span class=p>();</span>  <span class=c1>//存放访问顺序
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=n>Stack</span><span class=o>&lt;</span><span class=n>TreeNode</span><span class=o>&gt;</span> <span class=n>stack</span> <span class=o>=</span> <span class=k>new</span> <span class=n>Stack</span><span class=o>&lt;&gt;</span><span class=p>();</span>  <span class=c1>//存放结点，用于回溯
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=k>while</span><span class=p>(</span><span class=n>root</span> <span class=o>!=</span> <span class=n>null</span> <span class=o>||</span> <span class=o>!</span><span class=n>stack</span><span class=p>.</span><span class=n>empty</span><span class=p>())</span> <span class=p>{</span>       <span class=c1>//迭代遍历二叉树
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=k>while</span><span class=p>(</span><span class=n>root</span> <span class=o>!=</span> <span class=n>null</span><span class=p>)</span> <span class=p>{</span>   <span class=c1>//使root指向当前子二叉树的最左结点
-</span></span></span><span class=line><span class=cl><span class=c1></span>                <span class=n>stack</span><span class=p>.</span><span class=n>push</span><span class=p>(</span><span class=n>root</span><span class=p>);</span> 
-</span></span><span class=line><span class=cl>                <span class=n>root</span> <span class=o>=</span> <span class=n>root</span><span class=p>.</span><span class=n>left</span><span class=p>;</span>   
-</span></span><span class=line><span class=cl>            <span class=p>}</span>
-</span></span><span class=line><span class=cl>            <span class=n>root</span> <span class=o>=</span> <span class=n>stack</span><span class=p>.</span><span class=n>pop</span><span class=p>();</span>
-</span></span><span class=line><span class=cl>            <span class=n>inOrderList</span><span class=p>.</span><span class=n>add</span><span class=p>(</span><span class=n>root</span><span class=p>.</span><span class=n>val</span><span class=p>);</span>   <span class=c1>//出栈当前子二叉树的根结点，并访问
-</span></span></span><span class=line><span class=cl><span class=c1></span>            <span class=n>root</span> <span class=o>=</span> <span class=n>root</span><span class=p>.</span><span class=n>right</span><span class=p>;</span>     <span class=c1>//更新root结点：当前子二叉树的右孩子 or 树的父结点
-</span></span></span><span class=line><span class=cl><span class=c1></span>        <span class=p>}</span>
-</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=n>inOrderList</span><span class=p>;</span>
-</span></span><span class=line><span class=cl>    <span class=p>}</span>  
-</span></span><span class=line><span class=cl><span class=p>}</span>
-</span></span></code></pre></div><p>后序遍历</p><pre tabindex=0><code>class Solution {
+</code></pre><p>中序遍历</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">Solution</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">inorderTraversal</span><span class="p">(</span><span class="n">TreeNode</span> <span class="n">root</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">inOrderList</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>  <span class="c1">//存放访问顺序
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">Stack</span><span class="o">&lt;</span><span class="n">TreeNode</span><span class="o">&gt;</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;&gt;</span><span class="p">();</span>  <span class="c1">//存放结点，用于回溯
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">while</span><span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="n">null</span> <span class="o">||</span> <span class="o">!</span><span class="n">stack</span><span class="p">.</span><span class="n">empty</span><span class="p">())</span> <span class="p">{</span>       <span class="c1">//迭代遍历二叉树
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="k">while</span><span class="p">(</span><span class="n">root</span> <span class="o">!=</span> <span class="n">null</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//使root指向当前子二叉树的最左结点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                <span class="n">stack</span><span class="p">.</span><span class="n">push</span><span class="p">(</span><span class="n">root</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">                <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">left</span><span class="p">;</span>   
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="n">root</span> <span class="o">=</span> <span class="n">stack</span><span class="p">.</span><span class="n">pop</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">            <span class="n">inOrderList</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="n">root</span><span class="p">.</span><span class="n">val</span><span class="p">);</span>   <span class="c1">//出栈当前子二叉树的根结点，并访问
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>            <span class="n">root</span> <span class="o">=</span> <span class="n">root</span><span class="p">.</span><span class="n">right</span><span class="p">;</span>     <span class="c1">//更新root结点：当前子二叉树的右孩子 or 树的父结点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">inOrderList</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>  
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>后序遍历</p>
+<pre tabindex="0"><code>class Solution {
     public List&lt;Integer&gt; postorderTraversal(TreeNode root) {
         List&lt;Integer&gt; postOrderList = new ArrayList&lt;&gt;();    //用于存放访问顺序
         Stack&lt;TreeNode&gt; stack = new Stack&lt;&gt;();  //存放结点，用于回溯
@@ -99,12 +1078,265 @@
         return postOrderList;    
     }
 }
-</code></pre><h2 class="relative group">linux内核的基础知识<div id=linux%E5%86%85%E6%A0%B8%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#linux%E5%86%85%E6%A0%B8%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86 aria-label=锚点>#</a></span></h2><h3 class="relative group">1 进程调度<div id=1-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6 class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#1-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6 aria-label=锚点>#</a></span></h3><p>时间片，分配给每个可运行进程的处理器时间段。linux为抢占式系统。</p><p>调度算法有基于优先级，linux为动态优先级</p><h3 class="relative group">2 缺页中断<div id=2-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#2-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD aria-label=锚点>#</a></span></h3><h2 class="relative group">结尾<div id=%E7%BB%93%E5%B0%BE class=anchor></div><span class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100"><a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700" style=text-decoration-line:none!important href=#%E7%BB%93%E5%B0%BE aria-label=锚点>#</a></span></h2><p>唉，尴尬</p><p><figure><img class="my-0 rounded-md" loading=lazy src=https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg alt=狗头的赞赏码.jpg></figure></p></div></div><script>var oid="views_posts\\2021-02-23-基本的算法和数据结构(包含多线程)\\index.md",oid_likes="likes_posts\\2021-02-23-基本的算法和数据结构(包含多线程)\\index.md"</script><script type=text/javascript src=/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q+oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script></section><footer class="pt-8 max-w-prose print:hidden"><div class=pt-8><hr class="border-dotted border-neutral-300 dark:border-neutral-600"><div class="flex justify-between pt-3"><span><a class="flex group mr-3" href=/posts/2021-02-22-%E5%AE%89%E5%85%A8%E6%96%B9%E9%9D%A2%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B0%E5%AD%A6+%E5%8D%8F%E8%AE%AE%E7%AF%87/><span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&larr;</span>
-<span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">2021-02-22-安全方面的基础知识（数学+协议篇）</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-02-22T00:00:00+00:00>2021 年 2 月 22 日</time>
-</span></span></a></span><span><a class="flex text-right group ml-3" href=/posts/2021-03-29-%E6%95%B0%E8%AE%BA%E7%AC%94%E8%AE%B0/><span class="flex flex-col"><span class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500">数论笔记</span>
-<span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400"><time datetime=2021-03-29T00:00:00+00:00>2021 年 3 月 29 日</time>
-</span></span><span class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400">&rarr;</span>
-<span class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400">&larr;</span></a></span></div></div></footer></article><div id=top-scroller class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0"><a href=#the-top class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400" aria-label=返回顶部 title=返回顶部>&uarr;</a></div></main><footer id=site-footer class="py-10 print:hidden"><div class="flex items-center justify-between"><p class="text-sm text-neutral-500 dark:text-neutral-400">© 2025 - 2025 菜狗 All Rights Reserved.</p><p class="text-xs text-neutral-500 dark:text-neutral-400">由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://gohugo.io/ target=_blank rel="noopener noreferrer">Hugo</a> & <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500" href=https://blowfish.page/ target=_blank rel="noopener noreferrer">Blowfish</a> 强力驱动</p></div><script>mediumZoom(document.querySelectorAll("img:not(.nozoom)"),{margin:24,background:"rgba(0,0,0,0.5)",scrollOffset:0})</script><script type=text/javascript src=/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh+sCQ0E53ghYrxgYqw+0GCRyIEpA=="></script></footer><div id=search-wrapper class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]" data-url=https://hxndg.github.io/ style=z-index:500><div id=search-modal class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"><header class="relative z-10 flex items-center justify-between flex-none px-2"><form class="flex items-center flex-auto min-w-0"><div class="flex items-center justify-center w-8 h-8 text-neutral-400"><span class="relative block icon"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" viewBox="0 0 512 512"><path fill="currentcolor" d="M505 442.7 405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9.0 208 0S0 93.1.0 208s93.1 208 208 208c48.3.0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9.0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7.0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7.0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg></span></div><input type=search id=search-query class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent" placeholder=搜索 tabindex=0></form><button id=close-search-button class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400" title="关闭 (Esc)">
-<span class="relative block icon"><svg viewBox="0 0 320 512"><path fill="currentcolor" d="M310.6 361.4c12.5 12.5 12.5 32.75.0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3 54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75.0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75.0-45.25s32.75-12.5 45.25.0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25.0s12.5 32.75.0 45.25l-105.4 105.4L310.6 361.4z"/></svg></span></button></header><section class="flex-auto px-2 overflow-auto"><ul id=search-results></ul></section></div></div></div></body></html>
+</code></pre>
+
+<h2 class="relative group">linux内核的基础知识 
+    <div id="linux%E5%86%85%E6%A0%B8%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#linux%E5%86%85%E6%A0%B8%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+
+
+<h3 class="relative group">1 进程调度 
+    <div id="1-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#1-%E8%BF%9B%E7%A8%8B%E8%B0%83%E5%BA%A6" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+<p>时间片，分配给每个可运行进程的处理器时间段。linux为抢占式系统。</p>
+<p>调度算法有基于优先级，linux为动态优先级</p>
+
+
+<h3 class="relative group">2 缺页中断 
+    <div id="2-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#2-%E7%BC%BA%E9%A1%B5%E4%B8%AD%E6%96%AD" aria-label="锚点">#</a>
+    </span>        
+    
+</h3>
+
+
+<h2 class="relative group">结尾 
+    <div id="%E7%BB%93%E5%B0%BE" class="anchor"></div>
+    
+    <span
+        class="absolute top-0 w-6 transition-opacity opacity-0 ltr:-left-6 rtl:-right-6 not-prose group-hover:opacity-100">
+        <a class="group-hover:text-primary-300 dark:group-hover:text-neutral-700"
+            style="text-decoration-line: none !important;" href="#%E7%BB%93%E5%B0%BE" aria-label="锚点">#</a>
+    </span>        
+    
+</h2>
+<p>唉，尴尬</p>
+<p>
+  <figure>
+    <img class="my-0 rounded-md" loading="lazy" src="https://i.loli.net/2020/08/27/BFHNyfpx3EsIDUG.jpg" alt="狗头的赞赏码.jpg" />
+    
+  </figure>
+</p>
+
+          
+          
+          
+        </div>
+        
+        
+
+        
+        
+
+          
+      </div>
+     
+      
+      
+        
+        
+          
+          
+        
+      <script>
+        var oid = "views_posts\/2021-02-23-基本的算法和数据结构(包含多线程)\/index.md"
+        var oid_likes = "likes_posts\/2021-02-23-基本的算法和数据结构(包含多线程)\/index.md"
+      </script>
+      
+      
+      <script type="text/javascript" src="/js/page.min.0860cf4e04fa2d72cc33ddba263083464d48f67de06114529043cb4623319efed4f484fd7f1730df5abea0e2da6f3538855634081d02f2d6e920b956f063e823.js" integrity="sha512-CGDPTgT6LXLMM926JjCDRk1I9n3gYRRSkEPLRiMxnv7U9IT9fxcw31q&#43;oOLabzU4hVY0CB0C8tbpILlW8GPoIw=="></script>
+      
+  
+    </section>
+  <footer class="pt-8 max-w-prose print:hidden">
+
+    
+  
+    
+    
+    
+    <div class="pt-8">
+      <hr class="border-dotted border-neutral-300 dark:border-neutral-600" />
+      <div class="flex justify-between pt-3">
+        <span>
+          
+            <a class="flex group mr-3" href="/posts/2021-02-22-%E5%AE%89%E5%85%A8%E6%96%B9%E9%9D%A2%E7%9A%84%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86%E6%95%B0%E5%AD%A6&#43;%E5%8D%8F%E8%AE%AE%E7%AF%87/">
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >2021-02-22-安全方面的基础知识（数学+协议篇）</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-02-22T00:00:00&#43;00:00">2021 年 2 月 22 日</time>
+                  
+                </span>
+              </span>
+            </a>
+          
+        </span>
+        <span>
+          
+            <a class="flex text-right group ml-3" href="/posts/2021-03-29-%E6%95%B0%E8%AE%BA%E7%AC%94%E8%AE%B0/">
+              <span class="flex flex-col">
+                <span
+                  class="mt-[0.1rem] leading-6 group-hover:underline group-hover:decoration-primary-500"
+                  >数论笔记</span
+                >
+                <span class="mt-[0.1rem] text-xs text-neutral-500 dark:text-neutral-400">
+                  
+                    <time datetime="2021-03-29T00:00:00&#43;00:00">2021 年 3 月 29 日</time>
+                  
+                </span>
+              </span>
+              <span
+                class="ml-3 text-neutral-700 group-hover:text-primary-600 ltr:inline rtl:hidden dark:text-neutral dark:group-hover:text-primary-400"
+                >&rarr;</span
+              >
+              <span
+                class="mr-3 text-neutral-700 group-hover:text-primary-600 ltr:hidden rtl:inline dark:text-neutral dark:group-hover:text-primary-400"
+                >&larr;</span
+              >
+            </a>
+          
+        </span>
+      </div>
+    </div>
+  
+
+
+    
+  </footer>
+</article>
+
+      <div id="top-scroller" class="pointer-events-none absolute top-[110vh] bottom-0 w-12 ltr:right-0 rtl:left-0">
+  <a href="#the-top"
+    class="pointer-events-auto sticky top-[calc(100vh-5.5rem)] flex h-12 w-12 mb-16 items-center justify-center rounded-full bg-neutral/50 text-xl text-neutral-700 hover:text-primary-600 dark:bg-neutral-800/50 dark:text-neutral dark:hover:text-primary-400"
+    aria-label="返回顶部" title="返回顶部">
+    &uarr;
+  </a>
+</div>
+    </main><footer id="site-footer" class="py-10 print:hidden">
+  
+  
+    
+  
+  <div class="flex items-center justify-between">
+
+    
+    
+    <p class="text-sm text-neutral-500 dark:text-neutral-400">
+      © 2025 - 2025 菜狗 All Rights Reserved.
+    </p>
+    
+
+    
+    
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">
+      
+      
+      由 <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://gohugo.io/" target="_blank" rel="noopener noreferrer">Hugo</a> &amp; <a class="hover:underline hover:decoration-primary-400 hover:text-primary-500"
+        href="https://blowfish.page/" target="_blank" rel="noopener noreferrer">Blowfish</a> 强力驱动
+    </p>
+    
+
+  </div>
+  <script>
+    
+    mediumZoom(document.querySelectorAll("img:not(.nozoom)"), {
+      margin: 24,
+      background: 'rgba(0,0,0,0.5)',
+      scrollOffset: 0,
+    })
+    
+  </script>
+  
+  
+  <script type="text/javascript" src="/js/process.min.ee03488f19c93c2efb199e2e3014ea5f3cb2ce7d45154adb3399a158cac27ca52831db249ede5bb602700ef87eb02434139de0858af1818ab0fb4182472204a4.js" integrity="sha512-7gNIjxnJPC77GZ4uMBTqXzyyzn1FFUrbM5mhWMrCfKUoMdsknt5btgJwDvh&#43;sCQ0E53ghYrxgYqw&#43;0GCRyIEpA=="></script>
+  
+  
+</footer>
+<div
+  id="search-wrapper"
+  class="invisible fixed inset-0 flex h-screen w-screen cursor-default flex-col bg-neutral-500/50 p-4 backdrop-blur-sm dark:bg-neutral-900/50 sm:p-6 md:p-[10vh] lg:p-[12vh]"
+  data-url="https://hxndg.github.io/"
+  style="z-index:500"
+>
+  <div
+    id="search-modal"
+    class="flex flex-col w-full max-w-3xl min-h-0 mx-auto border rounded-md shadow-lg top-20 border-neutral-200 bg-neutral dark:border-neutral-700 dark:bg-neutral-800"
+  >
+    <header class="relative z-10 flex items-center justify-between flex-none px-2">
+      <form class="flex items-center flex-auto min-w-0">
+        <div class="flex items-center justify-center w-8 h-8 text-neutral-400">
+          
+
+  <span class="relative block icon">
+    <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="search" class="svg-inline--fa fa-search fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M505 442.7L405.3 343c-4.5-4.5-10.6-7-17-7H372c27.6-35.3 44-79.7 44-128C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c48.3 0 92.7-16.4 128-44v16.3c0 6.4 2.5 12.5 7 17l99.7 99.7c9.4 9.4 24.6 9.4 33.9 0l28.3-28.3c9.4-9.4 9.4-24.6.1-34zM208 336c-70.7 0-128-57.2-128-128 0-70.7 57.2-128 128-128 70.7 0 128 57.2 128 128 0 70.7-57.2 128-128 128z"/></svg>
+
+  </span>
+
+
+        </div>
+        <input
+          type="search"
+          id="search-query"
+          class="flex flex-auto h-12 mx-1 bg-transparent appearance-none focus:outline-dotted focus:outline-2 focus:outline-transparent"
+          placeholder="搜索"
+          tabindex="0"
+        />
+      </form>
+      <button
+        id="close-search-button"
+        class="flex items-center justify-center w-8 h-8 text-neutral-700 hover:text-primary-600 dark:text-neutral dark:hover:text-primary-400"
+        title="关闭 (Esc)"
+      >
+        
+
+  <span class="relative block icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path fill="currentColor" d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
+
+  </span>
+
+
+      </button>
+    </header>
+    <section class="flex-auto px-2 overflow-auto">
+      <ul id="search-results">
+        
+      </ul>
+    </section>
+  </div>
+</div>
+
+  </div>
+</body>
+
+</html>

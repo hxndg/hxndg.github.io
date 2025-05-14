@@ -1,1 +1,43 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Perf on 菜狗的blog</title><link>https://hxndg.github.io/tags/perf/</link><description>Recent content in Perf on 菜狗的blog</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright><lastBuildDate>Sat, 25 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/perf/index.xml" rel="self" type="application/rss+xml"/><item><title>2023-03-25-folly学习笔记</title><link>https://hxndg.github.io/posts/2023-03-25-folly%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link><pubDate>Sat, 25 Mar 2023 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2023-03-25-folly%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid><description/></item><item><title>USTACK系统的ATCPZONE设计</title><link>https://hxndg.github.io/posts/2021-01-17-ustack%E7%B3%BB%E7%BB%9F%E7%9A%84atcpzone%E8%AE%BE%E8%AE%A1/</link><pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2021-01-17-ustack%E7%B3%BB%E7%BB%9F%E7%9A%84atcpzone%E8%AE%BE%E8%AE%A1/</guid><description/></item><item><title>如何进行性能分析和诊断</title><link>https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/</link><pubDate>Tue, 15 Dec 2020 00:00:00 +0000</pubDate><guid>https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/</guid><description/><media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/featured.png"/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Perf on 菜狗的blog</title>
+    <link>https://hxndg.github.io/tags/perf/</link>
+    <description>Recent content in Perf on 菜狗的blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <copyright>© 2025 - 2025 菜狗 All Rights Reserved.</copyright>
+    <lastBuildDate>Sat, 25 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://hxndg.github.io/tags/perf/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>2023-03-25-folly学习笔记</title>
+      <link>https://hxndg.github.io/posts/2023-03-25-folly%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Sat, 25 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2023-03-25-folly%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>USTACK系统的ATCPZONE设计</title>
+      <link>https://hxndg.github.io/posts/2021-01-17-ustack%E7%B3%BB%E7%BB%9F%E7%9A%84atcpzone%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2021-01-17-ustack%E7%B3%BB%E7%BB%9F%E7%9A%84atcpzone%E8%AE%BE%E8%AE%A1/</guid>
+      <description></description>
+      
+    </item>
+    
+    <item>
+      <title>如何进行性能分析和诊断</title>
+      <link>https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/</link>
+      <pubDate>Tue, 15 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/</guid>
+      <description></description>
+      <media:content xmlns:media="http://search.yahoo.com/mrss/" url="https://hxndg.github.io/posts/2020-12-15-%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%92%8C%E8%AF%8A%E6%96%AD/featured.png" />
+    </item>
+    
+  </channel>
+</rss>
